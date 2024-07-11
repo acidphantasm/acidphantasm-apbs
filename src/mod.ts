@@ -6,7 +6,7 @@ import { ILogger } from "@spt/models/spt/utils/ILogger";
 
 // Custom
 import { APBSLogger } from "./Utils/apbsLogger";
-import { Logging } from "./Enums/Logs";
+import { Logging } from "./Enums/Logging";
 
 class APBS implements IPostDBLoadMod
 {

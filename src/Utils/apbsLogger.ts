@@ -1,6 +1,6 @@
 import { ILogger } from "@spt/models/spt/utils/ILogger";
-import { Logging } from "../Enums/Logs";
-import { LogTypes } from "../Enums/LogTypes";
+import { Logging } from "../Enums/Logging";
+import { LoggingFolders } from "../Enums/LoggingFolders";
 import fs from "node:fs";
 
 export class APBSLogger
@@ -10,9 +10,9 @@ export class APBSLogger
     
     public createLogFiles(): void
     {
-        for (const value in LogTypes)
+        for (const value in LoggingFolders)
         {
-            fs.writeFile(`${this.logPath}/${LogTypes[value]}.log`, `${new Date().toLocaleString()} - Acid's Progressive Bot System Log File\n`, function (err) 
+            fs.writeFile(`${this.logPath}/${LoggingFolders[value]}.log`, `${new Date().toLocaleString()} - Acid's Progressive Bot System Log File\n`, function (err) 
             {
                 if (err) throw err;
             });
