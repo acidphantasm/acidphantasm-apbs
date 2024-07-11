@@ -1,5 +1,5 @@
 {
-    "name": "EditDatabase",
+    "name": "Acids Progressive Bot System",
     "version": "1.0.0",
     "sptVersion": "~3.9",
     "loadBefore": [],
@@ -24,7 +24,7 @@
         "typescript": "5.4",
         "winston": "3.12"
     },
-    "author": "Chomp",
+    "author": "acidphantasm",
     "contributors": [],
     "license": "MIT"
 }
