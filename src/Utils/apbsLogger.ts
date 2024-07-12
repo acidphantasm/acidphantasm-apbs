@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/brace-style */
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { Logging } from "../Enums/Logging";
 import { LoggingFolders } from "../Enums/LoggingFolders";
@@ -7,7 +8,6 @@ export class APBSLogger
 {
     private logPath = "./user/mods/acidphantasm-acidsprogressivebotsystem/logs";
 
-    
     public createLogFiles(): void
     {
         for (const value in LoggingFolders)
@@ -19,7 +19,7 @@ export class APBSLogger
         }
     }
 
-    public log(logger: ILogger, message: string, logcation: Logging, message2?: string, message3?: string, message4?: string, message5?: string): void
+    public log(logger: ILogger, logcation: Logging, message: string, message2?: string, message3?: string, message4?: string, message5?: string): void
     {
         const messagesArray = {
             message,
@@ -29,38 +29,48 @@ export class APBSLogger
             message5
         }
         let messages: string = "";
+        let textFlag;
+        let logType;
+        let showInConsole;
         for (const line in messagesArray)
         {
             if (messagesArray[line])
             {
-                messages = messages + `${messagesArray[line]}\n`;
+                switch (logcation) {
+                    case Logging.DEBUG:
+                        logType = Logging.DEBUG;
+                        textFlag = " DEBUG - "
+                        showInConsole = false;
+                        break;
+                    case Logging.WARN:
+                        logType = Logging.DEBUG;
+                        textFlag = " WARNING - "
+                        showInConsole = true;
+                        break;
+                    case Logging.ERR:
+                        logType = Logging.DEBUG;
+                        textFlag = " ERROR - "
+                        showInConsole = true;
+                        break;
+                    default:
+                        logType = logcation;
+                        textFlag = " - "
+                        showInConsole = false;
+                        break;
+                }
+                messages = messages + `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
             }
         }
-        switch (logcation)
-        {
-            case Logging.DEBUG:
-                fs.appendFile(`${this.logPath}/${Logging.DEBUG}.log`, `${new Date().toLocaleString()} - DEBUG - ${message}`, function (err) {
-                    if (err) throw err;
-                });
-                break;
-            case Logging.WARN:
-                fs.appendFile(`${this.logPath}/${Logging.DEBUG}.log`, `${new Date().toLocaleString()} - WARNING - ${message}`, function (err) {
-                    if (err) throw err;
-                    logger.warning(`[APBS] WARNING - ${message}`);
-                });
-                break;
-            case Logging.ERR:
-                fs.appendFile(`${this.logPath}/${Logging.DEBUG}.log`, `${new Date().toLocaleString()} - ERROR - ${message}`, function (err) {
-                    if (err) throw err;
-                    logger.error(`[APBS] ERROR - ${message}`);
-                });
-                break;
-            default:
-                fs.appendFile(`${this.logPath}/${logcation}.log`, `${new Date().toLocaleString()} - ${messages}`, function (err) {
-                    if (err) throw err;
-                });
-                break;
-        }
-
+        fs.appendFile(`${this.logPath}/${logType}.log`, `${messages}`, function (err) {
+            if (err) throw err;
+            if (showInConsole) {
+                if (logcation == Logging.WARN) {
+                    logger.warning(`[APBS] -${textFlag} ${messages}`);
+                }
+                if (logcation == Logging.ERR) {
+                    logger.error(`[APBS] -${textFlag} ${messages}`);
+                }
+            }
+        });
     }    
 }
