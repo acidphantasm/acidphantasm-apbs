@@ -71,8 +71,10 @@ export class StaticRouterHooks
     public logOutput(output: any):void
     {
         const start = performance.now()
+
         const outputJson = JSON.parse(output);
         const botDetails = this.getBotDetails(JSON.parse(output))
+        
         const primaryId = this.itemHelper.getItemName(botDetails.primaryID) ?? "None" ;
         const primaryCaliberID = this.itemHelper.getItemName(botDetails.primaryCaliberID) ?? "" ;
         const secondaryID = this.itemHelper.getItemName(botDetails.secondaryID) ?? "None" ;
