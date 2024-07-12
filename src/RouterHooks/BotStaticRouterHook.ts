@@ -29,7 +29,7 @@ export class BotStaticRouterHook
     {
         let routerHitCount = 0;
         this.staticRouterService.registerStaticRouter(
-            "APBS-BotGenerationRoute",
+            "APBS-BotGenerationRouter",
             [
                 {
                     url: "/client/game/bot/generate",
@@ -49,7 +49,7 @@ export class BotStaticRouterHook
             "spt"
         );
         this.staticRouterService.registerStaticRouter(
-            "APBS-EndRaidState",
+            "APBS-EndRaidStateRouter",
             [
                 {
                     url: "/singleplayer/settings/raid/endstate",
