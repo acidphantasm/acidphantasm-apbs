@@ -48,6 +48,19 @@ export class BotStaticRouterHook
             ],
             "spt"
         );
+        this.staticRouterService.registerStaticRouter(
+            "APBS-EndRaidState",
+            [
+                {
+                    url: "/singleplayer/settings/raid/endstate",
+                    action: async (url, info, sessionId, output) => {
+                        routerHitCount = 0;
+                        return output;
+                    }
+                }
+            ],
+            "spt"
+        );
     }
 
     public logOutput(output: any):void
