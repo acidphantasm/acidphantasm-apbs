@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/brace-style */
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { Logging } from "../Enums/Logging";
 import { LoggingFolders } from "../Enums/LoggingFolders";
@@ -36,7 +35,8 @@ export class APBSLogger
         {
             if (messagesArray[line])
             {
-                switch (logcation) {
+                switch (logcation) 
+                {
                     case Logging.DEBUG:
                         logType = Logging.DEBUG;
                         textFlag = " DEBUG - "
@@ -61,13 +61,17 @@ export class APBSLogger
                 messages = messages + `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
             }
         }
-        fs.appendFile(`${this.logPath}/${logType}.log`, `${messages}`, function (err) {
+        fs.appendFile(`${this.logPath}/${logType}.log`, `${messages}`, function (err) 
+        {
             if (err) throw err;
-            if (showInConsole) {
-                if (logcation == Logging.WARN) {
+            if (showInConsole) 
+            {
+                if (logcation == Logging.WARN) 
+                {
                     logger.warning(`[APBS] -${textFlag} ${messages}`);
                 }
-                if (logcation == Logging.ERR) {
+                if (logcation == Logging.ERR) 
+                {
                     logger.error(`[APBS] -${textFlag} ${messages}`);
                 }
             }

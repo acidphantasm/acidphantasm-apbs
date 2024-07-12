@@ -10,7 +10,7 @@ import { ILogger } from "@spt/models/spt/utils/ILogger";
 // Custom
 import { APBSLogger } from "./Utils/apbsLogger";
 import { Logging } from "./Enums/Logging";
-import { BotStaticRouterHook } from "./RouterHooks/BotStaticRouterHook";
+import { StaticRouterHooks } from "./RouterHooks/StaticRouterHooks";
 
 class APBS implements IPreSptLoadMod, IPostDBLoadMod
 {
@@ -27,7 +27,7 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         this.apbsLogger = new APBSLogger();
         this.apbsLogger.createLogFiles();
 
-        const botStaticRouterHook = new BotStaticRouterHook(this.staticRouter, this.itemHelper, this.apbsLogger, this.logger);
+        const botStaticRouterHook = new StaticRouterHooks(this.staticRouter, this.itemHelper, this.apbsLogger, this.logger);
 
         botStaticRouterHook.registerRouterHook();
     }

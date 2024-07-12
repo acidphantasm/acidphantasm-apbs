@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/brace-style */
 import { StaticRouterModService } from "@spt/services/mod/staticRouter/StaticRouterModService";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { APBSLogger } from "../Utils/apbsLogger";
 import { Logging } from "../Enums/Logging";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 
-export class BotStaticRouterHook
+export class StaticRouterHooks
 {
     private staticRouterService: StaticRouterModService;
     private itemHelper: ItemHelper;
@@ -33,12 +32,17 @@ export class BotStaticRouterHook
             [
                 {
                     url: "/client/game/bot/generate",
-                    action: async (url, info, sessionId, output) => {
-                        try {
-                            if (routerHitCount >= 1) {
+                    action: async (url, info, sessionId, output) => 
+                    {
+                        try 
+                        {
+                            if (routerHitCount >= 1) 
+                            {
                                 this.logOutput(output);
                             }
-                        } catch (err) {
+                        }
+                        catch (err) 
+                        {
                             this.apbsLogger.log(this.logger, Logging.WARN, "Bot Router hook failed. Disable Logging to remove this message if intentional.", `${err.stack}`);
                         }
                         routerHitCount++;
@@ -53,7 +57,8 @@ export class BotStaticRouterHook
             [
                 {
                     url: "/singleplayer/settings/raid/endstate",
-                    action: async (url, info, sessionId, output) => {
+                    action: async (url, info, sessionId, output) => 
+                    {
                         routerHitCount = 0;
                         return output;
                     }
@@ -82,8 +87,10 @@ export class BotStaticRouterHook
         const lSidePlateID = botDetails.lSidePlateID ?? "0" ;
         const rSidePlateID = botDetails.rSidePlateID ?? "0" ;
 
-        try {
-            switch (outputJson["data"][0].Info.Settings.Role) {
+        try 
+        {
+            switch (outputJson["data"][0].Info.Settings.Role) 
+            {
                 case "pmcBEAR":
                 case "pmcUSEC":
                     this.apbsLogger.log(this.logger, 
@@ -163,7 +170,9 @@ export class BotStaticRouterHook
                     );
                     break;
             }
-        } catch (err) {
+        }
+        catch (err) 
+        {
             this.apbsLogger.log(this.logger, Logging.ERR, "Bot Generation LogOutput failed.", `${err.stack}`);
         }
         const timeTaken = performance.now() - start;
@@ -191,48 +200,59 @@ export class BotStaticRouterHook
         const botDetails = detailsJSON["data"][0].Inventory.items;
 
         const primaryWeapon = botDetails.find(e => e.slotId === "FirstPrimaryWeapon");
-        if (typeof primaryWeapon !== "undefined") {
+        if (typeof primaryWeapon !== "undefined") 
+        {
             primaryID = primaryWeapon._tpl;
             const primaryCaliber = botDetails.find(e => e.slotId === "patron_in_weapon" && e.parentId == primaryWeapon._id);
-            if (typeof primaryCaliber !== "undefined") {
+            if (typeof primaryCaliber !== "undefined") 
+            {
                 primaryCaliberID = primaryCaliber._tpl;
             }
         }
 
         const secondaryWeapon = botDetails.find(e => e.slotId === "SecondPrimaryWeapon");
-        if (typeof secondaryWeapon !== "undefined") {
+        if (typeof secondaryWeapon !== "undefined") 
+        {
             secondaryID = secondaryWeapon._tpl;
             const secondaryCaliber = botDetails.find(e => e.slotId === "patron_in_weapon" && e.parentId == secondaryWeapon._id);
-            if (typeof secondaryCaliber !== "undefined") {
+            if (typeof secondaryCaliber !== "undefined") 
+            {
                 secondaryCaliberID = secondaryCaliber._tpl;
             }
         }
 
         const holster = botDetails.find(e => e.slotId === "Holster");
-        if (typeof holster !== "undefined") {
+        if (typeof holster !== "undefined") 
+        {
             holsterID = holster._tpl;
             const holsterCaliber = botDetails.find(e => e.slotId === "patron_in_weapon" && e.parentId == holster._id);
-            if (typeof holsterCaliber !== "undefined") {
+            if (typeof holsterCaliber !== "undefined") 
+            {
                 holsterCaliberID = holsterCaliber._tpl;
             }
         }
 
         const helmet = botDetails.find(e => e.slotId === "Headwear");
-        if (typeof helmet !== "undefined") {
+        if (typeof helmet !== "undefined") 
+        {
             helmetID = helmet._tpl;
         }
 
         const earPro = botDetails.find(e => e.slotId === "Earpiece");
-        if (typeof earPro !== "undefined") {
+        if (typeof earPro !== "undefined") 
+        {
             earProID = earPro._tpl;
         }
 
         const armourVest = botDetails.find(e => e.slotId === "ArmorVest");
         const tacticalVest = botDetails.find(e => e.slotId === "TacticalVest");
-        if (typeof armourVest !== "undefined") {
+        if (typeof armourVest !== "undefined") 
+        {
             armourVestID = armourVest._tpl;
             tempIdHolder = armourVest;
-        } else if (typeof tacticalVest !== "undefined") {
+        }
+        else if (typeof tacticalVest !== "undefined") 
+        {
             armourVestID = tacticalVest._tpl;
             tempIdHolder = tacticalVest;
         }
@@ -240,19 +260,23 @@ export class BotStaticRouterHook
         const backPlate = botDetails.find(e => e.slotId === "Back_plate" && e.parentId == tempIdHolder._id);
         const lSidePlate = botDetails.find(e => e.slotId === "Left_side_plate" && e.parentId == tempIdHolder._id);
         const rSidePlate = botDetails.find(e => e.slotId === "Right_side_plate" && e.parentId == tempIdHolder._id);
-        if (typeof frontPlate !== "undefined") {
+        if (typeof frontPlate !== "undefined") 
+        {
             frontPlateID = this.itemHelper.getItem(frontPlate._tpl)
             frontPlateID = frontPlateID[1]._props.armorClass;
         }
-        if (typeof backPlate !== "undefined") {
+        if (typeof backPlate !== "undefined") 
+        {
             backPlateID = this.itemHelper.getItem(backPlate._tpl)
             backPlateID = backPlateID[1]._props.armorClass;
         }
-        if (typeof lSidePlate !== "undefined") {
+        if (typeof lSidePlate !== "undefined") 
+        {
             lSidePlateID = this.itemHelper.getItem(lSidePlate._tpl)
             lSidePlateID = lSidePlateID[1]._props.armorClass;
         }
-        if (typeof rSidePlate !== "undefined") {
+        if (typeof rSidePlate !== "undefined") 
+        {
             rSidePlateID = this.itemHelper.getItem(rSidePlate._tpl)
             rSidePlateID = rSidePlateID[1]._props.armorClass;
         }
