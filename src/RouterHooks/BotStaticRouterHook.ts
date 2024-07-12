@@ -37,7 +37,6 @@ export class BotStaticRouterHook
                         try {
                             if (routerHitCount >= 1) {
                                 this.logOutput(output);
-                                this.apbsLogger.log(this.logger, Logging.DEBUG, "----------------------------------------------", `${output}`);
                             }
                         } catch (err) {
                             this.apbsLogger.log(this.logger, Logging.WARN, "Bot Router hook failed. Disable Logging to remove this message if intentional.", `${err.stack}`);
@@ -53,6 +52,7 @@ export class BotStaticRouterHook
 
     public logOutput(output: any):void
     {
+        const start = performance.now()
         const outputJson = JSON.parse(output);
         const botDetails = this.getBotDetails(JSON.parse(output))
         const primaryId = this.itemHelper.getItemName(botDetails.primaryID) ?? "None" ;
@@ -153,6 +153,8 @@ export class BotStaticRouterHook
         } catch (err) {
             this.apbsLogger.log(this.logger, Logging.ERR, "Bot Generation LogOutput failed.", `${err.stack}`);
         }
+        const timeTaken = performance.now() - start;
+        this.apbsLogger.log(this.logger, Logging.DEBUG, `Time Taken for bot ${botDetails.name} to log: ${timeTaken}`);
     }
 
     public getBotDetails (detailsJSON: any): any
@@ -171,58 +173,60 @@ export class BotStaticRouterHook
         let lSidePlateID;
         let rSidePlateID;
 
-        let tempArmour;
+        let tempIdHolder;
 
-        const primaryWeapon = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "FirstPrimaryWeapon");
+        const botDetails = detailsJSON["data"][0].Inventory.items;
+
+        const primaryWeapon = botDetails.find(e => e.slotId === "FirstPrimaryWeapon");
         if (typeof primaryWeapon !== "undefined") {
             primaryID = primaryWeapon._tpl;
-            const primaryCaliber = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "patron_in_weapon" && e.parentId == primaryWeapon._id);
+            const primaryCaliber = botDetails.find(e => e.slotId === "patron_in_weapon" && e.parentId == primaryWeapon._id);
             if (typeof primaryCaliber !== "undefined") {
                 primaryCaliberID = primaryCaliber._tpl;
             }
         }
 
-        const secondaryWeapon = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "SecondPrimaryWeapon");
+        const secondaryWeapon = botDetails.find(e => e.slotId === "SecondPrimaryWeapon");
         if (typeof secondaryWeapon !== "undefined") {
             secondaryID = secondaryWeapon._tpl;
-            const secondaryCaliber = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "patron_in_weapon" && e.parentId == secondaryWeapon._id);
+            const secondaryCaliber = botDetails.find(e => e.slotId === "patron_in_weapon" && e.parentId == secondaryWeapon._id);
             if (typeof secondaryCaliber !== "undefined") {
                 secondaryCaliberID = secondaryCaliber._tpl;
             }
         }
 
-        const holster = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "Holster");
+        const holster = botDetails.find(e => e.slotId === "Holster");
         if (typeof holster !== "undefined") {
             holsterID = holster._tpl;
-            const holsterCaliber = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "patron_in_weapon" && e.parentId == holster._id);
+            const holsterCaliber = botDetails.find(e => e.slotId === "patron_in_weapon" && e.parentId == holster._id);
             if (typeof holsterCaliber !== "undefined") {
                 holsterCaliberID = holsterCaliber._tpl;
             }
         }
 
-        const helmet = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "Headwear");
+        const helmet = botDetails.find(e => e.slotId === "Headwear");
         if (typeof helmet !== "undefined") {
             helmetID = helmet._tpl;
         }
 
-        const earPro = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "Earpiece");
+        const earPro = botDetails.find(e => e.slotId === "Earpiece");
         if (typeof earPro !== "undefined") {
             earProID = earPro._tpl;
         }
 
-        const armourVest = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "ArmorVest");
-        const tacticalVest = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "TacticalVest");
+        const armourVest = botDetails.find(e => e.slotId === "ArmorVest");
+        const tacticalVest = botDetails.find(e => e.slotId === "TacticalVest");
         if (typeof armourVest !== "undefined") {
             armourVestID = armourVest._tpl;
-            tempArmour = armourVest;
+            tempIdHolder = armourVest;
         } else if (typeof tacticalVest !== "undefined") {
             armourVestID = tacticalVest._tpl;
-            tempArmour = tacticalVest;
+            tempIdHolder = tacticalVest;
         }
-        const frontPlate = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "Front_plate" && e.parentId == tempArmour._id);
-        const backPlate = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "Back_plate" && e.parentId == tempArmour._id);
-        const lSidePlate = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "Left_side_plate" && e.parentId == tempArmour._id);
-        const rSidePlate = detailsJSON["data"][0].Inventory.items.find(e => e.slotId === "Right_side_plate" && e.parentId == tempArmour._id);
+        const frontPlate = botDetails.find(e => e.slotId === "Front_plate" && e.parentId == tempIdHolder._id);
+        const backPlate = botDetails.find(e => e.slotId === "Back_plate" && e.parentId == tempIdHolder._id);
+        const lSidePlate = botDetails.find(e => e.slotId === "Left_side_plate" && e.parentId == tempIdHolder._id);
+        const rSidePlate = botDetails.find(e => e.slotId === "Right_side_plate" && e.parentId == tempIdHolder._id);
         if (typeof frontPlate !== "undefined") {
             frontPlateID = this.itemHelper.getItem(frontPlate._tpl)
             frontPlateID = frontPlateID[1]._props.armorClass;
