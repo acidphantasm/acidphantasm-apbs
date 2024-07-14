@@ -1,4 +1,5 @@
-export enum Logging {
+export enum Logging 
+{
     SCAV = "scav_generation",
     PMC = "pmc_generation",
     RAIDER = "raider_generation",

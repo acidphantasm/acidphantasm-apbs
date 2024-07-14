@@ -11,7 +11,7 @@ export class APBSLogger
 {
     constructor(
         @inject("ILogger") protected logger: ILogger,
-        @inject("ILogger") protected modInformation: ModInformation,
+        @inject("ILogger") protected modInformation: ModInformation
     )
     {}    
 

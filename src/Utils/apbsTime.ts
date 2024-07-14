@@ -25,7 +25,7 @@ export function getCurrentHour(currentTime: string, timeVariant: string): number
 
 export function nightTimeCheck(currentTime: string, timeVariant: string, location: string): boolean 
 {
-    let currentHour;
+    let currentHour: number;
     switch (location)
     {
         case "factory4_night":
