@@ -2,10 +2,11 @@ import { inject, injectable } from "tsyringe";
 import { StaticRouterModService } from "@spt/services/mod/staticRouter/StaticRouterModService";
 import { WeatherGenerator } from "@spt/generators/WeatherGenerator";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
+
 import { APBSLogger } from "../Utils/apbsLogger";
 import { Logging } from "../Enums/Logging";
-import { ILogger } from "@spt/models/spt/utils/ILogger";
-import { getCurrentTime, nightTimeCheck } from "../Utils/time";
+import { getCurrentTime, nightTimeCheck } from "../Utils/apbsTime";
 import { RaidInformation } from "../Globals/RaidInformation";
 
 @injectable()
@@ -174,7 +175,7 @@ export class StaticRouterHooks
                 default:
                     this.apbsLogger.log(
                         Logging.DEBUG,
-                        "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
+                        "-----------------------------------------------You forgot to properly log this bot-----------------------------------------------",
                         `| ${logMessages[0]}`,
                         `| ${logMessages[1]}`,
                         `| ${logMessages[2]} ${logMessages[3]}`
@@ -187,7 +188,7 @@ export class StaticRouterHooks
             this.apbsLogger.log(Logging.ERR, "Bot Generation LogOutput failed.", `${err.stack}`);
         }
         const timeTaken = performance.now() - start;
-        this.apbsLogger.log(Logging.DEBUG, `Time Taken for bot ${botDetails.name} to log: ${timeTaken}`);
+        this.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for logging bot ${botDetails.name}`);
     }
 
     private getBotDetails (detailsJSON: any): any

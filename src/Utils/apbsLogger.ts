@@ -1,28 +1,25 @@
 import { inject, injectable } from "tsyringe";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
+
 import { Logging } from "../Enums/Logging";
 import { LoggingFolders } from "../Enums/LoggingFolders";
-import { InstanceManager } from "../InstanceManager";
+import { ModInformation } from "../Globals/ModInformation";
 import fs from "node:fs";
 
 @injectable()
 export class APBSLogger
 {
-    protected logPath: string;
-
     constructor(
         @inject("ILogger") protected logger: ILogger,
-        @inject("InstanceManager") protected instance: InstanceManager,
+        @inject("ILogger") protected modInformation: ModInformation,
     )
-    {
-        this.logPath = this.instance.logPath;
-    }    
+    {}    
 
     public createLogFiles(): void
     {
         for (const value in LoggingFolders)
         {
-            fs.writeFile(`${this.logPath}/${LoggingFolders[value]}.log`, `${new Date().toLocaleString()} - Acid's Progressive Bot System Log File\n`, function (err) 
+            fs.writeFile(`${this.modInformation.logPath}/${LoggingFolders[value]}.log`, `${new Date().toLocaleString()} - Acid's Progressive Bot System Log File\n`, function (err) 
             {
                 if (err) throw err;
             });
@@ -75,7 +72,7 @@ export class APBSLogger
                 messages = messages + `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
             }
         }
-        fs.appendFile(`${this.instance.logPath}/${logType}.log`, `${messages}`, function (err) 
+        fs.appendFile(`${this.modInformation.logPath}/${logType}.log`, `${messages}`, function (err) 
         {
             if (err) throw err;
             if (showInConsole) 

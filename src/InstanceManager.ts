@@ -18,28 +18,25 @@ import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import { APBSLogger } from "./Utils/apbsLogger";
 import { StaticRouterHooks } from "./RouterHooks/StaticRouterHooks";
 import { RaidInformation } from "./Globals/RaidInformation";
+import { ModInformation } from "./Globals/ModInformation";
 
 export class InstanceManager 
 {
     //#region Accessible in or after preAkiLoad
     public modName: string;
     public debug: boolean;
-    public modPath: string = path.join(process.cwd(), "\\user\\mods\\acidphantasm-acidsprogressivebotsystem\\");
-    public logPath: string = path.join(process.cwd(), "\\user\\mods\\acidphantasm-acidsprogressivebotsystem\\logs");
-    public profilePath: string = path.join(process.cwd(), "\\user\\profiles");
     //#endregion
 
     // Instances
     public container: DependencyContainer;
     public preSptModLoader: PreSptModLoader;
     public configServer: ConfigServer;
-    public pmcConfig: IPmcConfig;
-    public botConfig: IBotConfig;
     public itemHelper: ItemHelper;
     public logger: ILogger;
     public staticRouter: StaticRouterModService;
     public weatherGenerator: WeatherGenerator;
     public apbsLogger: APBSLogger;
+    public modInformation: ModInformation;
     public raidInformation: RaidInformation;
     public staticRouterHooks: StaticRouterHooks;
 
@@ -47,6 +44,8 @@ export class InstanceManager
 
     //#region Acceessible in or after postDBLoad
     public database: IDatabaseTables;
+    public pmcConfig: IPmcConfig;
+    public botConfig: IBotConfig;
     //#endregion
 
     // Call at the start of the mods postDBLoad method
@@ -56,16 +55,15 @@ export class InstanceManager
 
         this.container = container;
         this.preSptModLoader = container.resolve<PreSptModLoader>("PreSptModLoader");
-        this.configServer = container.resolve<ConfigServer>("ConfigServer");
-        this.itemHelper = container.resolve<ItemHelper>("ItemHelper");
         this.logger = container.resolve<ILogger>("WinstonLogger");
         this.staticRouter = container.resolve<StaticRouterModService>("StaticRouterModService");
         this.weatherGenerator = container.resolve<WeatherGenerator>("WeatherGenerator");
-        this.botConfig = this.configServer.getConfig<IBotConfig>(ConfigTypes.BOT);
-        this.pmcConfig = this.configServer.getConfig<IPmcConfig>(ConfigTypes.PMC);
+        this.configServer = container.resolve<ConfigServer>("ConfigServer");
+        this.itemHelper = container.resolve<ItemHelper>("ItemHelper");
 
-        this.apbsLogger = new APBSLogger(this.logger, this);
+        this.modInformation = new ModInformation;
         this.raidInformation = new RaidInformation;
+        this.apbsLogger = new APBSLogger(this.logger, this.modInformation);
         this.staticRouterHooks = new StaticRouterHooks(this.staticRouter, this.itemHelper, this.apbsLogger, this.logger, this.weatherGenerator, this.raidInformation);
 
         this.getPath();
@@ -75,6 +73,8 @@ export class InstanceManager
     public postDBLoad(container: DependencyContainer): void
     {
         this.database = container.resolve<DatabaseService>("DatabaseService").getTables();
+        this.botConfig = this.configServer.getConfig<IBotConfig>(ConfigTypes.BOT);
+        this.pmcConfig = this.configServer.getConfig<IPmcConfig>(ConfigTypes.PMC);
     }
 
     public getPath(): boolean

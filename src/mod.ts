@@ -23,9 +23,9 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         const start = performance.now()
 
         this.instance.postDBLoad(container);
-                
+        
         const timeTaken = performance.now() - start;
-        this.instance.apbsLogger.log(Logging.DEBUG, `Mod Load Time: ${timeTaken}`);
+        this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS to load`);
     }
 }
 
