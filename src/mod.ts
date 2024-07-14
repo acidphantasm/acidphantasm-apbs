@@ -28,5 +28,4 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS to load`);
     }
 }
-
 export const mod = new APBS();

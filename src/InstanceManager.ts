@@ -9,10 +9,7 @@ import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { DatabaseService } from "@spt/services/DatabaseService";
 import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
 import { ConfigServer } from "@spt/servers/ConfigServer";
-import { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
-import { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import { WeatherGenerator } from "@spt/generators/WeatherGenerator";
-import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 
 // Custom
 import { APBSLogger } from "./Utils/apbsLogger";
@@ -44,8 +41,6 @@ export class InstanceManager
 
     //#region Acceessible in or after postDBLoad
     public database: IDatabaseTables;
-    public pmcConfig: IPmcConfig;
-    public botConfig: IBotConfig;
     //#endregion
 
     // Call at the start of the mods postDBLoad method
@@ -73,8 +68,6 @@ export class InstanceManager
     public postDBLoad(container: DependencyContainer): void
     {
         this.database = container.resolve<DatabaseService>("DatabaseService").getTables();
-        this.botConfig = this.configServer.getConfig<IBotConfig>(ConfigTypes.BOT);
-        this.pmcConfig = this.configServer.getConfig<IPmcConfig>(ConfigTypes.PMC);
     }
 
     public getPath(): boolean
