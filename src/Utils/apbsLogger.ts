@@ -1,11 +1,22 @@
+import { inject, injectable } from "tsyringe";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { Logging } from "../Enums/Logging";
 import { LoggingFolders } from "../Enums/LoggingFolders";
+import { InstanceManager } from "../InstanceManager";
 import fs from "node:fs";
 
+@injectable()
 export class APBSLogger
 {
-    private logPath = "./user/mods/acidphantasm-acidsprogressivebotsystem/logs";
+    protected logPath: string;
+
+    constructor(
+        @inject("ILogger") protected logger: ILogger,
+        @inject("InstanceManager") protected instance: InstanceManager,
+    )
+    {
+        this.logPath = this.instance.logPath;
+    }    
 
     public createLogFiles(): void
     {
@@ -18,14 +29,17 @@ export class APBSLogger
         }
     }
 
-    public log(logger: ILogger, logcation: Logging, message: string, message2?: string, message3?: string, message4?: string, message5?: string): void
+    public log(logcation: Logging, message: string, message2?: string, message3?: string, message4?: string, message5?: string, message6?: string, message7?: string, message8?: string): void
     {
         const messagesArray = {
             message,
             message2,
             message3,
             message4,
-            message5
+            message5,
+            message6,
+            message7,
+            message8
         }
         let messages: string = "";
         let textFlag;
@@ -61,18 +75,18 @@ export class APBSLogger
                 messages = messages + `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
             }
         }
-        fs.appendFile(`${this.logPath}/${logType}.log`, `${messages}`, function (err) 
+        fs.appendFile(`${this.instance.logPath}/${logType}.log`, `${messages}`, function (err) 
         {
             if (err) throw err;
             if (showInConsole) 
             {
                 if (logcation == Logging.WARN) 
                 {
-                    logger.warning(`[APBS] -${textFlag} ${messages}`);
+                    this.logger.warning(`[APBS] -${textFlag} ${messages}`);
                 }
                 if (logcation == Logging.ERR) 
                 {
-                    logger.error(`[APBS] -${textFlag} ${messages}`);
+                    this.logger.error(`[APBS] -${textFlag} ${messages}`);
                 }
             }
         });
