@@ -13,7 +13,12 @@ export function getCurrentTime(weatherGenerator: WeatherGenerator): string
 
 export function getCurrentHour(currentTime: string, timeVariant: string): number 
 {
-    const [hourStr, minStr, secStr] = currentTime.split(":");
+    const [
+        hourStr, 
+        minStr, 
+        secStr
+    ] = currentTime.split(":");
+    
     const hour = parseInt(hourStr);
 
     if (timeVariant === "PAST") 

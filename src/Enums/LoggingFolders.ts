@@ -1,5 +1,5 @@
 export enum LoggingFolders 
-{
+    {
     SCAV = "scav_generation",
     PMC = "pmc_generation",
     RAIDER = "raider_generation",

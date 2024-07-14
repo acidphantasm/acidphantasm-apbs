@@ -18,7 +18,7 @@ export class StaticRouterHooks
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("ILogger") protected logger: ILogger,
         @inject("WeatherGenerator") protected weatherGenerator: WeatherGenerator,
-        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("RaidInformation") protected raidInformation: RaidInformation
     )
     {}
 
@@ -86,7 +86,7 @@ export class StaticRouterHooks
             `| Location: ${this.raidInformation.location}`,
             `| Time: ${this.raidInformation.currentTime}`,
             `| Night: ${this.raidInformation.nightTime}`,
-            "------------------------",
+            "------------------------"
         );
     }
 
