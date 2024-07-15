@@ -60,6 +60,7 @@ export class InstanceManager
     {
         this.modName = mod;
 
+        // SPT Classes
         this.container = container;
         this.preSptModLoader = container.resolve<PreSptModLoader>("PreSptModLoader");
         this.logger = container.resolve<ILogger>("WinstonLogger");
@@ -72,6 +73,7 @@ export class InstanceManager
         this.profileHelper = container.resolve<ProfileHelper>("ProfileHelper");
         this.botLevelGenerator = container.resolve<BotLevelGenerator>("BotLevelGenerator");
 
+        // Custom Classes
         this.modInformation = new ModInformation;
         this.apbsLogger = new APBSLogger(this.logger, this.modInformation);
         this.raidInformation = new RaidInformation;
@@ -85,10 +87,12 @@ export class InstanceManager
 
     public postDBLoad(container: DependencyContainer): void
     {
+        // SPT Classes
         this.tables = container.resolve<DatabaseService>("DatabaseService").getTables();
+
+        // Custom Classes
         this.botConfigs = new BotConfigs(this.tables);
 
-        this.botConfigs.configureBotExperienceLevels();
     }
 
     public getPath(): boolean

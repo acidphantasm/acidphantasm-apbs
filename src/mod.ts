@@ -14,20 +14,28 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
 
     public preSptLoad(container: DependencyContainer): void 
     {
+        const start = performance.now()
         this.instance.preSptLoad(container, "APBS");
+
+        //Do preSptLoad stuff
         this.instance.apbsLogger.createLogFiles();
         this.instance.staticRouterHooks.registerRouterHook();
         this.instance.apbsBotLevelGenerator.registerBotLevelGenerator(container);
+
+        const timeTaken = performance.now() - start;
+        this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.preSptLoad`);
     }
 
     public postDBLoad(container: DependencyContainer): void
     {
         const start = performance.now()
-
         this.instance.postDBLoad(container);
         
+        //Do postDBLoad stuff
+        this.instance.botConfigs.configureBotExperienceLevels();
+
         const timeTaken = performance.now() - start;
-        this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS to load`);
+        this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postDBLoad to load`);
     }
 }
 export const mod = new APBS();
