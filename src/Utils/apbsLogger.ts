@@ -10,10 +10,10 @@ import fs from "node:fs";
 export class APBSLogger
 {
     constructor(
-        @inject("ILogger") protected logger: ILogger,
-        @inject("ILogger") protected modInformation: ModInformation
+        @inject("WinstonLogger") protected logger: ILogger,
+        @inject("ModInformation") protected modInformation: ModInformation
     )
-    {}    
+    {}
 
     public createLogFiles(): void
     {
@@ -75,17 +75,17 @@ export class APBSLogger
         fs.appendFile(`${this.modInformation.logPath}/${logType}.log`, `${messages}`, function (err) 
         {
             if (err) throw err;
-            if (showInConsole) 
-            {
-                if (logcation == Logging.WARN) 
-                {
-                    this.logger.warning(`[APBS] -${textFlag} ${messages}`);
-                }
-                if (logcation == Logging.ERR) 
-                {
-                    this.logger.error(`[APBS] -${textFlag} ${messages}`);
-                }
-            }
         });
+        if (showInConsole) 
+        {
+            if (logcation == Logging.WARN) 
+            {
+                this.logger.warning(`[APBS] -${textFlag} ${messages}`);
+            }
+            if (logcation == Logging.ERR) 
+            {
+                this.logger.error(`[APBS] -${textFlag} ${messages}`);
+            }
+        }
     }    
 }
