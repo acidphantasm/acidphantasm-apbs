@@ -2,12 +2,12 @@ import { inject, injectable } from "tsyringe";
 import { StaticRouterModService } from "@spt/services/mod/staticRouter/StaticRouterModService";
 import { WeatherGenerator } from "@spt/generators/WeatherGenerator";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
-import { ILogger } from "@spt/models/spt/utils/ILogger";
 
 import { APBSLogger } from "../Utils/apbsLogger";
 import { Logging } from "../Enums/Logging";
 import { getCurrentTime, nightTimeCheck } from "../Utils/apbsTime";
 import { RaidInformation } from "../Globals/RaidInformation";
+import { BotLevelInformation } from "../Globals/BotLevelInformation";
 
 @injectable()
 export class StaticRouterHooks
@@ -17,13 +17,13 @@ export class StaticRouterHooks
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("WeatherGenerator") protected weatherGenerator: WeatherGenerator,
-        @inject("RaidInformation") protected raidInformation: RaidInformation
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("BotLevelInformation") protected botLevelInformation: BotLevelInformation
     )
     {}
 
     public registerRouterHook(): void
     {
-        let routerHitCount = 0;
         this.staticRouterService.registerStaticRouter(
             "APBS-BotGenerationRouter",
             [
@@ -33,16 +33,16 @@ export class StaticRouterHooks
                     {
                         try 
                         {
-                            if (routerHitCount >= 1) 
+                            const outputJSON = JSON.parse(output);
+                            if (outputJSON.data?.length)
                             {
-                                this.logBotGeneration(output);
+                                this.logBotGeneration(outputJSON);
                             }
                         }
                         catch (err) 
                         {
                             this.apbsLogger.log(Logging.WARN, "Bot Router hook failed.", `${err.stack}`);
                         }
-                        routerHitCount++;
                         return output;
                     }
                 }
@@ -57,7 +57,6 @@ export class StaticRouterHooks
                     url: "/client/raid/configuration",
                     action: async (url, info, sessionId, output) => 
                     {
-                        routerHitCount = 0;
                         try 
                         {
                             this.logLocation(info);
@@ -83,25 +82,24 @@ export class StaticRouterHooks
                 
         this.apbsLogger.log( 
             Logging.DEBUG,
-            "----Raid Information----",
+            "-------Raid Information-------",
             `| Location: ${this.raidInformation.location}`,
             `| Time: ${this.raidInformation.currentTime}`,
             `| Night: ${this.raidInformation.nightTime}`,
-            "------------------------"
+            "------------------------------"
         );
     }
 
-    private logBotGeneration(output: any):void
+    private logBotGeneration(outputJSON: any):void
     {
         const start = performance.now()
 
-        const outputJson = JSON.parse(output);
-        const botDetails = this.getBotDetails(outputJson)
-        const logMessages = this.getLogMessage(botDetails)
+        const botDetails = this.getBotDetails(outputJSON);
+        const logMessages = this.getLogMessage(botDetails);
 
         try 
         {
-            switch (outputJson["data"][0].Info.Settings.Role) 
+            switch (outputJSON.data[0].Info.Settings.Role) 
             {
                 case "pmcBEAR":
                 case "pmcUSEC":
@@ -173,10 +171,21 @@ export class StaticRouterHooks
                         `| ${logMessages[2]} ${logMessages[3]}`
                     );
                     break;
+                case "shooterBTR":
+                case "skier":
+                case "peacemaker":
+                    this.apbsLogger.log( 
+                        Logging.EVENT,
+                        "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
+                        `| ${logMessages[0]}`,
+                        `| ${logMessages[1]}`,
+                        `| ${logMessages[2]} ${logMessages[3]}`
+                    );
+                    break;
                 default:
                     this.apbsLogger.log(
                         Logging.DEBUG,
-                        "-----------------------------------------------You forgot to properly log this bot-----------------------------------------------",
+                        "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
                         `| ${logMessages[0]}`,
                         `| ${logMessages[1]}`,
                         `| ${logMessages[2]} ${logMessages[3]}`
@@ -210,7 +219,7 @@ export class StaticRouterHooks
 
         let canHavePlates = false;
 
-        const botDetails = detailsJSON["data"][0].Inventory.items;
+        const botDetails = detailsJSON.data[0].Inventory.items;
 
         const primaryWeapon = botDetails.find(e => e.slotId === "FirstPrimaryWeapon");
         if (typeof primaryWeapon !== "undefined") 
@@ -293,12 +302,13 @@ export class StaticRouterHooks
         }
 
         return {
-            name: detailsJSON["data"][0].Info.Nickname, 
-            level: detailsJSON["data"][0].Info.Level, 
-            gameVersion: detailsJSON["data"][0].Info.GameVersion, 
-            role: detailsJSON["data"][0].Info.Settings.Role, 
-            side: detailsJSON["data"][0].Info.Side,
-            difficulty: detailsJSON["data"][0].Info.Settings.BotDifficulty,
+            tier: detailsJSON.data[0].Info.Tier,
+            name: detailsJSON.data[0].Info.Nickname, 
+            level: detailsJSON.data[0].Info.Level, 
+            gameVersion: detailsJSON.data[0].Info.GameVersion, 
+            role: detailsJSON.data[0].Info.Settings.Role, 
+            side: detailsJSON.data[0].Info.Side,
+            difficulty: detailsJSON.data[0].Info.Settings.BotDifficulty,
             primaryID,
             primaryCaliberID,
             secondaryID,
@@ -330,6 +340,7 @@ export class StaticRouterHooks
         let realMessage4;
 
         let temporaryMessage1: string[] = [
+            `Tier: ${botDetails.tier}`,
             `Nickname: ${botDetails.name}`,
             `Level: ${botDetails.level}`,
             `Role: ${botDetails.role}`,
