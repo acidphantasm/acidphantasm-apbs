@@ -19,7 +19,7 @@ export class APBSLogger
     {
         for (const value in LoggingFolders)
         {
-            fs.writeFile(`${this.modInformation.logPath}/${LoggingFolders[value]}.log`, `${new Date().toLocaleString()} - Acid's Progressive Bot System Log File\n`, function (err) 
+            fs.writeFile(`${this.modInformation.logPath}/${LoggingFolders[value]}.log`, `${new Date().toLocaleString()} - Log File Created\n`, function (err) 
             {
                 if (err) throw err;
             });

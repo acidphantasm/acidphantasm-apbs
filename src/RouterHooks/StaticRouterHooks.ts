@@ -16,7 +16,6 @@ export class StaticRouterHooks
         @inject("StaticRouterModService") protected staticRouterService: StaticRouterModService,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
-        @inject("ILogger") protected logger: ILogger,
         @inject("WeatherGenerator") protected weatherGenerator: WeatherGenerator,
         @inject("RaidInformation") protected raidInformation: RaidInformation
     )
@@ -50,6 +49,7 @@ export class StaticRouterHooks
             ],
             "spt"
         );
+        this.apbsLogger.log(Logging.DEBUG, "Bot Generation Router registered");
         this.staticRouterService.registerStaticRouter(
             "APBS-StartRaidStateRouter",
             [
@@ -72,6 +72,7 @@ export class StaticRouterHooks
             ],
             "spt"
         );
+        this.apbsLogger.log(Logging.DEBUG, "Raid Configuration Router registered");
     }
     private logLocation(info: any):void
     {
