@@ -15,7 +15,9 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
     public preSptLoad(container: DependencyContainer): void 
     {
         this.instance.preSptLoad(container, "APBS");
+        this.instance.apbsLogger.createLogFiles();
         this.instance.staticRouterHooks.registerRouterHook();
+        this.instance.apbsBotLevelGenerator.registerBotLevelGenerator(container);
     }
 
     public postDBLoad(container: DependencyContainer): void
