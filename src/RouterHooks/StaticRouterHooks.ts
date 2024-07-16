@@ -77,7 +77,7 @@ export class StaticRouterHooks
         this.raidInformation.currentTime = getCurrentTime(this.weatherGenerator);
         this.raidInformation.timeVariant = info.timeVariant;
         this.raidInformation.nightTime = nightTimeCheck(this.raidInformation.currentTime, this.raidInformation.timeVariant, this.raidInformation.location);
-                
+        
         this.apbsLogger.log( 
             Logging.DEBUG,
             "-------Raid Information-------",
