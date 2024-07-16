@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
+// SPT
 import { DependencyContainer, Lifecycle } from "tsyringe";
 import { PreSptModLoader } from "@spt/loaders/PreSptModLoader";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
@@ -20,6 +21,11 @@ import { LocalisationService } from "@spt/services/LocalisationService";
 import { HashUtil } from "@spt/utils/HashUtil";
 import { InventoryMagGen } from "@spt/generators/weapongen/InventoryMagGen";
 import { ICloner } from "@spt/utils/cloners/ICloner";
+import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
+import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
+import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
+import { BotWeaponModLimitService } from "@spt/services/BotWeaponModLimitService";
+import { RepairService } from "@spt/services/RepairService";
 
 // Custom
 import { APBSLogger } from "./Utils/apbsLogger";
@@ -31,11 +37,6 @@ import { APBSBotLevelGenerator } from "./Generators/ABPSBotLevelGenerator";
 import { BotConfigs } from "./Configs/BotConfigs";
 import { APBSBotWeaponGenerator } from "./Generators/APBSBotWeaponGenerator";
 import { APBSTierGetter } from "./Utils/apbsTierGetter";
-import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
-import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
-import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
-import { BotWeaponModLimitService } from "@spt/services/BotWeaponModLimitService";
-import { RepairService } from "@spt/services/RepairService";
 
 export class InstanceManager 
 {
