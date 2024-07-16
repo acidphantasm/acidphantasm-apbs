@@ -339,9 +339,9 @@ export class StaticRouterHooks
 
         let temporaryMessage1: string[] = [
             `Tier: ${botDetails.tier}`,
-            `Nickname: ${botDetails.name}`,
-            `Level: ${botDetails.level}`,
             `Role: ${botDetails.role}`,
+            `Level: ${botDetails.level}`,
+            `Nickname: ${botDetails.name}`,
             `Difficulty: ${botDetails.difficulty}`
         ];
         let temporaryMessage2: string[] = [
