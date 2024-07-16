@@ -34,6 +34,8 @@ export class APBSTierGetter
                     case "pmcbear":
                         tier = Tier1.pmcBEAR;
                         break;
+                    case "arenaFighterEvent":
+                    case "exusec":
                     case "pmcusec":
                         tier = Tier1.pmcUSEC;
                         break;
@@ -41,10 +43,6 @@ export class APBSTierGetter
                     case "marksman":
                     case "assault":
                         tier = Tier1.scav;
-                        break;
-                    case "arenaFighterEvent":
-                    case "exusec":
-                        tier = Tier1.raider;
                         break;
                     default:
                         tier = Tier1.boss;
@@ -57,6 +55,8 @@ export class APBSTierGetter
                     case "pmcbear":
                         tier = Tier2.pmcBEAR;
                         break;
+                    case "arenaFighterEvent":
+                    case "exusec":
                     case "pmcusec":
                         tier = Tier2.pmcUSEC;
                         break;
@@ -64,10 +64,6 @@ export class APBSTierGetter
                     case "marksman":
                     case "assault":
                         tier = Tier2.scav;
-                        break;
-                    case "arenaFighterEvent":
-                    case "exusec":
-                        tier = Tier2.raider;
                         break;
                     default:
                         tier = Tier2.boss;
@@ -80,6 +76,8 @@ export class APBSTierGetter
                     case "pmcbear":
                         tier = Tier3.pmcBEAR;
                         break;
+                    case "arenaFighterEvent":
+                    case "exusec":
                     case "pmcusec":
                         tier = Tier3.pmcUSEC;
                         break;
@@ -87,10 +85,6 @@ export class APBSTierGetter
                     case "marksman":
                     case "assault":
                         tier = Tier3.scav;
-                        break;
-                    case "arenaFighterEvent":
-                    case "exusec":
-                        tier = Tier3.raider;
                         break;
                     default:
                         tier = Tier3.boss;
@@ -103,6 +97,8 @@ export class APBSTierGetter
                     case "pmcbear":
                         tier = Tier4.pmcBEAR;
                         break;
+                    case "arenaFighterEvent":
+                    case "exusec":
                     case "pmcusec":
                         tier = Tier4.pmcUSEC;
                         break;
@@ -110,10 +106,6 @@ export class APBSTierGetter
                     case "marksman":
                     case "assault":
                         tier = Tier4.scav;
-                        break;
-                    case "arenaFighterEvent":
-                    case "exusec":
-                        tier = Tier4.raider;
                         break;
                     default:
                         tier = Tier4.boss;
@@ -126,6 +118,8 @@ export class APBSTierGetter
                     case "pmcbear":
                         tier = Tier5.pmcBEAR;
                         break;
+                    case "arenaFighterEvent":
+                    case "exusec":
                     case "pmcusec":
                         tier = Tier5.pmcUSEC;
                         break;
@@ -133,10 +127,6 @@ export class APBSTierGetter
                     case "marksman":
                     case "assault":
                         tier = Tier5.scav;
-                        break;
-                    case "arenaFighterEvent":
-                    case "exusec":
-                        tier = Tier5.raider;
                         break;
                     default:
                         tier = Tier5.boss;
@@ -149,6 +139,8 @@ export class APBSTierGetter
                     case "pmcbear":
                         tier = Tier6.pmcBEAR;
                         break;
+                    case "arenaFighterEvent":
+                    case "exusec":
                     case "pmcusec":
                         tier = Tier6.pmcUSEC;
                         break;
@@ -156,10 +148,6 @@ export class APBSTierGetter
                     case "marksman":
                     case "assault":
                         tier = Tier6.scav;
-                        break;
-                    case "arenaFighterEvent":
-                    case "exusec":
-                        tier = Tier6.raider;
                         break;
                     default:
                         tier = Tier6.boss;
@@ -172,6 +160,8 @@ export class APBSTierGetter
                     case "pmcbear":
                         tier = Tier7.pmcBEAR;
                         break;
+                    case "arenaFighterEvent":
+                    case "exusec":
                     case "pmcusec":
                         tier = Tier7.pmcUSEC;
                         break;
@@ -179,10 +169,6 @@ export class APBSTierGetter
                     case "marksman":
                     case "assault":
                         tier = Tier7.scav;
-                        break;
-                    case "arenaFighterEvent":
-                    case "exusec":
-                        tier = Tier7.raider;
                         break;
                     default:
                         tier = Tier7.boss;
