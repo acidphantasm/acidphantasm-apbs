@@ -31,7 +31,7 @@ export class APBSTierGetter
         return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<playerMaximumLevel)?.botMinLevelVariance
     }
     
-    public getEquipmentByBotRole(botRole: string, tierInfo: number): any
+    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): any
     {
         let tier;
         switch (tierInfo) 
@@ -40,152 +40,158 @@ export class APBSTierGetter
                 switch (botRole)
                 {
                     case "pmcbear":
-                        tier = Tier1.pmcBEAR;
-                        break;
+                        tier = range == undefined ? Tier1[tierInfo].pmcBEAR.equipment[slot] : Tier1[tierInfo].pmcBEAR.equipment[slot][range]
+                        return tier;
                     case "arenaFighterEvent":
                     case "exusec":
                     case "pmcusec":
-                        tier = Tier1.pmcUSEC;
-                        break;
-                    case "cursedassault":
+                        tier = range == undefined ? Tier1[tierInfo].pmcUSEC.equipment[slot] : Tier1[tierInfo].pmcUSEC.equipment[slot][range]
+                        return tier;
                     case "marksman":
+                        tier = range == undefined ? Tier1[tierInfo].marksman.equipment[slot] : Tier1[tierInfo].marksman.equipment[slot][range]
+                        return tier;
+                    case "cursedassault":
                     case "assault":
-                        tier = Tier1.scav;
-                        break;
+                        tier = range == undefined ? Tier1[tierInfo].scav.equipment[slot] : Tier1[tierInfo].scav.equipment[slot][range]
+                        return tier;
                     default:
-                        tier = Tier1.boss;
-                        break;
+                        tier = range == undefined ? Tier1[tierInfo].boss.equipment[slot] : Tier1[tierInfo].boss.equipment[slot][range]
+                        return tier;
                 }
-                break;
             case 2:
                 switch (botRole)
                 {
                     case "pmcbear":
-                        tier = Tier2.pmcBEAR;
-                        break;
+                        tier = range == undefined ? Tier2[tierInfo].pmcBEAR.equipment[slot] : Tier2[tierInfo].pmcBEAR.equipment[slot][range]
+                        return tier;
                     case "arenaFighterEvent":
                     case "exusec":
                     case "pmcusec":
-                        tier = Tier2.pmcUSEC;
-                        break;
-                    case "cursedassault":
+                        tier = range == undefined ? Tier2[tierInfo].pmcUSEC.equipment[slot] : Tier2[tierInfo].pmcUSEC.equipment[slot][range]
+                        return tier;
                     case "marksman":
+                        tier = range == undefined ? Tier2[tierInfo].marksman.equipment[slot] : Tier2[tierInfo].marksman.equipment[slot][range]
+                        return tier;
+                    case "cursedassault":
                     case "assault":
-                        tier = Tier2.scav;
-                        break;
+                        tier = range == undefined ? Tier2[tierInfo].scav.equipment[slot] : Tier2[tierInfo].scav.equipment[slot][range]
+                        return tier;
                     default:
-                        tier = Tier2.boss;
-                        break;
+                        tier = range == undefined ? Tier2[tierInfo].boss.equipment[slot] : Tier2[tierInfo].boss.equipment[slot][range]
+                        return tier;
                 }
-                break;
             case 3:
                 switch (botRole)
                 {
                     case "pmcbear":
-                        tier = Tier3.pmcBEAR;
-                        break;
+                        tier = range == undefined ? Tier3[tierInfo].pmcBEAR.equipment[slot] : Tier3[tierInfo].pmcBEAR.equipment[slot][range]
+                        return tier;
                     case "arenaFighterEvent":
                     case "exusec":
                     case "pmcusec":
-                        tier = Tier3.pmcUSEC;
-                        break;
-                    case "cursedassault":
+                        tier = range == undefined ? Tier3[tierInfo].pmcUSEC.equipment[slot] : Tier3[tierInfo].pmcUSEC.equipment[slot][range]
+                        return tier;
                     case "marksman":
+                        tier = range == undefined ? Tier3[tierInfo].marksman.equipment[slot] : Tier3[tierInfo].marksman.equipment[slot][range]
+                        return tier;
+                    case "cursedassault":
                     case "assault":
-                        tier = Tier3.scav;
-                        break;
+                        tier = range == undefined ? Tier3[tierInfo].scav.equipment[slot] : Tier3[tierInfo].scav.equipment[slot][range]
+                        return tier;
                     default:
-                        tier = Tier3.boss;
-                        break;
+                        tier = range == undefined ? Tier3[tierInfo].boss.equipment[slot] : Tier3[tierInfo].boss.equipment[slot][range]
+                        return tier;
                 }
-                break;
             case 4:
                 switch (botRole)
                 {
                     case "pmcbear":
-                        tier = Tier4.pmcBEAR;
-                        break;
+                        tier = range == undefined ? Tier4[tierInfo].pmcBEAR.equipment[slot] : Tier4[tierInfo].pmcBEAR.equipment[slot][range]
+                        return tier;
                     case "arenaFighterEvent":
                     case "exusec":
                     case "pmcusec":
-                        tier = Tier4.pmcUSEC;
-                        break;
-                    case "cursedassault":
+                        tier = range == undefined ? Tier4[tierInfo].pmcUSEC.equipment[slot] : Tier4[tierInfo].pmcUSEC.equipment[slot][range]
+                        return tier;
                     case "marksman":
+                        tier = range == undefined ? Tier4[tierInfo].marksman.equipment[slot] : Tier4[tierInfo].marksman.equipment[slot][range]
+                        return tier;
+                    case "cursedassault":
                     case "assault":
-                        tier = Tier4.scav;
-                        break;
+                        tier = range == undefined ? Tier4[tierInfo].scav.equipment[slot] : Tier4[tierInfo].scav.equipment[slot][range]
+                        return tier;
                     default:
-                        tier = Tier4.boss;
-                        break;
+                        tier = range == undefined ? Tier4[tierInfo].boss.equipment[slot] : Tier4[tierInfo].boss.equipment[slot][range]
+                        return tier;
                 }
-                break;
             case 5:
                 switch (botRole)
                 {
                     case "pmcbear":
-                        tier = Tier5.pmcBEAR;
-                        break;
+                        tier = range == undefined ? Tier5[tierInfo].pmcBEAR.equipment[slot] : Tier5[tierInfo].pmcBEAR.equipment[slot][range]
+                        return tier;
                     case "arenaFighterEvent":
                     case "exusec":
                     case "pmcusec":
-                        tier = Tier5.pmcUSEC;
-                        break;
-                    case "cursedassault":
+                        tier = range == undefined ? Tier5[tierInfo].pmcUSEC.equipment[slot] : Tier5[tierInfo].pmcUSEC.equipment[slot][range]
+                        return tier;
                     case "marksman":
+                        tier = range == undefined ? Tier5[tierInfo].marksman.equipment[slot] : Tier5[tierInfo].marksman.equipment[slot][range]
+                        return tier;
+                    case "cursedassault":
                     case "assault":
-                        tier = Tier5.scav;
-                        break;
+                        tier = range == undefined ? Tier5[tierInfo].scav.equipment[slot] : Tier5[tierInfo].scav.equipment[slot][range]
+                        return tier;
                     default:
-                        tier = Tier5.boss;
-                        break;
+                        tier = range == undefined ? Tier5[tierInfo].boss.equipment[slot] : Tier5[tierInfo].boss.equipment[slot][range]
+                        return tier;
                 }
-                break;
             case 6:
                 switch (botRole)
                 {
                     case "pmcbear":
-                        tier = Tier6.pmcBEAR;
-                        break;
+                        tier = range == undefined ? Tier6[tierInfo].pmcBEAR.equipment[slot] : Tier6[tierInfo].pmcBEAR.equipment[slot][range]
+                        return tier;
                     case "arenaFighterEvent":
                     case "exusec":
                     case "pmcusec":
-                        tier = Tier6.pmcUSEC;
-                        break;
-                    case "cursedassault":
+                        tier = range == undefined ? Tier6[tierInfo].pmcUSEC.equipment[slot] : Tier6[tierInfo].pmcUSEC.equipment[slot][range]
+                        return tier;
                     case "marksman":
+                        tier = range == undefined ? Tier6[tierInfo].marksman.equipment[slot] : Tier6[tierInfo].marksman.equipment[slot][range]
+                        return tier;
+                    case "cursedassault":
                     case "assault":
-                        tier = Tier6.scav;
-                        break;
+                        tier = range == undefined ? Tier6[tierInfo].scav.equipment[slot] : Tier6[tierInfo].scav.equipment[slot][range]
+                        return tier;
                     default:
-                        tier = Tier6.boss;
-                        break;
+                        tier = range == undefined ? Tier6[tierInfo].boss.equipment[slot] : Tier6[tierInfo].boss.equipment[slot][range]
+                        return tier;
                 }
-                break;
             case 7:
                 switch (botRole)
                 {
                     case "pmcbear":
-                        tier = Tier7.pmcBEAR;
-                        break;
+                        tier = range == undefined ? Tier7[tierInfo].pmcBEAR.equipment[slot] : Tier7[tierInfo].pmcBEAR.equipment[slot][range]
+                        return tier;
                     case "arenaFighterEvent":
                     case "exusec":
                     case "pmcusec":
-                        tier = Tier7.pmcUSEC;
-                        break;
-                    case "cursedassault":
+                        tier = range == undefined ? Tier7[tierInfo].pmcUSEC.equipment[slot] : Tier7[tierInfo].pmcUSEC.equipment[slot][range]
+                        return tier;
                     case "marksman":
+                        tier = range == undefined ? Tier7[tierInfo].marksman.equipment[slot] : Tier7[tierInfo].marksman.equipment[slot][range]
+                        return tier;
+                    case "cursedassault":
                     case "assault":
-                        tier = Tier7.scav;
-                        break;
+                        tier = range == undefined ? Tier7[tierInfo].scav.equipment[slot] : Tier7[tierInfo].scav.equipment[slot][range]
+                        return tier;
                     default:
-                        tier = Tier7.boss;
-                        break;
+                        tier = range == undefined ? Tier7[tierInfo].boss.equipment[slot] : Tier7[tierInfo].boss.equipment[slot][range]
+                        return tier;
                 }
-                break;
             default:
                 break;
         }
-        return tier;
     }
 }
