@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { BotLevelInformation } from "../Globals/BotLevelInformation";
+import { TierInformation } from "../Globals/TierInformation";
 import Tier1 = require("../JSONs/1.json");
 import Tier2 = require("../JSONs/2.json");
 import Tier3 = require("../JSONs/3.json");
@@ -12,15 +12,23 @@ import Tier7 = require("../JSONs/7.json");
 export class APBSTierGetter
 {
     constructor(
-        @inject("BotLevelInformation") protected botLevelInformation: BotLevelInformation
+        @inject("TierInformation") protected tierInformation: TierInformation
     )
     {}
 
     public getTierByLevel(level: number): number
     {
-        const tiers = this.botLevelInformation.tiers;
-        const actualTier = tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<=playerMaximumLevel)?.tier
-        return actualTier
+        return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<=playerMaximumLevel)?.tier
+    }
+
+    public getTierUpperLevelDeviation(level:number): number
+    {
+        return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<playerMaximumLevel)?.botMaxLevelVariance
+    }
+
+    public getTierLowerLevelDeviation(level:number): number
+    {
+        return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<playerMaximumLevel)?.botMinLevelVariance
     }
     
     public getEquipmentByBotRole(botRole: string, tierInfo: number): any

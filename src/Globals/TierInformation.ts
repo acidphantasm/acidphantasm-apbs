@@ -1,4 +1,4 @@
-export class BotLevelInformation
+export class TierInformation
 {
     public tiers = [
         {

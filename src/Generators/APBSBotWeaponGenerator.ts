@@ -4,7 +4,6 @@ import { DatabaseService } from "@spt/services/DatabaseService";
 import { RandomUtil } from "@spt/utils/RandomUtil";
 import { APBSLogger } from "../Utils/apbsLogger";
 import { Logging } from "../Enums/Logging";
-import { BotLevelInformation } from "../Globals/BotLevelInformation";
 import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
 import { GenerationData, Inventory, ModsChances } from "@spt/models/eft/common/tables/IBotType";
 import { GenerateWeaponResult } from "@spt/models/spt/bots/GenerateWeaponResult";
@@ -46,7 +45,6 @@ export class APBSBotWeaponGenerator
 
     constructor(
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
-        @inject("BotLevelInformation") protected botLevelInformation: BotLevelInformation,
         @inject("BotWeaponGenerator") protected botWeaponGenerator: BotWeaponGenerator,
         @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper,
         @inject("LocalisationService") protected localisationService: LocalisationService,

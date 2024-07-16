@@ -26,7 +26,7 @@ import { APBSLogger } from "./Utils/apbsLogger";
 import { StaticRouterHooks } from "./RouterHooks/StaticRouterHooks";
 import { RaidInformation } from "./Globals/RaidInformation";
 import { ModInformation } from "./Globals/ModInformation";
-import { BotLevelInformation } from "./Globals/BotLevelInformation";
+import { TierInformation } from "./Globals/TierInformation";
 import { APBSBotLevelGenerator } from "./Generators/ABPSBotLevelGenerator";
 import { BotConfigs } from "./Configs/BotConfigs";
 import { APBSBotWeaponGenerator } from "./Generators/APBSBotWeaponGenerator";
@@ -59,7 +59,7 @@ export class InstanceManager
     public apbsBotLevelGenerator: APBSBotLevelGenerator;
     public botLevelGenerator: BotLevelGenerator;
     public botGenerator: BotGenerator;
-    public botLevelInformation: BotLevelInformation;
+    public tierInformation: TierInformation;
     public botWeaponGenerator: BotWeaponGenerator;
     public apbsBotWeaponGenerator: APBSBotWeaponGenerator;
     public weightedRandomHelper: WeightedRandomHelper;
@@ -120,8 +120,8 @@ export class InstanceManager
         this.container.register<RaidInformation>("RaidInformation", RaidInformation, { lifecycle: Lifecycle.Singleton });
         this.raidInformation = container.resolve<RaidInformation>("RaidInformation");
 
-        this.container.register<BotLevelInformation>("BotLevelInformation", BotLevelInformation, { lifecycle: Lifecycle.Singleton });
-        this.botLevelInformation = container.resolve<BotLevelInformation>("BotLevelInformation");
+        this.container.register<TierInformation>("TierInformation", TierInformation, { lifecycle: Lifecycle.Singleton });
+        this.tierInformation = container.resolve<TierInformation>("TierInformation");
         
         this.container.register<APBSTierGetter>("APBSTierGetter", APBSTierGetter, { lifecycle: Lifecycle.Singleton })
         this.apbsTierGetter = container.resolve<APBSTierGetter>("APBSTierGetter");

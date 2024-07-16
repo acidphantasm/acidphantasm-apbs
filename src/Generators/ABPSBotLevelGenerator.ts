@@ -9,7 +9,6 @@ import { BotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails"
 import { APBSLogger } from "../Utils/apbsLogger";
 import { Logging } from "../Enums/Logging";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
-import { BotLevelInformation } from "../Globals/BotLevelInformation";
 import { APBSIBotBase } from "../Interface/APBSIBotBase";
 import { APBSTierGetter } from "../Utils/apbsTierGetter";
 
@@ -23,7 +22,6 @@ export class APBSBotLevelGenerator
         @inject("BotLevelGenerator") protected botLevelGenerator: BotLevelGenerator,
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("ProfileHelper") protected profileHelper: ProfileHelper,
-        @inject("BotLevelInformation") protected botLevelInformation: BotLevelInformation,
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter
     )
     {}
@@ -63,7 +61,7 @@ export class APBSBotLevelGenerator
                 ? Math.min(botGenerationDetails.locationSpecificPmcLevelOverride.max, maxLevel) // Was a PMC and they have a level override
                 : Math.min(levelDetails.max, maxLevel); // Not pmc with override or non-pmc
 
-        let level = botGenerationDetails.playerLevel + this.getMaxLevelVariance(botGenerationDetails.playerLevel);
+        let level = botGenerationDetails.playerLevel + this.apbsTierGetter.getTierUpperLevelDeviation(botGenerationDetails.playerLevel);
         if (level > maxPossibleLevel)
         {
             level = maxPossibleLevel;
@@ -81,24 +79,12 @@ export class APBSBotLevelGenerator
                     maxlevel) // Fallback if value above is crazy (default is 79)
                 
                 : Math.min(levelDetails.min, maxlevel); // Not pmc with override or non-pmc
-        let level = botGenerationDetails.playerLevel - this.getMinLevelVariance(botGenerationDetails.playerLevel);
+        let level = botGenerationDetails.playerLevel - this.apbsTierGetter.getTierLowerLevelDeviation(botGenerationDetails.playerLevel);
         if (level < minPossibleLevel)
         {
             level = minPossibleLevel;
         }
 
         return level;
-    }
-
-    private getMaxLevelVariance(level: number): number
-    {
-        const tiers = this.botLevelInformation.tiers;
-        return tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<playerMaximumLevel)?.botMaxLevelVariance
-    }
-
-    private getMinLevelVariance(level: number): number
-    {
-        const tiers = this.botLevelInformation.tiers;
-        return tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<playerMaximumLevel)?.botMinLevelVariance
     }
 }

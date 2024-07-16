@@ -7,7 +7,6 @@ import { APBSLogger } from "../Utils/apbsLogger";
 import { Logging } from "../Enums/Logging";
 import { getCurrentTime, nightTimeCheck } from "../Utils/apbsTime";
 import { RaidInformation } from "../Globals/RaidInformation";
-import { BotLevelInformation } from "../Globals/BotLevelInformation";
 
 @injectable()
 export class StaticRouterHooks
@@ -17,8 +16,7 @@ export class StaticRouterHooks
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("WeatherGenerator") protected weatherGenerator: WeatherGenerator,
-        @inject("RaidInformation") protected raidInformation: RaidInformation,
-        @inject("BotLevelInformation") protected botLevelInformation: BotLevelInformation
+        @inject("RaidInformation") protected raidInformation: RaidInformation
     )
     {}
 
