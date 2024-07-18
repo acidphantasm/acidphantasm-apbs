@@ -2,21 +2,23 @@ import { inject, injectable } from "tsyringe";
 import { StaticRouterModService } from "@spt/services/mod/staticRouter/StaticRouterModService";
 import { WeatherGenerator } from "@spt/generators/WeatherGenerator";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 
-import { APBSLogger } from "../Utils/apbsLogger";
+import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
-import { getCurrentTime, nightTimeCheck } from "../Utils/apbsTime";
+import { getCurrentTime, nightTimeCheck } from "../Utils/APBSTime";
 import { RaidInformation } from "../Globals/RaidInformation";
 
 @injectable()
-export class StaticRouterHooks
+export class APBSStaticRouterHooks
 {
     constructor(
         @inject("StaticRouterModService") protected staticRouterService: StaticRouterModService,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("WeatherGenerator") protected weatherGenerator: WeatherGenerator,
-        @inject("RaidInformation") protected raidInformation: RaidInformation
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("ProfileHelper") protected profileHelper: ProfileHelper
     )
     {}
 
@@ -45,7 +47,7 @@ export class StaticRouterHooks
                     }
                 }
             ],
-            "spt"
+            "APBS"
         );
         this.apbsLogger.log(Logging.DEBUG, "Bot Generation Router registered");
         this.staticRouterService.registerStaticRouter(
@@ -67,9 +69,56 @@ export class StaticRouterHooks
                     }
                 }
             ],
-            "spt"
+            "APBS"
         );
         this.apbsLogger.log(Logging.DEBUG, "Raid Configuration Router registered");
+        this.staticRouterService.registerStaticRouter(
+            "APBS-GameStartRouter",
+            [
+                {
+                    url: "/client/game/start",
+                    action: async (url, info, sessionId, output) => 
+                    {
+                        try 
+                        {
+                            const fullProfile = this.profileHelper.getFullProfile(sessionId);
+                            this.raidInformation.freshProfile = (fullProfile.info.wipe === true) ? true : false;
+                        }
+                        catch (err) 
+                        {
+                            this.apbsLogger.log(Logging.WARN, "Game Start Router hook failed.", `${err.stack}`);
+                        }
+                        return output;
+                    }
+                }
+            ],
+            "APBS"
+        );
+        this.apbsLogger.log(Logging.DEBUG, "Game Start Router registered");
+        this.staticRouterService.registerStaticRouter(
+            "APBS-ProfileStatusChecker",
+            [
+                {
+                    url: "/client/profile/status",
+                    action: async (url, info, sessionId, output) => 
+                    {
+                        try 
+                        {
+                            const fullProfile = this.profileHelper.getFullProfile(sessionId);
+                            this.raidInformation.freshProfile = (fullProfile.info.wipe === true) ? true : false;
+                        }
+                        catch (err) 
+                        {
+                            this.apbsLogger.log(Logging.WARN, "Profile Status Router hook failed.", `${err.stack}`);
+                        }
+                        return output;
+                    }
+                }
+            ],
+            "APBS"
+        );
+        this.apbsLogger.log(Logging.DEBUG, "Profile Status Router registered");
+
     }
     private logLocation(info: any):void
     {
@@ -340,8 +389,8 @@ export class StaticRouterHooks
         let temporaryMessage1: string[] = [
             `Tier: ${botDetails.tier}`,
             `Role: ${botDetails.role}`,
-            `Level: ${botDetails.level}`,
             `Nickname: ${botDetails.name}`,
+            `Level: ${botDetails.level}`,
             `Difficulty: ${botDetails.difficulty}`
         ];
         let temporaryMessage2: string[] = [

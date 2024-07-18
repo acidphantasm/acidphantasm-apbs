@@ -6,11 +6,11 @@ import { BotLevelGenerator } from "@spt/generators/BotLevelGenerator";
 import { MinMax } from "@spt/models/common/MinMax";
 import { IRandomisedBotLevelResult } from "@spt/models/eft/bot/IRandomisedBotLevelResult";
 import { BotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
-import { APBSLogger } from "../Utils/apbsLogger";
+import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { APBSIBotBase } from "../Interface/APBSIBotBase";
-import { APBSTierGetter } from "../Utils/apbsTierGetter";
+import { APBSTierGetter } from "../Utils/APBSTierGetter";
 
 /** Handle profile related client events */
 @injectable()

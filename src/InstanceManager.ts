@@ -28,15 +28,16 @@ import { BotWeaponModLimitService } from "@spt/services/BotWeaponModLimitService
 import { RepairService } from "@spt/services/RepairService";
 
 // Custom
-import { APBSLogger } from "./Utils/apbsLogger";
-import { StaticRouterHooks } from "./RouterHooks/StaticRouterHooks";
+import { APBSLogger } from "./Utils/APBSLogger";
+import { APBSStaticRouterHooks } from "./RouterHooks/APBSStaticRouterHooks";
 import { RaidInformation } from "./Globals/RaidInformation";
 import { ModInformation } from "./Globals/ModInformation";
 import { TierInformation } from "./Globals/TierInformation";
 import { APBSBotLevelGenerator } from "./Generators/ABPSBotLevelGenerator";
 import { BotConfigs } from "./Configs/BotConfigs";
 import { APBSBotWeaponGenerator } from "./Generators/APBSBotWeaponGenerator";
-import { APBSTierGetter } from "./Utils/apbsTierGetter";
+import { APBSTierGetter } from "./Utils/APBSTierGetter";
+import { APBSEquipmentGetter } from "./Utils/APBSEquipmentGetter";
 
 export class InstanceManager 
 {
@@ -51,20 +52,16 @@ export class InstanceManager
     public logger: ILogger;
     public staticRouter: StaticRouterModService;
     public weatherGenerator: WeatherGenerator;
-    public apbsLogger: APBSLogger;
     public modInformation: ModInformation;
     public raidInformation: RaidInformation;
-    public staticRouterHooks: StaticRouterHooks;
+    public apbsStaticRouterHooks: APBSStaticRouterHooks;
     public randUtil: RandomUtil;
     public profileHelper: ProfileHelper;
-    public apbsBotLevelGenerator: APBSBotLevelGenerator;
     public botLevelGenerator: BotLevelGenerator;
     public botGenerator: BotGenerator;
     public tierInformation: TierInformation;
     public botWeaponGenerator: BotWeaponGenerator;
-    public apbsBotWeaponGenerator: APBSBotWeaponGenerator;
     public weightedRandomHelper: WeightedRandomHelper;
-    public apbsTierGetter: APBSTierGetter;
     public localisationService: LocalisationService;
     public hashUtil: HashUtil;
     public inventoryMagGen: InventoryMagGen;
@@ -74,6 +71,12 @@ export class InstanceManager
     public botEquipmentModGenerator: BotEquipmentModGenerator;
     public botGeneratorHelper: BotGeneratorHelper;
     public repairService: RepairService;
+
+    public apbsLogger: APBSLogger;
+    public apbsTierGetter: APBSTierGetter;
+    public apbsBotLevelGenerator: APBSBotLevelGenerator;
+    public apbsBotWeaponGenerator: APBSBotWeaponGenerator;
+    public apbsEquipmentGetter: APBSEquipmentGetter;
     //#endregion
 
     //#region Acceessible in or after postDBLoad
@@ -114,26 +117,22 @@ export class InstanceManager
         // Custom Classes
         this.container.register<ModInformation>("ModInformation", ModInformation, { lifecycle: Lifecycle.Singleton })
         this.modInformation = container.resolve<ModInformation>("ModInformation");
-
         this.container.register<APBSLogger>("APBSLogger", APBSLogger, { lifecycle: Lifecycle.Singleton });
         this.apbsLogger = container.resolve<APBSLogger>("APBSLogger");
-
         this.container.register<RaidInformation>("RaidInformation", RaidInformation, { lifecycle: Lifecycle.Singleton });
         this.raidInformation = container.resolve<RaidInformation>("RaidInformation");
-
         this.container.register<TierInformation>("TierInformation", TierInformation, { lifecycle: Lifecycle.Singleton });
         this.tierInformation = container.resolve<TierInformation>("TierInformation");
-        
         this.container.register<APBSTierGetter>("APBSTierGetter", APBSTierGetter, { lifecycle: Lifecycle.Singleton })
         this.apbsTierGetter = container.resolve<APBSTierGetter>("APBSTierGetter");
+        this.container.register<APBSEquipmentGetter>("APBSEquipmentGetter", APBSEquipmentGetter, { lifecycle: Lifecycle.Singleton })
+        this.apbsEquipmentGetter = container.resolve<APBSEquipmentGetter>("APBSEquipmentGetter");
 
-        this.container.register<StaticRouterHooks>("StaticRouterHooks", StaticRouterHooks, { lifecycle: Lifecycle.Singleton });
-        this.staticRouterHooks = container.resolve<StaticRouterHooks>("StaticRouterHooks");
-
-        // Custom Generators
+        // Custom Special
+        this.container.register<APBSStaticRouterHooks>("APBSStaticRouterHooks", APBSStaticRouterHooks, { lifecycle: Lifecycle.Singleton });
+        this.apbsStaticRouterHooks = container.resolve<APBSStaticRouterHooks>("APBSStaticRouterHooks");
         this.container.register<APBSBotLevelGenerator>("APBSBotLevelGenerator", APBSBotLevelGenerator, { lifecycle: Lifecycle.Singleton });
         this.apbsBotLevelGenerator = container.resolve<APBSBotLevelGenerator>("APBSBotLevelGenerator");
-
         this.container.register<APBSBotWeaponGenerator>("APBSBotWeaponGenerator", APBSBotWeaponGenerator, { lifecycle: Lifecycle.Singleton });
         this.apbsBotWeaponGenerator = container.resolve<APBSBotWeaponGenerator>("APBSBotWeaponGenerator");
 

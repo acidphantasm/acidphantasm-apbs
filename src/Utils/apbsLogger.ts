@@ -1,8 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 
-import { Logging } from "../Enums/Logging";
-import { LoggingFolders } from "../Enums/LoggingFolders";
+import { Logging, LoggingFolders } from "../Enums/Logging";
 import { ModInformation } from "../Globals/ModInformation";
 import fs from "node:fs";
 
@@ -26,7 +25,7 @@ export class APBSLogger
         }
     }
 
-    public log(logcation: Logging, message: string, message2?: string, message3?: string, message4?: string, message5?: string, message6?: string, message7?: string, message8?: string): void
+    public async log(logcation: Logging, message: string, message2?: string, message3?: string, message4?: string, message5?: string, message6?: string, message7?: string, message8?: string): Promise<void>
     {
         const messagesArray = {
             message,
@@ -72,7 +71,7 @@ export class APBSLogger
                 messages = messages + `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
             }
         }
-        fs.appendFile(`${this.modInformation.logPath}/${logType}.log`, `${messages}`, function (err) 
+        await fs.appendFile(`${this.modInformation.logPath}/${logType}.log`, `${messages}`, function (err) 
         {
             if (err) throw err;
         });

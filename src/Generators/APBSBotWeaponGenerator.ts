@@ -2,13 +2,13 @@ import { DependencyContainer, inject, injectable, injectAll } from "tsyringe";
 
 import { DatabaseService } from "@spt/services/DatabaseService";
 import { RandomUtil } from "@spt/utils/RandomUtil";
-import { APBSLogger } from "../Utils/apbsLogger";
+import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
 import { GenerationData, Inventory, ModsChances } from "@spt/models/eft/common/tables/IBotType";
 import { GenerateWeaponResult } from "@spt/models/spt/bots/GenerateWeaponResult";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
-import { APBSTierGetter } from "../Utils/apbsTierGetter";
+import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { LocalisationService } from "@spt/services/LocalisationService";
@@ -32,8 +32,9 @@ import { BotWeaponModLimitService } from "@spt/services/BotWeaponModLimitService
 import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
-import mods = require("../JSONs/mods.json");
 import { RaidInformation } from "../Globals/RaidInformation";
+import mods = require("../db/mods.json");
+import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 
 /** Handle profile related client events */
 @injectable()
@@ -63,7 +64,8 @@ export class APBSBotWeaponGenerator
         @inject("BotWeaponModLimitService") protected botWeaponModLimitService: BotWeaponModLimitService,
         @inject("BotEquipmentModGenerator") protected botEquipmentModGenerator: BotEquipmentModGenerator,
         @inject("BotWeaponGeneratorHelper") protected botWeaponGeneratorHelper: BotWeaponGeneratorHelper,
-        @inject("RaidInformation") protected raidInformation: RaidInformation
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter
     )
     {
         this.botConfig = this.configServer.getConfig(ConfigTypes.BOT);
@@ -78,6 +80,11 @@ export class APBSBotWeaponGenerator
         {
             result.generateRandomWeapon = (sessionId: string, equipmentSlot: string, botTemplateInventory: Inventory, weaponParentId: string, modChances: ModsChances, botRole: string, isPmc: boolean, botLevel: number): GenerateWeaponResult => 
             {
+                if (this.raidInformation.freshProfile)
+                {
+                    const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
+                    return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
+                }
                 const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole);
                 return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel)
             };
@@ -89,20 +96,9 @@ export class APBSBotWeaponGenerator
 
     private pickWeightedWeaponTplFromPool(equipmentSlot: string, botLevel: number, botRole: string): string
     {
-        let tieredEquipment;
-        let weaponPool;
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-        const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);
-
-        if (equipmentSlot == "FirstPrimaryWeapon" || equipmentSlot == "SecondPrimaryWeapon")
-        {
-            tieredEquipment = this.apbsTierGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
-            weaponPool = tieredEquipment;
-            return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
-        }
-
-        tieredEquipment = this.apbsTierGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
-        weaponPool = tieredEquipment;
+        const tieredEquipment = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+        const weaponPool = tieredEquipment;
         return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
     }
 
@@ -120,6 +116,7 @@ export class APBSBotWeaponGenerator
     {        
         const modPool = mods.mods;
         const weaponItemTemplate = this.itemHelper.getItem(weaponTpl)[1];
+        const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
 
         if (!weaponItemTemplate)
         {
@@ -136,7 +133,7 @@ export class APBSBotWeaponGenerator
 
             throw new Error(this.localisationService.getText("bot-generation_failed"));
         }
-        const ammoTpl = this.getWeightedCompatibleAmmo(botTemplateInventory.Ammo, weaponItemTemplate);
+        const ammoTpl = this.getWeightedCompatibleAmmo(this.apbsEquipmentGetter.getAmmoByBotRole(botRole, tierInfo), weaponItemTemplate);
 
         // Create with just base weapon item
         let weaponWithModsArray = this.constructWeaponBaseArray(
