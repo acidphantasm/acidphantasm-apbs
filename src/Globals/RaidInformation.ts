@@ -18,63 +18,63 @@ export class RaidInformation
     public mapWeights = {
         "bigmap":
         {
+            "LongRange": 1,
             "ShortRange": 6,
-            "LongRange": 1
         },
         "RezervBase":
         {
-            "ShortRange": 10,
-            "LongRange": 2
+            "LongRange": 2,
+            "ShortRange": 10
         },
         "laboratory":
         {
-            "ShortRange": 30,
-            "LongRange": 3
+            "LongRange": 3,
+            "ShortRange": 30
         },
         "factory4_night":
         {
-            "ShortRange": 33,
-            "LongRange": 2
+            "LongRange": 2,
+            "ShortRange": 33
         },
         "factory4_day":
         {
-            "ShortRange": 33,
-            "LongRange": 2
+            "LongRange": 2,
+            "ShortRange": 33
         },
         "Interchange":
         {
-            "ShortRange": 19,
-            "LongRange": 6
+            "LongRange": 6,
+            "ShortRange": 19
         },
         "Sandbox":
         {
-            "ShortRange": 15,
-            "LongRange": 3
+            "LongRange": 3,
+            "ShortRange": 15
         },
         "Sandbox_high":
         {
-            "ShortRange": 15,
-            "LongRange": 5
+            "LongRange": 5,
+            "ShortRange": 15
         },
         "Woods":
         {
-            "ShortRange": 5,
-            "LongRange": 34
+            "LongRange": 34,
+            "ShortRange": 5
         },
         "Shoreline":
         {
-            "ShortRange": 9,
-            "LongRange": 21
+            "LongRange": 21,
+            "ShortRange": 9
         },
         "Lighthouse":
         {
-            "ShortRange": 27,
-            "LongRange": 31
+            "LongRange": 31,
+            "ShortRange": 27
         },
         "TarkovStreets":
         {
-            "ShortRange": 17,
-            "LongRange": 4
+            "LongRange": 4,
+            "ShortRange": 17
         }
     }
 }

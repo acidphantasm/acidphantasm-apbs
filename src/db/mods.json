@@ -1,23 +1,45 @@
 {
     "mods": {
-        "57f4c844245977379d5c14d1": {
-            "mod_pistol_grip": [
-                "57d152ec245977144076ccdf"
-            ],
-            "mod_magazine": [
-                "57d14e1724597714010c3f4b",
-                "57d1519e24597714373db79d"
-            ],
-            "mod_mount": [
-                "57ee59b42459771c7b045da5"
-            ],
-            "patron_in_weapon": [
-                "573718ba2459775a75491131",
-                "573719df2459775a626ccbc2",
-                "57371aab2459775a77142f22",
-                "57371b192459775a9f58a5e0"
-            ]
-        },
+      "65268d8ecb944ff1e90ea385": {
+        "mod_barrel": [
+          "65266fd43341ed9aa903dd56",
+          "6513eff1e06849f06c0957d4"
+        ],
+        "mod_handguard": [
+          "6513f05a94c72326990a3866"
+        ],
+        "mod_magazine": [
+          "6513f0a194c72326990a3868"
+        ],
+        "mod_scope": [
+          "5cf638cbd7f00c06595bc936",
+          "618a75c9a3884f56c957ca1b"
+        ],
+        "mod_sight_rear": [
+          "6513f153e63f29908d0ffaba"
+        ],
+        "mod_stock": [
+          "6513f1798cb24472490ee331"
+        ]
+      },
+      "57f4c844245977379d5c14d1": {
+          "mod_pistol_grip": [
+              "57d152ec245977144076ccdf"
+          ],
+          "mod_magazine": [
+              "57d14e1724597714010c3f4b",
+              "57d1519e24597714373db79d"
+          ],
+          "mod_mount": [
+              "57ee59b42459771c7b045da5"
+          ],
+          "patron_in_weapon": [
+              "573718ba2459775a75491131",
+              "573719df2459775a626ccbc2",
+              "57371aab2459775a77142f22",
+              "57371b192459775a9f58a5e0"
+          ]
+      },
       "5447a9cd4bdc2dbd208b4567": {
         "mod_charge": [
           "5c0faf68d174af02a96260b8",

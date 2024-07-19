@@ -85,8 +85,9 @@ export class APBSBotWeaponGenerator
                     const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
                     return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
                 }
+                const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
                 const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole);
-                return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel)
+                return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierInfo)
             };
         },
         { frequency: "Always" }
@@ -97,8 +98,14 @@ export class APBSBotWeaponGenerator
     private pickWeightedWeaponTplFromPool(equipmentSlot: string, botLevel: number, botRole: string): string
     {
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-        const tieredEquipment = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
-        const weaponPool = tieredEquipment;
+
+        if (equipmentSlot == "FirstPrimaryWeapon" || equipmentSlot == "SecondPrimaryWeapon")
+        {
+            const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
+            return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
+        }
+        const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
         return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
     }
 
@@ -111,12 +118,12 @@ export class APBSBotWeaponGenerator
         modChances: ModsChances,
         botRole: string,
         isPmc: boolean,
-        botLevel: number
+        botLevel: number, 
+        tierInfo: number
     ): GenerateWeaponResult
     {        
         const modPool = mods.mods;
         const weaponItemTemplate = this.itemHelper.getItem(weaponTpl)[1];
-        const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
 
         if (!weaponItemTemplate)
         {
@@ -133,7 +140,8 @@ export class APBSBotWeaponGenerator
 
             throw new Error(this.localisationService.getText("bot-generation_failed"));
         }
-        const ammoTpl = this.getWeightedCompatibleAmmo(this.apbsEquipmentGetter.getAmmoByBotRole(botRole, tierInfo), weaponItemTemplate);
+        const ammoTable = this.apbsEquipmentGetter.getAmmoByBotRole(botRole, tierInfo)
+        const ammoTpl = this.getWeightedCompatibleAmmo(ammoTable, weaponItemTemplate);
 
         // Create with just base weapon item
         let weaponWithModsArray = this.constructWeaponBaseArray(
