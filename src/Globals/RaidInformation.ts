@@ -19,7 +19,7 @@ export class RaidInformation
         "bigmap":
         {
             "LongRange": 1,
-            "ShortRange": 6,
+            "ShortRange": 6
         },
         "RezervBase":
         {
