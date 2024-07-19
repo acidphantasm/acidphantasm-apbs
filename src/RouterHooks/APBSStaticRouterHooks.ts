@@ -245,7 +245,7 @@ export class APBSStaticRouterHooks
             this.apbsLogger.log(Logging.ERR, "Bot Generation LogOutput failed.", `${err.stack}`);
         }
         const timeTaken = performance.now() - start;
-        this.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for logging bot ${botDetails.name}`);
+        this.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for logging bot ${botDetails.role} | Name: ${botDetails.name}`);
     }
 
     private getBotDetails (detailsJSON: any): any
