@@ -1,5 +1,30 @@
 {
     "mods": {
+      "5448bd6b4bdc2dfc2f8b4569": {
+        "mod_magazine": [
+          "5448c12b4bdc2d02308b456f"
+        ],
+        "mod_pistolgrip": [
+          "637b6d610aef6cfc5e02dd14"
+        ],
+        "mod_reciever": [
+          "6374a822e629013b9c0645c8"
+        ]
+      },
+      "571a12c42459771f627b58a0": {
+        "mod_barrel": [
+          "571a26d524597720680fbe8a"
+        ],
+        "mod_magazine": [
+          "571a29dc2459771fb2755a6a"
+        ],
+        "mod_muzzle": [
+          "5bffd7ed0db834001d23ebf9"
+        ],
+        "mod_pistol_grip": [
+          "5bffcf7a0db83400232fea79"
+        ]
+      },
       "5b3b713c5acfc4330140bd8d": {
         "mod_barrel": [
           "5b3baf8f5acfc40dc5296692"
