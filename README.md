@@ -13,11 +13,7 @@ This mod may have missing mods or templates for weapons. If you see errors or wa
 This mod may have issues that prevent the game from working - if this happens, REMOVE THE MOD and REPORT THEM.
 
 
-Currently all bots that are due to spawn or have spawned are logged inside the \user\mods\acidphantasm-progressivebotsystem\logs\ folder. 
-
-These logs are wiped when you restart the server. 
-
-These may be needed to provide support, and are a nice thing to review if you happen to want to know everything that has or will spawn.
+Currently all bots that are due to spawn or have spawned are logged inside the \user\mods\acidphantasm-progressivebotsystem\logs\ folder. These logs are wiped when you restart the server. These may be needed to provide support, and are a nice thing to review if you happen to want to know everything that has or will spawn.
 
 - All AI will level with you.
 - All AI have a tiering system.
