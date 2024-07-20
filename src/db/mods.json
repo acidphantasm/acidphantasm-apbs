@@ -1,5 +1,16 @@
 {
     "mods": {
+      "5b3b713c5acfc4330140bd8d": {
+        "mod_barrel": [
+          "5b3baf8f5acfc40dc5296692"
+        ],
+        "mod_magazine": [
+          "571a29dc2459771fb2755a6a"
+        ],
+        "mod_pistol_grip": [
+          "5b3cadf35acfc400194776a0"
+        ]
+      },
       "65268d8ecb944ff1e90ea385": {
         "mod_barrel": [
           "65266fd43341ed9aa903dd56",
