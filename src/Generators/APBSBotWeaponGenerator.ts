@@ -86,7 +86,7 @@ export class APBSBotWeaponGenerator
                     return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
                 }
                 const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-                const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole);
+                const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole, botTemplateInventory);
                 return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierInfo)
             };
         },
@@ -95,9 +95,15 @@ export class APBSBotWeaponGenerator
         this.apbsLogger.log(Logging.DEBUG, "Bot Weapon Generator registered");
     }
 
-    private pickWeightedWeaponTplFromPool(equipmentSlot: string, botLevel: number, botRole: string): string
+    private pickWeightedWeaponTplFromPool(equipmentSlot: string, botLevel: number, botRole: string, botTemplateInventory: Inventory): string
     {
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
+
+        if (botRole.includes("boss"))
+        {
+            const weaponPool = botTemplateInventory.equipment[equipmentSlot];
+            return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
+        }
 
         if (equipmentSlot == "FirstPrimaryWeapon" || equipmentSlot == "SecondPrimaryWeapon")
         {
@@ -105,6 +111,7 @@ export class APBSBotWeaponGenerator
             const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
             return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
         }
+        
         const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
         return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
     }
