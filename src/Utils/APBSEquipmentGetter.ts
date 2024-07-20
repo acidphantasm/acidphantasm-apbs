@@ -80,6 +80,39 @@ export class APBSEquipmentGetter
             case "assault":
                 tier = tierJson.scav.Ammo
                 return tier;
+            case "bossBully":
+            case "bossTagilla":
+            case "bossGluhar":
+            case "bossKilla":
+            case "bossKojaniy":
+            case "bossSanitar":
+            case "bossKnight":
+            case "bossZryachiy":
+            case "bossTest":
+            case "bossKolontay":
+            case "followerBully":
+            case "followerGluharAssault":
+            case "followerGluharScout":
+            case "followerGluharSecurity":
+            case "followerGluharSnipe":
+            case "followerKojaniy":
+            case "followerSanitar":
+            case "followerTagilla":
+            case "followerBirdEye":
+            case "followerBigPipe":
+            case "followerZryachiy":
+            case "followerTest":
+            case "followerBoar":
+            case "sectantPriest":
+            case "sectantWarrior":
+            case "bossBoar":
+            case "bossBoarSniper":
+            case "followerBoarClose1":
+            case "followerBoarClose2":
+            case "followerKolontayAssault":
+            case "followerKolontaySecurity":
+                tier = tierJson.boss.Ammo
+                return tier;
             default:
                 tier = tierJson.Ammo
                 return tier;
