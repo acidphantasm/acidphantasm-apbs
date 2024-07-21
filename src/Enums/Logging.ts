@@ -12,10 +12,10 @@ export enum Logging
 
 export enum LoggingFolders 
 {
+    DEBUG = "debug",
     SCAV = "scav_generation",
     PMC = "pmc_generation",
     RAIDER = "raider_generation",
     BOSS = "boss_generation",
-    EVENT = "event_generation",
-    DEBUG = "debug"
+    EVENT = "event_generation"
 }
