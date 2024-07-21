@@ -41,7 +41,7 @@ export class APBSEquipmentGetter
             case 7:
                 return Tier7
             default:
-                this.apbsLogger.log(Logging.DEBUG, `getTierJson returned default for ${botRole} level ${botLevel}`);
+                this.apbsLogger.log(Logging.WARN, `Something went wrong, Tier3 returned default for ${botRole} level ${botLevel}`);
                 return Tier3
         }
 
