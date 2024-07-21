@@ -9,18 +9,20 @@ import Tier4 = require("../db/Tier4.json");
 import Tier5 = require("../db/Tier5.json");
 import Tier6 = require("../db/Tier6.json");
 import Tier7 = require("../db/Tier7.json");
+import { Logging } from "../Enums/Logging";
+import { APBSLogger } from "./APBSLogger";
 
 @injectable()
 export class APBSEquipmentGetter
 {
     constructor(
         @inject("RaidInformation") protected raidInformation: RaidInformation,
-        @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper
-
+        @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper,
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {}
 
-    public getTierJson(tierInfo: number)
+    public getTierJson(tierInfo: number, botRole?: string)
     {
         switch (tierInfo)
         {
@@ -39,6 +41,7 @@ export class APBSEquipmentGetter
             case 7:
                 return Tier7
             default:
+                this.apbsLogger.log(Logging.DEBUG, `getTierJson returned default for ${botRole}`);
                 return Tier3
         }
 
@@ -47,7 +50,7 @@ export class APBSEquipmentGetter
     public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): any
     {
         let tier;
-        const tierJson = this.getTierJson(tierInfo)
+        const tierJson = this.getTierJson(tierInfo, botRole)
         switch (botRole)
         {
             case "pmcbear":
