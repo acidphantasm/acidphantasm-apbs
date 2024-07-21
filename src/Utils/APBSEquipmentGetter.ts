@@ -22,7 +22,7 @@ export class APBSEquipmentGetter
     )
     {}
 
-    public getTierJson(tierInfo: number, botRole?: string)
+    public getTierJson(tierInfo: number, botRole?: string, botLevel?: number)
     {
         switch (tierInfo)
         {
@@ -41,16 +41,16 @@ export class APBSEquipmentGetter
             case 7:
                 return Tier7
             default:
-                this.apbsLogger.log(Logging.DEBUG, `getTierJson returned default for ${botRole}`);
+                this.apbsLogger.log(Logging.DEBUG, `getTierJson returned default for ${botRole} level ${botLevel}`);
                 return Tier3
         }
 
     }
 
-    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): any
+    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string, botLevel?:number, range?: string): any
     {
         let tier;
-        const tierJson = this.getTierJson(tierInfo, botRole)
+        const tierJson = this.getTierJson(tierInfo, botRole, botLevel)
         switch (botRole)
         {
             case "pmcbear":
