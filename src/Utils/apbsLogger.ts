@@ -41,9 +41,10 @@ export class APBSLogger
         let textFlag;
         let logType;
         let showInConsole;
+        let consoleMessage = "";
         for (const line in messagesArray)
         {
-            if (messagesArray[line])
+            if (messagesArray[line] !== undefined)
             {
                 switch (logcation) 
                 {
@@ -68,7 +69,11 @@ export class APBSLogger
                         showInConsole = false;
                         break;
                 }
-                messages = messages + `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
+                if (showInConsole)
+                {
+                    consoleMessage += `${messagesArray[line]}`;
+                }
+                messages += `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
             }
         }
         await fs.appendFile(`${this.modInformation.logPath}/${logType}.log`, `${messages}`, function (err) 
@@ -79,11 +84,11 @@ export class APBSLogger
         {
             if (logcation == Logging.WARN) 
             {
-                this.logger.warning(`[APBS] -${textFlag} ${messages}`);
+                this.logger.warning(`[APBS] ${consoleMessage}`);
             }
             if (logcation == Logging.ERR) 
             {
-                this.logger.error(`[APBS] -${textFlag} ${messages}`);
+                this.logger.error(`[APBS] ${consoleMessage}`);
             }
         }
     }    
