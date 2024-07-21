@@ -38,6 +38,8 @@ export class APBSEquipmentGetter
                 return Tier6
             case 7:
                 return Tier7
+            default:
+                return Tier3
         }
 
     }

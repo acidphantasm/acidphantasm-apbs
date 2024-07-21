@@ -1,19 +1,18 @@
 import { inject, injectable } from "tsyringe";
-import { StaticRouterModService } from "@spt/services/mod/staticRouter/StaticRouterModService";
+import { DynamicRouterModService } from "@spt/services/mod/dynamicRouter/DynamicRouterModService";
 import { WeatherGenerator } from "@spt/generators/WeatherGenerator";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
-import { getCurrentTime, nightTimeCheck } from "../Utils/APBSTime";
 import { RaidInformation } from "../Globals/RaidInformation";
 
 @injectable()
-export class APBSStaticRouterHooks
+export class APBSDynamicRouterHooks
 {
     constructor(
-        @inject("StaticRouterModService") protected staticRouterService: StaticRouterModService,
+        @inject("DynamicRouterModService") protected dynamicRouterModService: DynamicRouterModService,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("WeatherGenerator") protected weatherGenerator: WeatherGenerator,
@@ -22,13 +21,13 @@ export class APBSStaticRouterHooks
     )
     {}
 
-    public registerRouterHooks(): void
+    public registerQBRouterHooks(): void
     {
-        this.staticRouterService.registerStaticRouter(
-            "APBS-BotGenerationRouter",
+        this.dynamicRouterModService.registerDynamicRouter(
+            "APBS-QBBotGenerationRouter",
             [
                 {
-                    url: "/client/game/bot/generate",
+                    url: "/QuestingBots/GenerateBot/",
                     action: async (url, info, sessionId, output) => 
                     {
                         try 
@@ -41,7 +40,7 @@ export class APBSStaticRouterHooks
                         }
                         catch (err) 
                         {
-                            this.apbsLogger.log(Logging.WARN, "Bot Router hook failed.\n", `${err.stack}`);
+                            this.apbsLogger.log(Logging.WARN, "Bot Router hook failed.", `${err.stack}`);
                         }
                         return output;
                     }
@@ -49,92 +48,7 @@ export class APBSStaticRouterHooks
             ],
             "APBS"
         );
-        this.apbsLogger.log(Logging.DEBUG, "Bot Generation Router registered");
-        this.staticRouterService.registerStaticRouter(
-            "APBS-StartRaidStateRouter",
-            [
-                {
-                    url: "/client/raid/configuration",
-                    action: async (url, info, sessionId, output) => 
-                    {
-                        try 
-                        {
-                            this.logLocation(info);
-                        }
-                        catch (err) 
-                        {
-                            this.apbsLogger.log(Logging.WARN, "Raid Start Router hook failed.\n", `${err.stack}`);
-                        }
-                        return output;
-                    }
-                }
-            ],
-            "APBS"
-        );
-        this.apbsLogger.log(Logging.DEBUG, "Raid Configuration Router registered");
-        this.staticRouterService.registerStaticRouter(
-            "APBS-GameStartRouter",
-            [
-                {
-                    url: "/client/game/start",
-                    action: async (url, info, sessionId, output) => 
-                    {
-                        try 
-                        {
-                            const fullProfile = this.profileHelper.getFullProfile(sessionId);
-                            this.raidInformation.freshProfile = (fullProfile.info.wipe === true) ? true : false;
-                        }
-                        catch (err) 
-                        {
-                            this.apbsLogger.log(Logging.WARN, "Game Start Router hook failed.\n", `${err.stack}`);
-                        }
-                        return output;
-                    }
-                }
-            ],
-            "APBS"
-        );
-        this.apbsLogger.log(Logging.DEBUG, "Game Start Router registered");
-        this.staticRouterService.registerStaticRouter(
-            "APBS-ProfileStatusChecker",
-            [
-                {
-                    url: "/client/profile/status",
-                    action: async (url, info, sessionId, output) => 
-                    {
-                        try 
-                        {
-                            const fullProfile = this.profileHelper.getFullProfile(sessionId);
-                            this.raidInformation.freshProfile = (fullProfile.info.wipe === true) ? true : false;
-                        }
-                        catch (err) 
-                        {
-                            this.apbsLogger.log(Logging.WARN, "Profile Status Router hook failed.\n", `${err.stack}`);
-                        }
-                        return output;
-                    }
-                }
-            ],
-            "APBS"
-        );
-        this.apbsLogger.log(Logging.DEBUG, "Profile Status Router registered");
-    }
-    
-    private logLocation(info: any):void
-    {
-        this.raidInformation.location = info.location;
-        this.raidInformation.currentTime = getCurrentTime(this.weatherGenerator);
-        this.raidInformation.timeVariant = info.timeVariant;
-        this.raidInformation.nightTime = nightTimeCheck(this.raidInformation.currentTime, this.raidInformation.timeVariant, this.raidInformation.location);
-        
-        this.apbsLogger.log( 
-            Logging.DEBUG,
-            "-------Raid Information-------",
-            `| Location: ${this.raidInformation.location}`,
-            `| Time: ${this.raidInformation.currentTime}`,
-            `| Night: ${this.raidInformation.nightTime}`,
-            "------------------------------"
-        );
+        this.apbsLogger.log(Logging.DEBUG, "QB Compatibility Router registered");
     }
 
     private logBotGeneration(outputJSON: any):void
@@ -152,7 +66,7 @@ export class APBSStaticRouterHooks
                 case "pmcUSEC":
                     this.apbsLogger.log( 
                         Logging.PMC,
-                        "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
+                        "---------------------------------------------------QB Bot spawned from cache---------------------------------------------------",
                         `| ${logMessages[0]}`,
                         `| ${logMessages[1]}`,
                         `| ${logMessages[2]} ${logMessages[3]}`
@@ -163,7 +77,7 @@ export class APBSStaticRouterHooks
                 case "assault":
                     this.apbsLogger.log(
                         Logging.SCAV,
-                        "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
+                        "---------------------------------------------------QB Bot spawned from cache---------------------------------------------------",
                         `| ${logMessages[0]}`,
                         `| ${logMessages[1]}`,
                         `| ${logMessages[2]} ${logMessages[3]}`
@@ -173,7 +87,7 @@ export class APBSStaticRouterHooks
                 case "exUsec":
                     this.apbsLogger.log(
                         Logging.RAIDER,
-                        "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
+                        "---------------------------------------------------QB Bot spawned from cache---------------------------------------------------",
                         `| ${logMessages[0]}`,
                         `| ${logMessages[1]}`,
                         `| ${logMessages[2]} ${logMessages[3]}`
@@ -212,7 +126,7 @@ export class APBSStaticRouterHooks
                 case "followerKolontaySecurity":
                     this.apbsLogger.log( 
                         Logging.BOSS,
-                        "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
+                        "---------------------------------------------------QB Bot spawned from cache---------------------------------------------------",
                         `| ${logMessages[0]}`,
                         `| ${logMessages[1]}`,
                         `| ${logMessages[2]} ${logMessages[3]}`
@@ -223,7 +137,7 @@ export class APBSStaticRouterHooks
                 case "peacemaker":
                     this.apbsLogger.log( 
                         Logging.EVENT,
-                        "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
+                        "---------------------------------------------------QB Bot spawned from cache---------------------------------------------------",
                         `| ${logMessages[0]}`,
                         `| ${logMessages[1]}`,
                         `| ${logMessages[2]} ${logMessages[3]}`
@@ -232,7 +146,7 @@ export class APBSStaticRouterHooks
                 default:
                     this.apbsLogger.log(
                         Logging.DEBUG,
-                        "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
+                        "---------------------------------------------------QB Bot spawned from cache---------------------------------------------------",
                         `| ${logMessages[0]}`,
                         `| ${logMessages[1]}`,
                         `| ${logMessages[2]} ${logMessages[3]}`
@@ -242,10 +156,10 @@ export class APBSStaticRouterHooks
         }
         catch (err) 
         {
-            this.apbsLogger.log(Logging.ERR, "Bot Generation LogOutput failed.", `${err.stack}`);
+            this.apbsLogger.log(Logging.ERR, "QB Bot Generation LogOutput failed.", `${err.stack}`);
         }
         const timeTaken = performance.now() - start;
-        this.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for logging bot ${botDetails.role} | Name: ${botDetails.name}`);
+        this.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for logging QB bot ${botDetails.role} | Name: ${botDetails.name}`);
     }
 
     private getBotDetails (detailsJSON: any): any

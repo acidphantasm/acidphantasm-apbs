@@ -34,10 +34,13 @@ import { RaidInformation } from "./Globals/RaidInformation";
 import { ModInformation } from "./Globals/ModInformation";
 import { TierInformation } from "./Globals/TierInformation";
 import { APBSBotLevelGenerator } from "./Generators/ABPSBotLevelGenerator";
-import { BotConfigs } from "./Configs/BotConfigs";
+import { BotConfigs } from "./Alterations/BotConfigs";
 import { APBSBotWeaponGenerator } from "./Generators/APBSBotWeaponGenerator";
 import { APBSTierGetter } from "./Utils/APBSTierGetter";
 import { APBSEquipmentGetter } from "./Utils/APBSEquipmentGetter";
+import { TierConfigs } from "./Alterations/TierConfigs";
+import { DynamicRouterModService } from "@spt/services/mod/dynamicRouter/DynamicRouterModService";
+import { APBSDynamicRouterHooks } from "./RouterHooks/APBSDynamicRouterHooks";
 
 export class InstanceManager 
 {
@@ -51,10 +54,10 @@ export class InstanceManager
     public itemHelper: ItemHelper;
     public logger: ILogger;
     public staticRouter: StaticRouterModService;
+    public dynamicRouter: DynamicRouterModService;
     public weatherGenerator: WeatherGenerator;
     public modInformation: ModInformation;
     public raidInformation: RaidInformation;
-    public apbsStaticRouterHooks: APBSStaticRouterHooks;
     public randUtil: RandomUtil;
     public profileHelper: ProfileHelper;
     public botLevelGenerator: BotLevelGenerator;
@@ -77,11 +80,14 @@ export class InstanceManager
     public apbsBotLevelGenerator: APBSBotLevelGenerator;
     public apbsBotWeaponGenerator: APBSBotWeaponGenerator;
     public apbsEquipmentGetter: APBSEquipmentGetter;
+    public apbsStaticRouterHooks: APBSStaticRouterHooks;
+    public apbsDynamicRouterHooks: APBSDynamicRouterHooks;
     //#endregion
 
     //#region Acceessible in or after postDBLoad
     public tables: IDatabaseTables;
-    public botConfigs: BotConfigs
+    public botConfigs: BotConfigs;
+    public tierConfigs: TierConfigs;
     //#endregion
 
     // Call at the start of the mods postDBLoad method
@@ -94,6 +100,7 @@ export class InstanceManager
         this.preSptModLoader = container.resolve<PreSptModLoader>("PreSptModLoader");
         this.logger = container.resolve<ILogger>("WinstonLogger");
         this.staticRouter = container.resolve<StaticRouterModService>("StaticRouterModService");
+        this.dynamicRouter = container.resolve<DynamicRouterModService>("DynamicRouterModService");
         this.weatherGenerator = container.resolve<WeatherGenerator>("WeatherGenerator");
         this.configServer = container.resolve<ConfigServer>("ConfigServer");
         this.itemHelper = container.resolve<ItemHelper>("ItemHelper");
@@ -129,6 +136,8 @@ export class InstanceManager
         this.apbsEquipmentGetter = container.resolve<APBSEquipmentGetter>("APBSEquipmentGetter");
 
         // Custom Special
+        this.container.register<APBSDynamicRouterHooks>("APBSDynamicRouterHooks", APBSDynamicRouterHooks, { lifecycle: Lifecycle.Singleton });
+        this.apbsDynamicRouterHooks = container.resolve<APBSDynamicRouterHooks>("APBSDynamicRouterHooks");
         this.container.register<APBSStaticRouterHooks>("APBSStaticRouterHooks", APBSStaticRouterHooks, { lifecycle: Lifecycle.Singleton });
         this.apbsStaticRouterHooks = container.resolve<APBSStaticRouterHooks>("APBSStaticRouterHooks");
         this.container.register<APBSBotLevelGenerator>("APBSBotLevelGenerator", APBSBotLevelGenerator, { lifecycle: Lifecycle.Singleton });
@@ -146,6 +155,7 @@ export class InstanceManager
 
         // Custom Classes
         this.botConfigs = new BotConfigs(this.tables);
+        this.tierConfigs = new TierConfigs(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter);
 
     }
 

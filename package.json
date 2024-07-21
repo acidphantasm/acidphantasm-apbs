@@ -1,9 +1,11 @@
 {
     "name": "Progressive Bot System",
-    "version": "0.1.0",
+    "version": "0.1.6",
     "sptVersion": "~3.9",
     "loadBefore": [],
-    "loadAfter": [],
+    "loadAfter": [
+        "DanW-SPTQuestingBots"
+    ],
     "incompatibilities": [],
     "isBundleMod": false,
     "main": "src/mod.js",
