@@ -26,6 +26,7 @@ export class BotConfigs
     {
         this.configureBotExperienceLevels();
         this.configurePlateWeightings();
+        this.clearNoLongerNeededBotDetails();
     }
 
     private configureBotExperienceLevels(): void
@@ -46,6 +47,16 @@ export class BotConfigs
         {
             botConfigEquipment[botType].filterPlatesByLevel = true;
             botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.armorPlateWeights
+        }
+    }
+
+    private clearNoLongerNeededBotDetails(): void
+    {
+        const botConfigEquipment = this.botConfig.equipment
+        for (const botType in botConfigEquipment)
+        {
+            botConfigEquipment[botType].randomisation = [];
+            botConfigEquipment[botType].weightingAdjustmentsByBotLevel = [];
         }
     }
 }
