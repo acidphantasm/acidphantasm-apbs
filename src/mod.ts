@@ -23,8 +23,8 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         this.instance.apbsLogger.createLogFiles();
         if (questingBotsDetected)
         {
-            this.instance.apbsDynamicRouterHooks.registerQBRouterHooks(); 
             this.instance.apbsLogger.log(Logging.WARN, "Questing Bots Detected. Updated bot logging.")
+            this.instance.apbsDynamicRouterHooks.registerQBRouterHooks(); 
         }
         this.instance.apbsStaticRouterHooks.registerRouterHooks();
         this.instance.apbsBotLevelGenerator.registerBotLevelGenerator(container);
