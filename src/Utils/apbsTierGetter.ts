@@ -16,11 +16,11 @@ export class APBSTierGetter
 
     public getTierUpperLevelDeviation(level:number): number
     {
-        return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<playerMaximumLevel)?.botMaxLevelVariance
+        return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<=playerMaximumLevel)?.botMaxLevelVariance
     }
 
     public getTierLowerLevelDeviation(level:number): number
     {
-        return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<playerMaximumLevel)?.botMinLevelVariance
+        return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<=playerMaximumLevel)?.botMinLevelVariance
     }
 }

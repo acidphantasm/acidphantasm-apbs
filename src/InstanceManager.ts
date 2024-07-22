@@ -38,7 +38,7 @@ import { BotConfigs } from "./Alterations/BotConfigs";
 import { APBSBotWeaponGenerator } from "./Generators/APBSBotWeaponGenerator";
 import { APBSTierGetter } from "./Utils/APBSTierGetter";
 import { APBSEquipmentGetter } from "./Utils/APBSEquipmentGetter";
-import { TierConfigs } from "./Alterations/TierConfigs";
+import { ModdedWeaponHelper } from "./Helpers/ModdedWeaponHelper";
 import { DynamicRouterModService } from "@spt/services/mod/dynamicRouter/DynamicRouterModService";
 import { APBSDynamicRouterHooks } from "./RouterHooks/APBSDynamicRouterHooks";
 
@@ -87,7 +87,7 @@ export class InstanceManager
     //#region Acceessible in or after postDBLoad
     public tables: IDatabaseTables;
     public botConfigs: BotConfigs;
-    public tierConfigs: TierConfigs;
+    public moddedWeaponHelper: ModdedWeaponHelper;
     //#endregion
 
     // Call at the start of the mods postDBLoad method
@@ -155,7 +155,7 @@ export class InstanceManager
 
         // Custom Classes
         this.botConfigs = new BotConfigs(this.tables);
-        this.tierConfigs = new TierConfigs(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter);
+        this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter);
 
     }
 

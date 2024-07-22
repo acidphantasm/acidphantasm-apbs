@@ -57,6 +57,7 @@ export class APBSStaticRouterHooks
                     url: "/client/raid/configuration",
                     action: async (url, info, sessionId, output) => 
                     {
+                        this.raidInformation.sessionId = sessionId;
                         try 
                         {
                             this.logLocation(info);

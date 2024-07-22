@@ -41,16 +41,16 @@ export class APBSEquipmentGetter
             case 7:
                 return Tier7
             default:
-                this.apbsLogger.log(Logging.DEBUG, `getTierJson returned default for ${botRole} level ${botLevel}`);
+                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier3 loadout.");
                 return Tier3
         }
 
     }
 
-    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string, botLevel?:number, range?: string): any
+    public getWeaponByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): any
     {
         let tier;
-        const tierJson = this.getTierJson(tierInfo, botRole, botLevel)
+        const tierJson = this.getTierJson(tierInfo)
         switch (botRole)
         {
             case "pmcbear":
@@ -71,6 +71,26 @@ export class APBSEquipmentGetter
             default:
                 tier = range == undefined ? tierJson.boss.equipment[slot] : tierJson.boss.equipment[slot][range]
                 return tier;
+        }
+    }
+
+    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string): any
+    {
+        const tierJson = this.getTierJson(tierInfo)
+        switch (botRole)
+        {
+            case "pmcbear":
+                return tierJson.pmcBEAR.equipment[slot];
+            case "arenaFighterEvent":
+            case "exusec":
+            case "pmcusec":
+                return tierJson.pmcUSEC.equipment[slot];
+            case "marksman":
+            case "cursedassault":
+            case "assault":
+                return tierJson.scav.equipment[slot];
+            default:
+                return tierJson.boss.equipment[slot];
         }
     }
     

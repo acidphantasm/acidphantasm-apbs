@@ -23,8 +23,8 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         this.instance.apbsLogger.createLogFiles();
         if (questingBotsDetected)
         {
-            this.instance.apbsDynamicRouterHooks.registerQBRouterHooks(); 
             this.instance.apbsLogger.log(Logging.WARN, "Questing Bots Detected. Updated bot logging.")
+            this.instance.apbsDynamicRouterHooks.registerQBRouterHooks(); 
         }
         this.instance.apbsStaticRouterHooks.registerRouterHooks();
         this.instance.apbsBotLevelGenerator.registerBotLevelGenerator(container);
@@ -41,7 +41,7 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         
         //Do postDBLoad stuff
         this.instance.botConfigs.configureBotExperienceLevels();
-        this.instance.tierConfigs.populateTiersTable();
+        this.instance.moddedWeaponHelper.addModdedWeaponsToPools();
 
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postDBLoad`);
