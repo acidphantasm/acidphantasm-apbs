@@ -15,6 +15,8 @@ export class RaidInformation
     public timeVariant: string;
     public nightTime: boolean;
 
+    public sessionId: string;
+
     public mapWeights = {
         "bigmap":
         {
