@@ -1,5 +1,22 @@
 {
     "mods": {
+      "56e0598dd2720bb5668b45a6": {
+        "mod_magazine": [
+          "5448c12b4bdc2d02308b456f"
+        ],
+        "mod_muzzle": [
+          "56e05b06d2720bb2668b4586"
+        ],
+        "mod_pistolgrip": [
+          "56e05a6ed2720bd0748b4567"
+        ],
+        "patron_in_weapon": [
+          "57371eb62459776125652ac1",
+          "5737218f245977612125ba51",
+          "57371e4124597760ff7b25f1",
+          "5737207f24597760ff7b25f2"
+        ]
+      },
       "5448bd6b4bdc2dfc2f8b4569": {
         "mod_magazine": [
           "5448c12b4bdc2d02308b456f"
