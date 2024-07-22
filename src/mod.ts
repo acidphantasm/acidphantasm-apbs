@@ -40,8 +40,8 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         this.instance.postDBLoad(container);
         
         //Do postDBLoad stuff
-        this.instance.botConfigs.configureBotExperienceLevels();
-        this.instance.moddedWeaponHelper.addModdedWeaponsToPools();
+        this.instance.botConfigs.initialize();
+        this.instance.moddedWeaponHelper.initialize();
 
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postDBLoad`);
