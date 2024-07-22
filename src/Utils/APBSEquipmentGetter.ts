@@ -22,7 +22,7 @@ export class APBSEquipmentGetter
     )
     {}
 
-    public getTierJson(tierInfo: number, botRole?: string, botLevel?: number)
+    public getTierJson(tierInfo: number)
     {
         switch (tierInfo)
         {
