@@ -41,6 +41,8 @@ import { APBSEquipmentGetter } from "./Utils/APBSEquipmentGetter";
 import { ModdedWeaponHelper } from "./Helpers/ModdedWeaponHelper";
 import { DynamicRouterModService } from "@spt/services/mod/dynamicRouter/DynamicRouterModService";
 import { APBSDynamicRouterHooks } from "./RouterHooks/APBSDynamicRouterHooks";
+import { APBSBotEquipmentModGenerator } from "./ClassExtensions/APBSBotEquipmentModGenerator";
+import { APBSBotInventoryGenerator } from "./ClassExtensions/APBSBotInventoryGenerator";
 
 export class InstanceManager 
 {
@@ -82,6 +84,7 @@ export class InstanceManager
     public apbsEquipmentGetter: APBSEquipmentGetter;
     public apbsStaticRouterHooks: APBSStaticRouterHooks;
     public apbsDynamicRouterHooks: APBSDynamicRouterHooks;
+    public apbsBotInventoryGenerator: APBSBotInventoryGenerator;
     //#endregion
 
     //#region Acceessible in or after postDBLoad
@@ -145,6 +148,12 @@ export class InstanceManager
         this.container.register<APBSBotWeaponGenerator>("APBSBotWeaponGenerator", APBSBotWeaponGenerator, { lifecycle: Lifecycle.Singleton });
         this.apbsBotWeaponGenerator = container.resolve<APBSBotWeaponGenerator>("APBSBotWeaponGenerator");
 
+        // Class Extension Override
+        this.container.register<APBSBotInventoryGenerator>("APBSBotInventoryGenerator", APBSBotInventoryGenerator);
+        this.container.register("BotInventoryGenerator", { useToken: "APBSBotInventoryGenerator" });
+        this.container.register<APBSBotEquipmentModGenerator>("APBSBotEquipmentModGenerator", APBSBotEquipmentModGenerator);
+        this.container.register("BotEquipmentModGenerator", { useToken: "APBSBotEquipmentModGenerator" });
+
         this.getPath();
     }
 
@@ -154,7 +163,7 @@ export class InstanceManager
         this.tables = container.resolve<DatabaseService>("DatabaseService").getTables();
 
         // Custom Classes
-        this.botConfigs = new BotConfigs(this.tables);
+        this.botConfigs = new BotConfigs(this.tables, this.configServer, this.tierInformation);
         this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter);
 
     }
