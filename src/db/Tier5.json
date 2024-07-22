@@ -957,57 +957,77 @@
         "chances": {
             "equipment": {
                 "ArmBand": 0,
-                "ArmorVest": 21,
-                "Backpack": 43,
-                "Earpiece": 50,
+                "ArmorVest": 33,
+                "Backpack": 50,
+                "Earpiece": 25,
                 "Eyewear": 25,
-                "FaceCover": 49,
-                "FirstPrimaryWeapon": 92,
-                "Headwear": 75,
-                "Holster": 7,
+                "FaceCover": 20,
+                "FirstPrimaryWeapon": 100,
+                "Headwear": 60,
+                "Holster": 15,
                 "Pockets": 100,
-                "Scabbard": 79,
-                "SecondPrimaryWeapon": 0,
+                "Scabbard": 100,
+                "SecondPrimaryWeapon": 1,
                 "SecuredContainer": 100,
                 "TacticalVest": 100
             },
             "equipmentMods": {
-                "back_plate": 100,
-                "front_plate": 100,
-                "left_side_plate": 20,
-                "mod_equipment": 13,
-                "mod_equipment_000": 0,
-                "mod_equipment_001": 0,
-                "mod_equipment_002": 0,
-                "mod_mount": 0,
-                "mod_nvg": 0,
-                "right_side_plate": 20
+                "back_plate": 25,
+                "front_plate": 25,
+                "left_side_plate": 25,
+                "mod_equipment": 25,
+                "mod_equipment_000": 25,
+                "mod_equipment_001": 25,
+                "mod_equipment_002": 25,
+                "mod_nvg": 5,
+                "right_side_plate": 25
             },
             "weaponMods": {
-                "mod_charge": 1,
-                "mod_flashlight": 99,
-                "mod_foregrip": 6,
-                "mod_handguard": 100,
+                "mod_barrel": 5,
+                "mod_bipod": 10,
+                "mod_flashlight": 10,
+                "mod_foregrip": 10,
+                "mod_handguard": 10,
                 "mod_launcher": 0,
-                "mod_magazine": 100,
-                "mod_mount": 22,
-                "mod_mount_000": 27,
-                "mod_mount_001": 0,
-                "mod_muzzle": 37,
-                "mod_pistol_grip": 0,
-                "mod_reciever": 94,
-                "mod_scope": 50,
-                "mod_sight_front": 29,
-                "mod_sight_rear": 56,
+                "mod_reciever": 10,
+                "mod_magazine": 10,
+                "mod_mount": 15,
+                "mod_mount_000": 10,
+                "mod_mount_001": 10,
+                "mod_mount_002": 10,
+                "mod_mount_003": 10,
+                "mod_mount_004": 10,
+                "mod_mount_005": 10,
+                "mod_mount_006": 10,
+                "mod_muzzle": 10,
+                "mod_muzzle_000": 10,
+                "mod_muzzle_001": 10,
+                "mod_equipment": 5,
+                "mod_equipment_000": 10,
+                "mod_equipment_001": 5,
+                "mod_equipment_002": 0,
+                "mod_nvg": 0,
+                "mod_pistol_grip_akms": 10,
+                "mod_pistol_grip": 10,
+                "mod_scope": 10,
+                "mod_scope_000": 15,
+                "mod_scope_001": 15,
+                "mod_scope_002": 15,
+                "mod_scope_003": 15,
+                "mod_tactical": 10,
+                "mod_tactical001": 10,
+                "mod_tactical002": 10,
+                "mod_tactical_000": 10,
+                "mod_tactical_001": 10,
+                "mod_tactical_002": 10,
+                "mod_tactical_003": 10,
+                "mod_tactical_2": 10,
+                "mod_charge": 1,
+                "mod_sight_front": 80,
+                "mod_sight_rear": 80,
                 "mod_stock": 48,
                 "mod_stock_000": 11,
-                "mod_stock_akms": 100,
-                "mod_tactical": 37,
-                "mod_tactical_000": 2,
-                "mod_tactical_001": 77,
-                "mod_tactical_002": 3,
-                "mod_tactical_003": 0,
-                "mod_tactical_2": 0
+                "mod_stock_akms": 100
             }
         },
         "equipment": {
@@ -2102,15 +2122,15 @@
         "Ammo": {
             "Caliber1143x23ACP": {
                 "5ea2a8e200685063ec28c05a": 4,
-                "5efb0fc6aeb21837e749c801": 4,
-                "5efb0d4f4bc50b58e81710f3": 8,
-                "5e81f423763d9f754677bf2e": 8,
-                "5efb0cabfb3e451d70735af5": 6
+                "5efb0fc6aeb21837e749c801": 1,
+                "5efb0d4f4bc50b58e81710f3": 10,
+                "5e81f423763d9f754677bf2e": 18,
+                "5efb0cabfb3e451d70735af5": 9
             },
             "Caliber127x55": {
-                "5cadf6e5ae921500113bb973": 5,
-                "5cadf6ddae9215051e1c23b2": 5,
-                "5cadf6eeae921500134b2799": 4
+                "5cadf6e5ae921500113bb973": 3,
+                "5cadf6ddae9215051e1c23b2": 12,
+                "5cadf6eeae921500134b2799": 8
             },
             "Caliber12g": {
                 "5d6e6772a4b936088465b17c": 2,
@@ -2152,7 +2172,7 @@
                 "59e6658b86f77411d949b250": 1,
                 "59e6542b86f77411dc52a77a": 2,
                 "59e655cb86f77411dc52a77b": 10,
-                "5f0596629e22f464da6bbdd9": 6
+                "5f0596629e22f464da6bbdd9": 8
             },
             "Caliber40mmRU": {
                 "5656eb674bdc2d35148b457c": 1
@@ -2168,9 +2188,9 @@
             "Caliber46x30": {
                 "5ba26812d4351e003201fef1": 2,
                 "5ba26844d4351e00334c9475": 4,
-                "5ba2678ad4351e44f824b344": 10,
-                "64b6979341772715af0f9c39": 10,
-                "5ba26835d4351e0035628ff5": 5
+                "5ba2678ad4351e44f824b344": 15,
+                "64b6979341772715af0f9c39": 15,
+                "5ba26835d4351e0035628ff5": 8
             },
             "Caliber545x39": {
                 "56dff216d2720bbd668b4568": 1,
@@ -2178,33 +2198,33 @@
                 "56dff421d2720b5f5a8b4567": 1,
                 "56dff4ecd2720b5f5a8b4568": 1,
                 "56dff4a2d2720bbd668b456a": 1,
-                "56dff0bed2720bb0668b4567": 3,
-                "56dff3afd2720bba668b4567": 9,
-                "56dff2ced2720bb4668b4567": 15,
-                "56dff061d2720bb5668b4567": 15,
-                "61962b617c6c7b169525f168": 10,
-                "56dfef82d2720bbd668b4567": 7,
-                "56dff026d2720bb8668b4567": 6,
-                "5c0d5e4486f77478390952fe": 3
+                "56dff0bed2720bb0668b4567": 1,
+                "56dff3afd2720bba668b4567": 6,
+                "56dff2ced2720bb4668b4567": 12,
+                "56dff061d2720bb5668b4567": 20,
+                "61962b617c6c7b169525f168": 12,
+                "56dfef82d2720bbd668b4567": 9,
+                "56dff026d2720bb8668b4567": 8,
+                "5c0d5e4486f77478390952fe": 4
             },
             "Caliber556x45NATO": {
-                "5c0d5ae286f7741e46554302": 5,
+                "5c0d5ae286f7741e46554302": 1,
                 "59e6927d86f77411da468256": 1,
-                "59e6918f86f7746c9f75e849": 2,
-                "59e68f6f86f7746c9f75e846": 2,
-                "59e6920f86f77411d82aa167": 3,
-                "54527a984bdc2d4e668b4567": 10,
-                "60194943740c5d77f6705eea": 18,
-                "59e6906286f7746c9f75e847": 21,
-                "54527ac44bdc2d36668b4567": 21,
+                "59e6918f86f7746c9f75e849": 1,
+                "59e68f6f86f7746c9f75e846": 1,
+                "59e6920f86f77411d82aa167": 2,
+                "54527a984bdc2d4e668b4567": 7,
+                "60194943740c5d77f6705eea": 20,
+                "59e6906286f7746c9f75e847": 26,
+                "54527ac44bdc2d36668b4567": 30,
                 "59e690b686f7746c9f75e848": 7,
-                "601949593ae8f707c4608daa": 4
+                "601949593ae8f707c4608daa": 5
             },
             "Caliber57x28": {
-                "5cc86832d7f00c000d3a6e6c": 2,
-                "5cc80f79e4a949033c7343b2": 3,
-                "5cc86840d7f00c002412c56c": 4,
-                "5cc80f8fe4a949033b0224a2": 7,
+                "5cc86832d7f00c000d3a6e6c": 1,
+                "5cc80f79e4a949033c7343b2": 1,
+                "5cc86840d7f00c002412c56c": 2,
+                "5cc80f8fe4a949033b0224a2": 5,
                 "5cc80f53e4a949000e1ea4f8": 21,
                 "5cc80f67e4a949035e43bbba": 15,
                 "5cc80f38e4a949001152b560": 12
@@ -2225,9 +2245,9 @@
                 "6196365d58ef8c428c287da1": 7,
                 "6196364158ef8c428c287d9f": 2,
                 "5fbe3ffdf8b6a877a729ea82": 6,
-                "619636be6db0f2477964e710": 17,
-                "64b8725c4b75259c590fa899": 17,
-                "5fd20ff893a8961fc660a954": 8
+                "619636be6db0f2477964e710": 23,
+                "64b8725c4b75259c590fa899": 20,
+                "5fd20ff893a8961fc660a954": 9
             },
             "Caliber762x39": {
                 "59e4d3d286f774176a36250a": 1,
@@ -2235,18 +2255,18 @@
                 "64b7af5a8532cf95ee0a0dbd": 1,
                 "59e4d24686f7741776641ac7": 2,
                 "59e4cf5286f7741778269d8a": 4,
-                "5656d7c34bdc2d9d198b4587": 24,
-                "64b7af434b75259c590fa893": 22,
-                "59e0d99486f7744a32234762": 13,
-                "601aa3d2b2bcb34913271e6d": 8
+                "5656d7c34bdc2d9d198b4587": 28,
+                "64b7af434b75259c590fa893": 33,
+                "59e0d99486f7744a32234762": 20,
+                "601aa3d2b2bcb34913271e6d": 12
             },
             "Caliber762x51": {
                 "5e023e88277cce2b522ff2b1": 1,
                 "5e023e6e34d52a55c3304f71": 1,
                 "5e023e53d4353e3302577c4c": 1,
                 "58dd3ad986f77403051cba8f": 27,
-                "5a608bf24f39f98ffc77720e": 14,
-                "5a6086ea4f39f99cd479502f": 12,
+                "5a608bf24f39f98ffc77720e": 19,
+                "5a6086ea4f39f99cd479502f": 13,
                 "5efb0c1bd79ff02a1f5e68d9": 7
             },
             "Caliber762x54R": {
@@ -2279,26 +2299,26 @@
                 "5737201124597760fc4431f1": 5,
                 "573720e02459776143012541": 12,
                 "573718ba2459775a75491131": 18,
-                "57371aab2459775a77142f22": 10,
-                "573719df2459775a626ccbc2": 7
+                "57371aab2459775a77142f22": 12,
+                "573719df2459775a626ccbc2": 10
             },
             "Caliber9x19PARA": {
                 "5c0d56a986f774449d5de529": 9,
-                "5efb0e16aeb21837e749c7ff": 4,
+                "5efb0e16aeb21837e749c7ff": 5,
                 "58864a4f2459770fcc257101": 1,
-                "5a3c16fe86f77452b62de32a": 2,
-                "5c3df7d588a4501f290594e5": 2,
-                "64b7bbb74b75259c590fa897": 8,
-                "56d59d3ad2720bdb418b4577": 23,
-                "5c925fa22e221601da359b7b": 12,
-                "5efb0da7a29a85116f6ea05f": 6
+                "5a3c16fe86f77452b62de32a": 1,
+                "5c3df7d588a4501f290594e5": 1,
+                "64b7bbb74b75259c590fa897": 3,
+                "56d59d3ad2720bdb418b4577": 18,
+                "5c925fa22e221601da359b7b": 22,
+                "5efb0da7a29a85116f6ea05f": 9
             },
             "Caliber9x21": {
                 "5a26ac06c4a282000c5a90a8": 1,
-                "5a26abfac4a28232980eabff": 8,
-                "5a269f97c4a282000b151807": 15,
-                "6576f93989f0062e741ba952": 15,
-                "5a26ac0ec4a28200741e1e18": 12,
+                "5a26abfac4a28232980eabff": 3,
+                "5a269f97c4a282000b151807": 8,
+                "6576f93989f0062e741ba952": 18,
+                "5a26ac0ec4a28200741e1e18": 18,
                 "6576f4708ca9c4381d16cd9d": 8
             },
             "Caliber9x33R": {
@@ -2310,10 +2330,10 @@
             "Caliber9x39": {
                 "6576f96220d53a5b8f3e395e": 1,
                 "57a0dfb82459774d3078b56c": 2,
-                "5c0d668f86f7747ccb7f13b2": 15,
-                "61962d879bb3d20b0946d385": 18,
-                "57a0e5022459774d1673f889": 15,
-                "5c0d688c86f77413ae3407b2": 8
+                "5c0d668f86f7747ccb7f13b2": 9,
+                "61962d879bb3d20b0946d385": 25,
+                "57a0e5022459774d1673f889": 25,
+                "5c0d688c86f77413ae3407b2": 12
             }
         }
     },
