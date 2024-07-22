@@ -47,7 +47,12 @@ export class ModdedWeaponHelper
 
     public tiersTable = [];
 
-    public addModdedWeaponsToPools(): void
+    public initialize():void
+    {
+        this.addModdedWeaponsToPools()
+    }
+
+    private addModdedWeaponsToPools(): void
     {
         const tier7JSON = this.apbsEquipmentGetter.getTierJson(7)
         
@@ -74,7 +79,7 @@ export class ModdedWeaponHelper
         this.getModdedWeapons();
     }
 
-    public getModdedWeapons(): void
+    private getModdedWeapons(): void
     {
         const items = Object.values(this.tables.templates.items);
         const allWeapons = items.filter(x => this.itemHelper.isOfBaseclass(x._id, BaseClasses.WEAPON));
