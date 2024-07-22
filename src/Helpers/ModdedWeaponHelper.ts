@@ -9,7 +9,7 @@ import { DatabaseService } from "@spt/services/DatabaseService";
 
 
 @injectable()
-export class TierConfigs
+export class ModdedWeaponHelper
 {
     private tieredWeaponList: ITemplateItem;
     private blacklist: any[];
@@ -47,8 +47,8 @@ export class TierConfigs
 
     public tiersTable = [];
 
-    public populateTiersTable(): void
-    {        
+    public addModdedWeaponsToPools(): void
+    {
         const tier7JSON = this.apbsEquipmentGetter.getTierJson(7)
         
         Object.keys(tier7JSON.scav.equipment.FirstPrimaryWeapon.LongRange).forEach(element => {
