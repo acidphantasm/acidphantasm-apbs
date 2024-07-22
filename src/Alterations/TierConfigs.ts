@@ -19,7 +19,7 @@ export class TierConfigs
         @inject("DatabaseService") protected databaseService: DatabaseService,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("TierInformation") protected tierInformation: TierInformation,
-        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
+        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter
     )
     {
         
@@ -40,7 +40,8 @@ export class TierConfigs
             "579204f224597773d619e051",
             "6275303a9f372d6ea97f9ec7",
             "66015072e9f84d5680039678",
-            "59f9cabd86f7743a10721f46"
+            "59f9cabd86f7743a10721f46",
+            "5abccb7dd8ce87001773e277"
         ]
     }
 
@@ -84,8 +85,6 @@ export class TierConfigs
 
         let moddedItems = difference;
         
-        //console.log(`${JSON.stringify(moddedItems)}`)
-
         const blacklist = this.blacklist
         for (const item of difference)
         {
