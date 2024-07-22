@@ -11,6 +11,7 @@ import { Logging } from "../Enums/Logging";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { APBSIBotBase } from "../Interface/APBSIBotBase";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
+import { RaidInformation } from "../Globals/RaidInformation";
 
 /** Handle profile related client events */
 @injectable()
@@ -22,7 +23,8 @@ export class APBSBotLevelGenerator
         @inject("BotLevelGenerator") protected botLevelGenerator: BotLevelGenerator,
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("ProfileHelper") protected profileHelper: ProfileHelper,
-        @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter
+        @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
+        @inject("RaidInformation") protected raidInformation: RaidInformation
     )
     {}
 
@@ -39,9 +41,21 @@ export class APBSBotLevelGenerator
                 const max = highestLevel >= 78 ? 78 : highestLevel;
                 const level = this.randomUtil.getInt(min, max);
                 const exp = this.profileHelper.getExperience(level);
-                
+
                 bot.Info.Tier = this.apbsTierGetter.getTierByLevel(level)
                 
+                if (botGenerationDetails.isPlayerScav)
+                {
+                    const level = this.profileHelper.getScavProfile(this.raidInformation.sessionId).Info.Level;
+                    const exp = this.profileHelper.getExperience(level);
+                    
+                    bot.Info.Tier = this.apbsTierGetter.getTierByLevel(level)
+                    const result: IRandomisedBotLevelResult = {
+                        level,
+                        exp 
+                    };
+                    return result;                    
+                }
                 const result: IRandomisedBotLevelResult = {
                     level,
                     exp 
