@@ -108,11 +108,11 @@ export class APBSBotWeaponGenerator
         if (equipmentSlot == "FirstPrimaryWeapon" || equipmentSlot == "SecondPrimaryWeapon")
         {
             const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);
-            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
+            const weaponPool = this.apbsEquipmentGetter.getWeaponByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
             return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
         }
         
-        const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+        const weaponPool = this.apbsEquipmentGetter.getWeaponByBotRole(botRole, tierInfo, equipmentSlot);
         return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
     }
 

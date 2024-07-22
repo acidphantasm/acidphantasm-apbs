@@ -47,7 +47,7 @@ export class APBSEquipmentGetter
 
     }
 
-    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): any
+    public getWeaponByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): any
     {
         let tier;
         const tierJson = this.getTierJson(tierInfo)
@@ -71,6 +71,26 @@ export class APBSEquipmentGetter
             default:
                 tier = range == undefined ? tierJson.boss.equipment[slot] : tierJson.boss.equipment[slot][range]
                 return tier;
+        }
+    }
+
+    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string): any
+    {
+        const tierJson = this.getTierJson(tierInfo)
+        switch (botRole)
+        {
+            case "pmcbear":
+                return tierJson.pmcBEAR.equipment[slot];
+            case "arenaFighterEvent":
+            case "exusec":
+            case "pmcusec":
+                return tierJson.pmcUSEC.equipment[slot];
+            case "marksman":
+            case "cursedassault":
+            case "assault":
+                return tierJson.scav.equipment[slot];
+            default:
+                return tierJson.boss.equipment[slot];
         }
     }
     
