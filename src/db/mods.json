@@ -1,7 +1,42 @@
 {
     "mods": {
+      "65709d2d21b9f815e208ff95": {
+        "mod_equipment_000": [
+          "6570a88c8f221f3b210353b7"
+        ],
+        "mod_mount": [
+          "5b7be47f5acfc400170e2dd2"
+        ],
+        "mod_nvg": [
+          "5a16b8a9fcdbcb00165aa6ca",
+          "5c0558060db834001b735271"
+        ],
+        "Helmet_top": [
+          "657f9eb7e9433140ad0baf86"
+        ],
+        "Helmet_back": [
+          "657f9ef6c6679fefb3051e1f"
+        ]
+      },
+      "5b4329f05acfc47a86086aa1": {
+        "Helmet_top": [
+          "65711b07a330b8c9060f7b01"
+        ],
+        "Helmet_back": [
+          "65711b489eb8c145180dbb9d"
+        ],
+        "helmet_eyes": [
+          "65711b9b65daf6aa960c9b1b"
+        ],
+        "helmet_jaw": [
+          "65711bc79eb8c145180dbba1"
+        ],
+        "Helmet_ears": [
+          "65711b706d197c216005b31c"
+        ]
+      },
       "5c066ef40db834001966a595": {
-        "mod_nvg":[
+        "mod_nvg": [
           "5c066e3a0db834001b7353f0"
         ]
       },
