@@ -1,28 +1,37 @@
-import { DependencyContainer, inject, injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 
-import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
-import { ItemHelper } from "@spt/helpers/ItemHelper";
-import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
-import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
-import { BotInventoryGenerator } from "@spt/generators/BotInventoryGenerator";
+import { BotLootGenerator } from "@spt/generators/BotLootGenerator";
+import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
+import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
+import { BotHelper } from "@spt/helpers/BotHelper";
+import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
+import { Inventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBase";
+import { Chances, Equipment, Generation, IBotType, Inventory } from "@spt/models/eft/common/tables/IBotType";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
-import { EquipmentFilterDetails, IBotConfig } from "@spt/models/spt/config/IBotConfig";
+import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
+import { GameEditions } from "@spt/models/enums/GameEditions";
+import { ItemTpl } from "@spt/models/enums/ItemTpl";
+import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
+import {
+    EquipmentFilterDetails,
+    IBotConfig,
+} from "@spt/models/spt/config/IBotConfig";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { ConfigServer } from "@spt/servers/ConfigServer";
 import { BotEquipmentModPoolService } from "@spt/services/BotEquipmentModPoolService";
+import { DatabaseService } from "@spt/services/DatabaseService";
 import { LocalisationService } from "@spt/services/LocalisationService";
 import { HashUtil } from "@spt/utils/HashUtil";
 import { RandomUtil } from "@spt/utils/RandomUtil";
-import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
-import mods = require("../db/mods.json");
+
+
+import { BotInventoryGenerator } from "@spt/generators/BotInventoryGenerator";
+import customModPool = require("../db/mods.json");
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
-import { BotHelper } from "@spt/helpers/BotHelper";
-import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
-import { BotLootGenerator } from "@spt/generators/BotLootGenerator";
-import { DatabaseService } from "@spt/services/DatabaseService";
 
 /** Handle profile related client events */
 @injectable()
@@ -63,14 +72,58 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             configServer)
     }
 
+    public override generateInventory(
+        sessionId: string,
+        botJsonTemplate: IBotType,
+        botRole: string,
+        isPmc: boolean,
+        botLevel: number,
+        chosenGameVersion: string
+    ): PmcInventory
+    {
+        const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
+        const wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
+
+        const templateInventory = botJsonTemplate.inventory;
+        const itemGenerationLimitsMinMax = botJsonTemplate.generation;
+
+        // Generate base inventory with no items
+        const botInventory = this.generateInventoryBase();
+
+        this.generateAndAddEquipmentToBot(
+            templateInventory,
+            wornItemChances,
+            botRole,
+            botInventory,
+            botLevel,
+            chosenGameVersion);
+
+        // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed
+        this.generateAndAddWeaponsToBot(
+            templateInventory,
+            wornItemChances,
+            sessionId,
+            botInventory,
+            botRole,
+            isPmc,
+            itemGenerationLimitsMinMax,
+            botLevel,
+        );
+
+        // Pick loot and add to bots containers (rig/backpack/pockets/secure)
+        this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
+
+        return botInventory;
+    }
+
     protected override generateEquipment = (settings: IGenerateEquipmentProperties): boolean => 
     {
-        const modPool = mods;
         const equipmentSlot = settings.rootEquipmentSlot as string;
         const botRole = settings.botRole;
         const botLevel = settings.botLevel;
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
         const equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+        settings.randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo)
 
         const spawnChance = ([EquipmentSlots.POCKETS, EquipmentSlots.SECURED_CONTAINER] as string[]).includes(
             settings.rootEquipmentSlot
@@ -164,7 +217,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                 && settings.randomisationDetails?.randomisedArmorSlots?.includes(settings.rootEquipmentSlot)
             )
             {
-                modPool[pickedItemDb._id] = this.getFilteredDynamicModsForItem(
+                customModPool.mods[pickedItemDb._id] = this.getFilteredDynamicModsForItem(
                     pickedItemDb._id,
                     this.botConfig.equipment[botEquipmentRole].blacklist
                 );
