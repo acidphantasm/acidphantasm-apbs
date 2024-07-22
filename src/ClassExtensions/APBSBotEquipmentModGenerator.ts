@@ -209,4 +209,102 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         }
         return equipment;
     }
+
+    protected override filterPlateModsForSlotByLevel(settings: IGenerateEquipmentProperties, modSlot: string, existingPlateTplPool: string[], armorItem: ITemplateItem): IFilterPlateModsForSlotByLevelResult
+    {
+        const result: IFilterPlateModsForSlotByLevelResult = { result: Result.UNKNOWN_FAILURE, plateModTpls: undefined };
+
+        // Not pmc or not a plate slot, return original mod pool array
+        if (!this.itemHelper.isRemovablePlateSlot(modSlot))
+        {
+            result.result = Result.NOT_PLATE_HOLDING_SLOT;
+            result.plateModTpls = existingPlateTplPool;
+
+            return result;
+        }
+
+        // Get the front/back/side weights based on bots level
+        const plateSlotWeights = settings.botEquipmentConfig?.armorPlateWeighting?.find(
+            (armorWeight) =>
+                settings.botLevel >= armorWeight.levelRange.min && settings.botLevel <= armorWeight.levelRange.max);
+        if (!plateSlotWeights)
+        {
+            // No weights, return original array of plate tpls
+            result.result = Result.LACKS_PLATE_WEIGHTS;
+            result.plateModTpls = existingPlateTplPool;
+
+            return result;
+        }
+
+        // Get the specific plate slot weights (front/back/side)
+        const plateWeights: Record<string, number> = plateSlotWeights[modSlot];
+        if (!plateWeights)
+        {
+            // No weights, return original array of plate tpls
+            result.result = Result.LACKS_PLATE_WEIGHTS;
+            result.plateModTpls = existingPlateTplPool;
+
+            return result;
+        }
+
+        // Choose a plate level based on weighting
+        let chosenArmorPlateLevel = this.weightedRandomHelper.getWeightedValue<string>(plateWeights);
+
+        // Convert the array of ids into database items
+        let platesFromDb = existingPlateTplPool.map((plateTpl) => this.itemHelper.getItem(plateTpl)[1]);
+
+        // Filter plates to the chosen level based on its armorClass property
+        let platesOfDesiredLevel = platesFromDb.filter((item) => item._props.armorClass === chosenArmorPlateLevel);
+        let tries = 0;
+        while (platesOfDesiredLevel.length === 0 && tries <= 3)
+        {
+            chosenArmorPlateLevel = (parseInt(chosenArmorPlateLevel)+1).toString()
+            platesFromDb = existingPlateTplPool.map((plateTpl) => this.itemHelper.getItem(plateTpl)[1]);
+            platesOfDesiredLevel = platesFromDb.filter((item) => item._props.armorClass === chosenArmorPlateLevel);
+
+            tries++;
+        }
+
+        if (tries >= 3)
+        {
+            this.logger.debug(`Plate filter was too restrictive for armor: ${armorItem._id}. Tried ${tries} times. Using mod items default plate.`);
+
+            const relatedItemDbModSlot = armorItem._props.Slots.find((slot) => slot._name.toLowerCase() === modSlot);
+            const defaultPlate = relatedItemDbModSlot._props.filters[0].Plate;
+            if (!defaultPlate)
+            {
+                // No relevant plate found after filtering AND no default plate
+
+                // Last attempt, get default preset and see if it has a plate default
+                const defaultPreset = this.presetHelper.getDefaultPreset(armorItem._id);
+                if (defaultPreset)
+                {
+                    const relatedPresetSlot = defaultPreset._items.find(
+                        (item) => item.slotId?.toLowerCase() === modSlot);
+                    if (relatedPresetSlot)
+                    {
+                        result.result = Result.SUCCESS;
+                        result.plateModTpls = [relatedPresetSlot._tpl];
+
+                        return result;
+                    }
+                }
+                // Return Default Preset cause didn't have default plates
+                result.result = Result.NO_DEFAULT_FILTER;
+
+                return result;
+            }
+            // Return Default Plates cause couldn't get lowest level available from original selection
+            result.result = Result.SUCCESS;
+            result.plateModTpls = [defaultPlate];
+
+            return result;
+        }
+
+        // Only return the items ids
+        result.result = Result.SUCCESS;
+        result.plateModTpls = platesOfDesiredLevel.map((item) => item._id);
+
+        return result;
+    }
 }
