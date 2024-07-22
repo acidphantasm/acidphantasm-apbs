@@ -22,7 +22,7 @@ export class APBSEquipmentGetter
     )
     {}
 
-    public getTierJson(tierInfo: number, botRole?: string, botLevel?: number)
+    public getTierJson(tierInfo: number)
     {
         switch (tierInfo)
         {
@@ -91,6 +91,26 @@ export class APBSEquipmentGetter
                 return tierJson.scav.equipment[slot];
             default:
                 return tierJson.boss.equipment[slot];
+        }
+    }
+
+    public getSpawnChancesByBotRole(botRole: string, tierInfo: number): any
+    {
+        const tierJson = this.getTierJson(tierInfo)
+        switch (botRole)
+        {
+            case "pmcbear":
+                return tierJson.pmcBEAR.chances;
+            case "arenaFighterEvent":
+            case "exusec":
+            case "pmcusec":
+                return tierJson.pmcUSEC.chances;
+            case "marksman":
+            case "cursedassault":
+            case "assault":
+                return tierJson.scav.chances;
+            default:
+                return tierJson.boss.chances;
         }
     }
     

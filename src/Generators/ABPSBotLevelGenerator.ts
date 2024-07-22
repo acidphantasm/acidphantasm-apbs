@@ -10,8 +10,8 @@ import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { APBSIBotBase } from "../Interface/APBSIBotBase";
-import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { RaidInformation } from "../Globals/RaidInformation";
+import { APBSTierGetter } from "../Utils/APBSTierGetter";
 
 /** Handle profile related client events */
 @injectable()

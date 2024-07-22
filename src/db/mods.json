@@ -1,5 +1,45 @@
 {
     "mods": {
+      "65709d2d21b9f815e208ff95": {
+        "mod_equipment_000": [
+          "6570a88c8f221f3b210353b7"
+        ],
+        "mod_mount": [
+          "5b7be47f5acfc400170e2dd2"
+        ],
+        "mod_nvg": [
+          "5a16b8a9fcdbcb00165aa6ca",
+          "5c0558060db834001b735271"
+        ],
+        "Helmet_top": [
+          "657f9eb7e9433140ad0baf86"
+        ],
+        "Helmet_back": [
+          "657f9ef6c6679fefb3051e1f"
+        ]
+      },
+      "5b4329f05acfc47a86086aa1": {
+        "Helmet_top": [
+          "65711b07a330b8c9060f7b01"
+        ],
+        "Helmet_back": [
+          "65711b489eb8c145180dbb9d"
+        ],
+        "helmet_eyes": [
+          "65711b9b65daf6aa960c9b1b"
+        ],
+        "helmet_jaw": [
+          "65711bc79eb8c145180dbba1"
+        ],
+        "Helmet_ears": [
+          "65711b706d197c216005b31c"
+        ]
+      },
+      "5c066ef40db834001966a595": {
+        "mod_nvg": [
+          "5c066e3a0db834001b7353f0"
+        ]
+      },
       "56e0598dd2720bb5668b45a6": {
         "mod_magazine": [
           "5448c12b4bdc2d02308b456f"
@@ -12072,8 +12112,31 @@
           "623c3c1f37b4b31470357737"
         ],
         "mod_pistol_grip": [
+          "5f6341043ada5942720e2dc5",
+          "6087e663132d4d12c81fd96b",
+          "623c3be0484b5003161840dc",
           "5beec8ea0db834001a6f9dbf",
-          "5cf508bfd7f00c056e24104e"
+          "5649ad3f4bdc2df8348b4585",
+          "5649ade84bdc2d1b2b8b4587",
+          "59e62cc886f77440d40b52a1",
+          "5a0071d486f77404e23a12b2",
+          "57e3dba62459770f0c32322b",
+          "5cf54404d7f00c108840b2ef",
+          "5e2192a498a36665e8337386",
+          "5b30ac585acfc433000eb79c",
+          "59e6318286f77444dd62c4cc",
+          "5cf50850d7f00c056e24104c",
+          "5cf508bfd7f00c056e24104e",
+          "628a664bccaab13006640e47",
+          "628c9ab845c59e5b80768a81",
+          "5947f92f86f77427344a76b1",
+          "5947fa2486f77425b47c1a9b",
+          "5c6bf4aa2e2216001219b0ae",
+          "5649ae4a4bdc2d1b2b8b4588",
+          "5998517986f7746017232f7e",
+          "63f4da90f31d4a33b87bd054",
+          "648ae3e356c6310a830fc291",
+          "651580dc71a4f10aec4b6056"
         ],
         "mod_stock_000": [
           "624c29ce09cd027dff2f8cd7"
