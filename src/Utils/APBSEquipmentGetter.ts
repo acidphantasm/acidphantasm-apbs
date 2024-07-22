@@ -41,16 +41,16 @@ export class APBSEquipmentGetter
             case 7:
                 return Tier7
             default:
-                this.apbsLogger.log(Logging.WARN, `Something went wrong, Tier3 returned default for ${botRole} level ${botLevel}`);
+                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier3 loadout.");
                 return Tier3
         }
 
     }
 
-    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string, botLevel?:number, range?: string): any
+    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): any
     {
         let tier;
-        const tierJson = this.getTierJson(tierInfo, botRole, botLevel)
+        const tierJson = this.getTierJson(tierInfo)
         switch (botRole)
         {
             case "pmcbear":
