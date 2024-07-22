@@ -33,18 +33,18 @@ export class APBSBotLevelGenerator
             result.generateBotLevel = (levelDetails: MinMax, botGenerationDetails: BotGenerationDetails, bot: APBSIBotBase): IRandomisedBotLevelResult => 
             {
                 const expTable = this.databaseService.getGlobals().config.exp.level.exp_table;
-
-                const lowestPossibleLevel = this.getLowestRelativeLevel(botGenerationDetails, levelDetails, expTable.length);
-                const highestPossibleLevel = this.getHighestRelativeLevel(botGenerationDetails, levelDetails, expTable.length);
-                const min = lowestPossibleLevel <= 0 ? 1 : lowestPossibleLevel;
-                const max = highestPossibleLevel >= 78 ? 78 : highestPossibleLevel;
+                const highestLevel = this.getHighestRelativeLevel(botGenerationDetails, levelDetails, expTable.length);
+                const lowestLevel = this.getLowestRelativeLevel(botGenerationDetails, levelDetails, expTable.length);
+                const min = lowestLevel <= 0 ? 1 : lowestLevel;
+                const max = highestLevel >= 78 ? 78 : highestLevel;
                 const level = this.randomUtil.getInt(min, max);
+                const exp = this.profileHelper.getExperience(level);
                 
                 bot.Info.Tier = this.apbsTierGetter.getTierByLevel(level)
                 
                 const result: IRandomisedBotLevelResult = {
                     level,
-                    exp: this.profileHelper.getExperience(level)
+                    exp 
                 };
                 return result;
             };
