@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export class TierInformation
 {
+    public tier1;
+    public tier2;
+    public tier3;
+    public tier4;
+    public tier5;
+    public tier6;
+    public tier7;
+
     public tiers = [
         {
             tier: 1,

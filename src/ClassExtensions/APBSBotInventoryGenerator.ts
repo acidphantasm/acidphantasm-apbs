@@ -123,7 +123,8 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         const botLevel = settings.botLevel;
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
         const equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
-        settings.randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo)
+        settings.randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
+        settings.spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
 
         const spawnChance = ([EquipmentSlots.POCKETS, EquipmentSlots.SECURED_CONTAINER] as string[]).includes(
             settings.rootEquipmentSlot

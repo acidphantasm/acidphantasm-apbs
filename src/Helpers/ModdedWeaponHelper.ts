@@ -6,7 +6,17 @@ import { injectable, inject } from "tsyringe";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { ITemplateItem, ItemType } from "@spt/models/eft/common/tables/ITemplateItem";
 import { DatabaseService } from "@spt/services/DatabaseService";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
 
+import Tier1 = require("../db/Tier1.json");
+import Tier2 = require("../db/Tier2.json");
+import Tier3 = require("../db/Tier3.json");
+import Tier4 = require("../db/Tier4.json");
+import Tier5 = require("../db/Tier5.json");
+import Tier6 = require("../db/Tier6.json");
+import Tier7 = require("../db/Tier7.json");
+import mods = require("../db/mods.json");
 
 @injectable()
 export class ModdedWeaponHelper
@@ -19,7 +29,8 @@ export class ModdedWeaponHelper
         @inject("DatabaseService") protected databaseService: DatabaseService,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("TierInformation") protected tierInformation: TierInformation,
-        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter
+        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
         
@@ -49,10 +60,22 @@ export class ModdedWeaponHelper
 
     public initialize():void
     {
-        this.addModdedWeaponsToPools()
+        this.buildTierJson();
+        this.buildVanillaWeaponList();
     }
 
-    private addModdedWeaponsToPools(): void
+    private buildTierJson(): void
+    {
+        this.tierInformation.tier1 = Tier1;
+        this.tierInformation.tier2 = Tier2;
+        this.tierInformation.tier3 = Tier3;
+        this.tierInformation.tier4 = Tier4;
+        this.tierInformation.tier5 = Tier5;
+        this.tierInformation.tier6 = Tier6;
+        this.tierInformation.tier7 = Tier7;
+    }
+
+    private buildVanillaWeaponList(): void
     {
         const tier7JSON = this.apbsEquipmentGetter.getTierJson(7)
         
@@ -102,12 +125,126 @@ export class ModdedWeaponHelper
                 }
             }
         }
-        
-        //console.log(`${JSON.stringify(moddedItems)}`)
 
+        //console.log(`${JSON.stringify(moddedItems)}`)
+        if (moddedItems.length > 0)
+        {
+            this.getSetModdedWeaponDetails(moddedItems);
+        }
         /**
          * Push @param moddedItems to Tier4+, soonTM.
         */
+    }
+
+    private getSetModdedWeaponDetails(modWeaponPool): void
+    {
+        for (const weapon in modWeaponPool)
+        {
+            const weaponParent = modWeaponPool[weapon]._parent;
+            const weaponId = modWeaponPool[weapon]._id;
+            const weaponSlots = modWeaponPool[weapon]?._props?.Slots;
+            const weaponChamber = modWeaponPool[weapon]?._props?.Chambers;
+            const weaponType = modWeaponPool[weapon]?._props?.weapUseType;
+
+            this.pushWeaponToTiers(weaponId, weaponType);
+            this.pushWeaponModToMods(weaponSlots, weaponId);
+
+            //console.log(JSON.stringify(modWeaponPool[weapon]))            
+            //console.log(`Weapon Parent: ${weaponParent} | Weapon ID: ${weaponId} | WeaponSlots: ${JSON.stringify(weaponSlots)} | WeaponChamber: ${JSON.stringify(weaponChamber)} | WeaponType: ${weaponType}`)
+        }
+    }
+
+    private pushWeaponToTiers(weaponId: string, weaponType: string): void
+    {
+        for (const object in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[object].tier
+            const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber);
+
+            if (weaponType == "primary")
+            {
+                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 20
+                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 20
+                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 20
+                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 20
+                tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 20
+                tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 20
+                tierJson.boss.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 20
+                tierJson.boss.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 20
+                
+                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 20
+                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 20
+                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 20
+                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 20
+                tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 20
+                tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 20
+                tierJson.boss.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 20
+                tierJson.boss.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 20
+
+                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 20.`)
+            }
+            if (weaponType == "secondary")
+            {
+                tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
+                tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
+                tierJson.scav.equipment.Holster[weaponId] = 5
+                tierJson.boss.equipment.Holster[weaponId] = 5
+
+                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 20.`)
+            }
+        }
+    }
+
+    private pushWeaponModToMods(weaponSlots, weaponId): void
+    {
+        for (const slot in weaponSlots)
+        {
+            const slotName = weaponSlots[slot]?._name;
+            for (const item in weaponSlots[slot]?._props?.filters[0]?.Filter)
+            {
+                const slotFilterItem = weaponSlots[slot]?._props?.filters[0]?.Filter[item];
+
+                this.pushChildrenMods(slotFilterItem);
+
+                if (mods.mods[weaponId] == undefined)
+                {
+                    mods.mods[weaponId] = {};
+                }
+                if (mods.mods[weaponId][slotName] == undefined)
+                {
+                    mods.mods[weaponId][slotName] = [];
+                }
+                mods.mods[weaponId][slotName].push(slotFilterItem)
+            }
+        }
+    }
+
+    private pushChildrenMods(slotFilterItem)
+    {
+        const slotFilterItemData = this.getItem(slotFilterItem);
+        const slotItemId = slotFilterItemData?._id;
+        const weaponSlots = slotFilterItemData?._props?.Slots;
+
+        for (const slot in weaponSlots)
+        {
+            const slotName = weaponSlots[slot]?._name;
+            for (const item in weaponSlots[slot]?._props?.filters[0]?.Filter)
+            {
+                const slotFilterItem = weaponSlots[slot]?._props?.filters[0]?.Filter[item];
+
+                this.pushChildrenMods(slotFilterItem);
+
+                if (mods.mods[slotItemId] == undefined)
+                {
+                    mods.mods[slotItemId] = {};
+                }
+                if (mods.mods[slotItemId][slotName] == undefined)
+                {
+                    mods.mods[slotItemId][slotName] = [];
+                }
+                mods.mods[slotItemId][slotName].push(slotFilterItem)
+            }
+        }
     }
 
     private getItem(tpl: string): ITemplateItem

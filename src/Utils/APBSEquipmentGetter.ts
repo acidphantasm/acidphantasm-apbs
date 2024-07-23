@@ -2,21 +2,17 @@
 import { inject, injectable } from "tsyringe";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { RaidInformation } from "../Globals/RaidInformation";
-import Tier1 = require("../db/Tier1.json");
-import Tier2 = require("../db/Tier2.json");
-import Tier3 = require("../db/Tier3.json");
-import Tier4 = require("../db/Tier4.json");
-import Tier5 = require("../db/Tier5.json");
-import Tier6 = require("../db/Tier6.json");
-import Tier7 = require("../db/Tier7.json");
 import { Logging } from "../Enums/Logging";
 import { APBSLogger } from "./APBSLogger";
+import { TierInformation } from "../Globals/TierInformation";
 
 @injectable()
 export class APBSEquipmentGetter
 {
+
     constructor(
         @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper,
         @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
@@ -27,22 +23,22 @@ export class APBSEquipmentGetter
         switch (tierInfo)
         {
             case 1:
-                return Tier1
+                return this.tierInformation.tier1
             case 2:
-                return Tier2
+                return this.tierInformation.tier2
             case 3:
-                return Tier3
+                return this.tierInformation.tier3
             case 4:
-                return Tier4
+                return this.tierInformation.tier4
             case 5:
-                return Tier5
+                return this.tierInformation.tier5
             case 6:
-                return Tier6
+                return this.tierInformation.tier6
             case 7:
-                return Tier7
+                return this.tierInformation.tier7
             default:
                 this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier3 loadout.");
-                return Tier3
+                return this.tierInformation.tier3
         }
 
     }
