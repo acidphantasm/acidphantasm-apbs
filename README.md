@@ -6,17 +6,19 @@ In vanilla, scavs are a minor annoyance once you reach level 30+. This aims to c
 
 ## General Notes
 
-This mod has only been tested with SAIN, SWAG+Donuts, and QuestingBots.
+This mod has only been tested with SAIN, SWAG+Donuts, QuestingBots, and LootingBots.
 
 This mod may have missing mods or templates for weapons. If you see errors or warning - REPORT THEM.
 
 This mod may have issues that prevent the game from working - if this happens, REMOVE THE MOD and REPORT THEM.
 
-
 Currently all bots that are due to spawn or have spawned are logged inside the \user\mods\acidphantasm-progressivebotsystem\logs\ folder. These logs are wiped when you restart the server. These may be needed to provide support, and are a nice thing to review if you happen to want to know everything that has or will spawn.
+
+## Put this mod last in your load order. If you have issues and it isn't last, then move it last.
 
 - All AI will level with you.
 - All AI have a tiering system.
+- All AI will use modded weapons that you have installed.
 - USEC spawn with weapons that you would expect from non-Russian forces.
 - BEAR spawn with weapons that you would expect from Russian forces.
 - Scavs pull a weapon from the Tier they have spawned from (any weapon available in that tier from USEC or BEAR can be chosen.)
@@ -24,3 +26,5 @@ Currently all bots that are due to spawn or have spawned are logged inside the \
 - Bosses pull weapons from their vanilla pools until a later version.
   - Bosses & guards pull ammo from a Tier4 pool.
   - Boss guards pull a Tier4 weapon from the combined pools of USEC & BEAR.
+
+## Put this mod last in your load order. If you have issues and it isn't last, then move it last.
