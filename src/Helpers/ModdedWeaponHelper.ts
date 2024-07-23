@@ -163,23 +163,23 @@ export class ModdedWeaponHelper
 
             if (weaponType == "primary")
             {
-                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 20
-                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 20
-                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 20
-                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 20
-                tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 20
-                tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 20
-                tierJson.boss.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 20
-                tierJson.boss.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 20
+                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 15
+                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 15
+                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 0
+                tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
+                tierJson.boss.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 15
+                tierJson.boss.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
                 
-                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 20
-                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 20
-                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 20
-                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 20
-                tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 20
-                tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 20
-                tierJson.boss.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 20
-                tierJson.boss.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 20
+                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
+                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
+                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 0
+                tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
+                tierJson.boss.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
+                tierJson.boss.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
 
                 this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 20.`)
             }
