@@ -16,6 +16,7 @@ Currently all bots that are due to spawn or have spawned are logged inside the \
 
 ## Put this mod last in your load order. If you have issues and it isn't last, then move it last.
 
+### Current Features
 - All AI will level with you.
 - All AI have a tiering system.
 - All AI will use modded weapons that you have installed.
@@ -26,5 +27,21 @@ Currently all bots that are due to spawn or have spawned are logged inside the \
 - Bosses pull weapons from their vanilla pools until a later version.
   - Bosses & guards pull ammo from a Tier4 pool.
   - Boss guards pull a Tier4 weapon from the combined pools of USEC & BEAR.
+
+### Current Tiers
+- Tier 1 = Lv1-10
+  - Level Variance +/- 5
+- Tier 2 = Lv11-20
+  - Level Variance +/- 7
+- Tier 3 = Lv21-30
+  - Level Variance +/- 10
+- Tier 4 = Lv31-40
+  - Level Variance +/- 15
+- Tier 5 = Lv41-50
+  - Level Variance +/- 15
+- Tier 6 = Lv51-60
+  - Level Variance +/- 20
+- Tier 7 = Lv61-78
+  - Level Variance +/- 30
 
 ## Put this mod last in your load order. If you have issues and it isn't last, then move it last.
