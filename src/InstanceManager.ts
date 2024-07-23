@@ -164,7 +164,7 @@ export class InstanceManager
 
         // Custom Classes
         this.botConfigs = new BotConfigs(this.tables, this.configServer, this.tierInformation);
-        this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter);
+        this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
 
     }
 
