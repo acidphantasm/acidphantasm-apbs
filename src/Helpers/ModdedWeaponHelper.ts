@@ -181,7 +181,7 @@ export class ModdedWeaponHelper
                 tierJson.boss.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
                 tierJson.boss.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
 
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 20.`)
+                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 15.`)
             }
             if (weaponType == "secondary")
             {
@@ -190,7 +190,7 @@ export class ModdedWeaponHelper
                 tierJson.scav.equipment.Holster[weaponId] = 5
                 tierJson.boss.equipment.Holster[weaponId] = 5
 
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 20.`)
+                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 5.`)
             }
         }
     }
