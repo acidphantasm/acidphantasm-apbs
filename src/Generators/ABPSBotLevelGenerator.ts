@@ -46,9 +46,8 @@ export class APBSBotLevelGenerator
                 
                 if (botGenerationDetails.isPlayerScav)
                 {
-                    const level = this.profileHelper.getScavProfile(this.raidInformation.sessionId).Info.Level;
+                    const level = this.raidInformation.freshProfile == true ? 1 : this.profileHelper.getScavProfile(this.raidInformation.sessionId)?.Info?.Level
                     const exp = this.profileHelper.getExperience(level);
-                    
                     bot.Info.Tier = this.apbsTierGetter.getTierByLevel(level)
                     const result: IRandomisedBotLevelResult = {
                         level,
