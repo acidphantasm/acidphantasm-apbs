@@ -256,7 +256,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         // Filter plates to the chosen level based on its armorClass property
         let platesOfDesiredLevel = platesFromDb.filter((item) => item._props.armorClass === chosenArmorPlateLevel);
         let tries = 0;
-        while (platesOfDesiredLevel.length === 0 && tries <= 3)
+        while (platesOfDesiredLevel.length === 0 && tries <= 2)
         {
             chosenArmorPlateLevel = (parseInt(chosenArmorPlateLevel)+1).toString()
             platesFromDb = existingPlateTplPool.map((plateTpl) => this.itemHelper.getItem(plateTpl)[1]);
@@ -265,7 +265,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             tries++;
         }
 
-        if (tries >= 3)
+        if (tries >= 2)
         {
             this.logger.debug(`${settings.botRole} - Plate filter was too restrictive for armor: ${armorItem._id}. Tried ${tries} times. Using mod items default plate.`);
 
