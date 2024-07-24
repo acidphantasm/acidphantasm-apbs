@@ -27,6 +27,7 @@ export class BotConfigs
         this.configureBotExperienceLevels();
         this.configurePlateWeightings();
         this.clearNoLongerNeededBotDetails();
+        this.configureAssaultWeaponDurability();
     }
 
     private configureBotExperienceLevels(): void
@@ -58,5 +59,23 @@ export class BotConfigs
             botConfigEquipment[botType].randomisation = [];
             botConfigEquipment[botType].weightingAdjustmentsByBotLevel = [];
         }
+    }
+
+    private configureAssaultWeaponDurability(): void
+    {
+        // Do this better in the future
+        const botConfigDurability = this.botConfig.durability
+
+        botConfigDurability.assault.weapon.lowestMax = 60
+        botConfigDurability.assault.weapon.highestMax = 90
+        botConfigDurability.assault.weapon.maxDelta = 25
+        botConfigDurability.assault.weapon.minDelta = 0
+        botConfigDurability.assault.weapon.minLimitPercent = 15
+
+        botConfigDurability.marksman.weapon.lowestMax = 60
+        botConfigDurability.marksman.weapon.highestMax = 90
+        botConfigDurability.marksman.weapon.maxDelta = 25
+        botConfigDurability.marksman.weapon.minDelta = 0
+        botConfigDurability.marksman.weapon.minLimitPercent = 15
     }
 }
