@@ -128,7 +128,7 @@ export class APBSBotWeaponGenerator
         botLevel: number, 
         tierInfo: number
     ): GenerateWeaponResult
-    {        
+    {
         const modPool = mods.mods;
         const weaponItemTemplate = this.itemHelper.getItem(weaponTpl)[1];
 

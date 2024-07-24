@@ -84,7 +84,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
     public override generateModsForEquipment(equipment: Item[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, shouldForceSpawn = false): Item[]
     {
         let forceSpawn = shouldForceSpawn;
-
+        
         const compatibleModsPool = customModPool.mods[parentTemplate._id];
         if (!compatibleModsPool)
         {
