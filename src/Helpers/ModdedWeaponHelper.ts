@@ -231,9 +231,7 @@ export class ModdedWeaponHelper
             for (const item in weaponSlots[slot]?._props?.filters[0]?.Filter)
             {
                 const slotFilterItem = weaponSlots[slot]?._props?.filters[0]?.Filter[item];
-
-                this.pushChildrenMods(slotFilterItem);
-
+                
                 if (mods.mods[slotItemId] == undefined)
                 {
                     mods.mods[slotItemId] = {};
