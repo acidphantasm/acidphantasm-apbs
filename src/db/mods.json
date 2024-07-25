@@ -2782,6 +2782,11 @@
           "5a16ba61fcdbcb098008728a"
         ]
       },
+      "5a16bb52fcdbcb001a3b00dc": {
+        "mod_nvg": [
+          "5a16b8a9fcdbcb00165aa6ca"
+        ]
+      },
       "5a17f98cfcdbcb0980087290": {
         "mod_magazine": [
           "5a17fb03fcdbcbcae668728f"
@@ -4315,8 +4320,7 @@
         ],
         "mod_nvg": [
           "5c0558060db834001b735271",
-          "5a16b8a9fcdbcb00165aa6ca",
-          "5ac8d6885acfc400180ae7b0"
+          "5a16b8a9fcdbcb00165aa6ca"
         ]
       },
       "5addbac75acfc400194dbc56": {
