@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { injectable, inject } from "tsyringe";
 import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
 import { ConfigServer } from "@spt/servers/ConfigServer";
@@ -30,6 +31,7 @@ export class BotConfigs
         this.configureAssaultWeaponDurability();
         this.removeNvgChanceFromBosses();
         this.setWeaponModLimits();
+        this.setNewRandomization();
     }
 
     private configureBotExperienceLevels(): void
@@ -95,7 +97,6 @@ export class BotConfigs
             }
         }
     }
-    
 
     private setWeaponModLimits(): void
     {
@@ -111,5 +112,29 @@ export class BotConfigs
                 };
             }
         }
+    }
+
+    private setNewRandomization(): void
+    {
+        const botConfigEquipment = this.botConfig.equipment
+        for (const botType in botConfigEquipment)
+        {
+            if (typeof this.botConfig.lootItemResourceRandomization[botType] == "undefined")
+            {
+                this.botConfig.lootItemResourceRandomization[botType] = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
+            }
+            this.botConfig.itemSpawnLimits[botType]["60098ad7c2240c0fe85c570a"] = 2
+            this.botConfig.itemSpawnLimits[botType]["590c678286f77426c9660122"] = 2
+            this.botConfig.itemSpawnLimits[botType]["5e831507ea0a7c419c2f9bd9"] = 1
+            this.botConfig.itemSpawnLimits[botType]["590c661e86f7741e566b646a"] = 1
+            this.botConfig.itemSpawnLimits[botType]["544fb45d4bdc2dee738b4568"] = 1
+            this.botConfig.itemSpawnLimits[botType]["5e8488fa988a8701445df1e4"] = 1
+            this.botConfig.itemSpawnLimits[botType]["544fb37f4bdc2dee738b4567"] = 1
+            this.botConfig.itemSpawnLimits[botType]["5448e8d04bdc2ddf718b4569"] = 1
+            this.botConfig.itemSpawnLimits[botType]["5448e8d64bdc2dce718b4568"] = 1
+        }
+
+        botConfigEquipment.pmc.randomisation = this.tierInformation.lootRandomization
+
     }
 }
