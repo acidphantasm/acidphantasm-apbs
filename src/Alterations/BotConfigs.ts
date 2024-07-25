@@ -28,6 +28,8 @@ export class BotConfigs
         this.configurePlateWeightings();
         this.clearNoLongerNeededBotDetails();
         this.configureAssaultWeaponDurability();
+        this.removeNvgChanceFromBosses();
+        this.setWeaponModLimits();
     }
 
     private configureBotExperienceLevels(): void
@@ -77,5 +79,37 @@ export class BotConfigs
         botConfigDurability.marksman.weapon.maxDelta = 25
         botConfigDurability.marksman.weapon.minDelta = 0
         botConfigDurability.marksman.weapon.minLimitPercent = 15
+    }
+
+    private removeNvgChanceFromBosses(): void
+    {
+        const botConfigEquipment = this.botConfig.equipment
+
+        for (const botType in botConfigEquipment)
+        {
+            if (botType.includes("boss"))
+            {
+                botConfigEquipment[botType].nvgIsActiveChanceDayPercent = 0;
+                botConfigEquipment[botType].nvgIsActiveChanceNightPercent = 0;
+                botConfigEquipment[botType].faceShieldIsActiveChancePercent = 100;
+            }
+        }
+    }
+    
+
+    private setWeaponModLimits(): void
+    {
+        const botConfigEquipment = this.botConfig.equipment
+        for (const botType in botConfigEquipment)
+        {
+            botConfigEquipment[botType].forceStock = true;
+            if (typeof botConfigEquipment[botType].weaponModLimits == "undefined")
+            {
+                botConfigEquipment[botType].weaponModLimits = {                
+                    "scopeLimit": 2,
+                    "lightLaserLimit": 2
+                };
+            }
+        }
     }
 }
