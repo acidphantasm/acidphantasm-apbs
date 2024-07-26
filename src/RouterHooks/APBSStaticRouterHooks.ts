@@ -6,7 +6,6 @@ import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
-import { getCurrentTime, nightTimeCheck } from "../Utils/APBSTime";
 import { RaidInformation } from "../Globals/RaidInformation";
 
 @injectable()
@@ -124,16 +123,11 @@ export class APBSStaticRouterHooks
     private logLocation(info: any):void
     {
         this.raidInformation.location = info.location;
-        this.raidInformation.currentTime = getCurrentTime(this.weatherGenerator);
-        this.raidInformation.timeVariant = info.timeVariant;
-        this.raidInformation.nightTime = nightTimeCheck(this.raidInformation.currentTime, this.raidInformation.timeVariant, this.raidInformation.location);
         
         this.apbsLogger.log( 
             Logging.DEBUG,
             "-------Raid Information-------",
             `| Location: ${this.raidInformation.location}`,
-            `| Time: ${this.raidInformation.currentTime}`,
-            `| Night: ${this.raidInformation.nightTime}`,
             "------------------------------"
         );
     }
