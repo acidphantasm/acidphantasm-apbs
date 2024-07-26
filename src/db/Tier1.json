@@ -13,7 +13,7 @@
                 "Holster": 5,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 2,
-                "TacticalVest": 100
+                "TacticalVest": 99
             },
             "equipmentMods": {
                 "back_plate": 40,
@@ -52,7 +52,7 @@
                 "mod_pistol_grip": 10,
                 "mod_pistol_grip_akms": 100,
                 "mod_pistolgrip": 10,
-                "mod_reciever": 5,
+                "mod_reciever": 75,
                 "mod_scope": 55,
                 "mod_scope_000": 75,
                 "mod_scope_001": 5,
@@ -323,7 +323,6 @@
                 "56e335e4d2720b6c058b456d": 15,
                 "5ca20d5986f774331e7c9602": 15,
                 "5e9dcf5986f7746c417435b3": 15,
-
                 "6038d614d10cbf667352dd44": 10,
                 "6034d103ca006d2dca39b3f0": 10,
                 "656ddcf0f02d7bcea90bf395": 10,
@@ -409,19 +408,16 @@
                 "64be7110bf597ba84a0a41ea": 8,
                 "59e7643b86f7742cbf2c109a": 8,
                 "6034d0230ca681766b6a0fb5": 8,
-
                 "5929a2a086f7744f4b234d43": 23,
                 "63611865ba5b90db0c0399d1": 23,
                 "5e4abfed86f77406a2713cf7": 23,
                 "6034cf5fffd42c541047f72e": 23,
-
                 "5d5d85c586f774279a21cbdb": 12,
                 "5ca20abf86f77418567a43f2": 12,
                 "5b44c8ea86f7742d1627baf1": 12,
                 "5c0e9f2c86f77432297fe0a3": 12,
                 "5f5f41f56760b4138443b352": 12,
                 "5fd4c60f875c30179f5d04c2": 12,
-
                 "5c0e3eb886f7742015526062": 300,
                 "5c0e446786f7742013381639": 300,
                 "5d5d646386f7742797261fd9": 300,
@@ -444,7 +440,7 @@
                 "Holster": 5,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 2,
-                "TacticalVest": 100
+                "TacticalVest": 99
             },
             "equipmentMods": {
                 "back_plate": 40,
@@ -483,7 +479,7 @@
                 "mod_pistol_grip": 10,
                 "mod_pistol_grip_akms": 100,
                 "mod_pistolgrip": 10,
-                "mod_reciever": 5,
+                "mod_reciever": 75,
                 "mod_scope": 55,
                 "mod_scope_000": 75,
                 "mod_scope_001": 5,
@@ -860,19 +856,16 @@
                 "64be7110bf597ba84a0a41ea": 8,
                 "59e7643b86f7742cbf2c109a": 8,
                 "6034d0230ca681766b6a0fb5": 8,
-
                 "5929a2a086f7744f4b234d43": 23,
                 "63611865ba5b90db0c0399d1": 23,
                 "5e4abfed86f77406a2713cf7": 23,
                 "6034cf5fffd42c541047f72e": 23,
-
                 "5d5d85c586f774279a21cbdb": 12,
                 "5ca20abf86f77418567a43f2": 12,
                 "5b44c8ea86f7742d1627baf1": 12,
                 "5c0e9f2c86f77432297fe0a3": 12,
                 "5f5f41f56760b4138443b352": 12,
                 "5fd4c60f875c30179f5d04c2": 12,
-
                 "5c0e3eb886f7742015526062": 300,
                 "5c0e446786f7742013381639": 300,
                 "5d5d646386f7742797261fd9": 300,
@@ -897,7 +890,7 @@
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 1,
                 "SecuredContainer": 100,
-                "TacticalVest": 100
+                "TacticalVest": 99
             },
             "equipmentMods": {
                 "back_plate": 25,
@@ -917,7 +910,7 @@
                 "mod_foregrip": 15,
                 "mod_handguard": 25,
                 "mod_launcher": 0,
-                "mod_reciever": 15,
+                "mod_reciever": 45,
                 "mod_magazine": 5,
                 "mod_mount": 20,
                 "mod_mount_000": 25,
@@ -1403,12 +1396,10 @@
                 "64be7110bf597ba84a0a41ea": 10,
                 "59e7643b86f7742cbf2c109a": 10,
                 "6034d0230ca681766b6a0fb5": 10,
-
                 "5929a2a086f7744f4b234d43": 3,
                 "63611865ba5b90db0c0399d1": 3,
                 "5e4abfed86f77406a2713cf7": 3,
                 "6034cf5fffd42c541047f72e": 3,
-
                 "5c0e3eb886f7742015526062": 10,
                 "5c0e446786f7742013381639": 10,
                 "5d5d646386f7742797261fd9": 10
@@ -1579,7 +1570,7 @@
                 "Scabbard": 45,
                 "SecondPrimaryWeapon": 0,
                 "SecuredContainer": 100,
-                "TacticalVest": 100
+                "TacticalVest": 99
             },
             "equipmentMods": {
                 "back_plate": 75,
@@ -1618,7 +1609,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_reciever": 50,
+                "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
                 "mod_scope_001": 50,

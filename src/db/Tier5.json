@@ -13,7 +13,8 @@
                 "Holster": 25,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 15,
-                "TacticalVest": 100
+                "TacticalVest": 99,
+                "ArmouredRig": 99
             },
             "equipmentMods": {
                 "back_plate": 95,
@@ -52,7 +53,7 @@
                 "mod_pistol_grip": 90,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_reciever": 50,
+                "mod_reciever": 100,
                 "mod_scope": 95,
                 "mod_scope_000": 100,
                 "mod_scope_001": 50,
@@ -522,28 +523,12 @@
                 "5ca20ee186f774799474abc2": 10
             },
             "TacticalVest": {
-                "572b7adb24597762ae139821": 1,
-                "5fd4c5477a8d854fa0105061": 1,
-                "64be7095047e826eae02b0c1": 1,
-                "5fd4c4fa16cac650092f6771": 1,
-                "5e4abc1f86f774069619fbaa": 1,
-                "5d5d8ca986f7742798716522": 1,
-                "64be7110bf597ba84a0a41ea": 1,
-                "59e7643b86f7742cbf2c109a": 1,
-                "6034d0230ca681766b6a0fb5": 1,
-
-                "5929a2a086f7744f4b234d43": 3,
-                "63611865ba5b90db0c0399d1": 3,
-                "5e4abfed86f77406a2713cf7": 3,
-                "6034cf5fffd42c541047f72e": 3,
-
                 "5d5d85c586f774279a21cbdb": 10,
                 "5ca20abf86f77418567a43f2": 10,
                 "5b44c8ea86f7742d1627baf1": 10,
                 "5c0e9f2c86f77432297fe0a3": 10,
                 "5f5f41f56760b4138443b352": 10,
                 "5fd4c60f875c30179f5d04c2": 10,
-
                 "5e9db13186f7742f845ee9d3": 25,
                 "628baf0b967de16aab5a4f36": 25,
                 "60a6220e953894617404b00a": 25,
@@ -555,11 +540,6 @@
                 "6040dd4ddcf9592f401632d2": 25,
                 "5df8a42886f77412640e2e75": 25,
                 "5c0e6a1586f77404597b4965": 25,
-
-                "5c0e3eb886f7742015526062": 1,
-                "5c0e446786f7742013381639": 1,
-                "5d5d646386f7742797261fd9": 1,
-
                 "544a5caa4bdc2d1a388b4568": 300,
                 "5d5d87f786f77427997cfaef": 300,
                 "64a5366719bab53bd203bf33": 300,
@@ -571,7 +551,6 @@
                 "628dc750b910320f4c27a732": 300,
                 "5c0e722886f7740458316a57": 300,
                 "5c0e746986f7741453628fe5": 300,
-
                 "628b9784bcf6e2659e09b8a2": 300,
                 "5e4ac41886f77406a511c9a8": 300,
                 "5b44cad286f77402a54ae7e5": 300,
@@ -595,7 +574,8 @@
                 "Holster": 25,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 15,
-                "TacticalVest": 100
+                "TacticalVest": 99,
+                "ArmouredRig": 99
             },
             "equipmentMods": {
                 "back_plate": 95,
@@ -634,7 +614,7 @@
                 "mod_pistol_grip": 90,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_reciever": 50,
+                "mod_reciever": 100,
                 "mod_scope": 95,
                 "mod_scope_000": 100,
                 "mod_scope_001": 50,
@@ -1112,28 +1092,12 @@
                 "5ca20ee186f774799474abc2": 10
             },
             "TacticalVest": {
-                "572b7adb24597762ae139821": 1,
-                "5fd4c5477a8d854fa0105061": 1,
-                "64be7095047e826eae02b0c1": 1,
-                "5fd4c4fa16cac650092f6771": 1,
-                "5e4abc1f86f774069619fbaa": 1,
-                "5d5d8ca986f7742798716522": 1,
-                "64be7110bf597ba84a0a41ea": 1,
-                "59e7643b86f7742cbf2c109a": 1,
-                "6034d0230ca681766b6a0fb5": 1,
-
-                "5929a2a086f7744f4b234d43": 3,
-                "63611865ba5b90db0c0399d1": 3,
-                "5e4abfed86f77406a2713cf7": 3,
-                "6034cf5fffd42c541047f72e": 3,
-
                 "5d5d85c586f774279a21cbdb": 10,
                 "5ca20abf86f77418567a43f2": 10,
                 "5b44c8ea86f7742d1627baf1": 10,
                 "5c0e9f2c86f77432297fe0a3": 10,
                 "5f5f41f56760b4138443b352": 10,
                 "5fd4c60f875c30179f5d04c2": 10,
-
                 "5e9db13186f7742f845ee9d3": 25,
                 "628baf0b967de16aab5a4f36": 25,
                 "60a6220e953894617404b00a": 25,
@@ -1145,11 +1109,6 @@
                 "6040dd4ddcf9592f401632d2": 25,
                 "5df8a42886f77412640e2e75": 25,
                 "5c0e6a1586f77404597b4965": 25,
-
-                "5c0e3eb886f7742015526062": 1,
-                "5c0e446786f7742013381639": 1,
-                "5d5d646386f7742797261fd9": 1,
-
                 "544a5caa4bdc2d1a388b4568": 300,
                 "5d5d87f786f77427997cfaef": 300,
                 "64a5366719bab53bd203bf33": 300,
@@ -1161,7 +1120,6 @@
                 "628dc750b910320f4c27a732": 300,
                 "5c0e722886f7740458316a57": 300,
                 "5c0e746986f7741453628fe5": 300,
-
                 "628b9784bcf6e2659e09b8a2": 300,
                 "5e4ac41886f77406a511c9a8": 300,
                 "5b44cad286f77402a54ae7e5": 300,
@@ -1187,7 +1145,8 @@
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 1,
                 "SecuredContainer": 100,
-                "TacticalVest": 100
+                "TacticalVest": 99,
+                "ArmouredRig": 99
             },
             "equipmentMods": {
                 "back_plate": 25,
@@ -1207,7 +1166,7 @@
                 "mod_foregrip": 15,
                 "mod_handguard": 25,
                 "mod_launcher": 0,
-                "mod_reciever": 15,
+                "mod_reciever": 45,
                 "mod_magazine": 5,
                 "mod_mount": 20,
                 "mod_mount_000": 25,
@@ -1803,23 +1762,19 @@
                 "64be7110bf597ba84a0a41ea": 10,
                 "59e7643b86f7742cbf2c109a": 10,
                 "6034d0230ca681766b6a0fb5": 10,
-
                 "5929a2a086f7744f4b234d43": 3,
                 "63611865ba5b90db0c0399d1": 3,
                 "5e4abfed86f77406a2713cf7": 3,
                 "6034cf5fffd42c541047f72e": 3,
-
                 "5d5d85c586f774279a21cbdb": 1,
                 "5ca20abf86f77418567a43f2": 1,
                 "5b44c8ea86f7742d1627baf1": 1,
                 "5c0e9f2c86f77432297fe0a3": 1,
                 "5f5f41f56760b4138443b352": 1,
                 "5fd4c60f875c30179f5d04c2": 1,
-
                 "5c0e3eb886f7742015526062": 10,
                 "5c0e446786f7742013381639": 10,
                 "5d5d646386f7742797261fd9": 10,
-
                 "544a5caa4bdc2d1a388b4568": 5,
                 "5d5d87f786f77427997cfaef": 5,
                 "64a5366719bab53bd203bf33": 5,
@@ -1998,7 +1953,8 @@
                 "Scabbard": 45,
                 "SecondPrimaryWeapon": 0,
                 "SecuredContainer": 100,
-                "TacticalVest": 100
+                "TacticalVest": 99,
+                "ArmouredRig": 99
             },
             "equipmentMods": {
                 "back_plate": 100,
@@ -2038,7 +1994,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_reciever": 50,
+                "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
                 "mod_scope_001": 50,
@@ -2516,11 +2472,9 @@
                 "6040dd4ddcf9592f401632d2": 25,
                 "5df8a42886f77412640e2e75": 25,
                 "5c0e6a1586f77404597b4965": 25,
-
                 "5c0e3eb886f7742015526062": 1,
                 "5c0e446786f7742013381639": 1,
                 "5d5d646386f7742797261fd9": 1,
-
                 "544a5caa4bdc2d1a388b4568": 300,
                 "5d5d87f786f77427997cfaef": 300,
                 "64a5366719bab53bd203bf33": 300,
@@ -2532,7 +2486,6 @@
                 "628dc750b910320f4c27a732": 300,
                 "5c0e722886f7740458316a57": 300,
                 "5c0e746986f7741453628fe5": 300,
-
                 "628b9784bcf6e2659e09b8a2": 300,
                 "5e4ac41886f77406a511c9a8": 300,
                 "5b44cad286f77402a54ae7e5": 300,
