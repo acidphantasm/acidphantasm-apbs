@@ -1,6 +1,6 @@
 {
     "name": "Progressive Bot System",
-    "version": "0.4.3",
+    "version": "0.4.8",
     "sptVersion": "~3.9",
     "loadBefore": [],
     "loadAfter": [
