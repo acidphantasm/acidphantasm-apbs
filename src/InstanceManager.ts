@@ -43,6 +43,7 @@ import { DynamicRouterModService } from "@spt/services/mod/dynamicRouter/Dynamic
 import { APBSDynamicRouterHooks } from "./RouterHooks/APBSDynamicRouterHooks";
 import { APBSBotEquipmentModGenerator } from "./ClassExtensions/APBSBotEquipmentModGenerator";
 import { APBSBotInventoryGenerator } from "./ClassExtensions/APBSBotInventoryGenerator";
+import { APBSBotLootGenerator } from "./ClassExtensions/APBSBotLootGenerator";
 
 export class InstanceManager 
 {
@@ -153,6 +154,8 @@ export class InstanceManager
         this.container.register("BotInventoryGenerator", { useToken: "APBSBotInventoryGenerator" });
         this.container.register<APBSBotEquipmentModGenerator>("APBSBotEquipmentModGenerator", APBSBotEquipmentModGenerator);
         this.container.register("BotEquipmentModGenerator", { useToken: "APBSBotEquipmentModGenerator" });
+        this.container.register<APBSBotLootGenerator>("APBSBotLootGenerator", APBSBotLootGenerator);
+        this.container.register("BotLootGenerator", { useToken: "APBSBotLootGenerator" });
 
         this.getPath();
     }
