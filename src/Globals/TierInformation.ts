@@ -374,7 +374,6 @@ export class TierInformation
                         "5710c24ad2720bc3458b45a3": 25,
                         "58d3db5386f77426186285a0": 25,
                         "5448be9a4bdc2dfd2f8b456a": 25
-
                     }
                 },
                 "healing": {
@@ -384,10 +383,10 @@ export class TierInformation
                         "2": 20
                     },
                     "whitelist": {
-                        "5755356824597772cb798962": 3,
-                        "590c661e86f7741e566b646a": 2,
-                        "544fb45d4bdc2dee738b4568": 1,
-                        "5e831507ea0a7c419c2f9bd9": 2
+                        "5755356824597772cb798962": 4,
+                        "590c661e86f7741e566b646a": 9,
+                        "544fb45d4bdc2dee738b4568": 2,
+                        "5e831507ea0a7c419c2f9bd9": 6
                     }
                 },
                 "backpackLoot": {
@@ -411,7 +410,7 @@ export class TierInformation
                 "magazines": {
                     "weights": {
                         "0": 0,
-                        "1": 25,
+                        "1": 10,
                         "2": 55,
                         "3": 25
                     },
@@ -423,11 +422,8 @@ export class TierInformation
                         "1": 1
                     },
                     "whitelist": {
-                        "544fb3f34bdc2d03748b456a": 1,
-                        "5c0e530286f7747fa1419862": 65,
-                        "5c0e534186f7747fa1419867": 12,
-                        "5c0e531d86f7747fa23f4d42": 8,
-                        "5ed51652f6c34d2cc26336a1": 17
+                        "544fb3f34bdc2d03748b456a": 25,
+                        "5c0e530286f7747fa1419862": 65
                     }
                 }
             }
@@ -543,8 +539,8 @@ export class TierInformation
                         "5448be9a4bdc2dfd2f8b456a": 15,
                         "5e32f56fcb6d5863cc5e5ee4": 45,
                         "5e340dcdcb6d5863cc5e5efb": 20,
-                        "617fd91e5539a84ec44ce155": 1,
-                        "618a431df1eb8e24b8741deb": 1
+                        "617fd91e5539a84ec44ce155": 5,
+                        "618a431df1eb8e24b8741deb": 5
                     }
                 },
                 "healing": {
