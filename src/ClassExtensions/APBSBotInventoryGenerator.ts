@@ -154,7 +154,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             let pickedItemDb: ITemplateItem;
             let found = false;
 
-            const maxAttempts = Math.round(Object.keys(equipmentPool).length * 0.75); // Roughly 75% of pool size
+            const maxAttempts = Math.round(Object.keys(equipmentPool).length * 0.80); // Roughly 75% of pool size
             let attempts = 0;
             while (!found)
             {
@@ -172,8 +172,6 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                     this.logger.info(`EquipmentSlot -> ${settings.rootEquipmentSlot}`);
 
                     // remove picked item
-                    delete equipmentPool[chosenItemTpl];
-
                     attempts++;
 
                     continue;
@@ -191,10 +189,6 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                     {
                         return false;
                     }
-
-                    // Remove picked item
-                    delete equipmentPool[chosenItemTpl];
-
                     attempts++;
                 }
                 else
