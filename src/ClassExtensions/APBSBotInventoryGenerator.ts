@@ -17,7 +17,7 @@ import { ItemTpl } from "@spt/models/enums/ItemTpl";
 import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
 import {
     EquipmentFilterDetails,
-    IBotConfig,
+    IBotConfig
 } from "@spt/models/spt/config/IBotConfig";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { ConfigServer } from "@spt/servers/ConfigServer";
@@ -107,7 +107,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             botRole,
             isPmc,
             itemGenerationLimitsMinMax,
-            botLevel,
+            botLevel
         );
 
         // Pick loot and add to bots containers (rig/backpack/pockets/secure)
@@ -245,5 +245,183 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         }
 
         return false;
+    }
+
+    protected override generateAndAddEquipmentToBot(
+        templateInventory: Inventory,
+        wornItemChances: Chances,
+        botRole: string,
+        botInventory: PmcInventory,
+        botLevel: number,
+        chosenGameVersion: string
+    ): void 
+    {
+        // These will be handled later
+        const excludedSlots: string[] = [
+            EquipmentSlots.POCKETS,
+            EquipmentSlots.FIRST_PRIMARY_WEAPON,
+            EquipmentSlots.SECOND_PRIMARY_WEAPON,
+            EquipmentSlots.HOLSTER,
+            EquipmentSlots.ARMOR_VEST,
+            EquipmentSlots.TACTICAL_VEST,
+            EquipmentSlots.FACE_COVER,
+            EquipmentSlots.HEADWEAR,
+            EquipmentSlots.EARPIECE
+        ];
+
+        const botEquipConfig = this.botConfig.equipment[this.botGeneratorHelper.getBotEquipmentRole(botRole)];
+        const randomistionDetails = this.botHelper.getBotRandomizationDetails(botLevel, botEquipConfig);
+        for (const equipmentSlot in templateInventory.equipment) 
+        {
+            // Weapons have special generation and will be generated separately; ArmorVest should be generated after TactivalVest
+            if (excludedSlots.includes(equipmentSlot)) 
+            {
+                continue;
+            }
+
+            this.generateEquipment({
+                rootEquipmentSlot: equipmentSlot,
+                rootEquipmentPool: templateInventory.equipment[equipmentSlot],
+                modPool: templateInventory.mods,
+                spawnChances: wornItemChances,
+                botRole: botRole,
+                botLevel: botLevel,
+                inventory: botInventory,
+                botEquipmentConfig: botEquipConfig,
+                randomisationDetails: randomistionDetails
+            });
+        }
+
+        // Generate below in specific order
+        this.generateEquipment({
+            rootEquipmentSlot: EquipmentSlots.POCKETS,
+            rootEquipmentPool:
+                chosenGameVersion === GameEditions.UNHEARD
+                    ? { [ItemTpl.POCKETS_1X4_TUE]: 1 }
+                    : templateInventory.equipment.Pockets,
+            modPool: templateInventory.mods,
+            spawnChances: wornItemChances,
+            botRole: botRole,
+            botLevel: botLevel,
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails,
+            generateModsBlacklist: [ItemTpl.POCKETS_1X4_TUE]
+        });
+        this.generateEquipment({
+            rootEquipmentSlot: EquipmentSlots.FACE_COVER,
+            rootEquipmentPool: templateInventory.equipment.FaceCover,
+            modPool: templateInventory.mods,
+            spawnChances: wornItemChances,
+            botRole: botRole,
+            botLevel: botLevel,
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails
+        });
+        this.generateEquipment({
+            rootEquipmentSlot: EquipmentSlots.HEADWEAR,
+            rootEquipmentPool: templateInventory.equipment.Headwear,
+            modPool: templateInventory.mods,
+            spawnChances: wornItemChances,
+            botRole: botRole,
+            botLevel: botLevel,
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails
+        });
+        this.generateEquipment({
+            rootEquipmentSlot: EquipmentSlots.EARPIECE,
+            rootEquipmentPool: templateInventory.equipment.Earpiece,
+            modPool: templateInventory.mods,
+            spawnChances: wornItemChances,
+            botRole: botRole,
+            botLevel: botLevel,
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails
+        });
+        const hasArmorVest = this.generateEquipment({
+            rootEquipmentSlot: EquipmentSlots.ARMOR_VEST,
+            rootEquipmentPool: templateInventory.equipment.ArmorVest,
+            modPool: templateInventory.mods,
+            spawnChances: wornItemChances,
+            botRole: botRole,
+            botLevel: botLevel,
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails
+        });
+
+        const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
+        const pool = this.apbsEquipmentGetter.getEquipmentPoolJSON(botRole, tierInfo);
+
+        // Bot has no armor vest and flagged to be foreced to wear armored rig in this event
+        if (botEquipConfig.forceOnlyArmoredRigWhenNoArmor && !hasArmorVest) 
+        {
+            // Filter rigs down to only those with armor
+            this.filterRigsToThoseWithProtection(pool.equipment);
+        }
+
+        // Optimisation - Remove armored rigs from pool
+        if (hasArmorVest) 
+        {
+            // Filter rigs down to only those with armor
+            this.filterRigsToThoseWithoutProtection(pool.equipment);
+        }
+
+        this.generateEquipment({
+            rootEquipmentSlot: EquipmentSlots.TACTICAL_VEST,
+            rootEquipmentPool: templateInventory.equipment.TacticalVest,
+            modPool: templateInventory.mods,
+            spawnChances: wornItemChances,
+            botRole: botRole,
+            botLevel: botLevel,
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails
+        });
+    }
+
+    /**
+     * Remove non-armored rigs from parameter data
+     * @param templateEquipment Equpiment to filter TacticalVest of
+     */
+    protected filterRigsToThoseWithProtection(templateEquipment: Equipment): void 
+    {
+        const tacVestsWithArmor = Object.entries(templateEquipment.TacticalVest).reduce(
+            (newVestDictionary, [tplKey]) => 
+            {
+                if (this.itemHelper.itemHasSlots(tplKey)) 
+                {
+                    newVestDictionary[tplKey] = templateEquipment.TacticalVest[tplKey];
+                }
+                return newVestDictionary;
+            },
+            {}
+        );
+
+        templateEquipment.TacticalVest = tacVestsWithArmor;
+    }
+
+    /**
+     * Remove armored rigs from parameter data
+     * @param templateEquipment Equpiment to filter TacticalVest of
+     */
+    protected filterRigsToThoseWithoutProtection(templateEquipment: Equipment): void 
+    {
+        const tacVestsWithoutArmor = Object.entries(templateEquipment.TacticalVest).reduce(
+            (newVestDictionary, [tplKey]) => 
+            {
+                if (!this.itemHelper.itemHasSlots(tplKey)) 
+                {
+                    newVestDictionary[tplKey] = templateEquipment.TacticalVest[tplKey];
+                }
+                return newVestDictionary;
+            },
+            {}
+        );
+
+        templateEquipment.TacticalVest = tacVestsWithoutArmor;
     }
 }
