@@ -70,7 +70,7 @@ export class APBSEquipmentGetter
         }
     }
 
-    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string): any
+    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string): Record<string, number>
     {
         const tierJson = this.getTierJson(tierInfo)
         switch (botRole)
