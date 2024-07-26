@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { injectable, inject } from "tsyringe";
 import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
 import { ConfigServer } from "@spt/servers/ConfigServer";
@@ -20,6 +21,7 @@ export class BotConfigs
     )
     {
         this.botConfig = this.configServer.getConfig(ConfigTypes.BOT);
+        this.pmcConfig = this.configServer.getConfig(ConfigTypes.PMC);
     }
 
     public initialize(): void
@@ -27,7 +29,11 @@ export class BotConfigs
         this.configureBotExperienceLevels();
         this.configurePlateWeightings();
         this.clearNoLongerNeededBotDetails();
-        this.configureAssaultWeaponDurability();
+        this.configureScavWeaponDurability();
+        this.removeNvgChanceFromBosses();
+        this.setWeaponModLimits();
+        this.setLootItemResourceRandomization();
+        this.setPMCItemLimits()
     }
 
     private configureBotExperienceLevels(): void
@@ -61,7 +67,7 @@ export class BotConfigs
         }
     }
 
-    private configureAssaultWeaponDurability(): void
+    private configureScavWeaponDurability(): void
     {
         // Do this better in the future
         const botConfigDurability = this.botConfig.durability
@@ -77,5 +83,61 @@ export class BotConfigs
         botConfigDurability.marksman.weapon.maxDelta = 25
         botConfigDurability.marksman.weapon.minDelta = 0
         botConfigDurability.marksman.weapon.minLimitPercent = 15
+    }
+
+    private removeNvgChanceFromBosses(): void
+    {
+        const botConfigEquipment = this.botConfig.equipment
+
+        for (const botType in botConfigEquipment)
+        {
+            if (botType.includes("boss"))
+            {
+                botConfigEquipment[botType].nvgIsActiveChanceDayPercent = 0;
+                botConfigEquipment[botType].nvgIsActiveChanceNightPercent = 0;
+                botConfigEquipment[botType].faceShieldIsActiveChancePercent = 100;
+            }
+        }
+    }
+
+    private setWeaponModLimits(): void
+    {
+        const botConfigEquipment = this.botConfig.equipment
+        for (const botType in botConfigEquipment)
+        {
+            botConfigEquipment[botType].forceStock = true;
+            if (typeof botConfigEquipment[botType].weaponModLimits == "undefined")
+            {
+                botConfigEquipment[botType].weaponModLimits = {                
+                    "scopeLimit": 2,
+                    "lightLaserLimit": 2
+                };
+            }
+        }
+    }
+
+    private setLootItemResourceRandomization(): void
+    {        
+        this.botConfig.lootItemResourceRandomization.assault = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
+        this.botConfig.lootItemResourceRandomization.marksman = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
+        this.botConfig.lootItemResourceRandomization.pmcUSEC = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
+        this.botConfig.lootItemResourceRandomization.pmcBEAR = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
+        this.botConfig.lootItemResourceRandomization.pmc = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
+    }
+
+    private setPMCItemLimits(): void
+    {
+        this.pmcConfig.looseWeaponInBackpackLootMinMax.min = 0;
+        this.pmcConfig.looseWeaponInBackpackLootMinMax.max = 0;
+        this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
+        this.botConfig.itemSpawnLimits.pmc["60098ad7c2240c0fe85c570a"] = 2
+        this.botConfig.itemSpawnLimits.pmc["590c678286f77426c9660122"] = 2
+        this.botConfig.itemSpawnLimits.pmc["5e831507ea0a7c419c2f9bd9"] = 1
+        this.botConfig.itemSpawnLimits.pmc["590c661e86f7741e566b646a"] = 1
+        this.botConfig.itemSpawnLimits.pmc["544fb45d4bdc2dee738b4568"] = 1
+        this.botConfig.itemSpawnLimits.pmc["5e8488fa988a8701445df1e4"] = 1
+        this.botConfig.itemSpawnLimits.pmc["544fb37f4bdc2dee738b4567"] = 1
+        this.botConfig.itemSpawnLimits.pmc["5448e8d04bdc2ddf718b4569"] = 1
+        this.botConfig.itemSpawnLimits.pmc["5448e8d64bdc2dce718b4568"] = 1
     }
 }

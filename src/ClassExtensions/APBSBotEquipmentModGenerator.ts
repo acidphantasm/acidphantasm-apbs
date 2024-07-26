@@ -9,7 +9,7 @@ import { ProbabilityHelper } from "@spt/helpers/ProbabilityHelper";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { Item } from "@spt/models/eft/common/tables/IItem";
-import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { ITemplateItem, Slot } from "@spt/models/eft/common/tables/ITemplateItem";
 import { ModSpawn } from "@spt/models/enums/ModSpawn";
 import { IFilterPlateModsForSlotByLevelResult, Result } from "@spt/models/spt/bots/IFilterPlateModsForSlotByLevelResult";
 import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
@@ -17,19 +17,19 @@ import { ExhaustableArray } from "@spt/models/spt/server/ExhaustableArray";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { ConfigServer } from "@spt/servers/ConfigServer";
 import { BotEquipmentFilterService } from "@spt/services/BotEquipmentFilterService";
+import { BotEquipmentModPoolService } from "@spt/services/BotEquipmentModPoolService";
 import { BotWeaponModLimitService } from "@spt/services/BotWeaponModLimitService";
 import { DatabaseService } from "@spt/services/DatabaseService";
 import { ItemFilterService } from "@spt/services/ItemFilterService";
 import { LocalisationService } from "@spt/services/LocalisationService";
-import { ICloner } from "@spt/utils/cloners/ICloner";
 import { HashUtil } from "@spt/utils/HashUtil";
 import { RandomUtil } from "@spt/utils/RandomUtil";
+import { ICloner } from "@spt/utils/cloners/ICloner";
 
 import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
 import customModPool = require("../db/mods.json");
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
-import { BotEquipmentModPoolService } from "@spt/services/BotEquipmentModPoolService";
 
 /** Handle profile related client events */
 @injectable()
@@ -89,8 +89,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         if (!compatibleModsPool)
         {
             this.logger.warning(
-                `bot: ${settings.botRole} lacks a mod slot pool for item: ${parentTemplate._id} ${parentTemplate._name}`
-            );
+                `bot: ${settings.botRole} lacks a mod slot pool for item: ${parentTemplate._id} ${parentTemplate._name}`);
         }
 
         // Iterate over mod pool and choose mods to add to item
@@ -126,7 +125,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 forceSpawn = true;
             }
 
-            let modsToChooseFrom = compatibleModsPool[modSlotName];
+            let modPoolToChooseFrom = compatibleModsPool[modSlotName];
             if (
                 settings.botEquipmentConfig.filterPlatesByLevel
                 && this.itemHelper.isRemovablePlateSlot(modSlotName.toLowerCase())
@@ -156,19 +155,19 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                     );
                 }
 
-                modsToChooseFrom = outcome.plateModTpls;
+                modPoolToChooseFrom = outcome.plateModTpls;
             }
 
             // Find random mod and check its compatible
             let modTpl: string | undefined;
             let found = false;
-            const exhaustablemods = new ExhaustableArray<string>(modsToChooseFrom, this.randomUtil, this.cloner);
-            while (exhaustablemods.hasValues())
+            const exhaustableModPool = new ExhaustableArray<string>(modPoolToChooseFrom, this.randomUtil, this.cloner);
+            while (exhaustableModPool.hasValues())
             {
-                modTpl = exhaustablemods.getRandomValue();
+                modTpl = exhaustableModPool.getRandomValue();
                 if (modTpl
-                && !this.botGeneratorHelper.isItemIncompatibleWithCurrentItems(equipment, modTpl, modSlotName)
-                    .incompatible
+                    && !this.botGeneratorHelper.isItemIncompatibleWithCurrentItems(equipment, modTpl, modSlotName)
+                        .incompatible
                 )
                 {
                     found = true;

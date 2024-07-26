@@ -147,7 +147,7 @@ export class ModdedWeaponHelper
             const weaponType = modWeaponPool[weapon]?._props?.weapUseType;
 
             this.pushWeaponToTiers(weaponId, weaponType);
-            this.pushWeaponModToMods(weaponSlots, weaponId);
+            this.pushWeaponAndPrimaryMods(weaponId, weaponSlots);
 
             //console.log(JSON.stringify(modWeaponPool[weapon]))            
             //console.log(`Weapon Parent: ${weaponParent} | Weapon ID: ${weaponId} | WeaponSlots: ${JSON.stringify(weaponSlots)} | WeaponChamber: ${JSON.stringify(weaponChamber)} | WeaponType: ${weaponType}`)
@@ -195,7 +195,7 @@ export class ModdedWeaponHelper
         }
     }
 
-    private pushWeaponModToMods(weaponSlots, weaponId): void
+    private pushWeaponAndPrimaryMods(weaponId, weaponSlots): void
     {
         for (const slot in weaponSlots)
         {
@@ -203,8 +203,6 @@ export class ModdedWeaponHelper
             for (const item in weaponSlots[slot]?._props?.filters[0]?.Filter)
             {
                 const slotFilterItem = weaponSlots[slot]?._props?.filters[0]?.Filter[item];
-
-                this.pushChildrenMods(slotFilterItem);
 
                 if (mods.mods[weaponId] == undefined)
                 {
@@ -214,33 +212,41 @@ export class ModdedWeaponHelper
                 {
                     mods.mods[weaponId][slotName] = [];
                 }
-                mods.mods[weaponId][slotName].push(slotFilterItem)
+                if (!mods.mods[weaponId][slotName].includes(slotFilterItem))
+                {
+                    mods.mods[weaponId][slotName].push(slotFilterItem);
+                    this.recursivePushChildrenMods(slotFilterItem);
+                }
             }
         }
     }
 
-    private pushChildrenMods(slotFilterItem)
+    private recursivePushChildrenMods(parentSlotFilterItem)
     {
-        const slotFilterItemData = this.getItem(slotFilterItem);
-        const slotItemId = slotFilterItemData?._id;
-        const weaponSlots = slotFilterItemData?._props?.Slots;
+        const parentSlotItemData = this.getItem(parentSlotFilterItem);
+        const parentSlotItemID = parentSlotItemData?._id;
+        const parentSlotSlots = parentSlotItemData?._props?.Slots;
 
-        for (const slot in weaponSlots)
+        for (const slot in parentSlotSlots)
         {
-            const slotName = weaponSlots[slot]?._name;
-            for (const item in weaponSlots[slot]?._props?.filters[0]?.Filter)
+            const slotName = parentSlotSlots[slot]?._name;
+            for (const item in parentSlotSlots[slot]?._props?.filters[0]?.Filter)
             {
-                const slotFilterItem = weaponSlots[slot]?._props?.filters[0]?.Filter[item];
+                const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
                 
-                if (mods.mods[slotItemId] == undefined)
+                if (mods.mods[parentSlotItemID] == undefined)
                 {
-                    mods.mods[slotItemId] = {};
+                    mods.mods[parentSlotItemID] = {};
                 }
-                if (mods.mods[slotItemId][slotName] == undefined)
+                if (mods.mods[parentSlotItemID][slotName] == undefined)
                 {
-                    mods.mods[slotItemId][slotName] = [];
+                    mods.mods[parentSlotItemID][slotName] = [];
                 }
-                mods.mods[slotItemId][slotName].push(slotFilterItem)
+                if (!mods.mods[parentSlotItemID][slotName].includes(slotFilterItem))
+                {
+                    mods.mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.recursivePushChildrenMods(slotFilterItem);
+                }
             }
         }
     }
