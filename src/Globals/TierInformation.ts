@@ -57,7 +57,7 @@ export class TierInformation
             playerMinimumLevel: 61,
             playerMaximumLevel: 100,
             botMinLevelVariance: 30,
-            botMaxLevelVariance: 10
+            botMaxLevelVariance: 20
         }
     ]
 
