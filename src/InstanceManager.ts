@@ -45,6 +45,7 @@ import { APBSBotEquipmentModGenerator } from "./ClassExtensions/APBSBotEquipment
 import { APBSBotInventoryGenerator } from "./ClassExtensions/APBSBotInventoryGenerator";
 import { APBSBotLootGenerator } from "./ClassExtensions/APBSBotLootGenerator";
 import { ModConfig } from "./Globals/ModConfig";
+import { VFS } from "@spt/utils/VFS";
 
 export class InstanceManager 
 {
@@ -78,6 +79,7 @@ export class InstanceManager
     public botEquipmentModGenerator: BotEquipmentModGenerator;
     public botGeneratorHelper: BotGeneratorHelper;
     public repairService: RepairService;
+    public vfs: VFS;
 
     public apbsLogger: APBSLogger;
     public apbsTierGetter: APBSTierGetter;
@@ -126,10 +128,9 @@ export class InstanceManager
         this.botGeneratorHelper = container.resolve<BotGeneratorHelper>("BotGeneratorHelper");
         this.repairService = container.resolve<RepairService>("RepairService");
         this.cloner = container.resolve<ICloner>("PrimaryCloner");
+        this.vfs = container.resolve<VFS>("VFS");
 
         // Custom Classes
-        this.container.register<ModConfig>("ModConfig", ModConfig, { lifecycle: Lifecycle.Singleton })
-        this.modConfig = container.resolve<ModConfig>("ModConfig");
         this.container.register<ModInformation>("ModInformation", ModInformation, { lifecycle: Lifecycle.Singleton })
         this.modInformation = container.resolve<ModInformation>("ModInformation");
         this.container.register<APBSLogger>("APBSLogger", APBSLogger, { lifecycle: Lifecycle.Singleton });
@@ -160,6 +161,10 @@ export class InstanceManager
         this.container.register("BotEquipmentModGenerator", { useToken: "APBSBotEquipmentModGenerator" });
         this.container.register<APBSBotLootGenerator>("APBSBotLootGenerator", APBSBotLootGenerator);
         this.container.register("BotLootGenerator", { useToken: "APBSBotLootGenerator" });
+        
+        // Resolve this last to set mod configs
+        this.container.register<ModConfig>("ModConfig", ModConfig, { lifecycle: Lifecycle.Singleton })
+        this.modConfig = container.resolve<ModConfig>("ModConfig");
 
         this.getPath();
     }
