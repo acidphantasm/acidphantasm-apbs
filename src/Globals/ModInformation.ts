@@ -8,3 +8,4 @@ export class ModInformation
     public profilePath: string = path.join(path.dirname(__filename), "..", "..", "..", "..", "profiles");
     public versionNumber: string = modPackage.version;
 }
+

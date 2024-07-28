@@ -44,6 +44,7 @@ import { APBSDynamicRouterHooks } from "./RouterHooks/APBSDynamicRouterHooks";
 import { APBSBotEquipmentModGenerator } from "./ClassExtensions/APBSBotEquipmentModGenerator";
 import { APBSBotInventoryGenerator } from "./ClassExtensions/APBSBotInventoryGenerator";
 import { APBSBotLootGenerator } from "./ClassExtensions/APBSBotLootGenerator";
+import { ModConfig } from "./Globals/ModConfig";
 
 export class InstanceManager 
 {
@@ -86,6 +87,7 @@ export class InstanceManager
     public apbsStaticRouterHooks: APBSStaticRouterHooks;
     public apbsDynamicRouterHooks: APBSDynamicRouterHooks;
     public apbsBotInventoryGenerator: APBSBotInventoryGenerator;
+    public modConfig: ModConfig;
     //#endregion
 
     //#region Acceessible in or after postDBLoad
@@ -126,6 +128,8 @@ export class InstanceManager
         this.cloner = container.resolve<ICloner>("PrimaryCloner");
 
         // Custom Classes
+        this.container.register<ModConfig>("ModConfig", ModConfig, { lifecycle: Lifecycle.Singleton })
+        this.modConfig = container.resolve<ModConfig>("ModConfig");
         this.container.register<ModInformation>("ModInformation", ModInformation, { lifecycle: Lifecycle.Singleton })
         this.modInformation = container.resolve<ModInformation>("ModInformation");
         this.container.register<APBSLogger>("APBSLogger", APBSLogger, { lifecycle: Lifecycle.Singleton });
