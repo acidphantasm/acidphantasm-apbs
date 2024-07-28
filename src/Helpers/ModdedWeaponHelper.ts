@@ -17,7 +17,7 @@ import Tier5 = require("../db/Tier5.json");
 import Tier6 = require("../db/Tier6.json");
 import Tier7 = require("../db/Tier7.json");
 import mods = require("../db/mods.json");
-import { ModInformation } from "../Globals/ModInformation";
+import { ModConfig } from "../Globals/ModConfig";
 
 @injectable()
 export class ModdedWeaponHelper
@@ -31,8 +31,7 @@ export class ModdedWeaponHelper
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
-        @inject("APBSLogger") protected apbsLogger: APBSLogger,
-        @inject("ModInformation") protected modInformation: ModInformation
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
         
@@ -62,11 +61,9 @@ export class ModdedWeaponHelper
 
     public initialize():void
     {
-        if (this.modInformation.modConfig.enableModdedWeapons)
-        {
-            this.buildTierJson();
+        this.buildTierJson();
+        if (ModConfig.config.enableModdedWeapons)
             this.buildVanillaWeaponList();
-        }
     }
 
     private buildTierJson(): void
@@ -109,6 +106,7 @@ export class ModdedWeaponHelper
 
     private getModdedWeapons(): void
     {
+        this.apbsLogger.log(Logging.WARN, "Checking for Modded Weapons...")
         const items = Object.values(this.tables.templates.items);
         const allWeapons = items.filter(x => this.itemHelper.isOfBaseclass(x._id, BaseClasses.WEAPON));
 
@@ -134,11 +132,13 @@ export class ModdedWeaponHelper
         //console.log(`${JSON.stringify(moddedItems)}`)
         if (moddedItems.length > 0)
         {
+            this.apbsLogger.log(Logging.WARN, "Importing Modded Weapons...")
             this.getSetModdedWeaponDetails(moddedItems);
         }
-        /**
-         * Push @param moddedItems to Tier4+, soonTM.
-        */
+        if (moddedItems.length == 0)
+        {
+            this.apbsLogger.log(Logging.WARN, "No Modded Weapons found...")
+        }
     }
 
     private getSetModdedWeaponDetails(modWeaponPool): void

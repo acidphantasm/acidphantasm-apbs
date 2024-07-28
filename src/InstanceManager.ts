@@ -44,9 +44,7 @@ import { APBSDynamicRouterHooks } from "./RouterHooks/APBSDynamicRouterHooks";
 import { APBSBotEquipmentModGenerator } from "./ClassExtensions/APBSBotEquipmentModGenerator";
 import { APBSBotInventoryGenerator } from "./ClassExtensions/APBSBotInventoryGenerator";
 import { APBSBotLootGenerator } from "./ClassExtensions/APBSBotLootGenerator";
-
-// Config
-import { VFS } from "@spt/utils/VFS";
+import { ModConfig } from "./Globals/ModConfig";
 
 export class InstanceManager 
 {
@@ -89,13 +87,13 @@ export class InstanceManager
     public apbsStaticRouterHooks: APBSStaticRouterHooks;
     public apbsDynamicRouterHooks: APBSDynamicRouterHooks;
     public apbsBotInventoryGenerator: APBSBotInventoryGenerator;
+    public modConfig: ModConfig;
     //#endregion
 
     //#region Acceessible in or after postDBLoad
     public tables: IDatabaseTables;
     public botConfigs: BotConfigs;
     public moddedWeaponHelper: ModdedWeaponHelper;
-    public vfs: VFS
     //#endregion
 
     // Call at the start of the mods postDBLoad method
@@ -128,9 +126,10 @@ export class InstanceManager
         this.botGeneratorHelper = container.resolve<BotGeneratorHelper>("BotGeneratorHelper");
         this.repairService = container.resolve<RepairService>("RepairService");
         this.cloner = container.resolve<ICloner>("PrimaryCloner");
-        this.vfs = container.resolve<VFS>("VFS");
 
         // Custom Classes
+        this.container.register<ModConfig>("ModConfig", ModConfig, { lifecycle: Lifecycle.Singleton })
+        this.modConfig = container.resolve<ModConfig>("ModConfig");
         this.container.register<ModInformation>("ModInformation", ModInformation, { lifecycle: Lifecycle.Singleton })
         this.modInformation = container.resolve<ModInformation>("ModInformation");
         this.container.register<APBSLogger>("APBSLogger", APBSLogger, { lifecycle: Lifecycle.Singleton });
@@ -172,7 +171,7 @@ export class InstanceManager
 
         // Custom Classes
         this.botConfigs = new BotConfigs(this.tables, this.configServer, this.tierInformation);
-        this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger, this.modInformation);
+        this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
 
     }
 
