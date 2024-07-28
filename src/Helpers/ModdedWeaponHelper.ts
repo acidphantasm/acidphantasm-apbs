@@ -34,7 +34,6 @@ export class ModdedWeaponHelper
         @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
-        
         this.tieredWeaponList = {}
         this.blacklist = [
             "5ae083b25acfc4001a5fc702",
