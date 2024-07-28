@@ -45,9 +45,6 @@ import { APBSBotEquipmentModGenerator } from "./ClassExtensions/APBSBotEquipment
 import { APBSBotInventoryGenerator } from "./ClassExtensions/APBSBotInventoryGenerator";
 import { APBSBotLootGenerator } from "./ClassExtensions/APBSBotLootGenerator";
 
-// Config
-import { VFS } from "@spt/utils/VFS";
-
 export class InstanceManager 
 {
     //#region Accessible in or after preAkiLoad
@@ -95,7 +92,6 @@ export class InstanceManager
     public tables: IDatabaseTables;
     public botConfigs: BotConfigs;
     public moddedWeaponHelper: ModdedWeaponHelper;
-    public vfs: VFS
     //#endregion
 
     // Call at the start of the mods postDBLoad method
@@ -128,7 +124,6 @@ export class InstanceManager
         this.botGeneratorHelper = container.resolve<BotGeneratorHelper>("BotGeneratorHelper");
         this.repairService = container.resolve<RepairService>("RepairService");
         this.cloner = container.resolve<ICloner>("PrimaryCloner");
-        this.vfs = container.resolve<VFS>("VFS");
 
         // Custom Classes
         this.container.register<ModInformation>("ModInformation", ModInformation, { lifecycle: Lifecycle.Singleton })
@@ -172,7 +167,7 @@ export class InstanceManager
 
         // Custom Classes
         this.botConfigs = new BotConfigs(this.tables, this.configServer, this.tierInformation);
-        this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger, this.modInformation);
+        this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
 
     }
 
