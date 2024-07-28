@@ -8,7 +8,7 @@ import { jsonc } from "jsonc";
 export class ModInformation
 {
     private static vfs = container.resolve<VFS>("VFS");    
-    public modConfig: Config = jsonc.parse(ModInformation.vfs.readFile(path.resolve(__dirname, "../config/config.jsonc")));
+    public modConfig: Config = jsonc.parse(ModInformation.vfs.readFile(path.resolve(__dirname, "../../config/config.jsonc")));
 
     public modPath: string = path.join(path.dirname(__filename), "..", "..");
     public logPath: string = path.join(path.dirname(__filename), "..", "..", "logs");

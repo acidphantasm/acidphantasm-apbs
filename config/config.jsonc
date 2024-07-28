@@ -1,0 +1,4 @@
+{
+    // If you enable this, support will not be granted. Any custom weapon mods loaded before APBS will have their weapons & attachments imported.
+    "enableModdedWeapons": false
+}
