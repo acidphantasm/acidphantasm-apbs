@@ -17,15 +17,19 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         const start = performance.now()
         this.instance.preSptLoad(container, "APBS");
 
-        const questingBotsDetected = this.instance.preSptModLoader.getImportedModsNames().includes("DanW-SPTQuestingBots");
+        // Set Mod Configuration Settings
+        this.instance.modConfig.setModConfiguration()
 
-        //Do preSptLoad stuff
+        // Check and configure for Questing Bots if necessary
+        const questingBots = this.instance.preSptModLoader.getImportedModsNames().includes("DanW-SPTQuestingBots");
         this.instance.apbsLogger.createLogFiles();
-        if (questingBotsDetected)
+        if (questingBots)
         {
             this.instance.apbsLogger.log(Logging.WARN, "Questing Bots Detected. Updated bot logging.")
             this.instance.apbsDynamicRouterHooks.registerQBRouterHooks(); 
         }
+
+        // Register necessary routers & SPT method changes
         this.instance.apbsStaticRouterHooks.registerRouterHooks();
         this.instance.apbsBotLevelGenerator.registerBotLevelGenerator(container);
         this.instance.apbsBotWeaponGenerator.registerBotWeaponGenerator(container);
@@ -39,7 +43,7 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         const start = performance.now()
         this.instance.postDBLoad(container);
         
-        //Do postDBLoad stuff        
+        //Do postDBLoad stuff
         this.instance.botConfigs.initialize();
         this.instance.moddedWeaponHelper.initialize();
 
