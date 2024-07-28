@@ -17,6 +17,7 @@ import Tier5 = require("../db/Tier5.json");
 import Tier6 = require("../db/Tier6.json");
 import Tier7 = require("../db/Tier7.json");
 import mods = require("../db/mods.json");
+import { ModInformation } from "../Globals/ModInformation";
 
 @injectable()
 export class ModdedWeaponHelper
@@ -30,7 +31,8 @@ export class ModdedWeaponHelper
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
-        @inject("APBSLogger") protected apbsLogger: APBSLogger
+        @inject("APBSLogger") protected apbsLogger: APBSLogger,
+        @inject("ModInformation") protected modInformation: ModInformation
     )
     {
         
@@ -60,8 +62,11 @@ export class ModdedWeaponHelper
 
     public initialize():void
     {
-        this.buildTierJson();
-        this.buildVanillaWeaponList();
+        if (this.modInformation.modConfig.enableModdedWeapons)
+        {
+            this.buildTierJson();
+            this.buildVanillaWeaponList();
+        }
     }
 
     private buildTierJson(): void
