@@ -99,6 +99,11 @@ export class APBSBotWeaponGenerator
                     const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
                     return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
                 }
+                if ((botRole.includes("exusec") || botRole.includes("pmcbot")) && !ModConfig.config.disableRaiderRogueTierGeneration)
+                {
+                    const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
+                    return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
+                }
                 if (botRole.includes("pmc") && ModConfig.config.disablePMCTierGeneration)
                 {
                     const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);

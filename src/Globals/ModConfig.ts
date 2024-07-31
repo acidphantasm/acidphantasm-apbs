@@ -59,6 +59,7 @@ export interface Config
     disablePMCTierGeneration: boolean,
     disableBossTierGeneration: boolean,
     disableBossFollowerTierGeneration: boolean,
+    disableRaiderRogueTierGeneration: boolean,
     forceStock: boolean,
     forceWeaponModLimits: boolean,
     enableCustomLevelDeltas: boolean,

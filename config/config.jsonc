@@ -9,6 +9,7 @@
         "disablePMCTierGeneration": false,
         "disableBossTierGeneration": false,
         "disableBossFollowerTierGeneration": false,
+        "disableRaiderRogueTierGeneration": false,
 
 // Force weapon stocks
 // If set to true, will enforce all AI weapons to have stocks, if false - will use RNG rolls */

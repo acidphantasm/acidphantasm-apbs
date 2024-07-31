@@ -97,6 +97,10 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         {
             compatibleModsPool = customModPool.mods[parentTemplate._id];
         }
+        else if ((botRole.includes("exusec") || botRole.includes("pmcbot")) && !ModConfig.config.disableRaiderRogueTierGeneration)
+        {
+            compatibleModsPool = customModPool.mods[parentTemplate._id];
+        }
         else if (botRole.includes("pmc") && !ModConfig.config.disablePMCTierGeneration)
         {
             compatibleModsPool = customModPool.mods[parentTemplate._id];
