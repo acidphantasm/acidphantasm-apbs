@@ -63,13 +63,14 @@ export class BotConfigs
         const botConfigEquipment = this.botConfig.equipment
         for (const botType in botConfigEquipment)
         {
-            botConfigEquipment[botType].filterPlatesByLevel = true;
-            botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.armorPlateWeights;
             if (botType.includes("assault") || botType.includes("marksman"))
             {
                 botConfigEquipment[botType].filterPlatesByLevel = true;
                 botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.scavArmorPlateWeights;
+                continue;
             }
+            botConfigEquipment[botType].filterPlatesByLevel = true;
+            botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.armorPlateWeights;
         }
     }
 
