@@ -6,6 +6,7 @@ import { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import { TierInformation } from "../Globals/TierInformation";
+import { ModConfig } from "../Globals/ModConfig";
 
 
 @injectable()
@@ -31,9 +32,19 @@ export class BotConfigs
         this.clearNoLongerNeededBotDetails();
         this.configureScavWeaponDurability();
         this.removeNvgChanceFromBosses();
-        this.setWeaponModLimits();
         this.setLootItemResourceRandomization();
-        this.setPMCItemLimits()
+        if (ModConfig.config.forceStock)
+        {
+            this.setForceStock();
+        }
+        if (ModConfig.config.forceWeaponModLimits)
+        {
+            this.setWeaponModLimits();
+        }
+        if (!ModConfig.config.disablePMCTierGeneration)
+        {
+            this.setPMCItemLimits()
+        }
     }
 
     private configureBotExperienceLevels(): void
@@ -43,7 +54,7 @@ export class BotConfigs
         for (const botType in botTypeTable)
         {
             botTypeTable[botType].experience.level.min = 1;
-            botTypeTable[botType].experience.level.max = 78;
+            botTypeTable[botType].experience.level.max = 79;
         }
     }
 
@@ -52,8 +63,14 @@ export class BotConfigs
         const botConfigEquipment = this.botConfig.equipment
         for (const botType in botConfigEquipment)
         {
+            if (botType.includes("assault") || botType.includes("marksman"))
+            {
+                botConfigEquipment[botType].filterPlatesByLevel = true;
+                botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.scavArmorPlateWeights;
+                continue;
+            }
             botConfigEquipment[botType].filterPlatesByLevel = true;
-            botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.armorPlateWeights
+            botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.armorPlateWeights;
         }
     }
 
@@ -72,13 +89,13 @@ export class BotConfigs
         // Do this better in the future
         const botConfigDurability = this.botConfig.durability
 
-        botConfigDurability.assault.weapon.lowestMax = 60
+        botConfigDurability.assault.weapon.lowestMax = 50
         botConfigDurability.assault.weapon.highestMax = 90
         botConfigDurability.assault.weapon.maxDelta = 25
         botConfigDurability.assault.weapon.minDelta = 0
         botConfigDurability.assault.weapon.minLimitPercent = 15
 
-        botConfigDurability.marksman.weapon.lowestMax = 60
+        botConfigDurability.marksman.weapon.lowestMax = 50
         botConfigDurability.marksman.weapon.highestMax = 90
         botConfigDurability.marksman.weapon.maxDelta = 25
         botConfigDurability.marksman.weapon.minDelta = 0
@@ -100,12 +117,19 @@ export class BotConfigs
         }
     }
 
-    private setWeaponModLimits(): void
+    private setForceStock(): void
     {
         const botConfigEquipment = this.botConfig.equipment
         for (const botType in botConfigEquipment)
         {
             botConfigEquipment[botType].forceStock = true;
+        }
+    }
+    private setWeaponModLimits(): void
+    {
+        const botConfigEquipment = this.botConfig.equipment
+        for (const botType in botConfigEquipment)
+        {
             if (typeof botConfigEquipment[botType].weaponModLimits == "undefined")
             {
                 botConfigEquipment[botType].weaponModLimits = {                
@@ -130,8 +154,8 @@ export class BotConfigs
         this.pmcConfig.looseWeaponInBackpackLootMinMax.min = 0;
         this.pmcConfig.looseWeaponInBackpackLootMinMax.max = 0;
         this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
-        this.botConfig.itemSpawnLimits.pmc["60098ad7c2240c0fe85c570a"] = 2
-        this.botConfig.itemSpawnLimits.pmc["590c678286f77426c9660122"] = 2
+        this.botConfig.itemSpawnLimits.pmc["60098ad7c2240c0fe85c570a"] = 1
+        this.botConfig.itemSpawnLimits.pmc["590c678286f77426c9660122"] = 1
         this.botConfig.itemSpawnLimits.pmc["5e831507ea0a7c419c2f9bd9"] = 1
         this.botConfig.itemSpawnLimits.pmc["590c661e86f7741e566b646a"] = 1
         this.botConfig.itemSpawnLimits.pmc["544fb45d4bdc2dee738b4568"] = 1

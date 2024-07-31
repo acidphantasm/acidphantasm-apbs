@@ -37,8 +37,8 @@ export class APBSEquipmentGetter
             case 7:
                 return this.tierInformation.tier7
             default:
-                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier3 loadout.");
-                return this.tierInformation.tier3
+                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 loadout.");
+                return this.tierInformation.tier1
         }
 
     }

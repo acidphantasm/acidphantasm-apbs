@@ -30,6 +30,7 @@ import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerat
 import customModPool = require("../db/mods.json");
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
+import { ModConfig } from "../Globals/ModConfig";
 
 /** Handle profile related client events */
 @injectable()
@@ -83,9 +84,32 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
 
     public override generateModsForEquipment(equipment: Item[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, shouldForceSpawn = false): Item[]
     {
+        const botRole = settings.botRole;
         let forceSpawn = shouldForceSpawn;
-        
-        const compatibleModsPool = customModPool.mods[parentTemplate._id];
+        let compatibleModsPool = settings.modPool[parentTemplate._id];
+
+        // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed
+        if ((botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")) && !ModConfig.config.disableBossTierGeneration)
+        {
+            compatibleModsPool = customModPool.mods[parentTemplate._id];
+        }
+        else if (botRole.includes("follower") && !ModConfig.config.disableBossFollowerTierGeneration)
+        {
+            compatibleModsPool = customModPool.mods[parentTemplate._id];
+        }
+        else if ((botRole.includes("exusec") || botRole.includes("pmcbot")) && !ModConfig.config.disableRaiderRogueTierGeneration)
+        {
+            compatibleModsPool = customModPool.mods[parentTemplate._id];
+        }
+        else if (botRole.includes("pmc") && !ModConfig.config.disablePMCTierGeneration)
+        {
+            compatibleModsPool = customModPool.mods[parentTemplate._id];
+        }
+        else if ((botRole.includes("assault") || botRole.includes("marksman")) && !ModConfig.config.disableScavTierGeneration)
+        {
+            compatibleModsPool = customModPool.mods[parentTemplate._id];
+        }
+
         if (!compatibleModsPool)
         {
             this.logger.warning(

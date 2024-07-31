@@ -32,6 +32,7 @@ import { BotInventoryGenerator } from "@spt/generators/BotInventoryGenerator";
 import customModPool = require("../db/mods.json");
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
+import { ModConfig } from "../Globals/ModConfig";
 
 /** Handle profile related client events */
 @injectable()
@@ -79,12 +80,10 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         isPmc: boolean,
         botLevel: number,
         chosenGameVersion: string
-    ): PmcInventory
+    ): PmcInventory 
     {
-        const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-        const wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-
         const templateInventory = botJsonTemplate.inventory;
+        let wornItemChances = botJsonTemplate.chances;
         const itemGenerationLimitsMinMax = botJsonTemplate.generation;
 
         // Generate base inventory with no items
@@ -96,19 +95,37 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             botRole,
             botInventory,
             botLevel,
-            chosenGameVersion);
+            chosenGameVersion
+        );
 
         // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed
-        this.generateAndAddWeaponsToBot(
-            templateInventory,
-            wornItemChances,
-            sessionId,
-            botInventory,
-            botRole,
-            isPmc,
-            itemGenerationLimitsMinMax,
-            botLevel
-        );
+        if ((botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")) && ModConfig.config.disableBossTierGeneration)
+        {
+            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
+        }
+        else if (botRole.includes("follower") && ModConfig.config.disableBossFollowerTierGeneration)
+        {
+            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
+        }
+        else if ((botRole.includes("exusec") || botRole.includes("pmcbot")) && !ModConfig.config.disableRaiderRogueTierGeneration)
+        {
+            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
+        }
+        else if (botRole.includes("pmc") && ModConfig.config.disablePMCTierGeneration)
+        {
+            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
+        }
+        else if ((botRole.includes("assault") || botRole.includes("marksman")) && ModConfig.config.disableScavTierGeneration)
+        {
+            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
+        }
+        else 
+        {
+            // APBS generation chances instead
+            const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
+            wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
+            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
+        }
 
         // Pick loot and add to bots containers (rig/backpack/pockets/secure)
         this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
@@ -122,21 +139,76 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         const botRole = settings.botRole;
         const botLevel = settings.botLevel;
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-        let equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
-        settings.randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
 
-        if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
+        let equipmentPool = settings.rootEquipmentPool;
+        let randomisationDetails = settings.randomisationDetails;
+        let wornItemChances = settings.spawnChances;
+        let modPool = settings.modPool;
+
+
+        if ((botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")) && !ModConfig.config.disableBossTierGeneration)
         {
-            equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
+            equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+            randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
+            wornItemChances = randomisationDetails;
+            modPool = customModPool.mods;
+            if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
+            {
+                equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
+            }
+        }
+        else if (botRole.includes("follower") && !ModConfig.config.disableBossFollowerTierGeneration)
+        {
+            equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+            randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
+            wornItemChances = randomisationDetails;
+            modPool = customModPool.mods;
+            if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
+            {
+                equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
+            }
+        }
+        else if ((botRole.includes("exusec") || botRole.includes("pmcbot")) && !ModConfig.config.disableRaiderRogueTierGeneration)
+        {
+            equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+            randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
+            wornItemChances = randomisationDetails;
+            modPool = customModPool.mods;
+            if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
+            {
+                equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
+            }
+        }
+        else if (botRole.includes("pmc") && !ModConfig.config.disablePMCTierGeneration)
+        {
+            equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+            randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
+            wornItemChances = randomisationDetails;
+            modPool = customModPool.mods;
+            if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
+            {
+                equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
+            }
+        }
+        else if ((botRole.includes("assault") || botRole.includes("marksman")) && !ModConfig.config.disableScavTierGeneration)
+        {
+            equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+            randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
+            wornItemChances = randomisationDetails;
+            modPool = customModPool.mods;
+            if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
+            {
+                equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
+            }
         }
 
         const spawnChance = ([EquipmentSlots.POCKETS, EquipmentSlots.SECURED_CONTAINER] as string[]).includes(
             settings.rootEquipmentSlot
         )
             ? 100
-            : settings.spawnChances.equipment[settings.rootEquipmentSlot];
+            : wornItemChances.equipment[settings.rootEquipmentSlot];
 
-        if (typeof spawnChance === "undefined")
+        if (typeof spawnChance === "undefined") 
         {
             this.logger.warning(
                 this.localisationService.getText(
@@ -149,16 +221,16 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         }
 
         const shouldSpawn = this.randomUtil.getChance100(spawnChance);
-        if (shouldSpawn && Object.keys(equipmentPool).length)
+        if (shouldSpawn && Object.keys(equipmentPool).length) 
         {
             let pickedItemDb: ITemplateItem;
             let found = false;
 
-            const maxAttempts = Math.round(Object.keys(equipmentPool).length * 0.80); // Roughly 75% of pool size
+            const maxAttempts = Math.round(Object.keys(equipmentPool).length * 0.75); // Roughly 75% of pool size
             let attempts = 0;
-            while (!found)
+            while (!found) 
             {
-                if (Object.values(equipmentPool).length === 0)
+                if (Object.values(equipmentPool).length === 0) 
                 {
                     return false;
                 }
@@ -166,12 +238,12 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                 const chosenItemTpl = this.weightedRandomHelper.getWeightedValue<string>(equipmentPool);
                 const dbResult = this.itemHelper.getItem(chosenItemTpl);
 
-                if (!dbResult[0])
+                if (!dbResult[0]) 
                 {
                     this.logger.error(this.localisationService.getText("bot-missing_item_template", chosenItemTpl));
                     this.logger.info(`EquipmentSlot -> ${settings.rootEquipmentSlot}`);
 
-                    // remove picked item
+
                     attempts++;
 
                     continue;
@@ -182,16 +254,17 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                     chosenItemTpl,
                     settings.rootEquipmentSlot
                 );
-                if (compatabilityResult.incompatible)
+                if (compatabilityResult.incompatible) 
                 {
                     // Tried x different items that failed, stop
-                    if (attempts > maxAttempts)
+                    if (attempts > maxAttempts) 
                     {
                         return false;
                     }
+
                     attempts++;
                 }
-                else
+                else 
                 {
                     // Success
                     found = true;
@@ -206,24 +279,24 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                 _tpl: pickedItemDb._id,
                 parentId: settings.inventory.equipment,
                 slotId: settings.rootEquipmentSlot,
-                ...this.botGeneratorHelper.generateExtraPropertiesForItem(pickedItemDb, settings.botRole)
+                ...this.botGeneratorHelper.generateExtraPropertiesForItem(pickedItemDb, botRole)
             };
 
             // Use dynamic mod pool if enabled in config for this bot
-            const botEquipmentRole = this.botGeneratorHelper.getBotEquipmentRole(settings.botRole);
+            const botEquipmentRole = this.botGeneratorHelper.getBotEquipmentRole(botRole);
             if (
-                this.botConfig.equipment[botEquipmentRole]
-                && settings.randomisationDetails?.randomisedArmorSlots?.includes(settings.rootEquipmentSlot)
-            )
+                this.botConfig.equipment[botEquipmentRole] &&
+                randomisationDetails?.randomisedArmorSlots?.includes(settings.rootEquipmentSlot)
+            ) 
             {
-                customModPool.mods[pickedItemDb._id] = this.getFilteredDynamicModsForItem(
+                modPool[pickedItemDb._id] = this.getFilteredDynamicModsForItem(
                     pickedItemDb._id,
                     this.botConfig.equipment[botEquipmentRole].blacklist
                 );
             }
 
             // Item has slots, fill them
-            if (pickedItemDb._props.Slots?.length > 0 && !settings.generateModsBlacklist?.includes(pickedItemDb._id))
+            if (pickedItemDb._props.Slots?.length > 0 && !settings.generateModsBlacklist?.includes(pickedItemDb._id)) 
             {
                 const items = this.botEquipmentModGenerator.generateModsForEquipment(
                     [item],
@@ -233,7 +306,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                 );
                 settings.inventory.items.push(...items);
             }
-            else
+            else 
             {
                 // No slots, push root item only
                 settings.inventory.items.push(item);

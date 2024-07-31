@@ -1,4 +1,35 @@
 {
-    // If you enable this, support will not be granted. Any custom weapon mods loaded before APBS will have their weapons & attachments imported.
-    "enableModdedWeapons": false
+// If you enable this, support will not be granted.
+// Any mods adding weapons loaded before APBS will have their weapons & attachments imported. */
+        "enableModdedWeapons": false,
+
+// Disable specific bot generation
+// For each type that you disable, it will disable their tiered weapon and gear generation. */
+        "disableScavTierGeneration": false,
+        "disablePMCTierGeneration": false,
+        "disableBossTierGeneration": false,
+        "disableBossFollowerTierGeneration": false,
+        "disableRaiderRogueTierGeneration": false,
+
+// Force weapon stocks
+// If set to true, will enforce all AI weapons to have stocks, if false - will use RNG rolls */
+        "forceStock": false,
+
+// Force weapon mod count limits
+// If set to true, will enforce all AI weapons to be limited to 2 scopes and 2 lasers, if disabled the generation may go wild
+        "forceWeaponModLimits": true,
+
+// LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
+// Examples: 
+// "tier1LevelDelta": [ 5, 5 ] --- While you are Tier1 (lv1-10), all AI will be leveled -5 to +5 of your level.
+// "tier2LevelDelta": [ 10, 25 ] --- While you are Tier2 (lv11-20), all AI will be leveled -10 to +25 of your level.
+// "enableCustomLevelDeltas" if true will use the values you set below, otherwise they will use mod defaults
+        "enableCustomLevelDeltas": false,
+        "tier1LevelDelta": [ 5, 5 ],
+        "tier2LevelDelta": [ 7, 7 ],
+        "tier3LevelDelta": [ 10, 10 ],
+        "tier4LevelDelta": [ 15, 15 ],
+        "tier5LevelDelta": [ 15, 15 ],
+        "tier6LevelDelta": [ 20, 20 ],
+        "tier7LevelDelta": [ 30, 20 ]
 }

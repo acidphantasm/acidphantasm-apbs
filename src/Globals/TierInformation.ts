@@ -57,7 +57,7 @@ export class TierInformation
             playerMinimumLevel: 61,
             playerMaximumLevel: 100,
             botMinLevelVariance: 30,
-            botMaxLevelVariance: 10
+            botMaxLevelVariance: 20
         }
     ]
 
@@ -282,6 +282,40 @@ export class TierInformation
                 "4": 25,
                 "5": 70,
                 "6": 100
+            }
+        }
+    ]
+
+    public scavArmorPlateWeights = [
+        {
+            "levelRange": {
+                "min": 1,
+                "max": 79
+            },
+            "front_plate": {
+                "2": 15,
+                "3": 35,
+                "4": 5
+            },
+            "back_plate": {
+                "2": 15,
+                "3": 35,
+                "4": 5
+            },
+            "side_plate": {
+                "2": 15,
+                "3": 35,
+                "4": 5
+            },
+            "left_side_plate": {
+                "2": 15,
+                "3": 35,
+                "4": 5
+            },
+            "right_side_plate": {
+                "2": 15,
+                "3": 35,
+                "4": 5
             }
         }
     ]
