@@ -89,13 +89,13 @@ export class BotConfigs
         // Do this better in the future
         const botConfigDurability = this.botConfig.durability
 
-        botConfigDurability.assault.weapon.lowestMax = 60
+        botConfigDurability.assault.weapon.lowestMax = 50
         botConfigDurability.assault.weapon.highestMax = 90
         botConfigDurability.assault.weapon.maxDelta = 25
         botConfigDurability.assault.weapon.minDelta = 0
         botConfigDurability.assault.weapon.minLimitPercent = 15
 
-        botConfigDurability.marksman.weapon.lowestMax = 60
+        botConfigDurability.marksman.weapon.lowestMax = 50
         botConfigDurability.marksman.weapon.highestMax = 90
         botConfigDurability.marksman.weapon.maxDelta = 25
         botConfigDurability.marksman.weapon.minDelta = 0
@@ -154,8 +154,8 @@ export class BotConfigs
         this.pmcConfig.looseWeaponInBackpackLootMinMax.min = 0;
         this.pmcConfig.looseWeaponInBackpackLootMinMax.max = 0;
         this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
-        this.botConfig.itemSpawnLimits.pmc["60098ad7c2240c0fe85c570a"] = 2
-        this.botConfig.itemSpawnLimits.pmc["590c678286f77426c9660122"] = 2
+        this.botConfig.itemSpawnLimits.pmc["60098ad7c2240c0fe85c570a"] = 1
+        this.botConfig.itemSpawnLimits.pmc["590c678286f77426c9660122"] = 1
         this.botConfig.itemSpawnLimits.pmc["5e831507ea0a7c419c2f9bd9"] = 1
         this.botConfig.itemSpawnLimits.pmc["590c661e86f7741e566b646a"] = 1
         this.botConfig.itemSpawnLimits.pmc["544fb45d4bdc2dee738b4568"] = 1
