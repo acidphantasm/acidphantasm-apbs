@@ -6,6 +6,7 @@ import { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import { TierInformation } from "../Globals/TierInformation";
+import { ModConfig } from "../Globals/ModConfig";
 
 
 @injectable()
@@ -31,9 +32,19 @@ export class BotConfigs
         this.clearNoLongerNeededBotDetails();
         this.configureScavWeaponDurability();
         this.removeNvgChanceFromBosses();
-        this.setWeaponModLimits();
         this.setLootItemResourceRandomization();
-        this.setPMCItemLimits()
+        if (ModConfig.config.forceStock)
+        {
+            this.setForceStock();
+        }
+        if (ModConfig.config.forceWeaponModLimits)
+        {
+            this.setWeaponModLimits();
+        }
+        if (!ModConfig.config.disablePMCTierGeneration)
+        {
+            this.setPMCItemLimits()
+        }
     }
 
     private configureBotExperienceLevels(): void
@@ -43,7 +54,7 @@ export class BotConfigs
         for (const botType in botTypeTable)
         {
             botTypeTable[botType].experience.level.min = 1;
-            botTypeTable[botType].experience.level.max = 78;
+            botTypeTable[botType].experience.level.max = 79;
         }
     }
 
@@ -53,7 +64,12 @@ export class BotConfigs
         for (const botType in botConfigEquipment)
         {
             botConfigEquipment[botType].filterPlatesByLevel = true;
-            botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.armorPlateWeights
+            botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.armorPlateWeights;
+            if (botType.includes("assault") || botType.includes("marksman"))
+            {
+                botConfigEquipment[botType].filterPlatesByLevel = true;
+                botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.scavArmorPlateWeights;
+            }
         }
     }
 
@@ -100,12 +116,19 @@ export class BotConfigs
         }
     }
 
-    private setWeaponModLimits(): void
+    private setForceStock(): void
     {
         const botConfigEquipment = this.botConfig.equipment
         for (const botType in botConfigEquipment)
         {
             botConfigEquipment[botType].forceStock = true;
+        }
+    }
+    private setWeaponModLimits(): void
+    {
+        const botConfigEquipment = this.botConfig.equipment
+        for (const botType in botConfigEquipment)
+        {
             if (typeof botConfigEquipment[botType].weaponModLimits == "undefined")
             {
                 botConfigEquipment[botType].weaponModLimits = {                
