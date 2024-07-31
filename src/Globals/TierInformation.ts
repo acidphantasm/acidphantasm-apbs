@@ -286,6 +286,40 @@ export class TierInformation
         }
     ]
 
+    public scavArmorPlateWeights = [
+        {
+            "levelRange": {
+                "min": 1,
+                "max": 79
+            },
+            "front_plate": {
+                "2": 15,
+                "3": 35,
+                "4": 5
+            },
+            "back_plate": {
+                "2": 15,
+                "3": 35,
+                "4": 5
+            },
+            "side_plate": {
+                "2": 15,
+                "3": 35,
+                "4": 5
+            },
+            "left_side_plate": {
+                "2": 15,
+                "3": 35,
+                "4": 5
+            },
+            "right_side_plate": {
+                "2": 15,
+                "3": 35,
+                "4": 5
+            }
+        }
+    ]
+
     public lootRandomization = [
         {
             "levelRange": {
