@@ -21,7 +21,10 @@ export class ModConfig
 
     public setModConfiguration(): void
     {
-        this.setTierLevelDeviation();
+        if (ModConfig.config.enableCustomLevelDeltas)
+        {
+            this.setTierLevelDeviation();
+        }
     }
 
     private setTierLevelDeviation(): void
@@ -52,6 +55,13 @@ export class ModConfig
 export interface Config
 {
     enableModdedWeapons: boolean,
+    disableScavTierGeneration: boolean,
+    disablePMCTierGeneration: boolean,
+    disableBossTierGeneration: boolean,
+    disableBossFollowerTierGeneration: boolean,
+    forceStock: boolean,
+    forceWeaponModLimits: boolean,
+    enableCustomLevelDeltas: boolean,
     tier1LevelDelta: [ number, number ],
     tier2LevelDelta: [ number, number ],
     tier3LevelDelta: [ number, number ],
