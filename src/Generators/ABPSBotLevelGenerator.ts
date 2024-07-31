@@ -35,14 +35,25 @@ export class APBSBotLevelGenerator
             result.generateBotLevel = (levelDetails: MinMax, botGenerationDetails: BotGenerationDetails, bot: APBSIBotBase): IRandomisedBotLevelResult => 
             {
                 const expTable = this.databaseService.getGlobals().config.exp.level.exp_table;
-                const highestLevel = this.getHighestRelativeLevel(botGenerationDetails, levelDetails, expTable.length);
-                const lowestLevel = this.getLowestRelativeLevel(botGenerationDetails, levelDetails, expTable.length);
-                const min = lowestLevel <= 0 ? 1 : lowestLevel;
-                const max = highestLevel >= 78 ? 78 : highestLevel;
+                const botLevelRange = this.apbsGetRelativeBotLevelRange(botGenerationDetails, levelDetails, expTable.length);
+                const min = botLevelRange.min <= 0 ? 1 : botLevelRange.min;
+                const max = botLevelRange.max >= 79 ? 79 : botLevelRange.max;
                 const level = this.randomUtil.getInt(min, max);
                 const exp = this.profileHelper.getExperience(level);
+                const tier = this.apbsTierGetter.getTierByLevel(level);
 
-                bot.Info.Tier = this.apbsTierGetter.getTierByLevel(level)
+                /* 
+                TESTING TIER DEVIATION - Since botGenerationDetails isn't passed to the relevant methods, this is more difficult that anticipated. This logic works for the tier, but since selection is based on level..oof.
+                -2 to +1 tier
+                
+                const lowerDeviation = (Math.floor(Math.random() * 2) - 2);
+                const upperDeviation = (Math.floor(Math.random() * 2));
+                const minTier = (tier + lowerDeviation) <= 0 ? 1 : tier + lowerDeviation
+                const maxTier = (tier + upperDeviation) >= 7 ? 7 : tier + upperDeviation
+                const newTier = this.randomUtil.getInt(minTier, maxTier)
+                console.log(`Original Tier: ${tier} - New Tier ${newTier}`)
+                */
+                bot.Info.Tier = tier
                 
                 if (botGenerationDetails.isPlayerScav)
                 {
@@ -67,37 +78,35 @@ export class APBSBotLevelGenerator
         this.apbsLogger.log(Logging.DEBUG, "Bot Level Generator registered");
     }
 
-    private getHighestRelativeLevel(botGenerationDetails: BotGenerationDetails, levelDetails: MinMax, maxLevel: number): number
+    protected apbsGetRelativeBotLevelRange(
+        botGenerationDetails: BotGenerationDetails,
+        levelDetails: MinMax,
+        maxAvailableLevel: number
+    ): MinMax 
     {
-        const maxPossibleLevel
-            = botGenerationDetails.isPmc && botGenerationDetails.locationSpecificPmcLevelOverride
-                ? Math.min(botGenerationDetails.locationSpecificPmcLevelOverride.max, maxLevel) // Was a PMC and they have a level override
-                : Math.min(levelDetails.max, maxLevel); // Not pmc with override or non-pmc
-
-        let level = botGenerationDetails.playerLevel + this.apbsTierGetter.getTierUpperLevelDeviation(botGenerationDetails.playerLevel);
-        if (level > maxPossibleLevel)
-        {
-            level = maxPossibleLevel;
-        }
-
-        return level;
-    }
-
-    private getLowestRelativeLevel(botGenerationDetails: BotGenerationDetails, levelDetails: MinMax, maxlevel: number): number
-    {
-        const minPossibleLevel
-            = botGenerationDetails.isPmc && botGenerationDetails.locationSpecificPmcLevelOverride
+        const minPossibleLevel =
+            botGenerationDetails.isPmc && botGenerationDetails.locationSpecificPmcLevelOverride
                 ? Math.min(
                     Math.max(levelDetails.min, botGenerationDetails.locationSpecificPmcLevelOverride.min), // Biggest between json min and the botgen min
-                    maxlevel) // Fallback if value above is crazy (default is 79)
-                
-                : Math.min(levelDetails.min, maxlevel); // Not pmc with override or non-pmc
-        let level = botGenerationDetails.playerLevel - this.apbsTierGetter.getTierLowerLevelDeviation(botGenerationDetails.playerLevel);
-        if (level < minPossibleLevel)
-        {
-            level = minPossibleLevel;
-        }
+                    maxAvailableLevel // Fallback if value above is crazy (default is 79)
+                )
+                : Math.min(levelDetails.min, maxAvailableLevel); // Not pmc with override or non-pmc
 
-        return level;
+        const maxPossibleLevel =
+            botGenerationDetails.isPmc && botGenerationDetails.locationSpecificPmcLevelOverride
+                ? Math.min(botGenerationDetails.locationSpecificPmcLevelOverride.max, maxAvailableLevel) // Was a PMC and they have a level override
+                : Math.min(levelDetails.max, maxAvailableLevel); // Not pmc with override or non-pmc
+
+        let minLevel = botGenerationDetails.playerLevel - this.apbsTierGetter.getTierLowerLevelDeviation(botGenerationDetails.playerLevel);
+        let maxLevel = botGenerationDetails.playerLevel + this.apbsTierGetter.getTierUpperLevelDeviation(botGenerationDetails.playerLevel);
+
+        // Bound the level to the min/max possible
+        maxLevel = Math.min(Math.max(maxLevel, minPossibleLevel), maxPossibleLevel);
+        minLevel = Math.min(Math.max(minLevel, minPossibleLevel), maxPossibleLevel);
+
+        return {
+            min: minLevel,
+            max: maxLevel
+        }
     }
 }
