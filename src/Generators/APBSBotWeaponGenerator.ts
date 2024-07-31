@@ -35,6 +35,7 @@ import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper"
 import { RaidInformation } from "../Globals/RaidInformation";
 import mods = require("../db/mods.json");
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
+import { ModConfig } from "../Globals/ModConfig";
 
 /** Handle profile related client events */
 @injectable()
@@ -80,11 +81,36 @@ export class APBSBotWeaponGenerator
         {
             result.generateRandomWeapon = (sessionId: string, equipmentSlot: string, botTemplateInventory: Inventory, weaponParentId: string, modChances: ModsChances, botRole: string, isPmc: boolean, botLevel: number): GenerateWeaponResult => 
             {
+                // If the profile was just created, then use vanilla weapon gen
                 if (this.raidInformation.freshProfile)
                 {
                     const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
                     return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
                 }
+
+                // Config disable checks to flip to default weapon gen
+                if ((botRole.includes("boss") || botRole.includes("sectant")) && ModConfig.config.disableBossTierGeneration)
+                {
+                    const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
+                    return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
+                }
+                if (botRole.includes("follower") && ModConfig.config.disableBossFollowerTierGeneration)
+                {
+                    const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
+                    return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
+                }
+                if (botRole.includes("pmc") && ModConfig.config.disablePMCTierGeneration)
+                {
+                    const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
+                    return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
+                }
+                if ((botRole.includes("assault") || botRole.includes("marksman")) && ModConfig.config.disableScavTierGeneration)
+                {
+                    const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
+                    return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
+                }
+
+                // If not disabled via config, all bots follow this custom generation
                 const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
                 const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole, botTemplateInventory);
                 return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierInfo)
