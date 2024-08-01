@@ -1,10 +1,10 @@
 {
 // If you enable this, support will not be granted.
-// Any mods adding weapons loaded before APBS will have their weapons & attachments imported. */
+// Any mods adding weapons loaded before APBS will have their weapons & attachments imported.
         "enableModdedWeapons": false,
 
 // Disable specific bot generation
-// For each type that you disable, it will disable their tiered weapon and gear generation. */
+// For each type that you disable, it will disable their tiered weapon and gear generation.
         "disableScavTierGeneration": false,
         "disablePMCTierGeneration": false,
         "disableBossTierGeneration": false,
@@ -12,7 +12,7 @@
         "disableRaiderRogueTierGeneration": false,
 
 // Force weapon stocks
-// If set to true, will enforce all AI weapons to have stocks, if false - will use RNG rolls */
+// If set to true, will enforce all AI weapons to have stocks, if false - will use RNG rolls
         "forceStock": false,
 
 // Force weapon mod count limits
