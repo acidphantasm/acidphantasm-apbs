@@ -9,6 +9,14 @@ export class TierInformation
     public tier6;
     public tier7;
 
+    public tier1mods;
+    public tier2mods;
+    public tier3mods;
+    public tier4mods;
+    public tier5mods;
+    public tier6mods;
+    public tier7mods;
+
     public tiers = [
         {
             tier: 1,

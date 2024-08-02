@@ -33,7 +33,6 @@ import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
 import { RaidInformation } from "../Globals/RaidInformation";
-import mods = require("../db/mods.json");
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { ModConfig } from "../Globals/ModConfig";
 
@@ -160,7 +159,7 @@ export class APBSBotWeaponGenerator
         tierInfo: number
     ): GenerateWeaponResult
     {
-        const modPool = mods.mods;
+        const modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
         const weaponItemTemplate = this.itemHelper.getItem(weaponTpl)[1];
 
         if (!weaponItemTemplate)

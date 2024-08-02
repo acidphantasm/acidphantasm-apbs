@@ -29,7 +29,6 @@ import { RandomUtil } from "@spt/utils/RandomUtil";
 
 
 import { BotInventoryGenerator } from "@spt/generators/BotInventoryGenerator";
-import customModPool = require("../db/mods.json");
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ModConfig } from "../Globals/ModConfig";
@@ -150,7 +149,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
             randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
             wornItemChances = randomisationDetails;
-            modPool = customModPool.mods;
+            modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
             if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
             {
                 equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
@@ -161,7 +160,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
             randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
             wornItemChances = randomisationDetails;
-            modPool = customModPool.mods;
+            modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
             if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
             {
                 equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
@@ -172,7 +171,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
             randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
             wornItemChances = randomisationDetails;
-            modPool = customModPool.mods;
+            modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
             if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
             {
                 equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
@@ -183,7 +182,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
             randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
             wornItemChances = randomisationDetails;
-            modPool = customModPool.mods;
+            modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
             if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
             {
                 equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
@@ -194,7 +193,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
             randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
             wornItemChances = randomisationDetails;
-            modPool = customModPool.mods;
+            modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
             if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
             {
                 equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
