@@ -83,13 +83,13 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             cloner)
     }
 
-    public override generateModsForEquipment(equipment: Item[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, shouldForceSpawn = false): Item[]
+    public override generateModsForEquipment(equipment: Item[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, shouldForceSpawn?: boolean): Item[]
     {
         const botRole = settings.botRole;
         const tier = this.apbsTierGetter.getTierByLevel(settings.botLevel);
         const tieredModPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tier)
         let spawnChances = settings.spawnChances;
-        let forceSpawn = shouldForceSpawn;
+        let forceSpawn = shouldForceSpawn ? true : false;
         let compatibleModsPool = settings.modPool[parentTemplate._id];
 
         // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed

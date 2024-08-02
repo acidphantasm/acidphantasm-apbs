@@ -9,20 +9,6 @@ import { DatabaseService } from "@spt/services/DatabaseService";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 
-import Tier1 = require("../db/Tier1.json");
-import Tier2 = require("../db/Tier2.json");
-import Tier3 = require("../db/Tier3.json");
-import Tier4 = require("../db/Tier4.json");
-import Tier5 = require("../db/Tier5.json");
-import Tier6 = require("../db/Tier6.json");
-import Tier7 = require("../db/Tier7.json");
-import Tier1mods = require("../db/Tier1mods.json");
-import Tier2mods = require("../db/Tier2mods.json");
-import Tier3mods = require("../db/Tier3mods.json");
-import Tier4mods = require("../db/Tier4mods.json");
-import Tier5mods = require("../db/Tier5mods.json");
-import Tier6mods = require("../db/Tier6mods.json");
-import Tier7mods = require("../db/Tier7mods.json");
 import { ModConfig } from "../Globals/ModConfig";
 
 @injectable()
@@ -66,27 +52,8 @@ export class ModdedWeaponHelper
 
     public initialize():void
     {
-        this.buildTierJson();
         if (ModConfig.config.enableModdedWeapons)
             this.buildVanillaWeaponList();
-    }
-
-    private buildTierJson(): void
-    {
-        this.tierInformation.tier1 = Tier1;
-        this.tierInformation.tier2 = Tier2;
-        this.tierInformation.tier3 = Tier3;
-        this.tierInformation.tier4 = Tier4;
-        this.tierInformation.tier5 = Tier5;
-        this.tierInformation.tier6 = Tier6;
-        this.tierInformation.tier7 = Tier7;
-        this.tierInformation.tier1mods = Tier1mods;
-        this.tierInformation.tier2mods = Tier2mods;
-        this.tierInformation.tier3mods = Tier3mods;
-        this.tierInformation.tier4mods = Tier4mods;
-        this.tierInformation.tier5mods = Tier5mods;
-        this.tierInformation.tier6mods = Tier6mods;
-        this.tierInformation.tier7mods = Tier7mods;
     }
 
     private buildVanillaWeaponList(): void
@@ -221,35 +188,35 @@ export class ModdedWeaponHelper
             {
                 const slotFilterItem = weaponSlots[slot]?._props?.filters[0]?.Filter[item];
 
-                if (this.tierInformation.tier1mods.mods[weaponId] == undefined)
+                if (this.tierInformation.tier1mods[weaponId] == undefined)
                 {
-                    this.tierInformation.tier1mods.mods[weaponId] = {};
-                    this.tierInformation.tier2mods.mods[weaponId] = {};
-                    this.tierInformation.tier3mods.mods[weaponId] = {};
-                    this.tierInformation.tier4mods.mods[weaponId] = {};
-                    this.tierInformation.tier5mods.mods[weaponId] = {};
-                    this.tierInformation.tier6mods.mods[weaponId] = {};
-                    this.tierInformation.tier7mods.mods[weaponId] = {};
+                    this.tierInformation.tier1mods[weaponId] = {};
+                    this.tierInformation.tier2mods[weaponId] = {};
+                    this.tierInformation.tier3mods[weaponId] = {};
+                    this.tierInformation.tier4mods[weaponId] = {};
+                    this.tierInformation.tier5mods[weaponId] = {};
+                    this.tierInformation.tier6mods[weaponId] = {};
+                    this.tierInformation.tier7mods[weaponId] = {};
                 }
-                if (this.tierInformation.tier1mods.mods[weaponId][slotName] == undefined)
+                if (this.tierInformation.tier1mods[weaponId][slotName] == undefined)
                 {
-                    this.tierInformation.tier1mods.mods[weaponId][slotName] = [];
-                    this.tierInformation.tier2mods.mods[weaponId][slotName] = [];
-                    this.tierInformation.tier3mods.mods[weaponId][slotName] = [];
-                    this.tierInformation.tier4mods.mods[weaponId][slotName] = [];
-                    this.tierInformation.tier5mods.mods[weaponId][slotName] = [];
-                    this.tierInformation.tier6mods.mods[weaponId][slotName] = [];
-                    this.tierInformation.tier7mods.mods[weaponId][slotName] = [];
+                    this.tierInformation.tier1mods[weaponId][slotName] = [];
+                    this.tierInformation.tier2mods[weaponId][slotName] = [];
+                    this.tierInformation.tier3mods[weaponId][slotName] = [];
+                    this.tierInformation.tier4mods[weaponId][slotName] = [];
+                    this.tierInformation.tier5mods[weaponId][slotName] = [];
+                    this.tierInformation.tier6mods[weaponId][slotName] = [];
+                    this.tierInformation.tier7mods[weaponId][slotName] = [];
                 }
-                if (!this.tierInformation.tier1mods.mods[weaponId][slotName].includes(slotFilterItem))
+                if (!this.tierInformation.tier1mods[weaponId][slotName].includes(slotFilterItem))
                 {
-                    this.tierInformation.tier1mods.mods[weaponId][slotName].push(slotFilterItem);
-                    this.tierInformation.tier2mods.mods[weaponId][slotName].push(slotFilterItem);
-                    this.tierInformation.tier3mods.mods[weaponId][slotName].push(slotFilterItem);
-                    this.tierInformation.tier4mods.mods[weaponId][slotName].push(slotFilterItem);
-                    this.tierInformation.tier5mods.mods[weaponId][slotName].push(slotFilterItem);
-                    this.tierInformation.tier6mods.mods[weaponId][slotName].push(slotFilterItem);
-                    this.tierInformation.tier7mods.mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier1mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier2mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier3mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier4mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier5mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier6mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier7mods[weaponId][slotName].push(slotFilterItem);
                     this.recursivePushChildrenMods(slotFilterItem);
                 }
             }
@@ -269,35 +236,35 @@ export class ModdedWeaponHelper
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
                 
-                if (this.tierInformation.tier1mods.mods[parentSlotItemID] == undefined)
+                if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
                 {
-                    this.tierInformation.tier1mods.mods[parentSlotItemID] = {};
-                    this.tierInformation.tier2mods.mods[parentSlotItemID] = {};
-                    this.tierInformation.tier3mods.mods[parentSlotItemID] = {};
-                    this.tierInformation.tier4mods.mods[parentSlotItemID] = {};
-                    this.tierInformation.tier5mods.mods[parentSlotItemID] = {};
-                    this.tierInformation.tier6mods.mods[parentSlotItemID] = {};
-                    this.tierInformation.tier7mods.mods[parentSlotItemID] = {};
+                    this.tierInformation.tier1mods[parentSlotItemID] = {};
+                    this.tierInformation.tier2mods[parentSlotItemID] = {};
+                    this.tierInformation.tier3mods[parentSlotItemID] = {};
+                    this.tierInformation.tier4mods[parentSlotItemID] = {};
+                    this.tierInformation.tier5mods[parentSlotItemID] = {};
+                    this.tierInformation.tier6mods[parentSlotItemID] = {};
+                    this.tierInformation.tier7mods[parentSlotItemID] = {};
                 }
-                if (this.tierInformation.tier1mods.mods[parentSlotItemID][slotName] == undefined)
+                if (this.tierInformation.tier1mods[parentSlotItemID][slotName] == undefined)
                 {
-                    this.tierInformation.tier1mods.mods[parentSlotItemID][slotName] = [];
-                    this.tierInformation.tier2mods.mods[parentSlotItemID][slotName] = [];
-                    this.tierInformation.tier3mods.mods[parentSlotItemID][slotName] = [];
-                    this.tierInformation.tier4mods.mods[parentSlotItemID][slotName] = [];
-                    this.tierInformation.tier5mods.mods[parentSlotItemID][slotName] = [];
-                    this.tierInformation.tier6mods.mods[parentSlotItemID][slotName] = [];
-                    this.tierInformation.tier7mods.mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier1mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier2mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier3mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier4mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier5mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier6mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier7mods[parentSlotItemID][slotName] = [];
                 }
-                if (!this.tierInformation.tier1mods.mods[parentSlotItemID][slotName].includes(slotFilterItem))
+                if (!this.tierInformation.tier1mods[parentSlotItemID][slotName].includes(slotFilterItem))
                 {
-                    this.tierInformation.tier1mods.mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier2mods.mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier3mods.mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier4mods.mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier5mods.mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier6mods.mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier7mods.mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier4mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier5mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier6mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier7mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.recursivePushChildrenMods(slotFilterItem);
                 }
             }

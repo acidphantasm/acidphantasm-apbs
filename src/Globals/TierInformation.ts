@@ -17,6 +17,22 @@ export class TierInformation
     public tier6mods;
     public tier7mods;
 
+    public tier1chances;
+    public tier2chances;
+    public tier3chances;
+    public tier4chances;
+    public tier5chances;
+    public tier6chances;
+    public tier7chances;
+
+    public tier1ammo;
+    public tier2ammo;
+    public tier3ammo;
+    public tier4ammo;
+    public tier5ammo;
+    public tier6ammo;
+    public tier7ammo;
+
     public tiers = [
         {
             tier: 1,

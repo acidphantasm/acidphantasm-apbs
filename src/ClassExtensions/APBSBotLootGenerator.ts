@@ -76,7 +76,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
     {// Limits on item types to be added as loot
         
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-        const chances = this.apbsEquipmentGetter.getItemGenerationByBotRole(botRole, tierInfo);
+        const chances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
         const itemCounts: GenerationWeightingItems = chances.generation.items;
 
         if (
