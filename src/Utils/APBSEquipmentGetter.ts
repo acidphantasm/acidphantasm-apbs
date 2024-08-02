@@ -40,7 +40,52 @@ export class APBSEquipmentGetter
                 this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 loadout.");
                 return this.tierInformation.tier1
         }
+    }
 
+    public getTierModsJson(tierInfo: number)
+    {
+        switch (tierInfo)
+        {
+            case 1:
+                return this.tierInformation.tier1mods
+            case 2:
+                return this.tierInformation.tier2mods
+            case 3:
+                return this.tierInformation.tier3mods
+            case 4:
+                return this.tierInformation.tier4mods
+            case 5:
+                return this.tierInformation.tier5mods
+            case 6:
+                return this.tierInformation.tier6mods
+            case 7:
+                return this.tierInformation.tier7mods
+            default:
+                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 mods.");
+                return this.tierInformation.tier1mods
+        }
+    }
+
+    public getModsByBotRole(botRole: string, tierInfo: number): any
+    {
+        let tier;
+        const tierJson = this.getTierModsJson(tierInfo)
+        switch (botRole)
+        {
+            case "pmcbear":
+                return tierJson;
+            case "arenaFighterEvent":
+            case "exusec":
+            case "pmcusec":
+                return tierJson;
+            case "marksman":
+                return this.tierInformation.tier1mods;
+            case "cursedassault":
+            case "assault":
+                return this.tierInformation.tier1mods;
+            default:
+                return tierJson;
+        }
     }
 
     public getWeaponByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): any
