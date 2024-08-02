@@ -145,7 +145,6 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         let wornItemChances = settings.spawnChances;
         let modPool = settings.modPool;
 
-
         if ((botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")) && !ModConfig.config.disableBossTierGeneration)
         {
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
