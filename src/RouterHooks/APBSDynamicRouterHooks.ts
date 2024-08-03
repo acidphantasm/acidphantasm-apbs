@@ -40,7 +40,7 @@ export class APBSDynamicRouterHooks
                         }
                         catch (err) 
                         {
-                            this.apbsLogger.log(Logging.WARN, "Bot Router hook failed.", `${err.stack}`);
+                            this.apbsLogger.log(Logging.WARN, "Bot Router hook failed.\n", `${err.stack}`);
                         }
                         return output;
                     }
