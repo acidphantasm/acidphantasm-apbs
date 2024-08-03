@@ -128,13 +128,7 @@ export class APBSBotWeaponGenerator
     private pickWeightedWeaponTplFromPool(equipmentSlot: string, botLevel: number, botRole: string, botTemplateInventory: Inventory): string
     {
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-
-        if (botRole.includes("boss"))
-        {
-            const weaponPool = botTemplateInventory.equipment[equipmentSlot];
-            return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
-        }
-
+        
         if (equipmentSlot == "FirstPrimaryWeapon" || equipmentSlot == "SecondPrimaryWeapon")
         {
             const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);
