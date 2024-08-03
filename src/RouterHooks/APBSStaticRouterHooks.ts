@@ -123,16 +123,61 @@ export class APBSStaticRouterHooks
     private logLocation(info: any):void
     {
         this.raidInformation.location = info.location;
-        
-        this.apbsLogger.log( 
-            Logging.DEBUG,
-            "-------Raid Information-------",
-            `| Location: ${this.raidInformation.location}`,
+        const gameTime = this.weatherGenerator.calculateGameTime({ acceleration: 0, time: "", date: "", weather: undefined, season: 1 }).time;
+
+        if (info.timeVariant === "PAST") this.raidInformation.currentTime = this.parseTime(gameTime, 12, info.location)
+        if (info.timeVariant === "CURR") this.raidInformation.currentTime = this.parseTime(gameTime, 0, info.location)
+        this.raidInformation.nightTime = this.isNight(this.raidInformation.currentTime);
+
+        this.apbsLogger.log(
+            Logging.WARN,
+            "\n-------Raid Information-------\n",
+            `| Location: ${this.raidInformation.location}\n`,
+            `| Time: ${this.raidInformation.currentTime}\n`,
+            `| Night: ${this.raidInformation.nightTime}\n`,
             "------------------------------"
         );
     }
 
-    private logBotGeneration(outputJSON: any):void
+    private parseTime(time, hourDiff, location) 
+    {
+        if (location == "factory4_night")
+        {
+            return "03:28"
+        }
+        else if (location == "factory4_day" || location == "laboratory")
+        {
+            return "15:28"
+        }
+        else
+        {
+            const [hours, minutes] = time.split(":");
+            if (hourDiff == 12 && parseInt(hours) >= 12)
+            {
+                return `${Math.abs(parseInt(hours) - hourDiff)}:${minutes}`
+            }
+            if (hourDiff == 12 && parseInt(hours) < 12)
+            {
+                return `${Math.abs(parseInt(hours) + hourDiff)}:${minutes}`
+            }
+            return `${hours}:${minutes}`
+        }
+    }
+    
+    private isNight(time) 
+    {
+        const [hours, minutes] = time.split(":");
+        if (parseInt(hours) >= 5 && parseInt(hours) < 20)
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+
+    private logBotGeneration(outputJSON: any): void
     {
         const start = performance.now()
 
