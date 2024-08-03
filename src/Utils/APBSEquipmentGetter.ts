@@ -116,7 +116,6 @@ export class APBSEquipmentGetter
 
     public getModsByBotRole(botRole: string, tierInfo: number): any
     {
-        let tier;
         const tierJson = this.getTierModsJson(tierInfo)
         switch (botRole)
         {
@@ -167,6 +166,10 @@ export class APBSEquipmentGetter
                 return (range == undefined) ? tierJson.followerbigpipe.equipment[slot] : tierJson.followerbigpipe.equipment[slot][range];
             case "followerbirdeye":
                 return (range == undefined) ? tierJson.followerbirdeye.equipment[slot] : tierJson.followerbirdeye.equipment[slot][range];
+            case "sectantpriest":
+                return (range == undefined) ? tierJson.sectantpriest.equipment[slot] : tierJson.sectantpriest.equipment[slot][range];
+            case "sectantwarrior":
+                return (range == undefined) ? tierJson.sectantwarrior.equipment[slot] : tierJson.sectantwarrior.equipment[slot][range];
             case "exusec":
             case "arenafighterevent":
             case "arenafighter":
@@ -174,6 +177,7 @@ export class APBSEquipmentGetter
             case "pmcbot":
                 return (range == undefined) ? tierJson.pmcbot.equipment[slot] : tierJson.pmcbot.equipment[slot][range];
             default:
+                this.apbsLogger.log(Logging.DEBUG, `Bot: ${botRole} Tier: ${tierInfo} did not have an equipment pool. Tell acidphantasm to investigate.`)
                 return (range == undefined) ? tierJson.default.equipment[slot] : tierJson.default.equipment[slot][range];
         }
     }
@@ -191,8 +195,43 @@ export class APBSEquipmentGetter
             case "cursedassault":
             case "assault":
                 return tierJson.scav.chances;
+            case "bossboar":
+                return tierJson.bossboar.chances;
+            case "bossboarsniper":
+                return tierJson.bossboarsniper.chances;
+            case "bossbully":
+                return tierJson.bossbully.chances;
+            case "bossgluhar":
+                return tierJson.bossgluhar.chances;
+            case "bosskilla":
+                return tierJson.bosskilla.chances;
+            case "bossknight":
+                return tierJson.bosskilla.chances;
+            case "bosskojaniy":
+                return tierJson.bosskojaniy.chances;
+            case "bosskolontay":
+                return tierJson.bosskolontay.chances;
+            case "bosssanitar":
+                return tierJson.bosssanitar.chances;
+            case "bosstagilla":
+                return tierJson.bosstagilla.chances;
+            case "bosszryachiy":
+                return tierJson.bosszryachiy.chances;
+            case "followerbigpipe":
+                return tierJson.followerbigpipe.chances;
+            case "followerbirdeye":
+                return tierJson.followerbirdeye.chances;
+            case "sectantpriest":
+                return tierJson.sectantpriest.chances;
+            case "sectantwarrior":
+                return tierJson.sectantwarrior.chances;
+            case "exusec":
+                return tierJson.exusec.chances;
+            case "pmcbot":
+                return tierJson.pmcbot.chances;
             default:
-                return tierJson.boss.chances;
+                this.apbsLogger.log(Logging.DEBUG, `Bot: ${botRole} Tier: ${tierInfo} did not have a chances pool. Tell acidphantasm to investigate.`)
+                return tierJson.default.chances;
         }
     }
 
