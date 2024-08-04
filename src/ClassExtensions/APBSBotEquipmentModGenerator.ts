@@ -118,6 +118,11 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             compatibleModsPool = tieredModPool[parentTemplate._id]
             spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
         }
+        else 
+        {            
+            compatibleModsPool = tieredModPool[parentTemplate._id]
+            spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
+        }
 
         if (!compatibleModsPool)
         {
