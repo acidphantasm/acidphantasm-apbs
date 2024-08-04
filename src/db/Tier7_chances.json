@@ -423,7 +423,7 @@
                 "right_side_plate": 25
             },
             "weaponMods": {
-                "mod_barrel": 50,
+                "mod_barrel": 100,
                 "mod_bipod": 50,
                 "mod_flashlight": 5,
                 "mod_foregrip": 5,
@@ -3114,13 +3114,13 @@
                 "right_side_plate": 75
             },
             "weaponMods": {
-                "mod_barrel": 65,
+                "mod_barrel": 100,
                 "mod_bipod": 45,
                 "mod_catch": 45,
                 "mod_charge": 40,
                 "mod_flashlight": 45,
                 "mod_foregrip": 65,
-                "mod_gas_block": 35,
+                "mod_gas_block": 100,
                 "mod_hammer": 35,
                 "mod_handguard": 35,
                 "mod_launcher": 1,
@@ -3315,13 +3315,13 @@
                 "right_side_plate": 75
             },
             "weaponMods": {
-                "mod_barrel": 65,
+                "mod_barrel": 100,
                 "mod_bipod": 45,
                 "mod_catch": 45,
                 "mod_charge": 40,
                 "mod_flashlight": 45,
                 "mod_foregrip": 65,
-                "mod_gas_block": 35,
+                "mod_gas_block": 100,
                 "mod_hammer": 35,
                 "mod_handguard": 35,
                 "mod_launcher": 1,
