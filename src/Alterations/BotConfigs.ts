@@ -31,7 +31,7 @@ export class BotConfigs
         this.configurePlateWeightings();
         this.clearNoLongerNeededBotDetails();
         this.configureScavWeaponDurability();
-        this.removeNvgChanceFromBosses();
+        this.adjustNVG();
         this.setLootItemResourceRandomization();
         if (ModConfig.config.forceStock)
         {
@@ -102,18 +102,15 @@ export class BotConfigs
         botConfigDurability.marksman.weapon.minLimitPercent = 15
     }
 
-    private removeNvgChanceFromBosses(): void
+    private adjustNVG(): void
     {
         const botConfigEquipment = this.botConfig.equipment
 
         for (const botType in botConfigEquipment)
         {
-            if (botType.includes("boss"))
-            {
-                botConfigEquipment[botType].nvgIsActiveChanceDayPercent = 0;
-                botConfigEquipment[botType].nvgIsActiveChanceNightPercent = 0;
-                botConfigEquipment[botType].faceShieldIsActiveChancePercent = 100;
-            }
+            botConfigEquipment[botType].nvgIsActiveChanceDayPercent = 0;
+            botConfigEquipment[botType].nvgIsActiveChanceNightPercent = 95;
+            botConfigEquipment[botType].faceShieldIsActiveChancePercent = 100;
         }
     }
 
