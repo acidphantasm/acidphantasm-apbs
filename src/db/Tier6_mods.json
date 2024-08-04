@@ -130,7 +130,11 @@
     "mod_scope": [
       "5cf638cbd7f00c06595bc936",
       "618a75c9a3884f56c957ca1b",
-      "591ee00d86f774592f7b841e"
+      "591ee00d86f774592f7b841e",
+      "5947db3f86f77447880cf76f",
+      "6113d6c3290d254f5e6b27db",
+      "57486e672459770abd687134",
+      "618a5d5852ecee1505530b2a"
     ],
     "mod_sight_rear": [
       "6513f153e63f29908d0ffaba"
@@ -159,31 +163,33 @@
   },
   "5447a9cd4bdc2dbd208b4567": {
     "mod_charge": [
-      "5c0faf68d174af02a96260b8",
-      "56ea7165d2720b6e518b4583",
-      "55d44fd14bdc2d962f8b456e",
-      "5ea16d4d5aad6446a939753d",
-      "5bb20dbcd4351e44f824c04e",
-      "6033749e88382f4fab3fd2c5",
       "5b2240bf5acfc40dc528af69",
       "5d44334ba4b9362b346d1948",
-      "5f633ff5c444ce7e3c30a006"
+      "5f633ff5c444ce7e3c30a006",
+      "651bf5617b3b552ef6712cb7"
     ],
     "mod_magazine": [
-      "55802d5f4bdc2dac148b458e",
-      "5c05413a0db834001c390617",
-      "55d4887d4bdc2d962f8b4570",
       "59c1383d86f774290a37e0ca",
-      "5d1340bdd7ad1a0e8d245aab",
-      "5d1340cad7ad1a0b0b249869"
+      "55802d5f4bdc2dac148b458e",
+      "5d1340cad7ad1a0b0b249869",
+      "544a37c44bdc2d25388b4567",
+      "5c6d46132e221601da357d56"
     ],
     "mod_pistol_grip": [
-      "571659bb2459771fb2755a12",
-      "5bb20e0ed4351e3bac1212dc",
-      "5c0e2ff6d174af02a1659d4a",
-      "59db3a1d86f77429e05b4e92",
+      "5a33e75ac4a2826c6e06d759",
       "6113c3586c780c1e710c90bc",
-      "6113cc78d3a39d50044c065a"
+      "6113cce3d92c473c770200c7",
+      "5cc9bcaed7f00c011c04e179",
+      "5bb20e18d4351e00320205d5",
+      "5bb20e0ed4351e3bac1212dc",
+      "6193dcd0f8ee7e52e4210a28",
+      "5d025cc1d7ad1a53845279ef",
+      "59db3a1d86f77429e05b4e92",
+      "59db3acc86f7742a2c4ab912",
+      "59db3b0886f77429d72fb895",
+      "615d8faecabb9b7ad90f4d5d",
+      "63f5feead259b42f0b4d6d0f",
+      "652911675ae2ae97b80fdf3c"
     ],
     "mod_reciever": [
       "5c0e2f26d174af02a9625114",
@@ -192,18 +198,12 @@
       "63f5ed14534b2c3d5479a677"
     ],
     "mod_stock": [
-      "5649be884bdc2d79388b4577",
       "5d120a10d7ad1a4e1026ba85",
       "5c793fc42e221600114ca25d",
       "5b0800175acfc400153aebd4",
-      "5a33ca0fc4a282000d72292f",
-      "5c0faeddd174af02a962601f",
       "5947e98b86f774778f1448bc",
       "5947eab886f77475961d96c5",
-      "602e3f1254072b51b239f713",
       "5c793fb92e221644f31bfb64",
-      "591aef7986f774139d495f03",
-      "591af10186f774139d495f0e",
       "627254cc9c563e6e442c398f"
     ],
     "patron_in_weapon": [
