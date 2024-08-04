@@ -130,13 +130,10 @@ export class BotConfigs
         const botConfigEquipment = this.botConfig.equipment
         for (const botType in botConfigEquipment)
         {
-            if (typeof botConfigEquipment[botType].weaponModLimits == "undefined")
-            {
-                botConfigEquipment[botType].weaponModLimits = {                
-                    "scopeLimit": 2,
-                    "lightLaserLimit": 2
-                };
-            }
+            botConfigEquipment[botType].weaponModLimits = {                
+                "scopeLimit": 2,
+                "lightLaserLimit": 2
+            };
         }
     }
 
