@@ -2586,7 +2586,7 @@
     "followerbirdeye": {
         "chances": {
             "equipment": {
-                "Headwear": 100,
+                "Headwear": 0,
                 "Earpiece": 0,
                 "FaceCover": 0,
                 "ArmorVest": 77,
