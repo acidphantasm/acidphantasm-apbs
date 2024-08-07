@@ -177,7 +177,6 @@ export class APBSEquipmentGetter
             case "pmcbot":
                 return (range == undefined) ? tierJson.pmcbot.equipment[slot] : tierJson.pmcbot.equipment[slot][range];
             default:
-                this.apbsLogger.log(Logging.DEBUG, `Bot: ${botRole} Tier: ${tierInfo} did not have an equipment pool. Tell acidphantasm to investigate.`)
                 return (range == undefined) ? tierJson.default.equipment[slot] : tierJson.default.equipment[slot][range];
         }
     }
@@ -230,7 +229,6 @@ export class APBSEquipmentGetter
             case "pmcbot":
                 return tierJson.pmcbot.chances;
             default:
-                this.apbsLogger.log(Logging.DEBUG, `Bot: ${botRole} Tier: ${tierInfo} did not have a chances pool. Tell acidphantasm to investigate.`)
                 return tierJson.default.chances;
         }
     }
