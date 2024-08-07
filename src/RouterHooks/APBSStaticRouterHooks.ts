@@ -210,7 +210,9 @@ export class APBSStaticRouterHooks
                     );
                     break;
                 case "arenaFighterEvent":
+                case "arenaFighter":
                 case "exUsec":
+                case "pmcbot":
                     this.apbsLogger.log(
                         Logging.RAIDER,
                         "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
