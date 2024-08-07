@@ -4,6 +4,7 @@ import jsonc from "jsonc";
 import path from "path";
 import { TierInformation } from "./TierInformation";
 import { APBSLogger } from "../Utils/APBSLogger";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
 
 @injectable()
 export class ModConfig
@@ -12,6 +13,7 @@ export class ModConfig
 
     constructor(
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
+        @inject("PrimaryLogger") protected logger: ILogger,
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("VFS") protected vfs: VFS
     )
@@ -25,6 +27,14 @@ export class ModConfig
         {
             this.setTierLevelDeviation();
         }
+        this.logger.debug(`[APBS] Mod Config - FOR SUPPORT FOLKS LOL ❤❤`)
+        this.logger.debug(`[APBS] Import Mod Weapons: ${ModConfig.config.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Scav Generation Disabled: ${ModConfig.config.disableScavTierGeneration}`)
+        this.logger.debug(`[APBS] PMC Generation Disabled: ${ModConfig.config.disablePMCTierGeneration}`)
+        this.logger.debug(`[APBS] Boss Generation Disabled: ${ModConfig.config.disableBossTierGeneration}`)
+        this.logger.debug(`[APBS] Guard/Follower Generation Disabled: ${ModConfig.config.disableBossFollowerTierGeneration}`)
+        this.logger.debug(`[APBS] Raider/Rogue Generation Disabled: ${ModConfig.config.disableRaiderRogueTierGeneration}`)
+        this.logger.debug(`[APBS] Using Custom Bot Levels: ${ModConfig.config.enableCustomLevelDeltas}`)
     }
 
     private setTierLevelDeviation(): void
