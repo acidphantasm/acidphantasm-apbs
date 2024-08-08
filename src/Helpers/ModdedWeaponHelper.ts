@@ -153,8 +153,8 @@ export class ModdedWeaponHelper
                 tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
                 tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 0
                 tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
-                tierJson.boss.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 15
-                tierJson.boss.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 15
+                tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
                 
                 tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
                 tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
@@ -162,8 +162,8 @@ export class ModdedWeaponHelper
                 tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
                 tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 0
                 tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
-                tierJson.boss.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
-                tierJson.boss.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
+                tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
 
                 this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 15.`)
             }
@@ -172,7 +172,7 @@ export class ModdedWeaponHelper
                 tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
                 tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
                 tierJson.scav.equipment.Holster[weaponId] = 5
-                tierJson.boss.equipment.Holster[weaponId] = 5
+                tierJson.default.equipment.Holster[weaponId] = 5
 
                 this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 5.`)
             }
