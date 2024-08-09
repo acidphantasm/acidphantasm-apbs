@@ -308,7 +308,10 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         {
             tries++;
             chosenArmorPlateLevel = (parseInt(chosenArmorPlateLevel)+1).toString()
-            console.log(`Plate level: ${chosenArmorPlateLevel} selected for ${armorItem._id}`)
+            if (parseInt(chosenArmorPlateLevel) > 6) 
+            {
+                chosenArmorPlateLevel = "3"
+            }            
             platesFromDb = existingPlateTplPool.map((plateTpl) => this.itemHelper.getItem(plateTpl)[1]);
             platesOfDesiredLevel = platesFromDb.filter((item) => item._props.armorClass === chosenArmorPlateLevel);
 
