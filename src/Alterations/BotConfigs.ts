@@ -128,7 +128,7 @@ export class BotConfigs
         for (const botType in botConfigEquipment)
         {
             botConfigEquipment[botType].weaponModLimits = {                
-                "scopeLimit": 2,
+                "scopeLimit": 1,
                 "lightLaserLimit": 2
             };
         }
@@ -136,11 +136,11 @@ export class BotConfigs
 
     private setLootItemResourceRandomization(): void
     {        
-        this.botConfig.lootItemResourceRandomization.assault = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
-        this.botConfig.lootItemResourceRandomization.marksman = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
-        this.botConfig.lootItemResourceRandomization.pmcUSEC = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
-        this.botConfig.lootItemResourceRandomization.pmcBEAR = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
-        this.botConfig.lootItemResourceRandomization.pmc = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 }, "meds": { "chanceMaxResourcePercent": 50, "resourcePercent": 65 } }
+        this.botConfig.lootItemResourceRandomization.assault = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 60 }, "meds": { "chanceMaxResourcePercent": 25, "resourcePercent": 60 } }
+        this.botConfig.lootItemResourceRandomization.marksman = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 60 }, "meds": { "chanceMaxResourcePercent": 25, "resourcePercent": 60 } }
+        this.botConfig.lootItemResourceRandomization.pmcusec = {"food": { "chanceMaxResourcePercent": 75, "resourcePercent": 50 }, "meds": { "chanceMaxResourcePercent": 65, "resourcePercent": 60 } }
+        this.botConfig.lootItemResourceRandomization.pmcbear = {"food": { "chanceMaxResourcePercent": 75, "resourcePercent": 50 }, "meds": { "chanceMaxResourcePercent": 65, "resourcePercent": 60 } }
+        this.botConfig.lootItemResourceRandomization.pmc = {"food": { "chanceMaxResourcePercent": 75, "resourcePercent": 50 }, "meds": { "chanceMaxResourcePercent": 65, "resourcePercent": 60 } }
     }
 
     private setPMCItemLimits(): void
