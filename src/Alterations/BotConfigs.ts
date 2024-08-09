@@ -128,7 +128,7 @@ export class BotConfigs
         for (const botType in botConfigEquipment)
         {
             botConfigEquipment[botType].weaponModLimits = {                
-                "scopeLimit": 1,
+                "scopeLimit": 2,
                 "lightLaserLimit": 2
             };
         }
