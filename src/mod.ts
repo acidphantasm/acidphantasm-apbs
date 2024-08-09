@@ -51,9 +51,7 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
 
         if (this.instance.modInformation.versionNumber.includes("alpha"))
         {
-            this.instance.apbsLogger.log(Logging.WARN, "THIS IS AN EARLY RELEASE BUILD")
-            this.instance.apbsLogger.log(Logging.WARN, "Do not report problems with this anywhere except #acidphantasm-mods in the SPT Discord.")
-            this.instance.apbsLogger.log(Logging.WARN, "Thank you for testing!")
+            this.instance.apbsLogger.log(Logging.WARN, "THIS IS AN EARLY RELEASE BUILD\n","Do not report problems with this anywhere except #acidphantasm-mods in the SPT Discord.\n","Thank you for testing!\n")
         }
 
         const timeTaken = performance.now() - start;

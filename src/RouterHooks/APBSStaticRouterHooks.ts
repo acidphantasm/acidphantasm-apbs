@@ -131,11 +131,11 @@ export class APBSStaticRouterHooks
 
         this.apbsLogger.log(
             Logging.WARN,
-            "\n-------Raid Information-------\n",
+            "--Raid Information--\n",
             `| Location: ${this.raidInformation.location}\n`,
             `| Time: ${this.raidInformation.currentTime}\n`,
             `| Night: ${this.raidInformation.nightTime}\n`,
-            "------------------------------"
+            "--------------------------\n"
         );
     }
 
