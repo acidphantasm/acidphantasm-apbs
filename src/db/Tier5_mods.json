@@ -1050,7 +1050,6 @@
       "5ac733a45acfc400192630e2",
       "5649b0544bdc2d1b2b8b458a",
       "5ac72e475acfc400180ae6fe",
-      "5649d9a14bdc2d79388b4580",
       "628a7b23b0f75035732dd565",
       "649ec2cec93611967b03495e",
       "5bf3f59f0db834001a6fa060"
@@ -4262,8 +4261,7 @@
     ],
     "mod_sight_rear": [
       "59d650cf86f7741b846413a4",
-      "5a0eb980fcdbcb001a3b00a6",
-      "5649d9a14bdc2d79388b4580"
+      "5a0eb980fcdbcb001a3b00a6"
     ],
     "mod_stock": [
       "5cf518cfd7f00c065b422214",
@@ -6982,7 +6980,6 @@
     ],
     "mod_sight_rear": [
       "5ac72e475acfc400180ae6fe",
-      "5649d9a14bdc2d79388b4580",
       "5ac733a45acfc400192630e2"
     ],
     "mod_stock": [
