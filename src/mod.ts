@@ -49,6 +49,13 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         this.instance.botConfigs.initialize();
         this.instance.moddedWeaponHelper.initialize();
 
+        if (this.instance.modInformation.versionNumber.includes("alpha"))
+        {
+            this.instance.apbsLogger.log(Logging.WARN, "THIS IS AN EARLY RELEASE BUILD")
+            this.instance.apbsLogger.log(Logging.WARN, "Do not report problems with this anywhere except #acidphantasm-mods in the SPT Discord.")
+            this.instance.apbsLogger.log(Logging.WARN, "Thank you for testing!")
+        }
+
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postDBLoad`);
     }
