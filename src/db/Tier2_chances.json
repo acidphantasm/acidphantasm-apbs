@@ -23,7 +23,7 @@
                 "mod_equipment_000": 15,
                 "mod_equipment_001": 10,
                 "mod_equipment_002": 10,
-                "mod_nvg": 45,
+                "mod_nvg": 35,
                 "right_side_plate": 25
             },
             "weaponMods": {
@@ -201,7 +201,7 @@
                 "mod_equipment_000": 15,
                 "mod_equipment_001": 10,
                 "mod_equipment_002": 10,
-                "mod_nvg": 45,
+                "mod_nvg": 35,
                 "right_side_plate": 25
             },
             "weaponMods": {
@@ -381,7 +381,7 @@
                 "mod_equipment_000": 7,
                 "mod_equipment_001": 7,
                 "mod_equipment_002": 7,
-                "mod_nvg": 50,
+                "mod_nvg": 30,
                 "right_side_plate": 25
             },
             "weaponMods": {
