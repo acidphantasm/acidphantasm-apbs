@@ -83,45 +83,47 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             cloner)
     }
 
-    public override generateModsForEquipment(equipment: Item[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, shouldForceSpawn?: boolean): Item[]
+    public override generateModsForEquipment(equipment: Item[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, shouldForceSpawn: boolean): Item[]
     {
+        let forceSpawn = shouldForceSpawn;
+
         const botRole = settings.botRole;
         const tier = this.apbsTierGetter.getTierByLevel(settings.botLevel);
         const tieredModPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tier)
-        let spawnChances = settings.spawnChances;
-        let forceSpawn = shouldForceSpawn ? true : false;
-        let compatibleModsPool = settings.modPool[parentTemplate._id];
+        let compatibleModsPool = tieredModPool[parentTemplate._id]
+        let actualModPool = tieredModPool;
+        let spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
 
         // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed
-        if ((botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")) && !ModConfig.config.disableBossTierGeneration)
+        if (ModConfig.config.disableBossTierGeneration && (botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")))
         {
-            compatibleModsPool = tieredModPool[parentTemplate._id]
-            spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
         }
-        else if (botRole.includes("follower") && !ModConfig.config.disableBossFollowerTierGeneration)
+        if (ModConfig.config.disableBossFollowerTierGeneration && botRole.includes("follower"))
         {
-            compatibleModsPool = tieredModPool[parentTemplate._id]
-            spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
         }
-        else if ((botRole.includes("exusec") || botRole.includes("pmcbot")) && !ModConfig.config.disableRaiderRogueTierGeneration)
+        if (ModConfig.config.disableRaiderRogueTierGeneration && (botRole.includes("exusec") || botRole.includes("pmcbot")))
         {
-            compatibleModsPool = tieredModPool[parentTemplate._id]
-            spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
         }
-        else if (botRole.includes("pmc") && !ModConfig.config.disablePMCTierGeneration)
+        if (ModConfig.config.disablePMCTierGeneration && (botRole.includes("pmcusec") || botRole.includes("pmcbear")))
         {
-            compatibleModsPool = tieredModPool[parentTemplate._id]
-            spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
         }
-        else if ((botRole.includes("assault") || botRole.includes("marksman")) && !ModConfig.config.disableScavTierGeneration)
+        if (ModConfig.config.disableScavTierGeneration && (botRole.includes("assault") || botRole.includes("marksman")))
         {
-            compatibleModsPool = tieredModPool[parentTemplate._id]
-            spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
-        }
-        else 
-        {            
-            compatibleModsPool = tieredModPool[parentTemplate._id]
-            spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
         }
 
         if (!compatibleModsPool)
@@ -133,6 +135,8 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         // Iterate over mod pool and choose mods to add to item
         for (const modSlotName in compatibleModsPool)
         {
+            if (modSlotName === "mod_equipment_000" && this.raidInformation.nightTime) continue;
+
             const itemSlotTemplate = this.getModItemSlotFromDb(modSlotName, parentTemplate);
             if (!itemSlotTemplate)
             {
@@ -160,7 +164,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             // Ensure submods for nvgs all spawn together if it's night
             if (modSlotName === "mod_nvg")
             {
-                if (this.raidInformation.nightTime)
+                if (this.raidInformation.nightTime) 
                 {
                     forceSpawn = true;
                 }
@@ -245,7 +249,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             equipment.push(this.createModItem(modId, modTpl, parentId, modSlotName, modTemplate[1], botRole));
 
             // Does the item being added have possible child mods?
-            if (Object.keys(compatibleModsPool).includes(modTpl))
+            if (Object.keys(actualModPool).includes(modTpl))
             {
                 // Call self recursively with item being checkced item we just added to bot
                 this.generateModsForEquipment(equipment, modId, modTemplate[1], settings, forceSpawn);
