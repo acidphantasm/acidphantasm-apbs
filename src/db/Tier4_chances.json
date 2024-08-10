@@ -39,7 +39,7 @@
                 "mod_launcher": 1,
                 "mod_magazine": 85,
                 "mod_mount": 85,
-                "mod_mount_000": 75,
+                "mod_mount_000": 85,
                 "mod_mount_001": 50,
                 "mod_mount_002": 30,
                 "mod_mount_003": 5,
@@ -236,7 +236,7 @@
                 "mod_launcher": 1,
                 "mod_magazine": 85,
                 "mod_mount": 85,
-                "mod_mount_000": 75,
+                "mod_mount_000": 85,
                 "mod_mount_001": 50,
                 "mod_mount_002": 30,
                 "mod_mount_003": 5,
@@ -466,8 +466,8 @@
                 "mod_sight_front": 90,
                 "mod_sight_rear": 90,
                 "mod_stock": 88,
-                "mod_stock_000": 11,
-                "mod_stock_001": 11,
+                "mod_stock_000": 80,
+                "mod_stock_001": 80,
                 "mod_stock_akms": 100
             },
             "generation": {

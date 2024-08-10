@@ -452,8 +452,8 @@
                 "mod_sight_front": 90,
                 "mod_sight_rear": 90,
                 "mod_stock": 88,
-                "mod_stock_000": 11,
-                "mod_stock_001": 11,
+                "mod_stock_000": 80,
+                "mod_stock_001": 80,
                 "mod_stock_akms": 100
             },
             "generation": {
