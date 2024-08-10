@@ -205,7 +205,7 @@ export class APBSEquipmentGetter
             case "bosskilla":
                 return tierJson.bosskilla.chances;
             case "bossknight":
-                return tierJson.bosskilla.chances;
+                return tierJson.bossknight.chances;
             case "bosskojaniy":
                 return tierJson.bosskojaniy.chances;
             case "bosskolontay":
