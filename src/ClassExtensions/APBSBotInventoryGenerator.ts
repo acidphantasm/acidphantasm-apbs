@@ -148,14 +148,14 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         {
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
             randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-            wornItemChances = randomisationDetails;
+            wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
             modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
         }
         else if (botRole.includes("follower") && !ModConfig.config.disableBossFollowerTierGeneration)
         {
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
             randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-            wornItemChances = randomisationDetails;
+            wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
             modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
             if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
             {
@@ -166,7 +166,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         {
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
             randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-            wornItemChances = randomisationDetails;
+            wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
             modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
             if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
             {
@@ -176,8 +176,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         else if (botRole.includes("pmc") && !ModConfig.config.disablePMCTierGeneration)
         {
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
-            randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-            wornItemChances = randomisationDetails;
+            wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
             modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
             if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
             {
@@ -188,7 +187,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         {
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
             randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-            wornItemChances = randomisationDetails;
+            wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
             modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
             if (equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
             {
