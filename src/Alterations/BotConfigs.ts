@@ -7,6 +7,7 @@ import { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import { TierInformation } from "../Globals/TierInformation";
 import { ModConfig } from "../Globals/ModConfig";
+import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 
 
 @injectable()
@@ -18,7 +19,8 @@ export class BotConfigs
     constructor(
         @inject("IDatabaseTables") protected tables: IDatabaseTables,
         @inject("ConfigServer") protected configServer: ConfigServer,
-        @inject("TierInformation") protected tierInformation: TierInformation
+        @inject("TierInformation") protected tierInformation: TierInformation,
+        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter
     )
     {
         this.botConfig = this.configServer.getConfig(ConfigTypes.BOT);
@@ -33,18 +35,11 @@ export class BotConfigs
         this.configureScavWeaponDurability();
         this.adjustNVG();
         this.setLootItemResourceRandomization();
-        if (ModConfig.config.forceStock)
-        {
-            this.setForceStock();
-        }
-        if (ModConfig.config.forceWeaponModLimits)
-        {
-            this.setWeaponModLimits();
-        }
-        if (!ModConfig.config.disablePMCTierGeneration)
-        {
-            this.setPMCItemLimits()
-        }
+        if (ModConfig.config.forceStock) this.setForceStock()
+        if (ModConfig.config.forceDustCover) this.setForceDustCover();
+        if (ModConfig.config.forceScopeSlot) this.setForceScopes()
+        if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
+        if (!ModConfig.config.disablePMCTierGeneration) this.setPMCItemLimits()
     }
 
     private configureBotExperienceLevels(): void
@@ -116,12 +111,50 @@ export class BotConfigs
 
     private setForceStock(): void
     {
-        const botConfigEquipment = this.botConfig.equipment
-        for (const botType in botConfigEquipment)
+        for (const tierObject in this.tierInformation.tiers)
         {
-            botConfigEquipment[botType].forceStock = true;
+            const tierNumber = this.tierInformation.tiers[tierObject].tier
+            const tierJson = this.apbsEquipmentGetter.getTierChancesJson(tierNumber);
+
+            for (const botType in this.tierInformation.tier1chances)
+            {
+                tierJson[botType].chances.weaponMods["mod_stock"] = 100;
+                tierJson[botType].chances.weaponMods["mod_stock_000"] = 100;
+                tierJson[botType].chances.weaponMods["mod_stock_001"] = 100;
+                tierJson[botType].chances.weaponMods["mod_stock_akms"] = 100;
+                tierJson[botType].chances.weaponMods["mod_stock_axis"] = 100;
+            }
         }
     }
+
+    private setForceDustCover(): void
+    {
+        for (const tierObject in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[tierObject].tier
+            const tierJson = this.apbsEquipmentGetter.getTierChancesJson(tierNumber);
+
+            for (const botType in this.tierInformation.tier1chances)
+            {
+                tierJson[botType].chances.weaponMods["mod_reciever"] = 100;
+            }
+        }
+    }
+
+    private setForceScopes(): void
+    {
+        for (const tierObject in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[tierObject].tier
+            const tierJson = this.apbsEquipmentGetter.getTierChancesJson(tierNumber);
+
+            for (const botType in this.tierInformation.tier1chances)
+            {
+                tierJson[botType].chances.weaponMods["mod_scope"] = 100;
+            }
+        }
+    }
+
     private setWeaponModLimits(): void
     {
         const botConfigEquipment = this.botConfig.equipment
@@ -135,12 +168,23 @@ export class BotConfigs
     }
 
     private setLootItemResourceRandomization(): void
-    {        
-        this.botConfig.lootItemResourceRandomization.assault = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 60 }, "meds": { "chanceMaxResourcePercent": 25, "resourcePercent": 60 } }
-        this.botConfig.lootItemResourceRandomization.marksman = {"food": { "chanceMaxResourcePercent": 50, "resourcePercent": 60 }, "meds": { "chanceMaxResourcePercent": 25, "resourcePercent": 60 } }
-        this.botConfig.lootItemResourceRandomization.pmcusec = {"food": { "chanceMaxResourcePercent": 75, "resourcePercent": 50 }, "meds": { "chanceMaxResourcePercent": 65, "resourcePercent": 60 } }
-        this.botConfig.lootItemResourceRandomization.pmcbear = {"food": { "chanceMaxResourcePercent": 75, "resourcePercent": 50 }, "meds": { "chanceMaxResourcePercent": 65, "resourcePercent": 60 } }
-        this.botConfig.lootItemResourceRandomization.pmc = {"food": { "chanceMaxResourcePercent": 75, "resourcePercent": 50 }, "meds": { "chanceMaxResourcePercent": 65, "resourcePercent": 60 } }
+    {
+        let scavFoodChanceMaxResourcePercent = 100;
+        let scavMedChanceMaxResourcePercent = 100;
+        let pmcFoodChanceMaxResourcePercent = 100;
+        let pmcMedChanceMaxResourcePercent = 100;
+        if (ModConfig.config.enableConsumableResourceRandomization)
+        {
+            scavFoodChanceMaxResourcePercent = ModConfig.config.scavFoodFullChance;
+            scavMedChanceMaxResourcePercent = ModConfig.config.scavMedFullChance;
+            pmcFoodChanceMaxResourcePercent = ModConfig.config.pmcFoodFullChance;
+            pmcMedChanceMaxResourcePercent = ModConfig.config.pmcMedFullChance;
+        }
+        this.botConfig.lootItemResourceRandomization.assault = {"food": { "chanceMaxResourcePercent": scavFoodChanceMaxResourcePercent, "resourcePercent": 60 }, "meds": { "chanceMaxResourcePercent": scavMedChanceMaxResourcePercent, "resourcePercent": 60 } }
+        this.botConfig.lootItemResourceRandomization.marksman = {"food": { "chanceMaxResourcePercent": scavFoodChanceMaxResourcePercent, "resourcePercent": 60 }, "meds": { "chanceMaxResourcePercent": scavMedChanceMaxResourcePercent, "resourcePercent": 60 } }
+        this.botConfig.lootItemResourceRandomization.pmcusec = {"food": { "chanceMaxResourcePercent": pmcFoodChanceMaxResourcePercent, "resourcePercent": 50 }, "meds": { "chanceMaxResourcePercent": pmcMedChanceMaxResourcePercent, "resourcePercent": 60 } }
+        this.botConfig.lootItemResourceRandomization.pmcbear = {"food": { "chanceMaxResourcePercent": pmcFoodChanceMaxResourcePercent, "resourcePercent": 50 }, "meds": { "chanceMaxResourcePercent": pmcMedChanceMaxResourcePercent, "resourcePercent": 60 } }
+        this.botConfig.lootItemResourceRandomization.pmc = {"food": { "chanceMaxResourcePercent": pmcFoodChanceMaxResourcePercent, "resourcePercent": 50 }, "meds": { "chanceMaxResourcePercent": pmcMedChanceMaxResourcePercent, "resourcePercent": 60 } }
     }
 
     private setPMCItemLimits(): void

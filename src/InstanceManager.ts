@@ -179,7 +179,7 @@ export class InstanceManager
         this.tables = container.resolve<DatabaseService>("DatabaseService").getTables();
 
         // Custom Classes
-        this.botConfigs = new BotConfigs(this.tables, this.configServer, this.tierInformation);
+        this.botConfigs = new BotConfigs(this.tables, this.configServer, this.tierInformation, this.apbsEquipmentGetter);
         this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
 
     }
