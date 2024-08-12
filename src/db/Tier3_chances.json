@@ -3322,15 +3322,15 @@
                 "SecuredContainer": 100
             },
             "equipmentMods": {
-                "back_plate": 75,
-                "front_plate": 75,
-                "left_side_plate": 75,
+                "back_plate": 85,
+                "front_plate": 85,
+                "left_side_plate": 70,
+                "right_side_plate": 70,
                 "mod_equipment": 25,
                 "mod_equipment_000": 25,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
-                "mod_nvg": 50,
-                "right_side_plate": 75
+                "mod_nvg": 50
             },
             "weaponMods": {
                 "mod_gas_block": 100,
