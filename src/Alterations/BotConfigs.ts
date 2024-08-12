@@ -103,9 +103,12 @@ export class BotConfigs
 
         for (const botType in botConfigEquipment)
         {
+            botConfigEquipment[botType].faceShieldIsActiveChancePercent = 90;
+            botConfigEquipment[botType].lightIsActiveDayChancePercent = 7;
+            botConfigEquipment[botType].lightIsActiveNightChancePercent = 25;
+            botConfigEquipment[botType].laserIsActiveChancePercent = 50;
             botConfigEquipment[botType].nvgIsActiveChanceDayPercent = 0;
             botConfigEquipment[botType].nvgIsActiveChanceNightPercent = 95;
-            botConfigEquipment[botType].faceShieldIsActiveChancePercent = 100;
         }
     }
 
