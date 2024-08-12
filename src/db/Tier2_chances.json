@@ -568,6 +568,7 @@
             },
             "equipmentMods": {},
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_stock": 72,
                 "mod_bipod": 100,
@@ -738,6 +739,7 @@
                 "right_side_plate": 50
             },
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_scope": 87,
                 "mod_stock": 68,
@@ -909,6 +911,7 @@
             },
             "equipmentMods": {},
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_launcher": 0,
                 "mod_muzzle": 51,
                 "mod_reciever": 100,
@@ -1083,6 +1086,7 @@
                 "mod_equipment_002": 0
             },
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_sight_rear": 61,
                 "mod_mount": 0,
@@ -1252,6 +1256,7 @@
                 "mod_nvg": 0
             },
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_stock": 100,
                 "mod_charge": 15,
                 "mod_magazine": 100,
@@ -1420,6 +1425,7 @@
                 "right_side_plate": 100
             },
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_scope": 88,
                 "mod_sight_rear": 89,
@@ -1581,6 +1587,7 @@
             },
             "equipmentMods": {},
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_stock": 100,
                 "mod_mount_000": 0,
@@ -1749,6 +1756,7 @@
                 "mod_equipment_000": 100
             },
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_stock": 84,
                 "mod_charge": 93,
                 "mod_magazine": 100,
@@ -1914,6 +1922,7 @@
             },
             "equipmentMods": {},
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_mount_000": 90,
                 "mod_magazine": 100,
                 "mod_reciever": 100,
@@ -2080,6 +2089,7 @@
                 "right_side_plate": 0
             },
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_reciever": 100,
                 "mod_magazine": 100,
                 "mod_charge": 73,
@@ -2243,6 +2253,7 @@
             },
             "equipmentMods": {},
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_stock": 75,
                 "mod_mount_000": 33,
@@ -2405,6 +2416,7 @@
                 "back_plate": 100
             },
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_stock": 100,
                 "mod_scope": 84,
@@ -2572,6 +2584,7 @@
                 "right_side_plate": 0
             },
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_mount": 100,
                 "mod_stock": 100,
@@ -2736,6 +2749,7 @@
                 "mod_nvg": 100
             },
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_stock": 100,
                 "mod_scope": 0,
@@ -2902,6 +2916,7 @@
                 "right_side_plate": 66
             },
             "weaponMods": {
+                "mod_barrel": 100,
                 "mod_launcher": 0,
                 "mod_muzzle": 93,
                 "mod_reciever": 100,
