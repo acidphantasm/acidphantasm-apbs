@@ -1126,8 +1126,8 @@
                 "mod_nvg": 72,
                 "mod_mount": 0,
                 "mod_equipment_001": 0,
-                "left_side_plate": 0,
-                "right_side_plate": 0,
+                "left_side_plate": 90,
+                "right_side_plate": 90,
                 "mod_equipment_002": 0
             },
             "weaponMods": {

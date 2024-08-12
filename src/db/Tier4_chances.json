@@ -1118,14 +1118,14 @@
                 "SecuredContainer": 100
             },
             "equipmentMods": {
-                "front_plate": 100,
-                "back_plate": 100,
+                "front_plate": 90,
+                "back_plate": 90,
                 "mod_equipment_000": 0,
                 "mod_nvg": 72,
                 "mod_mount": 0,
                 "mod_equipment_001": 0,
-                "left_side_plate": 0,
-                "right_side_plate": 0,
+                "left_side_plate": 75,
+                "right_side_plate": 75,
                 "mod_equipment_002": 0
             },
             "weaponMods": {
