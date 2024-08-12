@@ -3499,13 +3499,13 @@
             "equipmentMods": {
                 "back_plate": 75,
                 "front_plate": 75,
-                "left_side_plate": 75,
+                "left_side_plate": 50,
+                "right_side_plate": 50,
                 "mod_equipment": 25,
                 "mod_equipment_000": 25,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
-                "mod_nvg": 0,
-                "right_side_plate": 75
+                "mod_nvg": 0
             },
             "weaponMods": {
                 "mod_gas_block": 100,
