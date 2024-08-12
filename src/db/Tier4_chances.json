@@ -16,15 +16,15 @@
                 "TacticalVest": 99
             },
             "equipmentMods": {
-                "back_plate": 90,
-                "front_plate": 90,
-                "left_side_plate": 40,
+                "back_plate": 95,
+                "front_plate": 100,
+                "left_side_plate": 75,
                 "mod_equipment": 25,
                 "mod_equipment_000": 25,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
                 "mod_nvg": 85,
-                "right_side_plate": 40
+                "right_side_plate": 75
             },
             "weaponMods": {
                 "mod_gas_block": 100,
@@ -66,13 +66,13 @@
                 "mod_stock_akms": 100,
                 "mod_stock_axis": 100,
                 "mod_tactical": 85,
-                "mod_tactical001": 80,
-                "mod_tactical002": 25,
-                "mod_tactical_000": 15,
-                "mod_tactical_001": 15,
-                "mod_tactical_002": 25,
-                "mod_tactical_003": 25,
-                "mod_tactical_2": 15,
+                "mod_tactical001": 35,
+                "mod_tactical002": 35,
+                "mod_tactical_000": 35,
+                "mod_tactical_001": 35,
+                "mod_tactical_002": 35,
+                "mod_tactical_003": 35,
+                "mod_tactical_2": 35,
                 "mod_trigger": 100
             },
             "generation": {
@@ -214,15 +214,15 @@
                 "TacticalVest": 99
             },
             "equipmentMods": {
-                "back_plate": 90,
-                "front_plate": 90,
-                "left_side_plate": 40,
+                "back_plate": 95,
+                "front_plate": 100,
+                "left_side_plate": 75,
                 "mod_equipment": 25,
                 "mod_equipment_000": 25,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
                 "mod_nvg": 85,
-                "right_side_plate": 40
+                "right_side_plate": 75
             },
             "weaponMods": {
                 "mod_gas_block": 100,
@@ -264,13 +264,13 @@
                 "mod_stock_akms": 100,
                 "mod_stock_axis": 100,
                 "mod_tactical": 85,
-                "mod_tactical001": 80,
-                "mod_tactical002": 25,
-                "mod_tactical_000": 15,
-                "mod_tactical_001": 15,
-                "mod_tactical_002": 25,
-                "mod_tactical_003": 25,
-                "mod_tactical_2": 15,
+                "mod_tactical001": 35,
+                "mod_tactical002": 35,
+                "mod_tactical_000": 35,
+                "mod_tactical_001": 35,
+                "mod_tactical_002": 35,
+                "mod_tactical_003": 35,
+                "mod_tactical_2": 35,
                 "mod_trigger": 100
             },
             "generation": {
