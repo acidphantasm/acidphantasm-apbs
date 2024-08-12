@@ -26,6 +26,7 @@ import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
 import { BotWeaponModLimitService } from "@spt/services/BotWeaponModLimitService";
 import { RepairService } from "@spt/services/RepairService";
+import { VFS } from "@spt/utils/VFS";
 
 // Custom
 import { APBSLogger } from "./Utils/APBSLogger";
@@ -45,7 +46,7 @@ import { APBSBotEquipmentModGenerator } from "./ClassExtensions/APBSBotEquipment
 import { APBSBotInventoryGenerator } from "./ClassExtensions/APBSBotInventoryGenerator";
 import { APBSBotLootGenerator } from "./ClassExtensions/APBSBotLootGenerator";
 import { ModConfig } from "./Globals/ModConfig";
-import { VFS } from "@spt/utils/VFS";
+import { JSONHelper } from "./Helpers/JSONHelper";
 
 export class InstanceManager 
 {
@@ -89,6 +90,7 @@ export class InstanceManager
     public apbsStaticRouterHooks: APBSStaticRouterHooks;
     public apbsDynamicRouterHooks: APBSDynamicRouterHooks;
     public apbsBotInventoryGenerator: APBSBotInventoryGenerator;
+    public jsonHelper: JSONHelper;
     public modConfig: ModConfig;
     //#endregion
 
@@ -153,6 +155,8 @@ export class InstanceManager
         this.apbsBotLevelGenerator = container.resolve<APBSBotLevelGenerator>("APBSBotLevelGenerator");
         this.container.register<APBSBotWeaponGenerator>("APBSBotWeaponGenerator", APBSBotWeaponGenerator, { lifecycle: Lifecycle.Singleton });
         this.apbsBotWeaponGenerator = container.resolve<APBSBotWeaponGenerator>("APBSBotWeaponGenerator");
+        this.container.register<JSONHelper>("JSONHelper", JSONHelper, { lifecycle: Lifecycle.Singleton });
+        this.jsonHelper = container.resolve<JSONHelper>("JSONHelper");
 
         // Class Extension Override
         this.container.register<APBSBotInventoryGenerator>("APBSBotInventoryGenerator", APBSBotInventoryGenerator);
@@ -175,7 +179,7 @@ export class InstanceManager
         this.tables = container.resolve<DatabaseService>("DatabaseService").getTables();
 
         // Custom Classes
-        this.botConfigs = new BotConfigs(this.tables, this.configServer, this.tierInformation);
+        this.botConfigs = new BotConfigs(this.tables, this.configServer, this.tierInformation, this.apbsEquipmentGetter);
         this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
 
     }

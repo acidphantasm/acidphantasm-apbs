@@ -1,10 +1,10 @@
 {
 // If you enable this, support will not be granted.
-// Any mods adding weapons loaded before APBS will have their weapons & attachments imported. */
+// Any mods adding weapons loaded before APBS will have their weapons & attachments imported.
         "enableModdedWeapons": false,
 
 // Disable specific bot generation
-// For each type that you disable, it will disable their tiered weapon and gear generation. */
+// For each type that you disable, it will disable their tiered weapon and gear generation.
         "disableScavTierGeneration": false,
         "disablePMCTierGeneration": false,
         "disableBossTierGeneration": false,
@@ -12,12 +12,31 @@
         "disableRaiderRogueTierGeneration": false,
 
 // Force weapon stocks
-// If set to true, will enforce all AI weapons to have stocks, if false - will use RNG rolls */
+// If set to true, will enforce all AI weapons to have stocks, if false - will use RNG rolls
         "forceStock": false,
+
+// Force weapon dust covers
+// If set to true, will enforce all AI weapons to have dust covers, if false - will use RNG rolls
+        "forceDustCover": false,
+        
+// Force weapon mod_scope slot
+// If set to true, will enforce all AI weapons to have a mod in the mod_scope slot 
+// This slot is *MOSTLY* optics but it's sometimes a laser/flashlight depending on gun, if false - will use RNG rolls
+        "forceScopeSlot": false,
 
 // Force weapon mod count limits
 // If set to true, will enforce all AI weapons to be limited to 2 scopes and 2 lasers, if disabled the generation may go wild
         "forceWeaponModLimits": true,
+
+// Enable/Disable randomization of medical and food resource values
+// If set to true, all scavs and PMCs will have randomized resource values, based on the chances you set below, for medical and food items. 
+// If disabled the items will always be full resource values. 
+// Example.. true means an AFAK on a PMC has a 65% chance to be 400/400 and 35% chance to be between 0% and 40% used (it would spawn somewhere between 240/400 to 400/400).
+        "enableConsumableResourceRandomization": true,
+        "scavFoodFullChance": 25,
+        "scavMedFullChance": 25,
+        "pmcFoodFullChance": 65,
+        "pmcMedFullChance": 65,
 
 // LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
 // Examples: 

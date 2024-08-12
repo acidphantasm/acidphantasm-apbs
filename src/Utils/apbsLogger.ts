@@ -72,6 +72,8 @@ export class APBSLogger
                 if (showInConsole)
                 {
                     consoleMessage += `${messagesArray[line]}`;
+                    messages += `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}`;
+                    continue;
                 }
                 messages += `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
             }

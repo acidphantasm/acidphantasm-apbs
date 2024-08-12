@@ -40,161 +40,213 @@ export class APBSEquipmentGetter
                 this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 loadout.");
                 return this.tierInformation.tier1
         }
-
     }
 
-    public getWeaponByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): any
+    public getTierModsJson(tierInfo: number)
     {
-        let tier;
-        const tierJson = this.getTierJson(tierInfo)
-        switch (botRole)
+        switch (tierInfo)
         {
-            case "pmcbear":
-                tier = range == undefined ? tierJson.pmcBEAR.equipment[slot] : tierJson.pmcBEAR.equipment[slot][range]
-                return tier;
-            case "arenaFighterEvent":
-            case "exusec":
-            case "pmcusec":
-                tier = range == undefined ? tierJson.pmcUSEC.equipment[slot] : tierJson.pmcUSEC.equipment[slot][range]
-                return tier;
-            case "marksman":
-                tier = range == undefined ? tierJson.scav.equipment[slot] : tierJson.scav.equipment[slot].LongRange
-                return tier;
-            case "cursedassault":
-            case "assault":
-                tier = range == undefined ? tierJson.scav.equipment[slot] : tierJson.scav.equipment[slot].ShortRange
-                return tier;
+            case 1:
+                return this.tierInformation.tier1mods
+            case 2:
+                return this.tierInformation.tier2mods
+            case 3:
+                return this.tierInformation.tier3mods
+            case 4:
+                return this.tierInformation.tier4mods
+            case 5:
+                return this.tierInformation.tier5mods
+            case 6:
+                return this.tierInformation.tier6mods
+            case 7:
+                return this.tierInformation.tier7mods
             default:
-                tier = range == undefined ? tierJson.boss.equipment[slot] : tierJson.boss.equipment[slot][range]
-                return tier;
+                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 mods.");
+                return this.tierInformation.tier1mods
         }
     }
 
-    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string): Record<string, number>
+    public getTierChancesJson(tierInfo: number)
     {
-        const tierJson = this.getTierJson(tierInfo)
-        switch (botRole)
+        switch (tierInfo)
         {
-            case "pmcbear":
-                return tierJson.pmcBEAR.equipment[slot];
-            case "arenaFighterEvent":
-            case "exusec":
-            case "pmcusec":
-                return tierJson.pmcUSEC.equipment[slot];
-            case "marksman":
-            case "cursedassault":
-            case "assault":
-                return tierJson.scav.equipment[slot];
+            case 1:
+                return this.tierInformation.tier1chances
+            case 2:
+                return this.tierInformation.tier2chances
+            case 3:
+                return this.tierInformation.tier3chances
+            case 4:
+                return this.tierInformation.tier4chances
+            case 5:
+                return this.tierInformation.tier5chances
+            case 6:
+                return this.tierInformation.tier6chances
+            case 7:
+                return this.tierInformation.tier7chances
             default:
-                return tierJson.boss.equipment[slot];
+                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 chances.");
+                return this.tierInformation.tier1chances
         }
     }
 
-    public getEquipmentPoolJSON(botRole: string, tierInfo: number): any
+    public getTierAmmoJson(tierInfo: number)
+    {
+        switch (tierInfo)
+        {
+            case 1:
+                return this.tierInformation.tier1ammo
+            case 2:
+                return this.tierInformation.tier2ammo
+            case 3:
+                return this.tierInformation.tier3ammo
+            case 4:
+                return this.tierInformation.tier4ammo
+            case 5:
+                return this.tierInformation.tier5ammo
+            case 6:
+                return this.tierInformation.tier6ammo
+            case 7:
+                return this.tierInformation.tier7ammo
+            default:
+                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 ammo.");
+                return this.tierInformation.tier1ammo
+        }
+    }
+
+    public getModsByBotRole(botRole: string, tierInfo: number): any
+    {
+        const tierJson = this.getTierModsJson(tierInfo)
+        switch (botRole)
+        {
+            case "marksman":
+            case "cursedassault":
+            case "assault":
+                return this.tierInformation.tier1mods;
+            default:
+                return tierJson;
+        }
+    }
+
+    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): Record<string, number>
     {
         const tierJson = this.getTierJson(tierInfo)
         switch (botRole)
         {
-            case "pmcbear":
-                return tierJson.pmcBEAR;
-            case "arenaFighterEvent":
-            case "exusec":
             case "pmcusec":
-                return tierJson.pmcUSEC;
+                return (range == undefined) ? tierJson.pmcUSEC.equipment[slot] : tierJson.pmcUSEC.equipment[slot][range];
+            case "pmcbear":
+                return (range == undefined) ? tierJson.pmcBEAR.equipment[slot] : tierJson.pmcBEAR.equipment[slot][range];
             case "marksman":
+                return (range == undefined) ? tierJson.scav.equipment[slot] : tierJson.scav.equipment[slot].LongRange;
             case "cursedassault":
             case "assault":
-                return tierJson.scav;
+                return (range == undefined) ? tierJson.scav.equipment[slot] : tierJson.scav.equipment[slot].ShortRange;
+            case "bossboar":
+                return (range == undefined) ? tierJson.bossboar.equipment[slot] : tierJson.bossboar.equipment[slot][range];
+            case "bossboarsniper":
+                return (range == undefined) ? tierJson.bossboarsniper.equipment[slot] : tierJson.bossboarsniper.equipment[slot][range];
+            case "bossbully":
+                return (range == undefined) ? tierJson.bossbully.equipment[slot] : tierJson.bossbully.equipment[slot][range];
+            case "bossgluhar":
+                return (range == undefined) ? tierJson.bossgluhar.equipment[slot] : tierJson.bossgluhar.equipment[slot][range];
+            case "bosskilla":
+                return (range == undefined) ? tierJson.bosskilla.equipment[slot] : tierJson.bosskilla.equipment[slot][range];
+            case "bosskojaniy":
+                return (range == undefined) ? tierJson.bosskojaniy.equipment[slot] : tierJson.bosskojaniy.equipment[slot][range];
+            case "bosskolontay":
+                return (range == undefined) ? tierJson.bosskolontay.equipment[slot] : tierJson.bosskolontay.equipment[slot][range];
+            case "bosssanitar":
+                return (range == undefined) ? tierJson.bosssanitar.equipment[slot] : tierJson.bosssanitar.equipment[slot][range];
+            case "bosstagilla":
+                return (range == undefined) ? tierJson.bosstagilla.equipment[slot] : tierJson.bosstagilla.equipment[slot][range];
+            case "bossknight":
+                return (range == undefined) ? tierJson.bossknight.equipment[slot] : tierJson.bossknight.equipment[slot][range];
+            case "followerbigpipe":
+                return (range == undefined) ? tierJson.followerbigpipe.equipment[slot] : tierJson.followerbigpipe.equipment[slot][range];
+            case "followerbirdeye":
+                return (range == undefined) ? tierJson.followerbirdeye.equipment[slot] : tierJson.followerbirdeye.equipment[slot][range];
+            case "sectantpriest":
+                return (range == undefined) ? tierJson.sectantpriest.equipment[slot] : tierJson.sectantpriest.equipment[slot][range];
+            case "sectantwarrior":
+                return (range == undefined) ? tierJson.sectantwarrior.equipment[slot] : tierJson.sectantwarrior.equipment[slot][range];
+            case "exusec":
+            case "arenafighterevent":
+            case "arenafighter":
+                return (range == undefined) ? tierJson.exUSEC.equipment[slot] : tierJson.exUSEC.equipment[slot][range];
+            case "pmcbot":
+                return (range == undefined) ? tierJson.pmcbot.equipment[slot] : tierJson.pmcbot.equipment[slot][range];
             default:
-                return tierJson.boss;
+                return (range == undefined) ? tierJson.default.equipment[slot] : tierJson.default.equipment[slot][range];
         }
     }
 
     public getSpawnChancesByBotRole(botRole: string, tierInfo: number): any
     {
-        const tierJson = this.getTierJson(tierInfo)
+        const tierJson = this.getTierChancesJson(tierInfo)
         switch (botRole)
         {
             case "pmcbear":
                 return tierJson.pmcBEAR.chances;
-            case "arenaFighterEvent":
-            case "exusec":
             case "pmcusec":
                 return tierJson.pmcUSEC.chances;
             case "marksman":
             case "cursedassault":
             case "assault":
                 return tierJson.scav.chances;
+            case "bossboar":
+                return tierJson.bossboar.chances;
+            case "bossboarsniper":
+                return tierJson.bossboarsniper.chances;
+            case "bossbully":
+                return tierJson.bossbully.chances;
+            case "bossgluhar":
+                return tierJson.bossgluhar.chances;
+            case "bosskilla":
+                return tierJson.bosskilla.chances;
+            case "bossknight":
+                return tierJson.bossknight.chances;
+            case "bosskojaniy":
+                return tierJson.bosskojaniy.chances;
+            case "bosskolontay":
+                return tierJson.bosskolontay.chances;
+            case "bosssanitar":
+                return tierJson.bosssanitar.chances;
+            case "bosstagilla":
+                return tierJson.bosstagilla.chances;
+            case "bosszryachiy":
+                return tierJson.bosszryachiy.chances;
+            case "followerbigpipe":
+                return tierJson.followerbigpipe.chances;
+            case "followerbirdeye":
+                return tierJson.followerbirdeye.chances;
+            case "sectantpriest":
+                return tierJson.sectantpriest.chances;
+            case "sectantwarrior":
+                return tierJson.sectantwarrior.chances;
+            case "exusec":
+                return tierJson.exusec.chances;
+            case "pmcbot":
+                return tierJson.pmcbot.chances;
             default:
-                return tierJson.boss.chances;
+                return tierJson.default.chances;
         }
     }
 
-    public getItemGenerationByBotRole(botRole: string, tierInfo: number): any
-    {
-        const tierJson = this.getTierJson(tierInfo)
-        switch (botRole)
-        {
-            case "pmcbear":
-                return tierJson.pmcBEAR.chances;
-            case "pmcusec":
-                return tierJson.pmcUSEC.chances;
-            case "marksman":
-            case "cursedassault":
-            case "assault":
-                return tierJson.scav.chances;
-            default:
-                return tierJson.boss.chances;
-        }
-    }
-    
     public getAmmoByBotRole(botRole: string, tierInfo: number): Record<string, Record<string, number>>
     {
-        let tier;
-        const tierJson = this.getTierJson(tierInfo)
+        const tierJson = this.getTierAmmoJson(tierInfo)
         switch (botRole)
         {
             case "marksman":
             case "cursedassault":
             case "assault":
-                tier = tierJson.scav.Ammo
-                return tier;
-            case "bossBully":
-            case "bossTagilla":
-            case "bossGluhar":
-            case "bossKilla":
-            case "bossKojaniy":
-            case "bossSanitar":
-            case "bossKnight":
-            case "bossZryachiy":
-            case "bossTest":
-            case "bossKolontay":
-            case "followerBully":
-            case "followerGluharAssault":
-            case "followerGluharScout":
-            case "followerGluharSecurity":
-            case "followerGluharSnipe":
-            case "followerKojaniy":
-            case "followerSanitar":
-            case "followerTagilla":
-            case "followerBirdEye":
-            case "followerBigPipe":
-            case "followerZryachiy":
-            case "followerTest":
-            case "followerBoar":
-            case "sectantPriest":
-            case "sectantWarrior":
-            case "bossBoar":
-            case "bossBoarSniper":
-            case "followerBoarClose1":
-            case "followerBoarClose2":
-            case "followerKolontayAssault":
-            case "followerKolontaySecurity":
-                tier = tierJson.boss.Ammo
-                return tier;
+                return tierJson.scavAmmo;
+            case "pmcusec":
+            case "pmcbear":
+                return tierJson.pmcAmmo;
             default:
-                tier = tierJson.Ammo
-                return tier;
+                return tierJson.bossAmmo;
         }
     }
 }

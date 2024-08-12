@@ -33,7 +33,6 @@ import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
 import { RaidInformation } from "../Globals/RaidInformation";
-import mods = require("../db/mods.json");
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { ModConfig } from "../Globals/ModConfig";
 
@@ -129,21 +128,15 @@ export class APBSBotWeaponGenerator
     private pickWeightedWeaponTplFromPool(equipmentSlot: string, botLevel: number, botRole: string, botTemplateInventory: Inventory): string
     {
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-
-        if (botRole.includes("boss"))
-        {
-            const weaponPool = botTemplateInventory.equipment[equipmentSlot];
-            return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
-        }
-
+        
         if (equipmentSlot == "FirstPrimaryWeapon" || equipmentSlot == "SecondPrimaryWeapon")
         {
             const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);
-            const weaponPool = this.apbsEquipmentGetter.getWeaponByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
             return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
         }
         
-        const weaponPool = this.apbsEquipmentGetter.getWeaponByBotRole(botRole, tierInfo, equipmentSlot);
+        const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
         return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
     }
 
@@ -160,7 +153,7 @@ export class APBSBotWeaponGenerator
         tierInfo: number
     ): GenerateWeaponResult
     {
-        const modPool = mods.mods;
+        const modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
         const weaponItemTemplate = this.itemHelper.getItem(weaponTpl)[1];
 
         if (!weaponItemTemplate)

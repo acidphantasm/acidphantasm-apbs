@@ -27,10 +27,10 @@ import { RandomUtil } from "@spt/utils/RandomUtil";
 import { ICloner } from "@spt/utils/cloners/ICloner";
 
 import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
-import customModPool = require("../db/mods.json");
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ModConfig } from "../Globals/ModConfig";
+import { RaidInformation } from "../Globals/RaidInformation";
 
 /** Handle profile related client events */
 @injectable()
@@ -58,7 +58,8 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         @inject("ConfigServer") protected configServer: ConfigServer,
         @inject("PrimaryCloner") protected cloner: ICloner,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
-        @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter
+        @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
+        @inject("RaidInformation") protected raidInformation: RaidInformation
     )
     {
         super(logger, 
@@ -82,32 +83,47 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             cloner)
     }
 
-    public override generateModsForEquipment(equipment: Item[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, shouldForceSpawn = false): Item[]
+    public override generateModsForEquipment(equipment: Item[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, shouldForceSpawn: boolean): Item[]
     {
-        const botRole = settings.botRole;
         let forceSpawn = shouldForceSpawn;
-        let compatibleModsPool = settings.modPool[parentTemplate._id];
+
+        const botRole = settings.botRole;
+        const tier = this.apbsTierGetter.getTierByLevel(settings.botLevel);
+        const tieredModPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tier)
+        let compatibleModsPool = tieredModPool[parentTemplate._id]
+        let actualModPool = tieredModPool;
+        let spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
 
         // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed
-        if ((botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")) && !ModConfig.config.disableBossTierGeneration)
+        if (ModConfig.config.disableBossTierGeneration && (botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")))
         {
-            compatibleModsPool = customModPool.mods[parentTemplate._id];
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
         }
-        else if (botRole.includes("follower") && !ModConfig.config.disableBossFollowerTierGeneration)
+        if (ModConfig.config.disableBossFollowerTierGeneration && botRole.includes("follower"))
         {
-            compatibleModsPool = customModPool.mods[parentTemplate._id];
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
         }
-        else if ((botRole.includes("exusec") || botRole.includes("pmcbot")) && !ModConfig.config.disableRaiderRogueTierGeneration)
+        if (ModConfig.config.disableRaiderRogueTierGeneration && (botRole.includes("exusec") || botRole.includes("pmcbot")))
         {
-            compatibleModsPool = customModPool.mods[parentTemplate._id];
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
         }
-        else if (botRole.includes("pmc") && !ModConfig.config.disablePMCTierGeneration)
+        if (ModConfig.config.disablePMCTierGeneration && (botRole.includes("pmcusec") || botRole.includes("pmcbear")))
         {
-            compatibleModsPool = customModPool.mods[parentTemplate._id];
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
         }
-        else if ((botRole.includes("assault") || botRole.includes("marksman")) && !ModConfig.config.disableScavTierGeneration)
+        if (ModConfig.config.disableScavTierGeneration && (botRole.includes("assault") || botRole.includes("marksman")))
         {
-            compatibleModsPool = customModPool.mods[parentTemplate._id];
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
         }
 
         if (!compatibleModsPool)
@@ -119,6 +135,8 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         // Iterate over mod pool and choose mods to add to item
         for (const modSlotName in compatibleModsPool)
         {
+            if (modSlotName === "mod_equipment_000" && this.raidInformation.nightTime) continue;
+
             const itemSlotTemplate = this.getModItemSlotFromDb(modSlotName, parentTemplate);
             if (!itemSlotTemplate)
             {
@@ -135,7 +153,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             const modSpawnResult = this.shouldModBeSpawned(
                 itemSlotTemplate,
                 modSlotName.toLowerCase(),
-                settings.spawnChances.equipmentMods,
+                spawnChances.equipmentMods,
                 settings.botEquipmentConfig
             );
             if (modSpawnResult === ModSpawn.SKIP && !forceSpawn)
@@ -143,10 +161,17 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 continue;
             }
 
-            // Ensure submods for nvgs all spawn together
+            // Ensure submods for nvgs all spawn together if it's night
             if (modSlotName === "mod_nvg")
             {
-                forceSpawn = true;
+                if (this.raidInformation.nightTime) 
+                {
+                    forceSpawn = true;
+                }
+                else
+                {
+                    continue;
+                }
             }
 
             let modPoolToChooseFrom = compatibleModsPool[modSlotName];
@@ -214,17 +239,17 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             }
 
             const modTemplate = this.itemHelper.getItem(modTpl);
-            if (!this.isModValidForSlot(modTemplate, itemSlotTemplate, modSlotName, parentTemplate, settings.botRole))
+            if (!this.isModValidForSlot(modTemplate, itemSlotTemplate, modSlotName, parentTemplate, botRole))
             {
                 continue;
             }
 
             // Generate new id to ensure all items are unique on bot
             const modId = this.hashUtil.generate();
-            equipment.push(this.createModItem(modId, modTpl, parentId, modSlotName, modTemplate[1], settings.botRole));
+            equipment.push(this.createModItem(modId, modTpl, parentId, modSlotName, modTemplate[1], botRole));
 
             // Does the item being added have possible child mods?
-            if (Object.keys(customModPool.mods).includes(modTpl))
+            if (Object.keys(actualModPool).includes(modTpl))
             {
                 // Call self recursively with item being checkced item we just added to bot
                 this.generateModsForEquipment(equipment, modId, modTemplate[1], settings, forceSpawn);
@@ -279,16 +304,22 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         // Filter plates to the chosen level based on its armorClass property
         let platesOfDesiredLevel = platesFromDb.filter((item) => item._props.armorClass === chosenArmorPlateLevel);
         let tries = 0;
-        while (platesOfDesiredLevel.length === 0 && tries <= 4)
+        while (platesOfDesiredLevel.length === 0)
         {
+            tries++;
             chosenArmorPlateLevel = (parseInt(chosenArmorPlateLevel)+1).toString()
+            if (parseInt(chosenArmorPlateLevel) > 6) 
+            {
+                chosenArmorPlateLevel = "3"
+            }            
             platesFromDb = existingPlateTplPool.map((plateTpl) => this.itemHelper.getItem(plateTpl)[1]);
             platesOfDesiredLevel = platesFromDb.filter((item) => item._props.armorClass === chosenArmorPlateLevel);
 
-            tries++;
+            if (platesOfDesiredLevel.length > 0) break;
+            if (tries >= 3) break;
         }
 
-        if (tries >= 4)
+        if (platesOfDesiredLevel.length === 0)
         {
             this.logger.debug(`${settings.botRole} - Plate filter was too restrictive for armor: ${armorItem._id}. Tried ${tries} times. Using mod items default plate.`);
 

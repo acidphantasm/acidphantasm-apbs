@@ -9,14 +9,6 @@ import { DatabaseService } from "@spt/services/DatabaseService";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 
-import Tier1 = require("../db/Tier1.json");
-import Tier2 = require("../db/Tier2.json");
-import Tier3 = require("../db/Tier3.json");
-import Tier4 = require("../db/Tier4.json");
-import Tier5 = require("../db/Tier5.json");
-import Tier6 = require("../db/Tier6.json");
-import Tier7 = require("../db/Tier7.json");
-import mods = require("../db/mods.json");
 import { ModConfig } from "../Globals/ModConfig";
 
 @injectable()
@@ -60,20 +52,8 @@ export class ModdedWeaponHelper
 
     public initialize():void
     {
-        this.buildTierJson();
         if (ModConfig.config.enableModdedWeapons)
             this.buildVanillaWeaponList();
-    }
-
-    private buildTierJson(): void
-    {
-        this.tierInformation.tier1 = Tier1;
-        this.tierInformation.tier2 = Tier2;
-        this.tierInformation.tier3 = Tier3;
-        this.tierInformation.tier4 = Tier4;
-        this.tierInformation.tier5 = Tier5;
-        this.tierInformation.tier6 = Tier6;
-        this.tierInformation.tier7 = Tier7;
     }
 
     private buildVanillaWeaponList(): void
@@ -173,8 +153,8 @@ export class ModdedWeaponHelper
                 tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
                 tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 0
                 tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
-                tierJson.boss.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 15
-                tierJson.boss.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 15
+                tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
                 
                 tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
                 tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
@@ -182,8 +162,8 @@ export class ModdedWeaponHelper
                 tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
                 tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 0
                 tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
-                tierJson.boss.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
-                tierJson.boss.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
+                tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
 
                 this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 15.`)
             }
@@ -192,7 +172,7 @@ export class ModdedWeaponHelper
                 tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
                 tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
                 tierJson.scav.equipment.Holster[weaponId] = 5
-                tierJson.boss.equipment.Holster[weaponId] = 5
+                tierJson.default.equipment.Holster[weaponId] = 5
 
                 this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 5.`)
             }
@@ -208,17 +188,35 @@ export class ModdedWeaponHelper
             {
                 const slotFilterItem = weaponSlots[slot]?._props?.filters[0]?.Filter[item];
 
-                if (mods.mods[weaponId] == undefined)
+                if (this.tierInformation.tier1mods[weaponId] == undefined)
                 {
-                    mods.mods[weaponId] = {};
+                    this.tierInformation.tier1mods[weaponId] = {};
+                    this.tierInformation.tier2mods[weaponId] = {};
+                    this.tierInformation.tier3mods[weaponId] = {};
+                    this.tierInformation.tier4mods[weaponId] = {};
+                    this.tierInformation.tier5mods[weaponId] = {};
+                    this.tierInformation.tier6mods[weaponId] = {};
+                    this.tierInformation.tier7mods[weaponId] = {};
                 }
-                if (mods.mods[weaponId][slotName] == undefined)
+                if (this.tierInformation.tier1mods[weaponId][slotName] == undefined)
                 {
-                    mods.mods[weaponId][slotName] = [];
+                    this.tierInformation.tier1mods[weaponId][slotName] = [];
+                    this.tierInformation.tier2mods[weaponId][slotName] = [];
+                    this.tierInformation.tier3mods[weaponId][slotName] = [];
+                    this.tierInformation.tier4mods[weaponId][slotName] = [];
+                    this.tierInformation.tier5mods[weaponId][slotName] = [];
+                    this.tierInformation.tier6mods[weaponId][slotName] = [];
+                    this.tierInformation.tier7mods[weaponId][slotName] = [];
                 }
-                if (!mods.mods[weaponId][slotName].includes(slotFilterItem))
+                if (!this.tierInformation.tier1mods[weaponId][slotName].includes(slotFilterItem))
                 {
-                    mods.mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier1mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier2mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier3mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier4mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier5mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier6mods[weaponId][slotName].push(slotFilterItem);
+                    this.tierInformation.tier7mods[weaponId][slotName].push(slotFilterItem);
                     this.recursivePushChildrenMods(slotFilterItem);
                 }
             }
@@ -238,17 +236,35 @@ export class ModdedWeaponHelper
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
                 
-                if (mods.mods[parentSlotItemID] == undefined)
+                if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
                 {
-                    mods.mods[parentSlotItemID] = {};
+                    this.tierInformation.tier1mods[parentSlotItemID] = {};
+                    this.tierInformation.tier2mods[parentSlotItemID] = {};
+                    this.tierInformation.tier3mods[parentSlotItemID] = {};
+                    this.tierInformation.tier4mods[parentSlotItemID] = {};
+                    this.tierInformation.tier5mods[parentSlotItemID] = {};
+                    this.tierInformation.tier6mods[parentSlotItemID] = {};
+                    this.tierInformation.tier7mods[parentSlotItemID] = {};
                 }
-                if (mods.mods[parentSlotItemID][slotName] == undefined)
+                if (this.tierInformation.tier1mods[parentSlotItemID][slotName] == undefined)
                 {
-                    mods.mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier1mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier2mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier3mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier4mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier5mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier6mods[parentSlotItemID][slotName] = [];
+                    this.tierInformation.tier7mods[parentSlotItemID][slotName] = [];
                 }
-                if (!mods.mods[parentSlotItemID][slotName].includes(slotFilterItem))
+                if (!this.tierInformation.tier1mods[parentSlotItemID][slotName].includes(slotFilterItem))
                 {
-                    mods.mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier4mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier5mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier6mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    this.tierInformation.tier7mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.recursivePushChildrenMods(slotFilterItem);
                 }
             }

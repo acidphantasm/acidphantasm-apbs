@@ -9,6 +9,30 @@ export class TierInformation
     public tier6;
     public tier7;
 
+    public tier1mods;
+    public tier2mods;
+    public tier3mods;
+    public tier4mods;
+    public tier5mods;
+    public tier6mods;
+    public tier7mods;
+
+    public tier1chances;
+    public tier2chances;
+    public tier3chances;
+    public tier4chances;
+    public tier5chances;
+    public tier6chances;
+    public tier7chances;
+
+    public tier1ammo;
+    public tier2ammo;
+    public tier3ammo;
+    public tier4ammo;
+    public tier5ammo;
+    public tier6ammo;
+    public tier7ammo;
+
     public tiers = [
         {
             tier: 1,
@@ -100,27 +124,27 @@ export class TierInformation
             },
             "front_plate": {
                 "3": 35,
-                "4": 25,
+                "4": 30,
                 "5": 3
             },
             "back_plate": {
                 "3": 35,
-                "4": 25,
+                "4": 30,
                 "5": 3
             },
             "side_plate": {
                 "3": 35,
-                "4": 25,
+                "4": 30,
                 "5": 3
             },
             "left_side_plate": {
                 "3": 35,
-                "4": 25,
+                "4": 30,
                 "5": 3
             },
             "right_side_plate": {
                 "3": 35,
-                "4": 25,
+                "4": 30,
                 "5": 3
             }
         },
@@ -131,31 +155,31 @@ export class TierInformation
             },
             "front_plate": {
                 "3": 10,
-                "4": 30,
+                "4": 55,
                 "5": 15,
                 "6": 3
             },
             "back_plate": {
                 "3": 10,
-                "4": 30,
+                "4": 55,
                 "5": 15,
                 "6": 3
             },
             "side_plate": {
                 "3": 10,
-                "4": 30,
+                "4": 55,
                 "5": 15,
                 "6": 3
             },
             "left_side_plate": {
                 "3": 10,
-                "4": 30,
+                "4": 55,
                 "5": 15,
                 "6": 3
             },
             "right_side_plate": {
                 "3": 10,
-                "4": 30,
+                "4": 55,
                 "5": 15,
                 "6": 3
             }
@@ -166,27 +190,32 @@ export class TierInformation
                 "max": 40
             },
             "front_plate": {
-                "4": 15,
+                "3": 5,
+                "4": 25,
                 "5": 30,
                 "6": 20
             },
             "back_plate": {
-                "4": 15,
+                "3": 5,
+                "4": 25,
                 "5": 30,
                 "6": 20
             },
             "side_plate": {
-                "4": 15,
+                "3": 5,
+                "4": 25,
                 "5": 30,
                 "6": 20
             },
             "left_side_plate": {
-                "4": 15,
+                "3": 5,
+                "4": 25,
                 "5": 30,
                 "6": 20
             },
             "right_side_plate": {
-                "4": 15,
+                "3": 5,
+                "4": 25,
                 "5": 30,
                 "6": 20
             }

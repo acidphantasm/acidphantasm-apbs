@@ -123,16 +123,61 @@ export class APBSStaticRouterHooks
     private logLocation(info: any):void
     {
         this.raidInformation.location = info.location;
-        
-        this.apbsLogger.log( 
-            Logging.DEBUG,
-            "-------Raid Information-------",
-            `| Location: ${this.raidInformation.location}`,
-            "------------------------------"
+        const gameTime = this.weatherGenerator.calculateGameTime({ acceleration: 0, time: "", date: "", weather: undefined, season: 1 }).time;
+
+        if (info.timeVariant === "PAST") this.raidInformation.currentTime = this.parseTime(gameTime, 12, info.location)
+        if (info.timeVariant === "CURR") this.raidInformation.currentTime = this.parseTime(gameTime, 0, info.location)
+        this.raidInformation.nightTime = this.isNight(this.raidInformation.currentTime);
+
+        this.apbsLogger.log(
+            Logging.WARN,
+            "--Raid Information--\n",
+            `| Location: ${this.raidInformation.location}\n`,
+            `| Time: ${this.raidInformation.currentTime}\n`,
+            `| Night: ${this.raidInformation.nightTime}\n`,
+            "--------------------------\n"
         );
     }
 
-    private logBotGeneration(outputJSON: any):void
+    private parseTime(time, hourDiff, location) 
+    {
+        if (location == "factory4_night")
+        {
+            return "03:28"
+        }
+        else if (location == "factory4_day" || location == "laboratory")
+        {
+            return "15:28"
+        }
+        else
+        {
+            const [hours, minutes] = time.split(":");
+            if (hourDiff == 12 && parseInt(hours) >= 12)
+            {
+                return `${Math.abs(parseInt(hours) - hourDiff)}:${minutes}`
+            }
+            if (hourDiff == 12 && parseInt(hours) < 12)
+            {
+                return `${Math.abs(parseInt(hours) + hourDiff)}:${minutes}`
+            }
+            return `${hours}:${minutes}`
+        }
+    }
+    
+    private isNight(time) 
+    {
+        const [hours, minutes] = time.split(":");
+        if (parseInt(hours) >= 5 && parseInt(hours) < 20)
+        {
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+
+    private logBotGeneration(outputJSON: any): void
     {
         const start = performance.now()
 
@@ -165,7 +210,9 @@ export class APBSStaticRouterHooks
                     );
                     break;
                 case "arenaFighterEvent":
+                case "arenaFighter":
                 case "exUsec":
+                case "pmcbot":
                     this.apbsLogger.log(
                         Logging.RAIDER,
                         "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
@@ -252,6 +299,7 @@ export class APBSStaticRouterHooks
         let holsterID;
         let holsterCaliberID;
         let helmetID;
+        let nvgID;
         let earProID;
         let armourVestID;
         let frontPlateID;
@@ -262,6 +310,22 @@ export class APBSStaticRouterHooks
         let canHavePlates = false;
 
         const botDetails = detailsJSON.data[0].Inventory.items;
+
+        let grenadeCount = 0;
+        for (const item in botDetails) 
+        {
+            if (botDetails[item]._tpl === ("5710c24ad2720bc3458b45a3" || 
+                "58d3db5386f77426186285a0" || 
+                "618a431df1eb8e24b8741deb" || 
+                "5448be9a4bdc2dfd2f8b456a" || 
+                "5e32f56fcb6d5863cc5e5ee4" || 
+                "5e340dcdcb6d5863cc5e5efb" || 
+                "617fd91e5539a84ec44ce155" )) 
+            {
+                grenadeCount++;
+            }
+            
+        }
 
         const primaryWeapon = botDetails.find(e => e.slotId === "FirstPrimaryWeapon");
         if (typeof primaryWeapon !== "undefined") 
@@ -300,6 +364,12 @@ export class APBSStaticRouterHooks
         if (typeof helmet !== "undefined") 
         {
             helmetID = this.itemHelper.getItemName(helmet._tpl);
+        }
+
+        const nvg = botDetails.find(e => e.slotId === "mod_nvg" && "upd" in e);
+        if (typeof nvg !== "undefined") 
+        {
+            nvgID = this.itemHelper.getItemName(nvg._tpl);
         }
 
         const earPro = botDetails.find(e => e.slotId === "Earpiece");
@@ -358,13 +428,15 @@ export class APBSStaticRouterHooks
             holsterID,
             holsterCaliberID,
             helmetID,
+            nvgID,
             earProID,
             canHavePlates,
             armourVestID,
             frontPlateID,
             backPlateID,
             lSidePlateID,
-            rSidePlateID
+            rSidePlateID,
+            grenadeCount
         }
     }
 
@@ -386,7 +458,8 @@ export class APBSStaticRouterHooks
             `Role: ${botDetails.role}`,
             `Nickname: ${botDetails.name}`,
             `Level: ${botDetails.level}`,
-            `Difficulty: ${botDetails.difficulty}`
+            `Difficulty: ${botDetails.difficulty}`,
+            `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`
         ];
         let temporaryMessage2: string[] = [
             `Primary: ${botDetails.primaryID ?? "None" }`,
@@ -398,6 +471,7 @@ export class APBSStaticRouterHooks
         ];
         let temporaryMessage3: string[] = [
             `Helmet: ${botDetails.helmetID ?? "None" }`,
+            `NVG: ${botDetails.nvgID ?? "None" }`,
             `Ears: ${botDetails.earProID ?? "None" }`,
             `Armour/Rig: ${botDetails.armourVestID ?? "None" }`
         ];
