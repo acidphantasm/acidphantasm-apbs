@@ -1018,10 +1018,6 @@
     ]
   },
   "560835c74bdc2dc8488b456f": {
-    "mod_mount": [
-      "609b9e31506cf869cf3eaf41",
-      "5dfe14f30b92095fd441edaf"
-    ],
     "mod_muzzle": [
       "5c0111ab0db834001966914d"
     ]
@@ -1034,20 +1030,12 @@
     ]
   },
   "560837154bdc2da74d8b4568": {
-    "mod_mount": [
-      "609b9e31506cf869cf3eaf41",
-      "5dfe14f30b92095fd441edaf"
-    ],
     "mod_muzzle": [
       "5c0111ab0db834001966914d",
       "560838c94bdc2d77798b4569"
     ]
   },
   "5608379a4bdc2d26448b4569": {
-    "mod_mount": [
-      "609b9e31506cf869cf3eaf41",
-      "5dfe14f30b92095fd441edaf"
-    ],
     "mod_muzzle": [
       "5c0111ab0db834001966914d"
     ]
@@ -2492,10 +2480,6 @@
     ]
   },
   "588200af24597742fa221dfb": {
-    "mod_mount": [
-      "609b9e31506cf869cf3eaf41",
-      "5dfe14f30b92095fd441edaf"
-    ],
     "mod_muzzle": [
       "5c0111ab0db834001966914d",
       "560838c94bdc2d77798b4569",
@@ -18041,10 +18025,6 @@
     ]
   },
   "612368f58b401f4f51239b33": {
-    "mod_mount": [
-      "609b9e31506cf869cf3eaf41",
-      "5dfe14f30b92095fd441edaf"
-    ],
     "mod_muzzle": [
       "619d36da53b4d42ee724fae4"
     ]
