@@ -35,6 +35,7 @@ export class BotConfigs
         this.configureScavWeaponDurability();
         this.adjustNVG();
         this.setLootItemResourceRandomization();
+        if (ModConfig.config.enableCustomPlateChances) this.setPlateChances()
         if (ModConfig.config.forceStock) this.setForceStock()
         if (ModConfig.config.forceDustCover) this.setForceDustCover();
         if (ModConfig.config.forceScopeSlot) this.setForceScopes()
@@ -154,6 +155,44 @@ export class BotConfigs
             for (const botType in this.tierInformation.tier1chances)
             {
                 tierJson[botType].chances.weaponMods["mod_scope"] = 100;
+            }
+        }
+    }
+
+    private setPlateChances() 
+    {
+        for (const tierObject in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[tierObject].tier
+            const tierJson = this.apbsEquipmentGetter.getTierChancesJson(tierNumber);
+
+            for (const botType in this.tierInformation.tier1chances)
+            {
+                if (botType == "pmcUSEC" || botType == "pmcBEAR")
+                {
+                    tierJson[botType].chances.equipmentMods["back_plate"] = tierJson[botType].chances.equipmentMods["front_plate"] = ModConfig.config.pmcMainPlateChance[tierObject];
+                    tierJson[botType].chances.equipmentMods["left_side_plate"] = tierJson[botType].chances.equipmentMods["right_side_plate"] = ModConfig.config.pmcSidePlateChance[tierObject];
+                }
+                if (botType == "followerbirdeye" || botType == "followerbigpipe" || botType.includes("boss") || botType.includes("sectant"))
+                {
+                    tierJson[botType].chances.equipmentMods["back_plate"] = tierJson[botType].chances.equipmentMods["front_plate"] = ModConfig.config.bossMainPlateChance[tierObject];
+                    tierJson[botType].chances.equipmentMods["left_side_plate"] = tierJson[botType].chances.equipmentMods["right_side_plate"] = ModConfig.config.bossSidePlateChance[tierObject];
+                }
+                if (botType == "scav")
+                {
+                    tierJson[botType].chances.equipmentMods["back_plate"] = tierJson[botType].chances.equipmentMods["front_plate"] = ModConfig.config.scavMainPlateChance[tierObject];
+                    tierJson[botType].chances.equipmentMods["left_side_plate"] = tierJson[botType].chances.equipmentMods["right_side_plate"] = ModConfig.config.scavSidePlateChance[tierObject];
+                }
+                if (botType == "exusec" || botType == "pmcbot")
+                {
+                    tierJson[botType].chances.equipmentMods["back_plate"] = tierJson[botType].chances.equipmentMods["front_plate"] = ModConfig.config.raiderMainPlateChance[tierObject];
+                    tierJson[botType].chances.equipmentMods["left_side_plate"] = tierJson[botType].chances.equipmentMods["right_side_plate"] = ModConfig.config.raiderSidePlateChance[tierObject];
+                }
+                if (botType == "default")
+                {
+                    tierJson[botType].chances.equipmentMods["back_plate"] = tierJson[botType].chances.equipmentMods["front_plate"] = ModConfig.config.guardMainPlateChance[tierObject];
+                    tierJson[botType].chances.equipmentMods["left_side_plate"] = tierJson[botType].chances.equipmentMods["right_side_plate"] = ModConfig.config.guardSidePlateChance[tierObject];
+                }
             }
         }
     }
