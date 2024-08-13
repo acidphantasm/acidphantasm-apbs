@@ -60,22 +60,26 @@ export class ModdedWeaponHelper
     {
         const tier7JSON = this.apbsEquipmentGetter.getTierJson(7)
         
-        Object.keys(tier7JSON.scav.equipment.FirstPrimaryWeapon.LongRange).forEach(element => {
+        Object.keys(tier7JSON.scav.equipment.FirstPrimaryWeapon.LongRange).forEach(element => 
+        {
             const data = this.getItem(element)
             this.tieredWeaponList[element] = data
         })
         
-        Object.keys(tier7JSON.scav.equipment.FirstPrimaryWeapon.ShortRange).forEach(element => {
+        Object.keys(tier7JSON.scav.equipment.FirstPrimaryWeapon.ShortRange).forEach(element => 
+        {
             const data = this.getItem(element)
             this.tieredWeaponList[element] = data;
         })
 
-        Object.keys(tier7JSON.scav.equipment.Holster).forEach(element => {
+        Object.keys(tier7JSON.scav.equipment.Holster).forEach(element => 
+        {
             const data = this.getItem(element)
             this.tieredWeaponList[element] = data;
         })
 
-        Object.keys(tier7JSON.scav.equipment.Scabbard).forEach(element => {
+        Object.keys(tier7JSON.scav.equipment.Scabbard).forEach(element => 
+        {
             const data = this.getItem(element)
             this.tieredWeaponList[element] = data;
         })
