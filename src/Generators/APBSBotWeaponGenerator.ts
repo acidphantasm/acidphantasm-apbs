@@ -88,27 +88,27 @@ export class APBSBotWeaponGenerator
                 }
 
                 // Config disable checks to flip to default weapon gen
-                if ((botRole.includes("boss") || botRole.includes("sectant")) && ModConfig.config.disableBossTierGeneration)
+                if (ModConfig.config.disableBossTierGeneration && (botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")))
                 {
                     const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
                     return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
                 }
-                if (botRole.includes("follower") && ModConfig.config.disableBossFollowerTierGeneration)
+                if (ModConfig.config.disableBossFollowerTierGeneration && botRole.includes("follower"))
                 {
                     const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
                     return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
                 }
-                if ((botRole.includes("exusec") || botRole.includes("pmcbot")) && !ModConfig.config.disableRaiderRogueTierGeneration)
+                if (ModConfig.config.disableRaiderRogueTierGeneration && (botRole.includes("exusec") || botRole.includes("pmcbot")))
                 {
                     const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
                     return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
                 }
-                if (botRole.includes("pmc") && ModConfig.config.disablePMCTierGeneration)
+                if (ModConfig.config.disablePMCTierGeneration && (botRole.includes("pmcusec") || botRole.includes("pmcbear")))
                 {
                     const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
                     return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
                 }
-                if ((botRole.includes("assault") || botRole.includes("marksman")) && ModConfig.config.disableScavTierGeneration)
+                if (ModConfig.config.disableScavTierGeneration && (botRole.includes("assault") || botRole.includes("marksman")))
                 {
                     const weaponTpl = this.botWeaponGenerator.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
                     return this.botWeaponGenerator.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
