@@ -116,7 +116,7 @@ export class APBSBotWeaponGenerator
 
                 // If not disabled via config, all bots follow this custom generation
                 const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-                const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole, botTemplateInventory);
+                const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole);
                 return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierInfo)
             };
         },
@@ -125,7 +125,7 @@ export class APBSBotWeaponGenerator
         this.apbsLogger.log(Logging.DEBUG, "Bot Weapon Generator registered");
     }
 
-    private pickWeightedWeaponTplFromPool(equipmentSlot: string, botLevel: number, botRole: string, botTemplateInventory: Inventory): string
+    private pickWeightedWeaponTplFromPool(equipmentSlot: string, botLevel: number, botRole: string): string
     {
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
         
