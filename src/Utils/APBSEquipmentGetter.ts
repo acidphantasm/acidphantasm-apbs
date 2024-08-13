@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import { inject, injectable } from "tsyringe";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
