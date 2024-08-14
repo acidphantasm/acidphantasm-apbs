@@ -3,6 +3,12 @@
 // Any mods adding weapons loaded before APBS will have their weapons & attachments imported.
         "enableModdedWeapons": false,
 
+// Looking for a challenge, or maybe just want to chill and wreck some bots?
+// Enable "onlyChads" to force all bots to be Tier7, enable "tarkovAndChill" to force all bots to be Tier1
+// Enabling both will enable chaos mode, bots will pull gear and weapons from completely random Tiers during generation. It's chaos. (scavs still pull crap weapon mods and ammo)
+        "onlyChads": false,
+        "tarkovAndChill": false,
+
 // Disable specific bot generation
 // For each type that you disable, it will disable their tiered weapon and gear generation.
         "disableScavTierGeneration": false,

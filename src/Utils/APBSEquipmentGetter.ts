@@ -6,6 +6,8 @@ import { RaidInformation } from "../Globals/RaidInformation";
 import { Logging } from "../Enums/Logging";
 import { APBSLogger } from "./APBSLogger";
 import { TierInformation } from "../Globals/TierInformation";
+import { ModConfig } from "../Globals/ModConfig";
+import { RandomUtil } from "@spt/utils/RandomUtil";
 
 @injectable()
 export class APBSEquipmentGetter
@@ -15,12 +17,26 @@ export class APBSEquipmentGetter
         @inject("RaidInformation") protected raidInformation: RaidInformation,
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper,
-        @inject("APBSLogger") protected apbsLogger: APBSLogger
+        @inject("APBSLogger") protected apbsLogger: APBSLogger,
+        @inject("RandomUtil") protected randomUtil: RandomUtil
     )
     {}
 
+    private chadOrChill(tierInfo: number): number
+    {
+        if (ModConfig.config.onlyChads && ModConfig.config.tarkovAndChill)
+        {
+            return this.randomUtil.getInt(1, 7);
+        }
+        if (ModConfig.config.onlyChads) return 7;
+        if (ModConfig.config.tarkovAndChill) return 1;
+
+        return tierInfo;
+    }
+
     public getTierJson(tierInfo: number)
     {
+        tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
             case 1:
@@ -45,6 +61,7 @@ export class APBSEquipmentGetter
 
     public getTierModsJson(tierInfo: number)
     {
+        tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
             case 1:
@@ -69,6 +86,7 @@ export class APBSEquipmentGetter
 
     public getTierChancesJson(tierInfo: number)
     {
+        tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
             case 1:
@@ -93,6 +111,7 @@ export class APBSEquipmentGetter
 
     public getTierAmmoJson(tierInfo: number)
     {
+        tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
             case 1:

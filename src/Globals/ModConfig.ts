@@ -65,6 +65,8 @@ export class ModConfig
 export interface Config
 {
     enableModdedWeapons: boolean,
+    onlyChads: boolean,
+    tarkovAndChill: boolean,
     disableScavTierGeneration: boolean,
     disablePMCTierGeneration: boolean,
     disableBossTierGeneration: boolean,
