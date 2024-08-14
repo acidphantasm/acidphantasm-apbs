@@ -13,15 +13,14 @@
                 "Holster": 25,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 15,
-                "TacticalVest": 99,
-                "ArmouredRig": 99
+                "TacticalVest": 99
             },
             "equipmentMods": {
                 "back_plate": 100,
                 "front_plate": 100,
                 "left_side_plate": 100,
-                "mod_equipment": 35,
-                "mod_equipment_000": 35,
+                "mod_equipment": 75,
+                "mod_equipment_000": 75,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
                 "mod_nvg": 100,
@@ -212,15 +211,14 @@
                 "Holster": 25,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 15,
-                "TacticalVest": 99,
-                "ArmouredRig": 99
+                "TacticalVest": 99
             },
             "equipmentMods": {
                 "back_plate": 100,
                 "front_plate": 100,
                 "left_side_plate": 100,
-                "mod_equipment": 35,
-                "mod_equipment_000": 35,
+                "mod_equipment": 75,
+                "mod_equipment_000": 75,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
                 "mod_nvg": 100,

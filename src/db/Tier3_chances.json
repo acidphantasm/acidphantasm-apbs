@@ -21,8 +21,8 @@
                 "left_side_plate": 50,
                 "mod_equipment": 20,
                 "mod_equipment_000": 20,
-                "mod_equipment_001": 10,
-                "mod_equipment_002": 10,
+                "mod_equipment_001": 0,
+                "mod_equipment_002": 0,
                 "mod_nvg": 65,
                 "right_side_plate": 50
             },
@@ -211,8 +211,8 @@
                 "left_side_plate": 50,
                 "mod_equipment": 20,
                 "mod_equipment_000": 20,
-                "mod_equipment_001": 10,
-                "mod_equipment_002": 10,
+                "mod_equipment_001": 0,
+                "mod_equipment_002": 0,
                 "mod_nvg": 65,
                 "right_side_plate": 50
             },
