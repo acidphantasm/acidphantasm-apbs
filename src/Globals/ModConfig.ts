@@ -27,14 +27,9 @@ export class ModConfig
         {
             this.setTierLevelDeviation();
         }
-        this.logger.debug(`[APBS] Mod Config - FOR SUPPORT FOLKS LOL ❤❤`)
+        this.logger.debug(`[APBS] Mod Config - FOR SUPPORT FOLKS ❤❤`)
         this.logger.debug(`[APBS] Import Mod Weapons: ${ModConfig.config.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Scav Generation Disabled: ${ModConfig.config.disableScavTierGeneration}`)
-        this.logger.debug(`[APBS] PMC Generation Disabled: ${ModConfig.config.disablePMCTierGeneration}`)
-        this.logger.debug(`[APBS] Boss Generation Disabled: ${ModConfig.config.disableBossTierGeneration}`)
-        this.logger.debug(`[APBS] Guard/Follower Generation Disabled: ${ModConfig.config.disableBossFollowerTierGeneration}`)
-        this.logger.debug(`[APBS] Raider/Rogue Generation Disabled: ${ModConfig.config.disableRaiderRogueTierGeneration}`)
-        this.logger.debug(`[APBS] Using Custom Bot Levels: ${ModConfig.config.enableCustomLevelDeltas}`)
+        this.logger.debug(`[APBS] Import Mod Equipment: ${ModConfig.config.enableModdedEquipment} <- MUST BE FALSE FOR SUPPORT`)
     }
 
     private setTierLevelDeviation(): void
@@ -65,6 +60,7 @@ export class ModConfig
 export interface Config
 {
     enableModdedWeapons: boolean,
+    enableModdedEquipment: boolean,
     onlyChads: boolean,
     tarkovAndChill: boolean,
     disableScavTierGeneration: boolean,
