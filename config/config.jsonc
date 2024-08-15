@@ -34,6 +34,19 @@
 // If set to true, will enforce all AI weapons to be limited to 2 scopes and 2 lasers, if disabled the generation may go wild
         "forceWeaponModLimits": true,
 
+// Configure Weapon Durability per AI Bot Type
+// Numbers are as follows: [ minDurability, maxDurability, minDelta, maxDelta ]
+// Example: [ 50, 90, 0, 25 ]
+// Ex ctd: Minimum possible "max" durability would be 50%, the highest possible "max" durability is 90%
+// Ex ctd: Whatever value is picked between 50% & 90% will be the "max" durability of the weapon ("max" is the limit you can repair the weapon to)
+// Ex ctd: After the max durability is selected, it will roll for the actual current durability which will be between 0-25% lower than the max.
+// Ex ctd: Weapons are safeguarded to never fall below 40%.
+        "scavWeaponDurability": [ 50, 90, 0, 20 ],
+        "pmcWeaponDurability": [ 95, 100, 0, 5 ],
+        "bossWeaponDurability": [ 80, 100, 0, 20 ],
+        "guardWeaponDurability": [ 80, 100, 0, 20 ],
+        "raiderWeaponDurability": [ 80, 100, 0, 20 ],
+
 // Enable/Disable custom plate chances
 // If you REALLY don't like APBS plate chances then you can adjust it here.
 // If set to true, will change all AI plate chances to the values you set below, if false - will use APBS values 

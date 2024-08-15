@@ -32,7 +32,7 @@ export class BotConfigs
         this.configureBotExperienceLevels();
         this.configurePlateWeightings();
         this.clearNoLongerNeededBotDetails();
-        this.configureScavWeaponDurability();
+        this.configureWeaponDurability();
         this.adjustNVG();
         this.setLootItemResourceRandomization();
         if (ModConfig.config.enableCustomPlateChances) this.setPlateChances()
@@ -80,22 +80,54 @@ export class BotConfigs
         }
     }
 
-    private configureScavWeaponDurability(): void
+    private configureWeaponDurability(): void
     {
-        // Do this better in the future
+        // Do this better in the future - this looks like shit. Bad Acid. Bad.
         const botConfigDurability = this.botConfig.durability
 
-        botConfigDurability.assault.weapon.lowestMax = 50
-        botConfigDurability.assault.weapon.highestMax = 90
-        botConfigDurability.assault.weapon.maxDelta = 25
-        botConfigDurability.assault.weapon.minDelta = 0
-        botConfigDurability.assault.weapon.minLimitPercent = 15
-
-        botConfigDurability.marksman.weapon.lowestMax = 50
-        botConfigDurability.marksman.weapon.highestMax = 90
-        botConfigDurability.marksman.weapon.maxDelta = 25
-        botConfigDurability.marksman.weapon.minDelta = 0
-        botConfigDurability.marksman.weapon.minLimitPercent = 15
+        for (const botType in botConfigDurability)
+        {
+            if (botType == "pmc")
+            {
+                botConfigDurability[botType].weapon.lowestMax = ModConfig.config.pmcWeaponDurability[0]
+                botConfigDurability[botType].weapon.highestMax = ModConfig.config.pmcWeaponDurability[1]
+                botConfigDurability[botType].weapon.minDelta = ModConfig.config.pmcWeaponDurability[2]
+                botConfigDurability[botType].weapon.maxDelta = ModConfig.config.pmcWeaponDurability[3]
+                botConfigDurability[botType].weapon.minLimitPercent = 40
+            }
+            if (botType == "boss" || botType == "arenafighterevent" || botType == "arenafighter" || botType == "sectantpriest" || botType == "sectantwarrior")
+            {
+                botConfigDurability[botType].weapon.lowestMax = ModConfig.config.bossWeaponDurability[0]
+                botConfigDurability[botType].weapon.highestMax = ModConfig.config.bossWeaponDurability[1]
+                botConfigDurability[botType].weapon.minDelta = ModConfig.config.bossWeaponDurability[2]
+                botConfigDurability[botType].weapon.maxDelta = ModConfig.config.bossWeaponDurability[3]
+                botConfigDurability[botType].weapon.minLimitPercent = 40
+            }
+            if (botType == "assault" || botType == "cursedassault" || botType == "marksman" || botType == "crazyassaultevent" || botType == "default")
+            {
+                botConfigDurability[botType].weapon.lowestMax = ModConfig.config.scavWeaponDurability[0]
+                botConfigDurability[botType].weapon.highestMax = ModConfig.config.scavWeaponDurability[1]
+                botConfigDurability[botType].weapon.minDelta = ModConfig.config.scavWeaponDurability[2]
+                botConfigDurability[botType].weapon.maxDelta = ModConfig.config.scavWeaponDurability[3]
+                botConfigDurability[botType].weapon.minLimitPercent = 40
+            }
+            if (botType == "follower")
+            {
+                botConfigDurability[botType].weapon.lowestMax = ModConfig.config.guardWeaponDurability[0]
+                botConfigDurability[botType].weapon.highestMax = ModConfig.config.guardWeaponDurability[1]
+                botConfigDurability[botType].weapon.minDelta = ModConfig.config.guardWeaponDurability[2]
+                botConfigDurability[botType].weapon.maxDelta = ModConfig.config.guardWeaponDurability[3]
+                botConfigDurability[botType].weapon.minLimitPercent = 40
+            }
+            if (botType == "pmcbot" || botType == "exusec")
+            {
+                botConfigDurability[botType].weapon.lowestMax = ModConfig.config.raiderWeaponDurability[0]
+                botConfigDurability[botType].weapon.highestMax = ModConfig.config.raiderWeaponDurability[1]
+                botConfigDurability[botType].weapon.minDelta = ModConfig.config.raiderWeaponDurability[2]
+                botConfigDurability[botType].weapon.maxDelta = ModConfig.config.raiderWeaponDurability[3]
+                botConfigDurability[botType].weapon.minLimitPercent = 40
+            }
+        }
     }
 
     private adjustNVG(): void
