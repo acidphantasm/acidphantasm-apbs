@@ -232,32 +232,32 @@ export class ModdedImportHelper
             }
             if (weaponType == "primary")
             {
-                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 15
-                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
-                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 15
-                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
+                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
+                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
+                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
                 tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 0
                 tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
-                tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 15
-                tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 7
+                tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 7
                 
-                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
-                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
-                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
-                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
+                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
+                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
+                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
                 tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 0
                 tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
-                tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 15
-                tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 15
+                tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
+                tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
 
                 this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 15.`)
             }
             if (weaponType == "secondary")
             {
-                tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
-                tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
-                tierJson.scav.equipment.Holster[weaponId] = 5
-                tierJson.default.equipment.Holster[weaponId] = 5
+                tierJson.pmcUSEC.equipment.Holster[weaponId] = 4
+                tierJson.pmcBEAR.equipment.Holster[weaponId] = 4
+                tierJson.scav.equipment.Holster[weaponId] = 4
+                tierJson.default.equipment.Holster[weaponId] = 4
 
                 this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 5.`)
             }
@@ -278,7 +278,7 @@ export class ModdedImportHelper
             let weight;
             if (equipmentSlot == "TacticalVest" && gridLength > 10) weight = 10;
             if (equipmentSlot == "TacticalVest" && gridLength <= 10) weight = 1;
-            if (equipmentSlot == "ArmouredRig") weight = 75;
+            if (equipmentSlot == "ArmouredRig") weight = 80;
             if (equipmentSlot == "ArmorVest") weight = 20;
             if (equipmentSlot == "Headwear") weight = 7;
 
