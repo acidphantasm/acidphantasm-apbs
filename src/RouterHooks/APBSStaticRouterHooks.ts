@@ -133,7 +133,6 @@ export class APBSStaticRouterHooks
         this.apbsLogger.log(Logging.WARN, `| Location: ${this.raidInformation.location}`);
         this.apbsLogger.log(Logging.WARN, `| Time: ${this.raidInformation.currentTime}`);
         this.apbsLogger.log(Logging.WARN, `| Night: ${this.raidInformation.nightTime}`);
-        this.apbsLogger.log(Logging.WARN, "--------------------------");
     }
 
     private parseTime(time, hourDiff, location) 
