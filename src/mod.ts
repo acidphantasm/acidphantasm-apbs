@@ -32,7 +32,6 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         // Register necessary routers & SPT method changes
         this.instance.apbsStaticRouterHooks.registerRouterHooks();
         this.instance.apbsBotLevelGenerator.registerBotLevelGenerator(container);
-        this.instance.apbsBotWeaponGenerator.registerBotWeaponGenerator(container);
 
         this.instance.jsonHelper.buildTierJson();
 
