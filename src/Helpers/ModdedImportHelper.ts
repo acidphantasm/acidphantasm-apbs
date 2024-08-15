@@ -74,7 +74,7 @@ export class ModdedImportHelper
 
     private buildVanillaWeaponList(): void
     {
-        this.apbsLogger.log(Logging.WARN, "Checking for Modded Weapons...")
+        this.apbsLogger.log(Logging.WARN, "Checking for Modded Weapons...Support not granted for this feature...")
         const tier7JSON = this.tierInformation.tier7
         
         const weapons: ITemplateItem = {};
@@ -103,7 +103,7 @@ export class ModdedImportHelper
 
     private buildVanillaEquipmentList(): void
     {
-        this.apbsLogger.log(Logging.WARN, "Checking for Modded Equipment...")
+        this.apbsLogger.log(Logging.WARN, "Checking for Modded Equipment...Support not granted for this feature...")
         const tier7JSON = this.tierInformation.tier7
 
         const armours: ITemplateItem = {};
