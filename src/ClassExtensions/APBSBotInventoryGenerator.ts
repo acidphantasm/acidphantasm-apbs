@@ -142,7 +142,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         const botRole = settings.botRole;
         const botLevel = settings.botLevel;
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-
+        
         let equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
         let randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
         let wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
@@ -193,6 +193,11 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         if (apbsBot && equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
         {
             equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
+        }
+        
+        if (equipmentSlot == EquipmentSlots.POCKETS && Object.keys(settings.rootEquipmentPool).includes("65e080be269cbd5c5005e529"))
+        {
+            equipmentPool = settings.rootEquipmentPool;
         }
 
         const spawnChance = ([EquipmentSlots.POCKETS, EquipmentSlots.SECURED_CONTAINER] as string[]).includes(
