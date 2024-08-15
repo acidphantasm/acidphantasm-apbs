@@ -72,7 +72,7 @@ export class APBSLogger
                 if (showInConsole)
                 {
                     consoleMessage += `${messagesArray[line]}`;
-                    messages += `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}`;
+                    messages += `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
                     continue;
                 }
                 messages += `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
