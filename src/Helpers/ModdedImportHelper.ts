@@ -43,12 +43,10 @@ export class ModdedImportHelper
             "66015072e9f84d5680039678",
             "59f9cabd86f7743a10721f46",
             "5abccb7dd8ce87001773e277",
-
             "56e33634d2720bd8058b456b", //backpacks
             "5e4abc6786f77406812bd572",
             "5e997f0b86f7741ac73993e2",
             "61b9e1aaef9a1b5d6a79899a",
-
             "61c18db6dfd64163ea78fbb4", //headwear
             "65749cb8e0423b9ebe0c79c9",
             "60a7acf20c5cb24b01346648",
@@ -191,6 +189,7 @@ export class ModdedImportHelper
             const equipmentParent = modEquipmentPool[equipment]._parent;
             const equipmentId = modEquipmentPool[equipment]._id;
             const equipmentSlots = modEquipmentPool[equipment]?._props?.Slots;
+            const equipmentSlotsLength = modEquipmentPool[equipment]?._props?.Slots.length;
             const gridLength = modEquipmentPool[equipment]?._props?.Grids.length;
             let equipmentSlot;
 
@@ -211,7 +210,7 @@ export class ModdedImportHelper
                 equipmentSlot = "Headwear"
             }
 
-            this.pushEquipmentToTiers(equipmentId, equipmentSlot, gridLength);
+            this.pushEquipmentToTiers(equipmentId, equipmentSlot, gridLength, equipmentSlotsLength);
             this.pushItemAndPrimaryMods(equipmentId, equipmentSlots);
 
             //console.log(JSON.stringify(modEquipmentPool[equipment]))
@@ -264,7 +263,7 @@ export class ModdedImportHelper
         }
     }
 
-    private pushEquipmentToTiers(itemID: string, equipmentSlot: string, gridLength: number): void
+    private pushEquipmentToTiers(itemID: string, equipmentSlot: string, gridLength: number, equipmentSlotsLength: number): void
     {
         for (const object in this.tierInformation.tiers)
         {
@@ -278,9 +277,10 @@ export class ModdedImportHelper
             let weight;
             if (equipmentSlot == "TacticalVest" && gridLength > 10) weight = 10;
             if (equipmentSlot == "TacticalVest" && gridLength <= 10) weight = 1;
-            if (equipmentSlot == "ArmouredRig") weight = 80;
+            if (equipmentSlot == "ArmouredRig") weight = 70;
             if (equipmentSlot == "ArmorVest") weight = 20;
-            if (equipmentSlot == "Headwear") weight = 7;
+            if (equipmentSlot == "Headwear" && equipmentSlotsLength > 0) weight = 7;
+            if (equipmentSlot == "Headwear" && equipmentSlotsLength == 0) weight = 1;
 
             tierJson.pmcUSEC.equipment[equipmentSlot][itemID] = weight
             tierJson.pmcBEAR.equipment[equipmentSlot][itemID] = weight
