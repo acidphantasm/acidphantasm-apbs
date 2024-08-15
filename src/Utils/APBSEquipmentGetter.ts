@@ -59,6 +59,30 @@ export class APBSEquipmentGetter
         }
     }
 
+    public getTierJsonWithoutConfigChecks(tierInfo: number)
+    {
+        switch (tierInfo)
+        {
+            case 1:
+                return this.tierInformation.tier1
+            case 2:
+                return this.tierInformation.tier2
+            case 3:
+                return this.tierInformation.tier3
+            case 4:
+                return this.tierInformation.tier4
+            case 5:
+                return this.tierInformation.tier5
+            case 6:
+                return this.tierInformation.tier6
+            case 7:
+                return this.tierInformation.tier7
+            default:
+                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 loadout.");
+                return this.tierInformation.tier1
+        }
+    }
+
     public getTierModsJson(tierInfo: number)
     {
         tierInfo = this.chadOrChill(tierInfo);
