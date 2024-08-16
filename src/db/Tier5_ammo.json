@@ -150,9 +150,8 @@
     "pmcAmmo": {
         "Caliber1143x23ACP": {
             "5ea2a8e200685063ec28c05a": 30,
-            "5efb0d4f4bc50b58e81710f3": 10,
-            "5e81f423763d9f754677bf2e": 60,
-            "5efb0cabfb3e451d70735af5": 35
+            "5e81f423763d9f754677bf2e": 10,
+            "5efb0cabfb3e451d70735af5": 60
         },
         "Caliber127x55": {
             "5cadf6ddae9215051e1c23b2": 40,
@@ -174,8 +173,8 @@
             "5e85aa1a988a8701445df1f5": 10
         },
         "Caliber366TKM": {
-            "59e655cb86f77411dc52a77b": 20,
-            "5f0596629e22f464da6bbdd9": 25
+            "59e655cb86f77411dc52a77b": 5,
+            "5f0596629e22f464da6bbdd9": 95
         },
         "Caliber40mmRU": {
             "5656eb674bdc2d35148b457c": 1
