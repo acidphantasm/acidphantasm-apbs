@@ -76,6 +76,30 @@
         "pmcFoodFullChance": 65,
         "pmcMedFullChance": 65,
 
+// Blacklist specific ammo types from all AI
+// Configure per tier blacklists
+// Example.. this will blacklist 9x19 RIP and 5.45x39mm PP from all bots in Tier1
+// tier1AmmoBlacklist: [ "5c0d56a986f774449d5de529", "56dff2ced2720bb4668b4567" ]
+        "tier1AmmoBlacklist": [],
+        "tier2AmmoBlacklist": [],
+        "tier3AmmoBlacklist": [],
+        "tier4AmmoBlacklist": [],
+        "tier5AmmoBlacklist": [],
+        "tier6AmmoBlacklist": [],
+        "tier7AmmoBlacklist": [],
+        
+// Blacklist specific equipment from all AI
+// Configure per tier blacklists
+// Example.. this will blacklist BlackRock chest rig and GSSh-01 headset from all bots in Tier1
+// tier1EquipmentBlacklist: [ "5648a69d4bdc2ded0b8b457b", "5b432b965acfc47a8774094e" ]
+        "tier1EquipmentBlacklist": [],
+        "tier2EquipmentBlacklist": [],
+        "tier3EquipmentBlacklist": [],
+        "tier4EquipmentBlacklist": [],
+        "tier5EquipmentBlacklist": [],
+        "tier6EquipmentBlacklist": [],
+        "tier7EquipmentBlacklist": [],
+
 // LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
 // Examples: 
 // "tier1LevelDelta": [ 5, 5 ] --- While you are Tier1 (lv1-10), all AI will be leveled -5 to +5 of your level.

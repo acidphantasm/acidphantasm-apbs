@@ -34,9 +34,9 @@ export class APBSEquipmentGetter
         return tierInfo;
     }
 
-    public getTierJson(tierInfo: number)
+    public getTierJson(tierInfo: number, ignoreCheck?: boolean)
     {
-        tierInfo = this.chadOrChill(tierInfo);
+        if (!ignoreCheck) tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
             case 1:
@@ -133,9 +133,9 @@ export class APBSEquipmentGetter
         }
     }
 
-    public getTierAmmoJson(tierInfo: number)
+    public getTierAmmoJson(tierInfo: number, ignoreCheck?: boolean)
     {
-        tierInfo = this.chadOrChill(tierInfo);
+        if (!ignoreCheck) tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
             case 1:
