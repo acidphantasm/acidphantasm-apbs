@@ -8,6 +8,10 @@ import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import { TierInformation } from "../Globals/TierInformation";
 import { ModConfig } from "../Globals/ModConfig";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
+import { DatabaseService } from "@spt/services/DatabaseService";
+import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
 
 
 @injectable()
@@ -18,9 +22,11 @@ export class BotConfigs
     
     constructor(
         @inject("IDatabaseTables") protected tables: IDatabaseTables,
+        @inject("DatabaseService") protected database: DatabaseService,
         @inject("ConfigServer") protected configServer: ConfigServer,
         @inject("TierInformation") protected tierInformation: TierInformation,
-        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter
+        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
         this.botConfig = this.configServer.getConfig(ConfigTypes.BOT);
@@ -29,17 +35,34 @@ export class BotConfigs
 
     public initialize(): void
     {
+        this.clearNoLongerNeededBotDetails();
         this.configureBotExperienceLevels();
         this.configurePlateWeightings();
-        this.clearNoLongerNeededBotDetails();
-        this.configureScavWeaponDurability();
+        this.configureWeaponDurability();
         this.adjustNVG();
         this.setLootItemResourceRandomization();
-        if (ModConfig.config.forceStock) this.setForceStock()
+        this.setPMCItemLimits();
+        this.setPMCLoot();
+        this.setPMCScopeWhitelist();
+        if (ModConfig.config.tier1AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier1AmmoBlacklist, 1);
+        if (ModConfig.config.tier2AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier2AmmoBlacklist, 2);
+        if (ModConfig.config.tier3AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier3AmmoBlacklist, 3);
+        if (ModConfig.config.tier4AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier4AmmoBlacklist, 4);
+        if (ModConfig.config.tier5AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier5AmmoBlacklist, 5);
+        if (ModConfig.config.tier6AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier6AmmoBlacklist, 6);
+        if (ModConfig.config.tier7AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier7AmmoBlacklist, 7);
+        if (ModConfig.config.tier1EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier1EquipmentBlacklist, 1);
+        if (ModConfig.config.tier2EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier2EquipmentBlacklist, 2);
+        if (ModConfig.config.tier3EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier3EquipmentBlacklist, 3);
+        if (ModConfig.config.tier4EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier4EquipmentBlacklist, 4);
+        if (ModConfig.config.tier5EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier5EquipmentBlacklist, 5);
+        if (ModConfig.config.tier6EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier6EquipmentBlacklist, 6);
+        if (ModConfig.config.tier7EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier7EquipmentBlacklist, 7);
+        if (ModConfig.config.enableCustomPlateChances) this.setPlateChances();
+        if (ModConfig.config.forceStock) this.setForceStock();
         if (ModConfig.config.forceDustCover) this.setForceDustCover();
-        if (ModConfig.config.forceScopeSlot) this.setForceScopes()
+        if (ModConfig.config.forceScopeSlot) this.setForceScopes();
         if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
-        if (!ModConfig.config.disablePMCTierGeneration) this.setPMCItemLimits()
     }
 
     private configureBotExperienceLevels(): void
@@ -79,22 +102,54 @@ export class BotConfigs
         }
     }
 
-    private configureScavWeaponDurability(): void
+    private configureWeaponDurability(): void
     {
-        // Do this better in the future
+        // Do this better in the future - this looks like shit. Bad Acid. Bad.
         const botConfigDurability = this.botConfig.durability
 
-        botConfigDurability.assault.weapon.lowestMax = 50
-        botConfigDurability.assault.weapon.highestMax = 90
-        botConfigDurability.assault.weapon.maxDelta = 25
-        botConfigDurability.assault.weapon.minDelta = 0
-        botConfigDurability.assault.weapon.minLimitPercent = 15
-
-        botConfigDurability.marksman.weapon.lowestMax = 50
-        botConfigDurability.marksman.weapon.highestMax = 90
-        botConfigDurability.marksman.weapon.maxDelta = 25
-        botConfigDurability.marksman.weapon.minDelta = 0
-        botConfigDurability.marksman.weapon.minLimitPercent = 15
+        for (const botType in botConfigDurability)
+        {
+            if (botType == "pmc")
+            {
+                botConfigDurability[botType].weapon.lowestMax = ModConfig.config.pmcWeaponDurability[0]
+                botConfigDurability[botType].weapon.highestMax = ModConfig.config.pmcWeaponDurability[1]
+                botConfigDurability[botType].weapon.minDelta = ModConfig.config.pmcWeaponDurability[2]
+                botConfigDurability[botType].weapon.maxDelta = ModConfig.config.pmcWeaponDurability[3]
+                botConfigDurability[botType].weapon.minLimitPercent = 40
+            }
+            if (botType == "boss" || botType == "arenafighterevent" || botType == "arenafighter" || botType == "sectantpriest" || botType == "sectantwarrior")
+            {
+                botConfigDurability[botType].weapon.lowestMax = ModConfig.config.bossWeaponDurability[0]
+                botConfigDurability[botType].weapon.highestMax = ModConfig.config.bossWeaponDurability[1]
+                botConfigDurability[botType].weapon.minDelta = ModConfig.config.bossWeaponDurability[2]
+                botConfigDurability[botType].weapon.maxDelta = ModConfig.config.bossWeaponDurability[3]
+                botConfigDurability[botType].weapon.minLimitPercent = 40
+            }
+            if (botType == "assault" || botType == "cursedassault" || botType == "marksman" || botType == "crazyassaultevent" || botType == "default")
+            {
+                botConfigDurability[botType].weapon.lowestMax = ModConfig.config.scavWeaponDurability[0]
+                botConfigDurability[botType].weapon.highestMax = ModConfig.config.scavWeaponDurability[1]
+                botConfigDurability[botType].weapon.minDelta = ModConfig.config.scavWeaponDurability[2]
+                botConfigDurability[botType].weapon.maxDelta = ModConfig.config.scavWeaponDurability[3]
+                botConfigDurability[botType].weapon.minLimitPercent = 40
+            }
+            if (botType == "follower")
+            {
+                botConfigDurability[botType].weapon.lowestMax = ModConfig.config.guardWeaponDurability[0]
+                botConfigDurability[botType].weapon.highestMax = ModConfig.config.guardWeaponDurability[1]
+                botConfigDurability[botType].weapon.minDelta = ModConfig.config.guardWeaponDurability[2]
+                botConfigDurability[botType].weapon.maxDelta = ModConfig.config.guardWeaponDurability[3]
+                botConfigDurability[botType].weapon.minLimitPercent = 40
+            }
+            if (botType == "pmcbot" || botType == "exusec")
+            {
+                botConfigDurability[botType].weapon.lowestMax = ModConfig.config.raiderWeaponDurability[0]
+                botConfigDurability[botType].weapon.highestMax = ModConfig.config.raiderWeaponDurability[1]
+                botConfigDurability[botType].weapon.minDelta = ModConfig.config.raiderWeaponDurability[2]
+                botConfigDurability[botType].weapon.maxDelta = ModConfig.config.raiderWeaponDurability[3]
+                botConfigDurability[botType].weapon.minLimitPercent = 40
+            }
+        }
     }
 
     private adjustNVG(): void
@@ -158,6 +213,44 @@ export class BotConfigs
         }
     }
 
+    private setPlateChances() 
+    {
+        for (const tierObject in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[tierObject].tier
+            const tierJson = this.apbsEquipmentGetter.getTierChancesJson(tierNumber);
+
+            for (const botType in this.tierInformation.tier1chances)
+            {
+                if (botType == "pmcUSEC" || botType == "pmcBEAR")
+                {
+                    tierJson[botType].chances.equipmentMods["back_plate"] = tierJson[botType].chances.equipmentMods["front_plate"] = ModConfig.config.pmcMainPlateChance[tierObject];
+                    tierJson[botType].chances.equipmentMods["left_side_plate"] = tierJson[botType].chances.equipmentMods["right_side_plate"] = ModConfig.config.pmcSidePlateChance[tierObject];
+                }
+                if (botType == "followerbirdeye" || botType == "followerbigpipe" || botType.includes("boss") || botType.includes("sectant"))
+                {
+                    tierJson[botType].chances.equipmentMods["back_plate"] = tierJson[botType].chances.equipmentMods["front_plate"] = ModConfig.config.bossMainPlateChance[tierObject];
+                    tierJson[botType].chances.equipmentMods["left_side_plate"] = tierJson[botType].chances.equipmentMods["right_side_plate"] = ModConfig.config.bossSidePlateChance[tierObject];
+                }
+                if (botType == "scav")
+                {
+                    tierJson[botType].chances.equipmentMods["back_plate"] = tierJson[botType].chances.equipmentMods["front_plate"] = ModConfig.config.scavMainPlateChance[tierObject];
+                    tierJson[botType].chances.equipmentMods["left_side_plate"] = tierJson[botType].chances.equipmentMods["right_side_plate"] = ModConfig.config.scavSidePlateChance[tierObject];
+                }
+                if (botType == "exusec" || botType == "pmcbot")
+                {
+                    tierJson[botType].chances.equipmentMods["back_plate"] = tierJson[botType].chances.equipmentMods["front_plate"] = ModConfig.config.raiderMainPlateChance[tierObject];
+                    tierJson[botType].chances.equipmentMods["left_side_plate"] = tierJson[botType].chances.equipmentMods["right_side_plate"] = ModConfig.config.raiderSidePlateChance[tierObject];
+                }
+                if (botType == "default")
+                {
+                    tierJson[botType].chances.equipmentMods["back_plate"] = tierJson[botType].chances.equipmentMods["front_plate"] = ModConfig.config.guardMainPlateChance[tierObject];
+                    tierJson[botType].chances.equipmentMods["left_side_plate"] = tierJson[botType].chances.equipmentMods["right_side_plate"] = ModConfig.config.guardSidePlateChance[tierObject];
+                }
+            }
+        }
+    }
+
     private setWeaponModLimits(): void
     {
         const botConfigEquipment = this.botConfig.equipment
@@ -192,17 +285,165 @@ export class BotConfigs
 
     private setPMCItemLimits(): void
     {
+        this.botConfig.itemSpawnLimits.pmc["60098ad7c2240c0fe85c570a"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["590c678286f77426c9660122"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["5e831507ea0a7c419c2f9bd9"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["590c661e86f7741e566b646a"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["544fb45d4bdc2dee738b4568"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["5e8488fa988a8701445df1e4"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["544fb37f4bdc2dee738b4567"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["5448e8d04bdc2ddf718b4569"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["5448e8d64bdc2dce718b4568"] = 1;
+    }
+
+    private setPMCLoot(): void
+    {
         this.pmcConfig.looseWeaponInBackpackLootMinMax.min = 0;
         this.pmcConfig.looseWeaponInBackpackLootMinMax.max = 0;
         this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
-        this.botConfig.itemSpawnLimits.pmc["60098ad7c2240c0fe85c570a"] = 1
-        this.botConfig.itemSpawnLimits.pmc["590c678286f77426c9660122"] = 1
-        this.botConfig.itemSpawnLimits.pmc["5e831507ea0a7c419c2f9bd9"] = 1
-        this.botConfig.itemSpawnLimits.pmc["590c661e86f7741e566b646a"] = 1
-        this.botConfig.itemSpawnLimits.pmc["544fb45d4bdc2dee738b4568"] = 1
-        this.botConfig.itemSpawnLimits.pmc["5e8488fa988a8701445df1e4"] = 1
-        this.botConfig.itemSpawnLimits.pmc["544fb37f4bdc2dee738b4567"] = 1
-        this.botConfig.itemSpawnLimits.pmc["5448e8d04bdc2ddf718b4569"] = 1
-        this.botConfig.itemSpawnLimits.pmc["5448e8d64bdc2dce718b4568"] = 1
+    }
+
+    private setPMCScopeWhitelist(): void
+    {
+        this.botConfig.equipment.pmc.weaponSightWhitelist = {
+            "5447b5fc4bdc2d87278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ae44bdc2dde698b456c",
+                "55818ac54bdc2d5b648b456e",
+                "55818add4bdc2d5b648b456f",
+                "55818aeb4bdc2ddc698b456a"
+            ],
+            "5447b5f14bdc2d61278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ae44bdc2dde698b456c",
+                "55818ac54bdc2d5b648b456e",
+                "55818add4bdc2d5b648b456f",
+                "55818aeb4bdc2ddc698b456a"
+            ],
+            "5447bedf4bdc2d87278b4568": [
+                "55818ad54bdc2ddc698b4569",
+                "55818add4bdc2d5b648b456f",
+                "55818ac54bdc2d5b648b456e",
+                "55818aeb4bdc2ddc698b456a"
+            ],
+            "5447bed64bdc2d97278b4568": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ac54bdc2d5b648b456e",
+                "55818add4bdc2d5b648b456f",
+                "55818aeb4bdc2ddc698b456a"
+            ],
+            "5447b6194bdc2d67278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818ae44bdc2dde698b456c",
+                "55818ac54bdc2d5b648b456e",
+                "55818aeb4bdc2ddc698b456a",
+                "55818add4bdc2d5b648b456f"
+            ],
+            "5447b5cf4bdc2d65278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ac54bdc2d5b648b456e"
+            ],
+            "617f1ef5e8b54b0998387733": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ac54bdc2d5b648b456e"
+            ],
+            "5447b6094bdc2dc3278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ac54bdc2d5b648b456e"
+            ],
+            "5447b5e04bdc2d62278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ac54bdc2d5b648b456e"
+            ],
+            "5447b6254bdc2dc3278b4568": [
+                "55818ae44bdc2dde698b456c",
+                "55818ac54bdc2d5b648b456e",
+                "55818aeb4bdc2ddc698b456a",
+                "55818add4bdc2d5b648b456f"
+            ]
+        };
+    }
+
+    private removeBlacklistedAmmo(ammoBlacklist: string[], tier: number): void
+    {
+        const tierJSON = this.apbsEquipmentGetter.getTierAmmoJson(tier, true);
+        for (const item in ammoBlacklist)
+        {
+            const itemDetails = this.getItem(ammoBlacklist[item])
+            if (itemDetails != undefined && itemDetails._parent == "5485a8684bdc2da71d8b4567")
+            {
+                for (const botType in tierJSON)
+                {
+                    for (const ammo in tierJSON[botType])
+                    {
+                        if (Object.keys(tierJSON[botType][ammo]).includes(itemDetails._id))
+                        {
+                            if (Object.keys(tierJSON[botType][ammo]).length > 1)
+                            {
+                                delete tierJSON[botType][ammo][itemDetails._id]
+                                this.apbsLogger.log(Logging.DEBUG, `Added "${ammoBlacklist[item]}" to blacklist for Tier${tier} ${botType} pool`)
+                                continue;
+                            }
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${ammoBlacklist[item]}" as it would make the Tier${tier} ${botType} pool empty for ${ammo}`)
+                            continue;
+                        }
+                    }
+                }
+            }
+            if (itemDetails == undefined || itemDetails._parent != "5485a8684bdc2da71d8b4567")
+            {
+                this.apbsLogger.log(Logging.WARN, `"${ammoBlacklist[item]}" in Ammo Blacklist is either an invalid ammunition or item ID.`)
+            }
+        }
+    }
+
+    private removeBlacklistedEquipment(equipmentBlacklist: string[], tier: number): void
+    {
+        const tierJSON = this.apbsEquipmentGetter.getTierJson(tier, true);
+        for (const item in equipmentBlacklist)
+        {
+            const itemDetails = this.getItem(equipmentBlacklist[item])
+            if (itemDetails != undefined)
+            {
+                for (const botType in tierJSON)
+                {
+                    for (const equipmentSlot in tierJSON[botType].equipment)
+                    {
+                        if (Object.keys(tierJSON[botType].equipment[equipmentSlot]).includes(itemDetails._id))
+                        {
+                            if (Object.keys(tierJSON[botType].equipment[equipmentSlot]).length > 1)
+                            {
+                                delete tierJSON[botType].equipment[equipmentSlot][itemDetails._id]
+                                this.apbsLogger.log(Logging.DEBUG, `Added "${equipmentBlacklist[item]}" to blacklist for Tier${tier} ${botType} equipment pool`)
+                                continue;
+                            }
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${equipmentBlacklist[item]}" as it would make the Tier${tier} ${botType} equipment pool empty for ${equipmentSlot}`)
+                            continue;
+                        }
+                    }
+                }
+            }
+            if (itemDetails == undefined)
+            {
+                this.apbsLogger.log(Logging.WARN, `"${equipmentBlacklist[item]}" in Equipment Blacklist is an invalid item ID.`)
+            }
+        }
+    }
+    
+    private getItem(tpl: string): ITemplateItem
+    {
+        if (tpl in this.database.getItems())
+        {
+            return this.database.getItems()[tpl];
+        }
+
+        return undefined;
     }
 }

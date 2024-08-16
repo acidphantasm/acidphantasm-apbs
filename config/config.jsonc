@@ -1,7 +1,15 @@
 {
-// If you enable this, support will not be granted.
-// Any mods adding weapons loaded before APBS will have their weapons & attachments imported.
+// If you enable either of these settings, support will not be granted.
+// enableModdedWeapons - Any mods adding weapons loaded before APBS will have their weapons & attachments imported.
+// enableModdedEquipment - Any mods adding equipment loaded before APBS will be imported with their attachments (if any).
         "enableModdedWeapons": false,
+        "enableModdedEquipment": false,
+
+// Looking for a challenge, or maybe just want to chill and wreck some bots?
+// Enable "onlyChads" to force all bots to be Tier7, enable "tarkovAndChill" to force all bots to be Tier1
+// Enabling both will enable chaos mode, bots will pull gear and weapons from completely random Tiers during generation. It's chaos. (scavs still pull crap weapon mods and ammo)
+        "onlyChads": false,
+        "tarkovAndChill": false,
 
 // Disable specific bot generation
 // For each type that you disable, it will disable their tiered weapon and gear generation.
@@ -12,21 +20,51 @@
         "disableRaiderRogueTierGeneration": false,
 
 // Force weapon stocks
-// If set to true, will enforce all AI weapons to have stocks, if false - will use RNG rolls
+// If set to true, will enforce all AI weapons to have stocks, if false - will use APBS values
         "forceStock": false,
 
 // Force weapon dust covers
-// If set to true, will enforce all AI weapons to have dust covers, if false - will use RNG rolls
+// If set to true, will enforce all AI weapons to have dust covers, if false - will use APBS values
         "forceDustCover": false,
         
 // Force weapon mod_scope slot
 // If set to true, will enforce all AI weapons to have a mod in the mod_scope slot 
-// This slot is *MOSTLY* optics but it's sometimes a laser/flashlight depending on gun, if false - will use RNG rolls
+// This slot is *MOSTLY* optics but it's sometimes a laser/flashlight depending on gun, if false - will use APBS values
         "forceScopeSlot": false,
 
 // Force weapon mod count limits
 // If set to true, will enforce all AI weapons to be limited to 2 scopes and 2 lasers, if disabled the generation may go wild
         "forceWeaponModLimits": true,
+
+// Configure Weapon Durability per AI Bot Type
+// Numbers are as follows: [ minDurability, maxDurability, minDelta, maxDelta ]
+// Example: [ 50, 90, 0, 25 ]
+// Ex ctd: Minimum possible "max" durability would be 50%, the highest possible "max" durability is 90%
+// Ex ctd: Whatever value is picked between 50% & 90% will be the "max" durability of the weapon ("max" is the limit you can repair the weapon to)
+// Ex ctd: After the max durability is selected, it will roll for the actual current durability which will be between 0-25% lower than the max.
+// Ex ctd: Weapons are safeguarded to never fall below 40%.
+        "scavWeaponDurability": [ 50, 90, 0, 20 ],
+        "pmcWeaponDurability": [ 95, 100, 0, 5 ],
+        "bossWeaponDurability": [ 80, 100, 0, 20 ],
+        "guardWeaponDurability": [ 80, 100, 0, 20 ],
+        "raiderWeaponDurability": [ 80, 100, 0, 20 ],
+
+// Enable/Disable custom plate chances
+// If you REALLY don't like APBS plate chances then you can adjust it here.
+// If set to true, will change all AI plate chances to the values you set below, if false - will use APBS values 
+// If set to true, Main Plates = front/back and Side Plates = left/right, if false - APBS uses individual plate chances for front/back and sides.
+// Values are configured for each tier, example: [ Tier1, Tier2, Tier3, Tier4, Tier5, Tier6, Tier7 ]
+        "enableCustomPlateChances": false,
+        "scavMainPlateChance":  [ 25, 25, 25, 25, 25, 25, 25 ],
+        "scavSidePlateChance":  [ 25, 25, 25, 25, 25, 25, 25 ],
+        "pmcMainPlateChance":  [ 65, 75, 90, 90, 95, 100, 100 ],
+        "pmcSidePlateChance":  [ 15, 25, 50, 75, 90, 95, 100 ],
+        "bossMainPlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
+        "bossSidePlateChance":  [ 50, 50, 50, 50, 50, 50, 50 ],
+        "guardMainPlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
+        "guardSidePlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
+        "raiderMainPlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
+        "raiderSidePlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
 
 // Enable/Disable randomization of medical and food resource values
 // If set to true, all scavs and PMCs will have randomized resource values, based on the chances you set below, for medical and food items. 
@@ -38,11 +76,35 @@
         "pmcFoodFullChance": 65,
         "pmcMedFullChance": 65,
 
+// Blacklist specific ammo types from all AI
+// Configure per tier blacklists
+// Example.. this will blacklist 9x19 RIP and 5.45x39mm PP from all bots in Tier1
+// tier1AmmoBlacklist: [ "5c0d56a986f774449d5de529", "56dff2ced2720bb4668b4567" ]
+        "tier1AmmoBlacklist": [],
+        "tier2AmmoBlacklist": [],
+        "tier3AmmoBlacklist": [],
+        "tier4AmmoBlacklist": [],
+        "tier5AmmoBlacklist": [],
+        "tier6AmmoBlacklist": [],
+        "tier7AmmoBlacklist": [],
+        
+// Blacklist specific equipment from all AI
+// Configure per tier blacklists
+// Example.. this will blacklist BlackRock chest rig and GSSh-01 headset from all bots in Tier1
+// tier1EquipmentBlacklist: [ "5648a69d4bdc2ded0b8b457b", "5b432b965acfc47a8774094e" ]
+        "tier1EquipmentBlacklist": [],
+        "tier2EquipmentBlacklist": [],
+        "tier3EquipmentBlacklist": [],
+        "tier4EquipmentBlacklist": [],
+        "tier5EquipmentBlacklist": [],
+        "tier6EquipmentBlacklist": [],
+        "tier7EquipmentBlacklist": [],
+
 // LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
 // Examples: 
 // "tier1LevelDelta": [ 5, 5 ] --- While you are Tier1 (lv1-10), all AI will be leveled -5 to +5 of your level.
 // "tier2LevelDelta": [ 10, 25 ] --- While you are Tier2 (lv11-20), all AI will be leveled -10 to +25 of your level.
-// "enableCustomLevelDeltas" if true will use the values you set below, otherwise they will use mod defaults
+// "enableCustomLevelDeltas" if true will use the values you set below, otherwise they will use APBS values
         "enableCustomLevelDeltas": false,
         "tier1LevelDelta": [ 5, 5 ],
         "tier2LevelDelta": [ 7, 7 ],

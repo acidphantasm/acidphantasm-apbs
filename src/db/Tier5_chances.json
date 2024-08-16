@@ -13,19 +13,18 @@
                 "Holster": 25,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 15,
-                "TacticalVest": 99,
-                "ArmouredRig": 99
+                "TacticalVest": 99
             },
             "equipmentMods": {
-                "back_plate": 95,
-                "front_plate": 95,
-                "left_side_plate": 70,
-                "mod_equipment": 35,
-                "mod_equipment_000": 35,
+                "back_plate": 100,
+                "front_plate": 100,
+                "left_side_plate": 100,
+                "mod_equipment": 75,
+                "mod_equipment_000": 75,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
                 "mod_nvg": 100,
-                "right_side_plate": 70
+                "right_side_plate": 100
             },
             "weaponMods": {
                 "mod_gas_block": 100,
@@ -41,18 +40,18 @@
                 "mod_magazine": 100,
                 "mod_mount": 85,
                 "mod_mount_000": 90,
-                "mod_mount_001": 35,
-                "mod_mount_002": 20,
-                "mod_mount_003": 10,
-                "mod_mount_004": 10,
-                "mod_mount_005": 10,
-                "mod_mount_006": 10,
+                "mod_mount_001": 40,
+                "mod_mount_002": 40,
+                "mod_mount_003": 40,
+                "mod_mount_004": 40,
+                "mod_mount_005": 40,
+                "mod_mount_006": 40,
                 "mod_muzzle": 85,
                 "mod_muzzle_000": 75,
                 "mod_muzzle_001": 90,
-                "mod_pistol_grip": 90,
-                "mod_pistol_grip_akms": 50,
-                "mod_pistolgrip": 50,
+                "mod_pistol_grip": 100,
+                "mod_pistol_grip_akms": 100,
+                "mod_pistolgrip": 100,
                 "mod_reciever": 100,
                 "mod_scope": 100,
                 "mod_scope_000": 100,
@@ -66,14 +65,14 @@
                 "mod_stock_001": 100,
                 "mod_stock_akms": 100,
                 "mod_stock_axis": 100,
-                "mod_tactical": 80,
-                "mod_tactical001": 50,
-                "mod_tactical002": 15,
-                "mod_tactical_000": 15,
-                "mod_tactical_001": 15,
-                "mod_tactical_002": 35,
-                "mod_tactical_003": 35,
-                "mod_tactical_2": 50,
+                "mod_tactical": 40,
+                "mod_tactical001": 65,
+                "mod_tactical002": 65,
+                "mod_tactical_000": 25,
+                "mod_tactical_001": 65,
+                "mod_tactical_002": 65,
+                "mod_tactical_003": 65,
+                "mod_tactical_2": 45,
                 "mod_trigger": 100
             },
             "generation": {
@@ -212,19 +211,18 @@
                 "Holster": 25,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 15,
-                "TacticalVest": 99,
-                "ArmouredRig": 99
+                "TacticalVest": 99
             },
             "equipmentMods": {
-                "back_plate": 95,
-                "front_plate": 95,
-                "left_side_plate": 70,
-                "mod_equipment": 35,
-                "mod_equipment_000": 35,
+                "back_plate": 100,
+                "front_plate": 100,
+                "left_side_plate": 100,
+                "mod_equipment": 75,
+                "mod_equipment_000": 75,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
                 "mod_nvg": 100,
-                "right_side_plate": 70
+                "right_side_plate": 100
             },
             "weaponMods": {
                 "mod_gas_block": 100,
@@ -240,18 +238,18 @@
                 "mod_magazine": 100,
                 "mod_mount": 85,
                 "mod_mount_000": 90,
-                "mod_mount_001": 35,
-                "mod_mount_002": 20,
-                "mod_mount_003": 10,
-                "mod_mount_004": 10,
-                "mod_mount_005": 10,
-                "mod_mount_006": 10,
+                "mod_mount_001": 75,
+                "mod_mount_002": 75,
+                "mod_mount_003": 75,
+                "mod_mount_004": 75,
+                "mod_mount_005": 75,
+                "mod_mount_006": 75,
                 "mod_muzzle": 85,
                 "mod_muzzle_000": 75,
                 "mod_muzzle_001": 90,
-                "mod_pistol_grip": 90,
-                "mod_pistol_grip_akms": 50,
-                "mod_pistolgrip": 50,
+                "mod_pistol_grip": 100,
+                "mod_pistol_grip_akms": 100,
+                "mod_pistolgrip": 100,
                 "mod_reciever": 100,
                 "mod_scope": 100,
                 "mod_scope_000": 100,
@@ -265,14 +263,14 @@
                 "mod_stock_001": 100,
                 "mod_stock_akms": 100,
                 "mod_stock_axis": 100,
-                "mod_tactical": 80,
-                "mod_tactical001": 50,
-                "mod_tactical002": 15,
-                "mod_tactical_000": 15,
-                "mod_tactical_001": 15,
-                "mod_tactical_002": 35,
-                "mod_tactical_003": 35,
-                "mod_tactical_2": 50,
+                "mod_tactical": 40,
+                "mod_tactical001": 65,
+                "mod_tactical002": 65,
+                "mod_tactical_000": 25,
+                "mod_tactical_001": 65,
+                "mod_tactical_002": 65,
+                "mod_tactical_003": 65,
+                "mod_tactical_2": 45,
                 "mod_trigger": 100
             },
             "generation": {
@@ -413,12 +411,11 @@
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 0,
                 "SecuredContainer": 100,
-                "TacticalVest": 99,
-                "ArmouredRig": 99
+                "TacticalVest": 99
             },
             "equipmentMods": {
                 "back_plate": 25,
-                "front_plate": 25,
+                "front_plate": 50,
                 "left_side_plate": 25,
                 "mod_equipment": 7,
                 "mod_equipment_000": 7,
@@ -431,20 +428,20 @@
                 "mod_gas_block": 100,
                 "mod_barrel": 100,
                 "mod_bipod": 50,
-                "mod_flashlight": 5,
-                "mod_foregrip": 15,
+                "mod_flashlight": 10,
+                "mod_foregrip": 20,
                 "mod_handguard": 100,
                 "mod_launcher": 0,
-                "mod_reciever": 45,
-                "mod_magazine": 15,
-                "mod_mount": 20,
+                "mod_reciever": 65,
+                "mod_magazine": 25,
+                "mod_mount": 25,
                 "mod_mount_000": 25,
                 "mod_mount_001": 20,
-                "mod_mount_002": 5,
-                "mod_mount_003": 5,
-                "mod_mount_004": 1,
-                "mod_mount_005": 1,
-                "mod_mount_006": 1,
+                "mod_mount_002": 15,
+                "mod_mount_003": 15,
+                "mod_mount_004": 15,
+                "mod_mount_005": 15,
+                "mod_mount_006": 15,
                 "mod_muzzle": 15,
                 "mod_muzzle_000": 15,
                 "mod_muzzle_001": 15,
@@ -481,10 +478,10 @@
                     "backpackLoot": {
                         "weights": {
                             "0": 1,
-                            "1": 6,
-                            "2": 6,
-                            "3": 5,
-                            "4": 3,
+                            "1": 8,
+                            "2": 12,
+                            "3": 10,
+                            "4": 4,
                             "5": 1
                         },
                     "whitelist": []
@@ -777,10 +774,10 @@
                 "SecuredContainer": 100
             },
             "equipmentMods": {
-                "front_plate": 75,
-                "back_plate": 75,
-                "left_side_plate": 50,
-                "right_side_plate": 50
+                "front_plate": 95,
+                "back_plate": 95,
+                "left_side_plate": 80,
+                "right_side_plate": 80
             },
             "weaponMods": {
                 "mod_gas_block": 100,
@@ -1121,14 +1118,14 @@
                 "SecuredContainer": 100
             },
             "equipmentMods": {
-                "front_plate": 100,
-                "back_plate": 100,
+                "front_plate": 95,
+                "back_plate": 95,
                 "mod_equipment_000": 0,
                 "mod_nvg": 72,
                 "mod_mount": 0,
                 "mod_equipment_001": 0,
-                "left_side_plate": 0,
-                "right_side_plate": 0,
+                "left_side_plate": 80,
+                "right_side_plate": 80,
                 "mod_equipment_002": 0
             },
             "weaponMods": {
@@ -1298,6 +1295,8 @@
                 "mod_equipment": 100,
                 "front_plate": 100,
                 "back_plate": 100,
+                "left_side_plate": 80,
+                "right_side_plate": 80,
                 "mod_equipment_000": 100,
                 "mod_mount": 0,
                 "mod_nvg": 0
@@ -2967,10 +2966,10 @@
                 "SecuredContainer": 100
             },
             "equipmentMods": {
-                "front_plate": 100,
-                "back_plate": 100,
-                "left_side_plate": 66,
-                "right_side_plate": 66
+                "front_plate": 95,
+                "back_plate": 95,
+                "left_side_plate": 80,
+                "right_side_plate": 80
             },
             "weaponMods": {
                 "mod_gas_block": 100,
@@ -3138,15 +3137,15 @@
                 "SecuredContainer": 100
             },
             "equipmentMods": {
-                "back_plate": 75,
-                "front_plate": 75,
-                "left_side_plate": 75,
+                "back_plate": 95,
+                "front_plate": 95,
+                "left_side_plate": 80,
+                "right_side_plate": 80,
                 "mod_equipment": 25,
                 "mod_equipment_000": 25,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
-                "mod_nvg": 50,
-                "right_side_plate": 75
+                "mod_nvg": 50
             },
             "weaponMods": {
                 "mod_gas_block": 100,
@@ -3339,15 +3338,15 @@
                 "SecuredContainer": 100
             },
             "equipmentMods": {
-                "back_plate": 75,
-                "front_plate": 75,
-                "left_side_plate": 75,
+                "back_plate": 95,
+                "front_plate": 95,
+                "left_side_plate": 80,
+                "right_side_plate": 80,
                 "mod_equipment": 25,
                 "mod_equipment_000": 25,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
-                "mod_nvg": 50,
-                "right_side_plate": 75
+                "mod_nvg": 50
             },
             "weaponMods": {
                 "mod_gas_block": 100,
@@ -3540,15 +3539,15 @@
                 "TacticalVest": 99
             },
             "equipmentMods": {
-                "back_plate": 75,
-                "front_plate": 75,
-                "left_side_plate": 75,
+                "back_plate": 95,
+                "front_plate": 95,
+                "left_side_plate": 80,
+                "right_side_plate": 80,
                 "mod_equipment": 25,
                 "mod_equipment_000": 25,
                 "mod_equipment_001": 25,
                 "mod_equipment_002": 25,
-                "mod_nvg": 0,
-                "right_side_plate": 75
+                "mod_nvg": 0
             },
             "weaponMods": {
                 "mod_gas_block": 100,

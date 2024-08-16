@@ -12,6 +12,8 @@ import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { APBSIBotBase } from "../Interface/APBSIBotBase";
 import { RaidInformation } from "../Globals/RaidInformation";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
+import { ModConfig } from "../Globals/ModConfig";
+import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 
 /** Handle profile related client events */
 @injectable()
@@ -24,7 +26,8 @@ export class APBSBotLevelGenerator
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("ProfileHelper") protected profileHelper: ProfileHelper,
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
-        @inject("RaidInformation") protected raidInformation: RaidInformation
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter
     )
     {}
 
@@ -34,13 +37,6 @@ export class APBSBotLevelGenerator
         {
             result.generateBotLevel = (levelDetails: MinMax, botGenerationDetails: BotGenerationDetails, bot: APBSIBotBase): IRandomisedBotLevelResult => 
             {
-                const expTable = this.databaseService.getGlobals().config.exp.level.exp_table;
-                const botLevelRange = this.apbsGetRelativeBotLevelRange(botGenerationDetails, levelDetails, expTable.length);
-                const min = botLevelRange.min <= 0 ? 1 : botLevelRange.min;
-                const max = botLevelRange.max >= 79 ? 79 : botLevelRange.max;
-                const level = this.randomUtil.getInt(min, max);
-                const exp = this.profileHelper.getExperience(level);
-                const tier = this.apbsTierGetter.getTierByLevel(level);
 
                 /* 
                 TESTING TIER DEVIATION - Since botGenerationDetails isn't passed to the relevant methods, this is more difficult that anticipated. This logic works for the tier, but since selection is based on level..oof.
@@ -53,19 +49,29 @@ export class APBSBotLevelGenerator
                 const newTier = this.randomUtil.getInt(minTier, maxTier)
                 console.log(`Original Tier: ${tier} - New Tier ${newTier}`)
                 */
-                bot.Info.Tier = tier
                 
                 if (botGenerationDetails.isPlayerScav)
                 {
                     const level = this.raidInformation.freshProfile == true ? 1 : this.profileHelper.getPmcProfile(this.raidInformation.sessionId)?.Info?.Level
                     const exp = this.profileHelper.getExperience(level);
-                    bot.Info.Tier = this.apbsTierGetter.getTierByLevel(level)
+                    const tier = this.apbsTierGetter.getTierByLevel(level);
+                    bot.Info.Tier = this.chadOrChill(tier.toString());
                     const result: IRandomisedBotLevelResult = {
                         level,
                         exp 
                     };
                     return result;                    
                 }
+
+                const expTable = this.databaseService.getGlobals().config.exp.level.exp_table;
+                const botLevelRange = this.apbsGetRelativeBotLevelRange(botGenerationDetails, levelDetails, expTable.length);
+                const min = botLevelRange.min <= 0 ? 1 : botLevelRange.min;
+                const max = botLevelRange.max >= 79 ? 79 : botLevelRange.max;
+                const level = this.randomUtil.getInt(min, max);
+                const exp = this.profileHelper.getExperience(level);
+                const tier = this.apbsTierGetter.getTierByLevel(level);
+                bot.Info.Tier = this.chadOrChill(tier.toString());
+                
                 const result: IRandomisedBotLevelResult = {
                     level,
                     exp 
@@ -76,6 +82,18 @@ export class APBSBotLevelGenerator
         { frequency: "Always" }
         );
         this.apbsLogger.log(Logging.DEBUG, "Bot Level Generator registered");
+    }
+
+    private chadOrChill(tierInfo: string): string
+    {
+        if (ModConfig.config.onlyChads && ModConfig.config.tarkovAndChill)
+        {
+            return "?";
+        }
+        if (ModConfig.config.onlyChads) return "7";
+        if (ModConfig.config.tarkovAndChill) return "1";
+
+        return tierInfo;
     }
 
     protected apbsGetRelativeBotLevelRange(

@@ -27,14 +27,9 @@ export class ModConfig
         {
             this.setTierLevelDeviation();
         }
-        this.logger.debug(`[APBS] Mod Config - FOR SUPPORT FOLKS LOL ❤❤`)
+        this.logger.debug(`[APBS] Mod Config - FOR SUPPORT FOLKS ❤❤`)
         this.logger.debug(`[APBS] Import Mod Weapons: ${ModConfig.config.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Scav Generation Disabled: ${ModConfig.config.disableScavTierGeneration}`)
-        this.logger.debug(`[APBS] PMC Generation Disabled: ${ModConfig.config.disablePMCTierGeneration}`)
-        this.logger.debug(`[APBS] Boss Generation Disabled: ${ModConfig.config.disableBossTierGeneration}`)
-        this.logger.debug(`[APBS] Guard/Follower Generation Disabled: ${ModConfig.config.disableBossFollowerTierGeneration}`)
-        this.logger.debug(`[APBS] Raider/Rogue Generation Disabled: ${ModConfig.config.disableRaiderRogueTierGeneration}`)
-        this.logger.debug(`[APBS] Using Custom Bot Levels: ${ModConfig.config.enableCustomLevelDeltas}`)
+        this.logger.debug(`[APBS] Import Mod Equipment: ${ModConfig.config.enableModdedEquipment} <- MUST BE FALSE FOR SUPPORT`)
     }
 
     private setTierLevelDeviation(): void
@@ -65,6 +60,9 @@ export class ModConfig
 export interface Config
 {
     enableModdedWeapons: boolean,
+    enableModdedEquipment: boolean,
+    onlyChads: boolean,
+    tarkovAndChill: boolean,
     disableScavTierGeneration: boolean,
     disablePMCTierGeneration: boolean,
     disableBossTierGeneration: boolean,
@@ -73,12 +71,42 @@ export interface Config
     forceStock: boolean,
     forceDustCover: boolean,
     forceScopeSlot: boolean,
+    scavWeaponDurability: [ number, number, number, number ],
+    pmcWeaponDurability: [ number, number, number, number ],
+    bossWeaponDurability: [ number, number, number, number ],
+    guardWeaponDurability: [ number, number, number, number ],
+    raiderWeaponDurability: [ number, number, number, number ],
     enableConsumableResourceRandomization: boolean,
     scavFoodFullChance: number,
     scavMedFullChance: number,
     pmcFoodFullChance: number,
     pmcMedFullChance: number,
     forceWeaponModLimits: boolean,
+    enableCustomPlateChances: boolean,
+    scavMainPlateChance: [ number, number, number, number, number, number, number ],
+    scavSidePlateChance: [ number, number, number, number, number, number, number ],
+    pmcMainPlateChance: [ number, number, number, number, number, number, number ],
+    pmcSidePlateChance: [ number, number, number, number, number, number, number ],
+    bossMainPlateChance: [ number, number, number, number, number, number, number ],
+    bossSidePlateChance: [ number, number, number, number, number, number, number ],
+    guardMainPlateChance: [ number, number, number, number, number, number, number ],
+    guardSidePlateChance: [ number, number, number, number, number, number, number ],
+    raiderMainPlateChance: [ number, number, number, number, number, number, number ],
+    raiderSidePlateChance: [ number, number, number, number, number, number, number ],
+    tier1AmmoBlacklist: string[],
+    tier2AmmoBlacklist: string[],
+    tier3AmmoBlacklist: string[],
+    tier4AmmoBlacklist: string[],
+    tier5AmmoBlacklist: string[],
+    tier6AmmoBlacklist: string[],
+    tier7AmmoBlacklist: string[],
+    tier1EquipmentBlacklist: string[],
+    tier2EquipmentBlacklist: string[],
+    tier3EquipmentBlacklist: string[],
+    tier4EquipmentBlacklist: string[],
+    tier5EquipmentBlacklist: string[],
+    tier6EquipmentBlacklist: string[],
+    tier7EquipmentBlacklist: string[],
     enableCustomLevelDeltas: boolean,
     tier1LevelDelta: [ number, number ],
     tier2LevelDelta: [ number, number ],

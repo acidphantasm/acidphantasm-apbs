@@ -6,5 +6,5 @@ export interface APBSIBotBase extends IBotBase
 }
 export interface APBSIBotBaseInfo extends Info
 {
-    Tier: number
+    Tier: string
 }

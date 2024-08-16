@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import { inject, injectable } from "tsyringe";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
@@ -5,6 +6,8 @@ import { RaidInformation } from "../Globals/RaidInformation";
 import { Logging } from "../Enums/Logging";
 import { APBSLogger } from "./APBSLogger";
 import { TierInformation } from "../Globals/TierInformation";
+import { ModConfig } from "../Globals/ModConfig";
+import { RandomUtil } from "@spt/utils/RandomUtil";
 
 @injectable()
 export class APBSEquipmentGetter
@@ -14,11 +17,49 @@ export class APBSEquipmentGetter
         @inject("RaidInformation") protected raidInformation: RaidInformation,
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper,
-        @inject("APBSLogger") protected apbsLogger: APBSLogger
+        @inject("APBSLogger") protected apbsLogger: APBSLogger,
+        @inject("RandomUtil") protected randomUtil: RandomUtil
     )
     {}
 
-    public getTierJson(tierInfo: number)
+    private chadOrChill(tierInfo: number): number
+    {
+        if (ModConfig.config.onlyChads && ModConfig.config.tarkovAndChill)
+        {
+            return this.randomUtil.getInt(1, 7);
+        }
+        if (ModConfig.config.onlyChads) return 7;
+        if (ModConfig.config.tarkovAndChill) return 1;
+
+        return tierInfo;
+    }
+
+    public getTierJson(tierInfo: number, ignoreCheck?: boolean)
+    {
+        if (!ignoreCheck) tierInfo = this.chadOrChill(tierInfo);
+        switch (tierInfo)
+        {
+            case 1:
+                return this.tierInformation.tier1
+            case 2:
+                return this.tierInformation.tier2
+            case 3:
+                return this.tierInformation.tier3
+            case 4:
+                return this.tierInformation.tier4
+            case 5:
+                return this.tierInformation.tier5
+            case 6:
+                return this.tierInformation.tier6
+            case 7:
+                return this.tierInformation.tier7
+            default:
+                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 loadout.");
+                return this.tierInformation.tier1
+        }
+    }
+
+    public getTierJsonWithoutConfigChecks(tierInfo: number)
     {
         switch (tierInfo)
         {
@@ -44,6 +85,7 @@ export class APBSEquipmentGetter
 
     public getTierModsJson(tierInfo: number)
     {
+        tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
             case 1:
@@ -68,6 +110,7 @@ export class APBSEquipmentGetter
 
     public getTierChancesJson(tierInfo: number)
     {
+        tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
             case 1:
@@ -90,8 +133,9 @@ export class APBSEquipmentGetter
         }
     }
 
-    public getTierAmmoJson(tierInfo: number)
+    public getTierAmmoJson(tierInfo: number, ignoreCheck?: boolean)
     {
+        if (!ignoreCheck) tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
             case 1:

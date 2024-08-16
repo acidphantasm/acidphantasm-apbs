@@ -36,10 +36,10 @@ import { ModInformation } from "./Globals/ModInformation";
 import { TierInformation } from "./Globals/TierInformation";
 import { APBSBotLevelGenerator } from "./Generators/ABPSBotLevelGenerator";
 import { BotConfigs } from "./Alterations/BotConfigs";
-import { APBSBotWeaponGenerator } from "./Generators/APBSBotWeaponGenerator";
+import { APBSBotWeaponGenerator } from "./ClassExtensions/APBSBotWeaponGenerator";
 import { APBSTierGetter } from "./Utils/APBSTierGetter";
 import { APBSEquipmentGetter } from "./Utils/APBSEquipmentGetter";
-import { ModdedWeaponHelper } from "./Helpers/ModdedWeaponHelper";
+import { ModdedImportHelper } from "./Helpers/ModdedImportHelper";
 import { DynamicRouterModService } from "@spt/services/mod/dynamicRouter/DynamicRouterModService";
 import { APBSDynamicRouterHooks } from "./RouterHooks/APBSDynamicRouterHooks";
 import { APBSBotEquipmentModGenerator } from "./ClassExtensions/APBSBotEquipmentModGenerator";
@@ -85,7 +85,6 @@ export class InstanceManager
     public apbsLogger: APBSLogger;
     public apbsTierGetter: APBSTierGetter;
     public apbsBotLevelGenerator: APBSBotLevelGenerator;
-    public apbsBotWeaponGenerator: APBSBotWeaponGenerator;
     public apbsEquipmentGetter: APBSEquipmentGetter;
     public apbsStaticRouterHooks: APBSStaticRouterHooks;
     public apbsDynamicRouterHooks: APBSDynamicRouterHooks;
@@ -97,7 +96,7 @@ export class InstanceManager
     //#region Acceessible in or after postDBLoad
     public tables: IDatabaseTables;
     public botConfigs: BotConfigs;
-    public moddedWeaponHelper: ModdedWeaponHelper;
+    public moddedImportHelper: ModdedImportHelper;
     //#endregion
 
     // Call at the start of the mods postDBLoad method
@@ -153,8 +152,6 @@ export class InstanceManager
         this.apbsStaticRouterHooks = container.resolve<APBSStaticRouterHooks>("APBSStaticRouterHooks");
         this.container.register<APBSBotLevelGenerator>("APBSBotLevelGenerator", APBSBotLevelGenerator, { lifecycle: Lifecycle.Singleton });
         this.apbsBotLevelGenerator = container.resolve<APBSBotLevelGenerator>("APBSBotLevelGenerator");
-        this.container.register<APBSBotWeaponGenerator>("APBSBotWeaponGenerator", APBSBotWeaponGenerator, { lifecycle: Lifecycle.Singleton });
-        this.apbsBotWeaponGenerator = container.resolve<APBSBotWeaponGenerator>("APBSBotWeaponGenerator");
         this.container.register<JSONHelper>("JSONHelper", JSONHelper, { lifecycle: Lifecycle.Singleton });
         this.jsonHelper = container.resolve<JSONHelper>("JSONHelper");
 
@@ -165,6 +162,8 @@ export class InstanceManager
         this.container.register("BotEquipmentModGenerator", { useToken: "APBSBotEquipmentModGenerator" });
         this.container.register<APBSBotLootGenerator>("APBSBotLootGenerator", APBSBotLootGenerator);
         this.container.register("BotLootGenerator", { useToken: "APBSBotLootGenerator" });
+        this.container.register<APBSBotWeaponGenerator>("APBSBotWeaponGenerator", APBSBotWeaponGenerator);
+        this.container.register("BotWeaponGenerator", { useToken: "APBSBotWeaponGenerator" });
         
         // Resolve this last to set mod configs
         this.container.register<ModConfig>("ModConfig", ModConfig, { lifecycle: Lifecycle.Singleton })
@@ -179,8 +178,8 @@ export class InstanceManager
         this.tables = container.resolve<DatabaseService>("DatabaseService").getTables();
 
         // Custom Classes
-        this.botConfigs = new BotConfigs(this.tables, this.configServer, this.tierInformation, this.apbsEquipmentGetter);
-        this.moddedWeaponHelper = new ModdedWeaponHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
+        this.botConfigs = new BotConfigs(this.tables, this.database, this.configServer, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
+        this.moddedImportHelper = new ModdedImportHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
 
     }
 

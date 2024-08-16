@@ -32,7 +32,6 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         // Register necessary routers & SPT method changes
         this.instance.apbsStaticRouterHooks.registerRouterHooks();
         this.instance.apbsBotLevelGenerator.registerBotLevelGenerator(container);
-        this.instance.apbsBotWeaponGenerator.registerBotWeaponGenerator(container);
 
         this.instance.jsonHelper.buildTierJson();
 
@@ -47,11 +46,13 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
         
         //Do postDBLoad stuff
         this.instance.botConfigs.initialize();
-        this.instance.moddedWeaponHelper.initialize();
+        this.instance.moddedImportHelper.initialize();
 
         if (this.instance.modInformation.versionNumber.includes("alpha"))
         {
-            this.instance.apbsLogger.log(Logging.WARN, "THIS IS AN EARLY RELEASE BUILD\n","Do not report problems with this anywhere except #acidphantasm-mods in the SPT Discord.\n","Thank you for testing!\n")
+            this.instance.apbsLogger.log(Logging.WARN, "THIS IS AN EARLY RELEASE BUILD")
+            this.instance.apbsLogger.log(Logging.WARN, "Do not report problems with this anywhere except #acidphantasm-mods in the SPT Discord.")
+            this.instance.apbsLogger.log(Logging.WARN, "Thank you for testing!")
         }
 
         const timeTaken = performance.now() - start;
