@@ -149,8 +149,8 @@
     },
     "pmcAmmo": {
         "Caliber1143x23ACP": {
-            "5ea2a8e200685063ec28c05a": 10,
-            "5e81f423763d9f754677bf2e": 30,
+            "5ea2a8e200685063ec28c05a": 20,
+            "5e81f423763d9f754677bf2e": 10,
             "5efb0cabfb3e451d70735af5": 40
         },
         "Caliber127x55": {
