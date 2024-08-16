@@ -37,6 +37,7 @@ export class BotConfigs
         this.setLootItemResourceRandomization();
         this.setPMCItemLimits();
         this.setPMCLoot();
+        this.setPMCScopeWhitelist();
         if (ModConfig.config.enableCustomPlateChances) this.setPlateChances();
         if (ModConfig.config.forceStock) this.setForceStock();
         if (ModConfig.config.forceDustCover) this.setForceDustCover();
@@ -264,15 +265,15 @@ export class BotConfigs
 
     private setPMCItemLimits(): void
     {
-        this.botConfig.itemSpawnLimits.pmc["60098ad7c2240c0fe85c570a"] = 1
-        this.botConfig.itemSpawnLimits.pmc["590c678286f77426c9660122"] = 1
-        this.botConfig.itemSpawnLimits.pmc["5e831507ea0a7c419c2f9bd9"] = 1
-        this.botConfig.itemSpawnLimits.pmc["590c661e86f7741e566b646a"] = 1
-        this.botConfig.itemSpawnLimits.pmc["544fb45d4bdc2dee738b4568"] = 1
-        this.botConfig.itemSpawnLimits.pmc["5e8488fa988a8701445df1e4"] = 1
-        this.botConfig.itemSpawnLimits.pmc["544fb37f4bdc2dee738b4567"] = 1
-        this.botConfig.itemSpawnLimits.pmc["5448e8d04bdc2ddf718b4569"] = 1
-        this.botConfig.itemSpawnLimits.pmc["5448e8d64bdc2dce718b4568"] = 1
+        this.botConfig.itemSpawnLimits.pmc["60098ad7c2240c0fe85c570a"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["590c678286f77426c9660122"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["5e831507ea0a7c419c2f9bd9"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["590c661e86f7741e566b646a"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["544fb45d4bdc2dee738b4568"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["5e8488fa988a8701445df1e4"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["544fb37f4bdc2dee738b4567"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["5448e8d04bdc2ddf718b4569"] = 1;
+        this.botConfig.itemSpawnLimits.pmc["5448e8d64bdc2dce718b4568"] = 1;
     }
 
     private setPMCLoot(): void
@@ -280,5 +281,73 @@ export class BotConfigs
         this.pmcConfig.looseWeaponInBackpackLootMinMax.min = 0;
         this.pmcConfig.looseWeaponInBackpackLootMinMax.max = 0;
         this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
+    }
+
+    private setPMCScopeWhitelist(): void
+    {
+        this.botConfig.equipment.pmc.weaponSightWhitelist = {
+            "5447b5fc4bdc2d87278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ae44bdc2dde698b456c",
+                "55818ac54bdc2d5b648b456e",
+                "55818add4bdc2d5b648b456f",
+                "55818aeb4bdc2ddc698b456a"
+            ],
+            "5447b5f14bdc2d61278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ae44bdc2dde698b456c",
+                "55818ac54bdc2d5b648b456e",
+                "55818add4bdc2d5b648b456f",
+                "55818aeb4bdc2ddc698b456a"
+            ],
+            "5447bedf4bdc2d87278b4568": [
+                "55818ad54bdc2ddc698b4569",
+                "55818add4bdc2d5b648b456f",
+                "55818ac54bdc2d5b648b456e",
+                "55818aeb4bdc2ddc698b456a"
+            ],
+            "5447bed64bdc2d97278b4568": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ac54bdc2d5b648b456e",
+                "55818add4bdc2d5b648b456f",
+                "55818aeb4bdc2ddc698b456a"
+            ],
+            "5447b6194bdc2d67278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818ae44bdc2dde698b456c",
+                "55818ac54bdc2d5b648b456e",
+                "55818aeb4bdc2ddc698b456a",
+                "55818add4bdc2d5b648b456f"
+            ],
+            "5447b5cf4bdc2d65278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ac54bdc2d5b648b456e"
+            ],
+            "617f1ef5e8b54b0998387733": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ac54bdc2d5b648b456e"
+            ],
+            "5447b6094bdc2dc3278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ac54bdc2d5b648b456e"
+            ],
+            "5447b5e04bdc2d62278b4567": [
+                "55818ad54bdc2ddc698b4569",
+                "55818acf4bdc2dde698b456b",
+                "55818ac54bdc2d5b648b456e"
+            ],
+            "5447b6254bdc2dc3278b4568": [
+                "55818ae44bdc2dde698b456c",
+                "55818ac54bdc2d5b648b456e",
+                "55818aeb4bdc2ddc698b456a",
+                "55818add4bdc2d5b648b456f"
+            ]
+        };
     }
 }
