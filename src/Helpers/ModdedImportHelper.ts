@@ -277,9 +277,9 @@ export class ModdedImportHelper
             let weight;
             if (equipmentSlot == "TacticalVest" && gridLength > 10) weight = 10;
             if (equipmentSlot == "TacticalVest" && gridLength <= 10) weight = 1;
-            if (equipmentSlot == "ArmouredRig") weight = 70;
-            if (equipmentSlot == "ArmorVest") weight = 20;
-            if (equipmentSlot == "Headwear" && equipmentSlotsLength > 0) weight = 7;
+            if (equipmentSlot == "ArmouredRig") weight = 7;
+            if (equipmentSlot == "ArmorVest") weight = 10;
+            if (equipmentSlot == "Headwear" && equipmentSlotsLength > 0) weight = 6;
             if (equipmentSlot == "Headwear" && equipmentSlotsLength == 0) weight = 1;
 
             tierJson.pmcUSEC.equipment[equipmentSlot][itemID] = weight
