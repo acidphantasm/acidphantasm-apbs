@@ -61,6 +61,7 @@ export interface Config
 {
     enableModdedWeapons: boolean,
     enableModdedEquipment: boolean,
+    initalTierAppearance: number,
     onlyChads: boolean,
     tarkovAndChill: boolean,
     disableScavTierGeneration: boolean,

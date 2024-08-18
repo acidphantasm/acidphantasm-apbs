@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/quotes */
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { TierInformation } from "../Globals/TierInformation";
@@ -66,8 +67,14 @@ export class ModdedImportHelper
 
     public initialize():void
     {
+        if (ModConfig.config.initalTierAppearance < 1 || ModConfig.config.initalTierAppearance > 7)
+        {
+            this.apbsLogger.log(Logging.WARN, `Config value for "initialTierAppearance" is invalid. Must be 1-7. Currently configured for ${ModConfig.config.initalTierAppearance}`)
+            return;
+        }
         if (ModConfig.config.enableModdedWeapons) this.buildVanillaWeaponList();
         if (ModConfig.config.enableModdedEquipment) this.buildVanillaEquipmentList();
+        
     }
 
     private buildVanillaWeaponList(): void
@@ -225,7 +232,7 @@ export class ModdedImportHelper
             const tierNumber = this.tierInformation.tiers[object].tier
             const tierJson = this.apbsEquipmentGetter.getTierJsonWithoutConfigChecks(tierNumber);
 
-            if (tierNumber < 3)
+            if (tierNumber < ModConfig.config.initalTierAppearance)
             {
                 continue;
             }
@@ -270,7 +277,7 @@ export class ModdedImportHelper
             const tierNumber = this.tierInformation.tiers[object].tier
             const tierJson = this.apbsEquipmentGetter.getTierJsonWithoutConfigChecks(tierNumber);
 
-            if (tierNumber < 3)
+            if (tierNumber < ModConfig.config.initalTierAppearance)
             {
                 continue;
             }

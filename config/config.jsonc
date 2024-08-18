@@ -2,8 +2,10 @@
 // If you enable either of these settings, support will not be granted.
 // enableModdedWeapons - Any mods adding weapons loaded before APBS will have their weapons & attachments imported.
 // enableModdedEquipment - Any mods adding equipment loaded before APBS will be imported with their attachments (if any).
+// initialTierAppearance - Whatever number (1-7) you put here, will be the first tier that imported mod items will be added to.
         "enableModdedWeapons": false,
         "enableModdedEquipment": false,
+        "initalTierAppearance": 3,
 
 // Looking for a challenge, or maybe just want to chill and wreck some bots?
 // Enable "onlyChads" to force all bots to be Tier7, enable "tarkovAndChill" to force all bots to be Tier1
