@@ -47,10 +47,11 @@ import { APBSBotInventoryGenerator } from "./ClassExtensions/APBSBotInventoryGen
 import { APBSBotLootGenerator } from "./ClassExtensions/APBSBotLootGenerator";
 import { ModConfig } from "./Globals/ModConfig";
 import { JSONHelper } from "./Helpers/JSONHelper";
+import { BlacklistHelper } from "./Helpers/BlacklistHelper";
 
 export class InstanceManager 
 {
-    //#region Accessible in or after preAkiLoad
+    //#region accessible in or after preAkiLoad
     public modName: string;
     public debug: boolean;
     public database: DatabaseService;
@@ -93,10 +94,14 @@ export class InstanceManager
     public modConfig: ModConfig;
     //#endregion
 
-    //#region Acceessible in or after postDBLoad
+    //#region accessible in or after postDBLoad
     public tables: IDatabaseTables;
     public botConfigs: BotConfigs;
     public moddedImportHelper: ModdedImportHelper;
+    //#endregion
+
+    //#region accessible in or after PostSptLoad
+    public blacklistHelper: BlacklistHelper;
     //#endregion
 
     // Call at the start of the mods postDBLoad method
@@ -180,6 +185,16 @@ export class InstanceManager
         // Custom Classes
         this.botConfigs = new BotConfigs(this.tables, this.database, this.configServer, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
         this.moddedImportHelper = new ModdedImportHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
+
+    }
+
+    public postSptLoad(container: DependencyContainer): void
+    {
+        // SPT Classes
+        this.tables = container.resolve<DatabaseService>("DatabaseService").getTables();
+
+        // Custom Classes
+        this.blacklistHelper = new BlacklistHelper(this.database, this.apbsEquipmentGetter, this.apbsLogger);
 
     }
 

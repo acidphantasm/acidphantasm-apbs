@@ -3,12 +3,13 @@ import { DependencyContainer } from "tsyringe";
 // SPT
 import { IPostDBLoadMod } from "@spt/models/external/IPostDBLoadMod";
 import { IPreSptLoadMod } from "@spt/models/external/IPreSptLoadMod";
+import { IPostSptLoadMod } from "@spt/models/external/IPostSptLoadMod";
 
 // Custom
 import { Logging } from "./Enums/Logging";
 import { InstanceManager } from "./InstanceManager";
 
-class APBS implements IPreSptLoadMod, IPostDBLoadMod
+class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
 {
     private instance: InstanceManager = new InstanceManager();
 
@@ -54,6 +55,18 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod
             this.instance.apbsLogger.log(Logging.WARN, "Do not report problems with this anywhere except #acidphantasm-mods in the SPT Discord.")
             this.instance.apbsLogger.log(Logging.WARN, "Thank you for testing!")
         }
+
+        const timeTaken = performance.now() - start;
+        this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postDBLoad`);
+    }
+
+    public postSptLoad(container: DependencyContainer): void 
+    {
+        const start = performance.now()
+        this.instance.postSptLoad(container);
+
+        //Do postSPTLoad stuff
+        this.instance.blacklistHelper.initialize();
 
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postDBLoad`);
