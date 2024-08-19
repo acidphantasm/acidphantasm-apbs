@@ -30,6 +30,7 @@ export class APBSEquipmentGetter
         }
         if (ModConfig.config.onlyChads) return 7;
         if (ModConfig.config.tarkovAndChill) return 1;
+        if (ModConfig.config.blickyMode) return 0;
 
         return tierInfo;
     }
@@ -39,30 +40,8 @@ export class APBSEquipmentGetter
         if (!ignoreCheck) tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
-            case 1:
-                return this.tierInformation.tier1
-            case 2:
-                return this.tierInformation.tier2
-            case 3:
-                return this.tierInformation.tier3
-            case 4:
-                return this.tierInformation.tier4
-            case 5:
-                return this.tierInformation.tier5
-            case 6:
-                return this.tierInformation.tier6
-            case 7:
-                return this.tierInformation.tier7
-            default:
-                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 loadout.");
-                return this.tierInformation.tier1
-        }
-    }
-
-    public getTierJsonWithoutConfigChecks(tierInfo: number)
-    {
-        switch (tierInfo)
-        {
+            case 0:
+                return this.tierInformation.tier0
             case 1:
                 return this.tierInformation.tier1
             case 2:
@@ -88,6 +67,8 @@ export class APBSEquipmentGetter
         tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
+            case 0:
+                return this.tierInformation.tier0mods
             case 1:
                 return this.tierInformation.tier1mods
             case 2:
@@ -113,6 +94,8 @@ export class APBSEquipmentGetter
         tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
+            case 0:
+                return this.tierInformation.tier0chances
             case 1:
                 return this.tierInformation.tier1chances
             case 2:
@@ -138,6 +121,8 @@ export class APBSEquipmentGetter
         if (!ignoreCheck) tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
+            case 0:
+                return this.tierInformation.tier0ammo
             case 1:
                 return this.tierInformation.tier1ammo
             case 2:
@@ -166,7 +151,8 @@ export class APBSEquipmentGetter
             case "marksman":
             case "cursedassault":
             case "assault":
-                return this.tierInformation.tier1mods;
+                if (ModConfig.config.blickyMode && !ModConfig.config.tarkovAndChill && !ModConfig.config.onlyChads) return tierJson;
+                else return this.tierInformation.tier1mods;
             default:
                 return tierJson;
         }

@@ -64,6 +64,7 @@ export interface Config
     initalTierAppearance: number,
     onlyChads: boolean,
     tarkovAndChill: boolean,
+    blickyMode: boolean,
     disableScavTierGeneration: boolean,
     disablePMCTierGeneration: boolean,
     disableBossTierGeneration: boolean,

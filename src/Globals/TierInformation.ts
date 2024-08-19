@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export class TierInformation
 {
+    public tier0;
     public tier1;
     public tier2;
     public tier3;
@@ -9,6 +10,7 @@ export class TierInformation
     public tier6;
     public tier7;
 
+    public tier0mods;
     public tier1mods;
     public tier2mods;
     public tier3mods;
@@ -17,6 +19,7 @@ export class TierInformation
     public tier6mods;
     public tier7mods;
 
+    public tier0chances;
     public tier1chances;
     public tier2chances;
     public tier3chances;
@@ -25,6 +28,7 @@ export class TierInformation
     public tier6chances;
     public tier7chances;
 
+    public tier0ammo;
     public tier1ammo;
     public tier2ammo;
     public tier3ammo;
