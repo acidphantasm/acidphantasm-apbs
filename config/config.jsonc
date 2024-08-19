@@ -41,6 +41,10 @@
 // If set to true, will enforce all AI weapons to be limited to 2 scopes and 2 lasers, if disabled the generation may go wild
         "forceWeaponModLimits": true,
 
+// Ehable/Disable PMC Loot
+// If set to true, will allow PMCs to have backpack/rig/pocket loot. If disabled, they will not.
+        "pmcLoot": false,
+
 // Configure Weapon Durability per AI Bot Type
 // Numbers are as follows: [ minDurability, maxDurability, minDelta, maxDelta ]
 // Example: [ 50, 90, 0, 25 ]

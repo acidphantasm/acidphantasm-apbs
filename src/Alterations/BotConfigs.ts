@@ -286,7 +286,79 @@ export class BotConfigs
     {
         this.pmcConfig.looseWeaponInBackpackLootMinMax.min = 0;
         this.pmcConfig.looseWeaponInBackpackLootMinMax.max = 0;
-        this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
+        if (ModConfig.config.pmcLoot)
+        {
+            for (const level in this.tierInformation.lootRandomization)
+            {
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["0"] =  1
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["3"] =  2
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["5"] =  5
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["8"] =  6
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["10"] =  5
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["12"] =  4
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["15"] =  4
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["20"] =  3
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["23"] =  1
+                
+                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["0"] =  1
+                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["1"] =  3
+                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["2"] =  4
+                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["3"] =  2
+                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["4"] =  1
+                
+                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["0"] =  1
+                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["1"] =  2
+                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["2"] =  3
+                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["3"] =  2
+                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["4"] =  1
+            }
+            for (const tierObject in this.tierInformation.tiers)
+            {
+                const tierNumber = this.tierInformation.tiers[tierObject].tier
+                const tierJson = this.apbsEquipmentGetter.getTierChancesJson(tierNumber);
+
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["0"] = 4
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["1"] = 15
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["2"] = 40
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["3"] = 10
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["4"] = 8
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["5"] = 2
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["10"] = 1
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["0"] = 4
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["1"] = 15
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["2"] = 40
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["3"] = 10
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["4"] = 8
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["5"] = 2
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["10"] = 1
+
+                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["0"] = 4
+                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["1"] = 9
+                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["2"] = 1
+                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["3"] = 1
+                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["0"] = 4
+                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["1"] = 9
+                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["2"] = 1
+                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["3"] = 1
+
+                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["0"] = 2
+                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["1"] = 12
+                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["2"] = 1
+                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["3"] = 1
+                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["4"] = 1
+                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["0"] = 2
+                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["1"] = 12
+                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["2"] = 1
+                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["3"] = 1
+                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["4"] = 1
+            }            
+            this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
+        }
+        else
+        {
+            this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
+        }
+
     }
 
     private setPMCScopeWhitelist(): void
