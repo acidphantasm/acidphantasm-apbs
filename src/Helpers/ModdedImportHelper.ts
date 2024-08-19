@@ -230,7 +230,7 @@ export class ModdedImportHelper
         for (const object in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[object].tier
-            const tierJson = this.apbsEquipmentGetter.getTierJsonWithoutConfigChecks(tierNumber);
+            const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber, true);
 
             if (tierNumber < ModConfig.config.initalTierAppearance)
             {
@@ -275,7 +275,7 @@ export class ModdedImportHelper
         for (const object in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[object].tier
-            const tierJson = this.apbsEquipmentGetter.getTierJsonWithoutConfigChecks(tierNumber);
+            const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber, true);
 
             if (tierNumber < ModConfig.config.initalTierAppearance)
             {
