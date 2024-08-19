@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/quotes */
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { TierInformation } from "../Globals/TierInformation";
@@ -15,6 +16,7 @@ import { ModConfig } from "../Globals/ModConfig";
 export class ModdedImportHelper
 {
     private blacklist: any[];
+    private attachmentBlacklist: any[];
 
     constructor(
         @inject("IDatabaseTables") protected tables: IDatabaseTables,
@@ -60,14 +62,33 @@ export class ModdedImportHelper
             "59ef13ca86f77445fd0e2483",
             "6531119b9afebff7ff0a1769"
         ]
+
+        this.attachmentBlacklist = [
+            "5c110624d174af029e69734c",
+            "5d1b5e94d7ad1a2b865a96b0",
+            "6478641c19d732620e045e17",
+            "5a1eaa87fcdbcb001865f75e",
+            "609bab8b455afd752b2e6138",
+            "63fc44e2429a8a166c7f61e6",
+            "5a1ead28fcdbcb001912fa9f",
+            "63fc449f5bd61c6cf3784a88",
+            "5b3b6dc75acfc47a8773fb1e",
+            "5c11046cd174af02a012e42b"
+        ]
     }
 
     public tiersTable = [];
 
     public initialize():void
     {
+        if (ModConfig.config.initalTierAppearance < 1 || ModConfig.config.initalTierAppearance > 7)
+        {
+            this.apbsLogger.log(Logging.WARN, `Config value for "initialTierAppearance" is invalid. Must be 1-7. Currently configured for ${ModConfig.config.initalTierAppearance}`)
+            return;
+        }
         if (ModConfig.config.enableModdedWeapons) this.buildVanillaWeaponList();
         if (ModConfig.config.enableModdedEquipment) this.buildVanillaEquipmentList();
+        
     }
 
     private buildVanillaWeaponList(): void
@@ -223,9 +244,9 @@ export class ModdedImportHelper
         for (const object in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[object].tier
-            const tierJson = this.apbsEquipmentGetter.getTierJsonWithoutConfigChecks(tierNumber);
+            const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber, true);
 
-            if (tierNumber < 3)
+            if (tierNumber < ModConfig.config.initalTierAppearance)
             {
                 continue;
             }
@@ -249,7 +270,7 @@ export class ModdedImportHelper
                 tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
                 tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
 
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 15.`)
+                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 10.`)
             }
             if (weaponType == "secondary")
             {
@@ -258,7 +279,7 @@ export class ModdedImportHelper
                 tierJson.scav.equipment.Holster[weaponId] = 4
                 tierJson.default.equipment.Holster[weaponId] = 4
 
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 5.`)
+                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 4.`)
             }
         }
     }
@@ -268,9 +289,9 @@ export class ModdedImportHelper
         for (const object in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[object].tier
-            const tierJson = this.apbsEquipmentGetter.getTierJsonWithoutConfigChecks(tierNumber);
+            const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber, true);
 
-            if (tierNumber < 3)
+            if (tierNumber < ModConfig.config.initalTierAppearance)
             {
                 continue;
             }
@@ -300,6 +321,11 @@ export class ModdedImportHelper
             {
                 const slotFilterItem = itemSlots[slot]?._props?.filters[0]?.Filter[item];
 
+                if (this.attachmentBlacklist.includes(slotFilterItem)) 
+                {
+                    this.apbsLogger.log(Logging.DEBUG, `Skipping ${slotFilterItem} due to internal blacklist`)
+                    continue;
+                }
                 if (this.tierInformation.tier1mods[itemID] == undefined)
                 {
                     this.tierInformation.tier1mods[itemID] = {};
@@ -348,6 +374,11 @@ export class ModdedImportHelper
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
                 
+                if (this.attachmentBlacklist.includes(slotFilterItem)) 
+                {
+                    this.apbsLogger.log(Logging.DEBUG, `Skipping ${slotFilterItem} due to internal blacklist`)
+                    continue;
+                }
                 if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
                 {
                     this.tierInformation.tier1mods[parentSlotItemID] = {};

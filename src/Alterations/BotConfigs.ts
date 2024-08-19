@@ -44,20 +44,6 @@ export class BotConfigs
         this.setPMCItemLimits();
         this.setPMCLoot();
         this.setPMCScopeWhitelist();
-        if (ModConfig.config.tier1AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier1AmmoBlacklist, 1);
-        if (ModConfig.config.tier2AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier2AmmoBlacklist, 2);
-        if (ModConfig.config.tier3AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier3AmmoBlacklist, 3);
-        if (ModConfig.config.tier4AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier4AmmoBlacklist, 4);
-        if (ModConfig.config.tier5AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier5AmmoBlacklist, 5);
-        if (ModConfig.config.tier6AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier6AmmoBlacklist, 6);
-        if (ModConfig.config.tier7AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier7AmmoBlacklist, 7);
-        if (ModConfig.config.tier1EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier1EquipmentBlacklist, 1);
-        if (ModConfig.config.tier2EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier2EquipmentBlacklist, 2);
-        if (ModConfig.config.tier3EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier3EquipmentBlacklist, 3);
-        if (ModConfig.config.tier4EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier4EquipmentBlacklist, 4);
-        if (ModConfig.config.tier5EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier5EquipmentBlacklist, 5);
-        if (ModConfig.config.tier6EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier6EquipmentBlacklist, 6);
-        if (ModConfig.config.tier7EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier7EquipmentBlacklist, 7);
         if (ModConfig.config.enableCustomPlateChances) this.setPlateChances();
         if (ModConfig.config.forceStock) this.setForceStock();
         if (ModConfig.config.forceDustCover) this.setForceDustCover();
@@ -300,7 +286,79 @@ export class BotConfigs
     {
         this.pmcConfig.looseWeaponInBackpackLootMinMax.min = 0;
         this.pmcConfig.looseWeaponInBackpackLootMinMax.max = 0;
-        this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
+        if (ModConfig.config.pmcLoot)
+        {
+            for (const level in this.tierInformation.lootRandomization)
+            {
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["0"] =  1
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["3"] =  2
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["5"] =  5
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["8"] =  6
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["10"] =  5
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["12"] =  4
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["15"] =  4
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["20"] =  3
+                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["23"] =  1
+                
+                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["0"] =  1
+                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["1"] =  3
+                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["2"] =  4
+                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["3"] =  2
+                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["4"] =  1
+                
+                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["0"] =  1
+                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["1"] =  2
+                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["2"] =  3
+                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["3"] =  2
+                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["4"] =  1
+            }
+            for (const tierObject in this.tierInformation.tiers)
+            {
+                const tierNumber = this.tierInformation.tiers[tierObject].tier
+                const tierJson = this.apbsEquipmentGetter.getTierChancesJson(tierNumber);
+
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["0"] = 4
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["1"] = 15
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["2"] = 40
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["3"] = 10
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["4"] = 8
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["5"] = 2
+                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["10"] = 1
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["0"] = 4
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["1"] = 15
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["2"] = 40
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["3"] = 10
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["4"] = 8
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["5"] = 2
+                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["10"] = 1
+
+                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["0"] = 4
+                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["1"] = 9
+                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["2"] = 1
+                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["3"] = 1
+                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["0"] = 4
+                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["1"] = 9
+                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["2"] = 1
+                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["3"] = 1
+
+                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["0"] = 2
+                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["1"] = 12
+                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["2"] = 1
+                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["3"] = 1
+                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["4"] = 1
+                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["0"] = 2
+                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["1"] = 12
+                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["2"] = 1
+                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["3"] = 1
+                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["4"] = 1
+            }            
+            this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
+        }
+        else
+        {
+            this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
+        }
+
     }
 
     private setPMCScopeWhitelist(): void
@@ -369,81 +427,5 @@ export class BotConfigs
                 "55818add4bdc2d5b648b456f"
             ]
         };
-    }
-
-    private removeBlacklistedAmmo(ammoBlacklist: string[], tier: number): void
-    {
-        const tierJSON = this.apbsEquipmentGetter.getTierAmmoJson(tier, true);
-        for (const item in ammoBlacklist)
-        {
-            const itemDetails = this.getItem(ammoBlacklist[item])
-            if (itemDetails != undefined && itemDetails._parent == "5485a8684bdc2da71d8b4567")
-            {
-                for (const botType in tierJSON)
-                {
-                    for (const ammo in tierJSON[botType])
-                    {
-                        if (Object.keys(tierJSON[botType][ammo]).includes(itemDetails._id))
-                        {
-                            if (Object.keys(tierJSON[botType][ammo]).length > 1)
-                            {
-                                delete tierJSON[botType][ammo][itemDetails._id]
-                                this.apbsLogger.log(Logging.DEBUG, `Added "${ammoBlacklist[item]}" to blacklist for Tier${tier} ${botType} pool`)
-                                continue;
-                            }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${ammoBlacklist[item]}" as it would make the Tier${tier} ${botType} pool empty for ${ammo}`)
-                            continue;
-                        }
-                    }
-                }
-            }
-            if (itemDetails == undefined || itemDetails._parent != "5485a8684bdc2da71d8b4567")
-            {
-                this.apbsLogger.log(Logging.WARN, `"${ammoBlacklist[item]}" in Ammo Blacklist is either an invalid ammunition or item ID.`)
-            }
-        }
-    }
-
-    private removeBlacklistedEquipment(equipmentBlacklist: string[], tier: number): void
-    {
-        const tierJSON = this.apbsEquipmentGetter.getTierJson(tier, true);
-        for (const item in equipmentBlacklist)
-        {
-            const itemDetails = this.getItem(equipmentBlacklist[item])
-            if (itemDetails != undefined)
-            {
-                for (const botType in tierJSON)
-                {
-                    for (const equipmentSlot in tierJSON[botType].equipment)
-                    {
-                        if (Object.keys(tierJSON[botType].equipment[equipmentSlot]).includes(itemDetails._id))
-                        {
-                            if (Object.keys(tierJSON[botType].equipment[equipmentSlot]).length > 1)
-                            {
-                                delete tierJSON[botType].equipment[equipmentSlot][itemDetails._id]
-                                this.apbsLogger.log(Logging.DEBUG, `Added "${equipmentBlacklist[item]}" to blacklist for Tier${tier} ${botType} equipment pool`)
-                                continue;
-                            }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${equipmentBlacklist[item]}" as it would make the Tier${tier} ${botType} equipment pool empty for ${equipmentSlot}`)
-                            continue;
-                        }
-                    }
-                }
-            }
-            if (itemDetails == undefined)
-            {
-                this.apbsLogger.log(Logging.WARN, `"${equipmentBlacklist[item]}" in Equipment Blacklist is an invalid item ID.`)
-            }
-        }
-    }
-    
-    private getItem(tpl: string): ITemplateItem
-    {
-        if (tpl in this.database.getItems())
-        {
-            return this.database.getItems()[tpl];
-        }
-
-        return undefined;
     }
 }

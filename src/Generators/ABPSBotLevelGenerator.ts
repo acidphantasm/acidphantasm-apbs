@@ -92,6 +92,7 @@ export class APBSBotLevelGenerator
         }
         if (ModConfig.config.onlyChads) return "7";
         if (ModConfig.config.tarkovAndChill) return "1";
+        if (ModConfig.config.blickyMode) return "0";
 
         return tierInfo;
     }

@@ -2,14 +2,19 @@
 // If you enable either of these settings, support will not be granted.
 // enableModdedWeapons - Any mods adding weapons loaded before APBS will have their weapons & attachments imported.
 // enableModdedEquipment - Any mods adding equipment loaded before APBS will be imported with their attachments (if any).
+// initialTierAppearance - Whatever number (1-7) you put here, will be the first tier that imported mod items will be added to.
         "enableModdedWeapons": false,
         "enableModdedEquipment": false,
+        "initalTierAppearance": 3,
 
 // Looking for a challenge, or maybe just want to chill and wreck some bots?
-// Enable "onlyChads" to force all bots to be Tier7, enable "tarkovAndChill" to force all bots to be Tier1
+// Enable "onlyChads" to force all bots to be Tier7, or enable "tarkovAndChill" to force all bots to be Tier1
 // Enabling both will enable chaos mode, bots will pull gear and weapons from completely random Tiers during generation. It's chaos. (scavs still pull crap weapon mods and ammo)
+// Alternatively, enable "blickyMode" to give everyone a blicky. It's actually the real chill mode.
+// Side note on "blickyMode" - it breaks some boss guards. Don't report it. It's a joke mode. It also won't do anything if either of the other two "modes" are enabled.
         "onlyChads": false,
         "tarkovAndChill": false,
+        "blickyMode": false,
 
 // Disable specific bot generation
 // For each type that you disable, it will disable their tiered weapon and gear generation.
@@ -35,6 +40,10 @@
 // Force weapon mod count limits
 // If set to true, will enforce all AI weapons to be limited to 2 scopes and 2 lasers, if disabled the generation may go wild
         "forceWeaponModLimits": true,
+
+// Ehable/Disable PMC Loot
+// If set to true, will allow PMCs to have backpack/rig/pocket loot. If disabled, they will not.
+        "pmcLoot": false,
 
 // Configure Weapon Durability per AI Bot Type
 // Numbers are as follows: [ minDurability, maxDurability, minDelta, maxDelta ]

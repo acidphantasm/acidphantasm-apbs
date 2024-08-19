@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export class TierInformation
 {
+    public tier0;
     public tier1;
     public tier2;
     public tier3;
@@ -9,6 +10,7 @@ export class TierInformation
     public tier6;
     public tier7;
 
+    public tier0mods;
     public tier1mods;
     public tier2mods;
     public tier3mods;
@@ -17,6 +19,7 @@ export class TierInformation
     public tier6mods;
     public tier7mods;
 
+    public tier0chances;
     public tier1chances;
     public tier2chances;
     public tier3chances;
@@ -25,6 +28,7 @@ export class TierInformation
     public tier6chances;
     public tier7chances;
 
+    public tier0ammo;
     public tier1ammo;
     public tier2ammo;
     public tier3ammo;
@@ -92,29 +96,29 @@ export class TierInformation
                 "max": 10
             },
             "front_plate": {
-                "2": 15,
-                "3": 35,
-                "4": 15
+                "2": 10,
+                "3": 80,
+                "4": 10
             },
             "back_plate": {
-                "2": 15,
-                "3": 35,
-                "4": 15
+                "2": 10,
+                "3": 80,
+                "4": 10
             },
             "side_plate": {
-                "2": 15,
-                "3": 35,
-                "4": 15
+                "2": 10,
+                "3": 80,
+                "4": 10
             },
             "left_side_plate": {
-                "2": 15,
-                "3": 35,
-                "4": 15
+                "2": 10,
+                "3": 80,
+                "4": 10
             },
             "right_side_plate": {
-                "2": 15,
-                "3": 35,
-                "4": 15
+                "2": 10,
+                "3": 80,
+                "4": 10
             }
         },
         {
@@ -123,28 +127,28 @@ export class TierInformation
                 "max": 20
             },
             "front_plate": {
-                "3": 35,
-                "4": 30,
+                "3": 65,
+                "4": 32,
                 "5": 3
             },
             "back_plate": {
-                "3": 35,
-                "4": 30,
+                "3": 65,
+                "4": 32,
                 "5": 3
             },
             "side_plate": {
-                "3": 35,
-                "4": 30,
+                "3": 65,
+                "4": 32,
                 "5": 3
             },
             "left_side_plate": {
-                "3": 35,
-                "4": 30,
+                "3": 65,
+                "4": 32,
                 "5": 3
             },
             "right_side_plate": {
-                "3": 35,
-                "4": 30,
+                "3": 65,
+                "4": 32,
                 "5": 3
             }
         },
@@ -155,33 +159,33 @@ export class TierInformation
             },
             "front_plate": {
                 "3": 10,
-                "4": 55,
+                "4": 70,
                 "5": 15,
-                "6": 3
+                "6": 5
             },
             "back_plate": {
                 "3": 10,
-                "4": 55,
+                "4": 70,
                 "5": 15,
-                "6": 3
+                "6": 5
             },
             "side_plate": {
                 "3": 10,
-                "4": 55,
+                "4": 70,
                 "5": 15,
-                "6": 3
+                "6": 5
             },
             "left_side_plate": {
                 "3": 10,
-                "4": 55,
+                "4": 70,
                 "5": 15,
-                "6": 3
+                "6": 5
             },
             "right_side_plate": {
                 "3": 10,
-                "4": 55,
+                "4": 70,
                 "5": 15,
-                "6": 3
+                "6": 5
             }
         },
         {
@@ -190,33 +194,28 @@ export class TierInformation
                 "max": 40
             },
             "front_plate": {
-                "3": 5,
-                "4": 25,
-                "5": 30,
+                "4": 30,
+                "5": 50,
                 "6": 20
             },
             "back_plate": {
-                "3": 5,
-                "4": 25,
-                "5": 30,
+                "4": 30,
+                "5": 50,
                 "6": 20
             },
             "side_plate": {
-                "3": 5,
-                "4": 25,
-                "5": 30,
+                "4": 30,
+                "5": 50,
                 "6": 20
             },
             "left_side_plate": {
-                "3": 5,
-                "4": 25,
-                "5": 30,
+                "4": 30,
+                "5": 50,
                 "6": 20
             },
             "right_side_plate": {
-                "3": 5,
-                "4": 25,
-                "5": 30,
+                "4": 30,
+                "5": 50,
                 "6": 20
             }
         },
@@ -226,29 +225,29 @@ export class TierInformation
                 "max": 50
             },
             "front_plate": {
-                "4": 15,
-                "5": 35,
-                "6": 35
+                "4": 10,
+                "5": 45,
+                "6": 45
             },
             "back_plate": {
-                "4": 15,
-                "5": 35,
-                "6": 35
+                "4": 10,
+                "5": 45,
+                "6": 45
             },
             "side_plate": {
-                "4": 15,
-                "5": 35,
-                "6": 35
+                "4": 10,
+                "5": 45,
+                "6": 45
             },
             "left_side_plate": {
-                "4": 15,
-                "5": 35,
-                "6": 35
+                "4": 10,
+                "5": 45,
+                "6": 45
             },
             "right_side_plate": {
-                "4": 15,
-                "5": 35,
-                "6": 35
+                "4": 10,
+                "5": 45,
+                "6": 45
             }
         },
         {
@@ -257,29 +256,29 @@ export class TierInformation
                 "max": 60
             },
             "front_plate": {
-                "4": 10,
-                "5": 40,
-                "6": 50
+                "4": 5,
+                "5": 30,
+                "6": 65
             },
             "back_plate": {
-                "4": 10,
-                "5": 40,
-                "6": 50
+                "4": 5,
+                "5": 30,
+                "6": 65
             },
             "side_plate": {
-                "4": 10,
-                "5": 40,
-                "6": 50
+                "4": 5,
+                "5": 30,
+                "6": 65
             },
             "left_side_plate": {
-                "4": 10,
-                "5": 40,
-                "6": 50
+                "4": 5,
+                "5": 30,
+                "6": 65
             },
             "right_side_plate": {
-                "4": 10,
-                "5": 40,
-                "6": 50
+                "4": 5,
+                "5": 30,
+                "6": 65
             }
         },
         {
@@ -288,29 +287,29 @@ export class TierInformation
                 "max": 100
             },
             "front_plate": {
-                "4": 25,
-                "5": 70,
-                "6": 100
+                "4": 1,
+                "5": 19,
+                "6": 80
             },
             "back_plate": {
-                "4": 25,
-                "5": 70,
-                "6": 100
+                "4": 1,
+                "5": 19,
+                "6": 80
             },
             "side_plate": {
-                "4": 25,
-                "5": 70,
-                "6": 100
+                "4": 1,
+                "5": 19,
+                "6": 80
             },
             "left_side_plate": {
-                "4": 25,
-                "5": 70,
-                "6": 100
+                "4": 1,
+                "5": 19,
+                "6": 80
             },
             "right_side_plate": {
-                "4": 25,
-                "5": 70,
-                "6": 100
+                "4": 1,
+                "5": 19,
+                "6": 80
             }
         }
     ]
@@ -319,7 +318,7 @@ export class TierInformation
         {
             "levelRange": {
                 "min": 1,
-                "max": 79
+                "max": 100
             },
             "front_plate": {
                 "2": 15,
