@@ -72,7 +72,8 @@ export class ModdedImportHelper
             "63fc44e2429a8a166c7f61e6",
             "5a1ead28fcdbcb001912fa9f",
             "63fc449f5bd61c6cf3784a88",
-            "5b3b6dc75acfc47a8773fb1e"
+            "5b3b6dc75acfc47a8773fb1e",
+            "5c11046cd174af02a012e42b"
         ]
     }
 
@@ -320,7 +321,11 @@ export class ModdedImportHelper
             {
                 const slotFilterItem = itemSlots[slot]?._props?.filters[0]?.Filter[item];
 
-                if (this.attachmentBlacklist.includes(slotFilterItem)) continue;
+                if (this.attachmentBlacklist.includes(slotFilterItem)) 
+                {
+                    this.apbsLogger.log(Logging.DEBUG, `Skipping ${slotFilterItem} due to internal blacklist`)
+                    continue;
+                }
                 if (this.tierInformation.tier1mods[itemID] == undefined)
                 {
                     this.tierInformation.tier1mods[itemID] = {};
@@ -369,7 +374,11 @@ export class ModdedImportHelper
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
                 
-                if (this.attachmentBlacklist.includes(slotFilterItem)) continue;
+                if (this.attachmentBlacklist.includes(slotFilterItem)) 
+                {
+                    this.apbsLogger.log(Logging.DEBUG, `Skipping ${slotFilterItem} due to internal blacklist`)
+                    continue;
+                }
                 if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
                 {
                     this.tierInformation.tier1mods[parentSlotItemID] = {};
