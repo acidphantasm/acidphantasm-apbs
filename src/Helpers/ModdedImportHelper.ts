@@ -16,6 +16,7 @@ import { ModConfig } from "../Globals/ModConfig";
 export class ModdedImportHelper
 {
     private blacklist: any[];
+    private attachmentBlacklist: any[];
 
     constructor(
         @inject("IDatabaseTables") protected tables: IDatabaseTables,
@@ -60,6 +61,16 @@ export class ModdedImportHelper
             "5c066ef40db834001966a595",
             "59ef13ca86f77445fd0e2483",
             "6531119b9afebff7ff0a1769"
+        ]
+
+        this.attachmentBlacklist = [
+            "5c110624d174af029e69734c",
+            "5d1b5e94d7ad1a2b865a96b0",
+            "6478641c19d732620e045e17",
+            "5a1eaa87fcdbcb001865f75e",
+            "609bab8b455afd752b2e6138",
+            "63fc44e2429a8a166c7f61e6",
+            "5a1ead28fcdbcb001912fa9f"
         ]
     }
 
@@ -307,6 +318,7 @@ export class ModdedImportHelper
             {
                 const slotFilterItem = itemSlots[slot]?._props?.filters[0]?.Filter[item];
 
+                if (this.attachmentBlacklist.includes(slotFilterItem)) continue;
                 if (this.tierInformation.tier1mods[itemID] == undefined)
                 {
                     this.tierInformation.tier1mods[itemID] = {};
@@ -355,6 +367,7 @@ export class ModdedImportHelper
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
                 
+                if (this.attachmentBlacklist.includes(slotFilterItem)) continue;
                 if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
                 {
                     this.tierInformation.tier1mods[parentSlotItemID] = {};
