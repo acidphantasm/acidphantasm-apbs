@@ -70,7 +70,9 @@ export class ModdedImportHelper
             "5a1eaa87fcdbcb001865f75e",
             "609bab8b455afd752b2e6138",
             "63fc44e2429a8a166c7f61e6",
-            "5a1ead28fcdbcb001912fa9f"
+            "5a1ead28fcdbcb001912fa9f",
+            "63fc449f5bd61c6cf3784a88",
+            "5b3b6dc75acfc47a8773fb1e"
         ]
     }
 
