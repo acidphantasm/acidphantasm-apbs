@@ -270,7 +270,7 @@ export class ModdedImportHelper
                 tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
                 tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
 
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 15.`)
+                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 10.`)
             }
             if (weaponType == "secondary")
             {
@@ -279,7 +279,7 @@ export class ModdedImportHelper
                 tierJson.scav.equipment.Holster[weaponId] = 4
                 tierJson.default.equipment.Holster[weaponId] = 4
 
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 5.`)
+                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 4.`)
             }
         }
     }
