@@ -4,6 +4,7 @@ import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { Logging, LoggingFolders } from "../Enums/Logging";
 import { ModInformation } from "../Globals/ModInformation";
 import fs from "node:fs";
+import { ModConfig } from "../Globals/ModConfig";
 
 @injectable()
 export class APBSLogger
@@ -27,6 +28,7 @@ export class APBSLogger
 
     public async log(logcation: Logging, message: string, message2?: string, message3?: string, message4?: string, message5?: string, message6?: string, message7?: string, message8?: string): Promise<void>
     {
+        if (!ModConfig.config.enableDebugLog && logcation == Logging.DEBUG) return;
         const messagesArray = {
             message,
             message2,
