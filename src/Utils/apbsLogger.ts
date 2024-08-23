@@ -19,14 +19,11 @@ export class APBSLogger
     {
         for (const value in LoggingFolders)
         {
-            fs.writeFile(`${this.modInformation.logPath}/${LoggingFolders[value]}.log`, `${new Date().toLocaleString()} - Log File Created - APBS Version: ${this.modInformation.versionNumber}\n`, function (err) 
-            {
-                if (err) throw err;
-            });
+            fs.writeFileSync(`${this.modInformation.logPath}/${LoggingFolders[value]}.log`, `${new Date().toLocaleString()} - Log File Created - APBS Version: ${this.modInformation.versionNumber}\n`);
         }
     }
 
-    public async log(logcation: Logging, message: string, message2?: string, message3?: string, message4?: string, message5?: string, message6?: string, message7?: string, message8?: string): Promise<void>
+    public log(logcation: Logging, message: string, message2?: string, message3?: string, message4?: string, message5?: string, message6?: string, message7?: string, message8?: string): void
     {
         if (!ModConfig.config.enableDebugLog && logcation == Logging.DEBUG) return;
         const messagesArray = {
@@ -80,10 +77,7 @@ export class APBSLogger
                 messages += `${new Date().toLocaleString()}${textFlag}${messagesArray[line]}\n`;
             }
         }
-        await fs.appendFile(`${this.modInformation.logPath}/${logType}.log`, `${messages}`, function (err) 
-        {
-            if (err) throw err;
-        });
+        fs.appendFileSync(`${this.modInformation.logPath}/${logType}.log`, `${messages}`);
         if (showInConsole) 
         {
             if (logcation == Logging.WARN) 
