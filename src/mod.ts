@@ -69,7 +69,7 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
         this.instance.blacklistHelper.initialize();
 
         const timeTaken = performance.now() - start;
-        this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postDBLoad`);
+        this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postSptLoad`);
     }
 }
 
