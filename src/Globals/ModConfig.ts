@@ -118,4 +118,5 @@ export interface Config
     tier5LevelDelta: [ number, number ],
     tier6LevelDelta: [ number, number ],
     tier7LevelDelta: [ number, number ],
+    enableDebugLog: boolean,
 }

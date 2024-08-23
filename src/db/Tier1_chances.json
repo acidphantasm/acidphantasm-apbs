@@ -13,7 +13,9 @@
                 "Holster": 5,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 2,
-                "TacticalVest": 99
+                "TacticalVest": 99,
+                "SecuredContainer": 100,
+                "Pockets": 100
             },
             "equipmentMods": {
                 "back_plate": 30,
@@ -190,7 +192,9 @@
                 "Holster": 5,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 2,
-                "TacticalVest": 99
+                "TacticalVest": 99,
+                "SecuredContainer": 100,
+                "Pockets": 100
             },
             "equipmentMods": {
                 "back_plate": 30,
