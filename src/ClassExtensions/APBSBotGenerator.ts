@@ -78,8 +78,6 @@ export class APBSBotGenerator extends BotGenerator
         {
             const tier = this.apbsTierGetter.getTierByLevel(bot.Info.Level)
             const role = bot.Info.Settings.Role
-
-            console.log(`${tier} and role ${role}`)
             const appearanceJson = this.apbsEquipmentGetter.getPmcAppearance(role, tier)
 
             bot.Customization.Head = this.weightedRandomHelper.getWeightedValue<string>(appearanceJson.head);
