@@ -37,6 +37,15 @@ import Tier5ammo = require("../db/Tier5_ammo.json");
 import Tier6ammo = require("../db/Tier6_ammo.json");
 import Tier7ammo = require("../db/Tier7_ammo.json");
 
+import Tier0appearance = require("../db/Tier0_appearance.json");
+import Tier1appearance = require("../db/Tier1_appearance.json");
+import Tier2appearance = require("../db/Tier2_appearance.json");
+import Tier3appearance = require("../db/Tier3_appearance.json");
+import Tier4appearance = require("../db/Tier4_appearance.json");
+import Tier5appearance = require("../db/Tier5_appearance.json");
+import Tier6appearance = require("../db/Tier6_appearance.json");
+import Tier7appearance = require("../db/Tier7_appearance.json");
+
 @injectable()
 export class JSONHelper
 {
@@ -82,5 +91,14 @@ export class JSONHelper
         this.tierInformation.tier5ammo = Tier5ammo;
         this.tierInformation.tier6ammo = Tier6ammo;
         this.tierInformation.tier7ammo = Tier7ammo;
+
+        this.tierInformation.tier0appearance = Tier0appearance;
+        this.tierInformation.tier1appearance = Tier1appearance;
+        this.tierInformation.tier2appearance = Tier2appearance;
+        this.tierInformation.tier3appearance = Tier3appearance;
+        this.tierInformation.tier4appearance = Tier4appearance;
+        this.tierInformation.tier5appearance = Tier5appearance;
+        this.tierInformation.tier6appearance = Tier6appearance;
+        this.tierInformation.tier7appearance = Tier7appearance;
     }
 }

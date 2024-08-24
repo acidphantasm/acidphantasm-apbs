@@ -37,6 +37,15 @@ export class TierInformation
     public tier6ammo;
     public tier7ammo;
 
+    public tier0appearance;
+    public tier1appearance;
+    public tier2appearance;
+    public tier3appearance;
+    public tier4appearance;
+    public tier5appearance;
+    public tier6appearance;
+    public tier7appearance;
+
     public tiers = [
         {
             tier: 1,

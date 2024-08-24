@@ -6,6 +6,7 @@ import { DependencyContainer, Lifecycle } from "tsyringe";
 import { PreSptModLoader } from "@spt/loaders/PreSptModLoader";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { StaticRouterModService } from "@spt/services/mod/staticRouter/StaticRouterModService";
+import { DynamicRouterModService } from "@spt/services/mod/dynamicRouter/DynamicRouterModService";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { DatabaseService } from "@spt/services/DatabaseService";
 import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
@@ -40,7 +41,7 @@ import { APBSBotWeaponGenerator } from "./ClassExtensions/APBSBotWeaponGenerator
 import { APBSTierGetter } from "./Utils/APBSTierGetter";
 import { APBSEquipmentGetter } from "./Utils/APBSEquipmentGetter";
 import { ModdedImportHelper } from "./Helpers/ModdedImportHelper";
-import { DynamicRouterModService } from "@spt/services/mod/dynamicRouter/DynamicRouterModService";
+import { APBSBotGenerator } from "./ClassExtensions/APBSBotGenerator";
 import { APBSDynamicRouterHooks } from "./RouterHooks/APBSDynamicRouterHooks";
 import { APBSBotEquipmentModGenerator } from "./ClassExtensions/APBSBotEquipmentModGenerator";
 import { APBSBotInventoryGenerator } from "./ClassExtensions/APBSBotInventoryGenerator";
@@ -85,6 +86,7 @@ export class InstanceManager
 
     public apbsLogger: APBSLogger;
     public apbsTierGetter: APBSTierGetter;
+    public apbsBotGenerator: APBSBotGenerator;
     public apbsBotLevelGenerator: APBSBotLevelGenerator;
     public apbsEquipmentGetter: APBSEquipmentGetter;
     public apbsStaticRouterHooks: APBSStaticRouterHooks;
@@ -161,6 +163,8 @@ export class InstanceManager
         this.jsonHelper = container.resolve<JSONHelper>("JSONHelper");
 
         // Class Extension Override
+        this.container.register<APBSBotGenerator>("APBSBotGenerator", APBSBotGenerator);
+        this.container.register("BotGenerator", { useToken: "APBSBotGenerator" });
         this.container.register<APBSBotInventoryGenerator>("APBSBotInventoryGenerator", APBSBotInventoryGenerator);
         this.container.register("BotInventoryGenerator", { useToken: "APBSBotInventoryGenerator" });
         this.container.register<APBSBotEquipmentModGenerator>("APBSBotEquipmentModGenerator", APBSBotEquipmentModGenerator);
