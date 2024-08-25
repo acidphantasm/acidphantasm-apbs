@@ -90,7 +90,8 @@ export class APBSBotGenerator extends BotGenerator
     
             // Find the body/hands mapping
             const matchingBody: IWildBody = bodyGlobalDict[chosenBodyTemplate?._name];
-            if (matchingBody?.isNotRandom) {
+            if (matchingBody?.isNotRandom) 
+            {
                 // Has fixed hands for this body, set them
                 bot.Customization.Hands = matchingBody.hands;
             }
@@ -106,7 +107,8 @@ export class APBSBotGenerator extends BotGenerator
 
         // Find the body/hands mapping
         const matchingBody: IWildBody = bodyGlobalDict[chosenBodyTemplate?._name];
-        if (matchingBody?.isNotRandom) {
+        if (matchingBody?.isNotRandom) 
+        {
             // Has fixed hands for this body, set them
             bot.Customization.Hands = matchingBody.hands;
         }
