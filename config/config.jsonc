@@ -74,6 +74,15 @@
         "guardSidePlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
         "raiderMainPlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
         "raiderSidePlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
+        
+// Enable/Disable adding keys to Scav Backpack loot
+// Pick -ONE- option below and enable it if you would like to expand the backpack key pool for scavs.
+// All keys are self explanatory
+// Mechanical keys are keys that aren't keycards
+// Keycards are self explanatory
+        "addAllKeysToScavs": false,
+        "addOnlyMechanicalKeysToScavs": true,
+        "addOnlyKeyCardsToScavs": false,
 
 // Enable/Disable randomization of medical and food resource values
 // If set to true, all scavs and PMCs will have randomized resource values, based on the chances you set below, for medical and food items. 
