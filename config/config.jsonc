@@ -81,7 +81,7 @@
 // Mechanical keys are keys that aren't keycards
 // Keycards are self explanatory
         "addAllKeysToScavs": false,
-        "addOnlyMechanicalKeysToScavs": true,
+        "addOnlyMechanicalKeysToScavs": false,
         "addOnlyKeyCardsToScavs": false,
 
 // Enable/Disable randomization of medical and food resource values
