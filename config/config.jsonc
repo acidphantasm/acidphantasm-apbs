@@ -16,8 +16,8 @@
         "tarkovAndChill": false,
         "blickyMode": false,
 
-// Disable specific bot generation
-// For each type that you disable, it will disable their tiered weapon and gear generation.
+// Enable/Disable specific bot generation
+// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation
         "disableScavTierGeneration": false,
         "disablePMCTierGeneration": false,
         "disableBossTierGeneration": false,
