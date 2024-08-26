@@ -213,13 +213,13 @@ export class ModdedImportHelper
             {
                 if (clothingList[item]._props.Side.includes("Bear"))
                 {
-                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcBEAR.appearance.feet[clothingList[item]._id] = 100
-                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcBEAR.appearance.body[clothingList[item]._id] = 100
+                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcBEAR.appearance.feet[clothingList[item]._id] = 1
+                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcBEAR.appearance.body[clothingList[item]._id] = 1
                 }
                 if (clothingList[item]._props.Side.includes("Usec"))
                 {
-                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcUSEC.appearance.feet[clothingList[item]._id] = 100
-                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcUSEC.appearance.body[clothingList[item]._id] = 100
+                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcUSEC.appearance.feet[clothingList[item]._id] = 1
+                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcUSEC.appearance.body[clothingList[item]._id] = 1
                 }
             }
         }        
