@@ -11,6 +11,7 @@ import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 
 import { ModConfig } from "../Globals/ModConfig";
+import { ICustomizationItem } from "@spt/models/eft/common/tables/ICustomizationItem";
 
 @injectable()
 export class ModdedImportHelper
@@ -75,7 +76,8 @@ export class ModdedImportHelper
             "5b3b6dc75acfc47a8773fb1e",
             "5c11046cd174af02a012e42b",
             "544a3f024bdc2d1d388b4568",
-            "544a3d0a4bdc2d1b388b4567"
+            "544a3d0a4bdc2d1b388b4567",
+            "5648b62b4bdc2d9d488b4585"
         ]
     }
 
@@ -90,7 +92,7 @@ export class ModdedImportHelper
         }
         if (ModConfig.config.enableModdedWeapons) this.buildVanillaWeaponList();
         if (ModConfig.config.enableModdedEquipment) this.buildVanillaEquipmentList();
-        
+        if (ModConfig.config.enableModdedClothing) this.buildVanillaClothingList();
     }
 
     private buildVanillaWeaponList(): void
@@ -148,6 +150,79 @@ export class ModdedImportHelper
             tacticalVests[element] = this.getItem(element);
         })
         this.getModdedItems(tacticalVests, BaseClasses.VEST, "Vests");
+    }
+
+    private buildVanillaClothingList(): void
+    {
+        this.apbsLogger.log(Logging.WARN, "Checking for Modded Clothing...Support not granted for this feature...")
+        const tier7JSON = this.tierInformation.tier7appearance
+        const tier2JSON = this.tierInformation.tier2appearance
+
+        const body: ICustomizationItem = {};
+        const combinedBody = { ...tier7JSON.pmcUSEC.appearance.body, ...tier7JSON.pmcBEAR.appearance.body, ...tier2JSON.pmcUSEC.appearance.body, ...tier2JSON.pmcBEAR.appearance.body }
+        Object.keys(combinedBody).forEach(element => 
+        {
+            body[element] = this.getCustomization(element);
+        })
+        this.getModdedClothing(body, "Body");
+
+        const feet: ICustomizationItem = {};
+        const combinedFeet = { ...tier7JSON.pmcUSEC.appearance.feet, ...tier7JSON.pmcBEAR.appearance.feet, ...tier2JSON.pmcUSEC.appearance.feet, ...tier2JSON.pmcBEAR.appearance.feet }
+        Object.keys(combinedFeet).forEach(element => 
+        {
+            feet[element] = this.getCustomization(element);
+        })
+        this.getModdedClothing(feet, "Feet");
+    }
+
+    private getModdedClothing(clothingList: ICustomizationItem, className: string): void
+    {
+        const clothing = Object.values(this.databaseService.getTables().templates.customization);
+        const allItems = clothing.filter(x => this.isCustomization(x._id, className));
+        
+        const apbsClothing = Object.values(clothingList);
+        const allApbsClothing = apbsClothing.filter(x => this.isCustomization(x._id, className));
+        const difference:any = allItems.filter(x => !allApbsClothing.includes(x));
+
+        let moddedItems = difference;
+        
+        //console.log(`${JSON.stringify(moddedItems)}`)
+        if (moddedItems.length > 0)
+        {
+            this.apbsLogger.log(Logging.WARN, `Importing Modded ${className}...`)
+            this.pushClothing(moddedItems);
+        }
+        if (moddedItems.length == 0)
+        {
+            this.apbsLogger.log(Logging.WARN, `No Modded ${className} found...`)
+        }
+    }
+
+    private pushClothing(clothingList: ICustomizationItem): void
+    {
+        for (const object in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[object].tier
+            const tierJson = this.apbsEquipmentGetter.getAppearanceJson(tierNumber, true);
+
+            if (tierNumber < ModConfig.config.initalTierAppearance)
+            {
+                continue;
+            }
+            for (const item in clothingList)
+            {
+                if (clothingList[item]._props.Side.includes("Bear"))
+                {
+                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcBEAR.appearance.feet[clothingList[item]._id] = 100
+                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcBEAR.appearance.body[clothingList[item]._id] = 100
+                }
+                if (clothingList[item]._props.Side.includes("Usec"))
+                {
+                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcUSEC.appearance.feet[clothingList[item]._id] = 100
+                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcUSEC.appearance.body[clothingList[item]._id] = 100
+                }
+            }
+        }        
     }
 
     private getModdedItems(equipmentList: ITemplateItem, baseClass: BaseClasses, className: string): void
@@ -424,5 +499,37 @@ export class ModdedImportHelper
         }
 
         return undefined;
+    }
+
+    private getCustomization(tpl: string): ICustomizationItem
+    {
+        if (tpl in this.databaseService.getCustomization())
+        {
+            return this.databaseService.getCustomization()[tpl];
+        }
+
+        return undefined;
+    }
+
+    private isCustomization(tpl: string, type: string): boolean
+    {
+        if (tpl in this.databaseService.getCustomization())
+        {
+            const item = this.databaseService.getCustomization()[tpl];
+            if (item._props.Side == undefined)
+            {
+                return false;
+            }
+            if (item._props.Side.includes("Bear") || item._props.Side.includes("Usec"))
+            {
+                if (item._props.BodyPart == type)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        return false;
     }
 }
