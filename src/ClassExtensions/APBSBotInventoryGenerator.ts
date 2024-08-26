@@ -8,7 +8,7 @@ import { BotHelper } from "@spt/helpers/BotHelper";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { Inventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBase";
-import { IBotType } from "@spt/models/eft/common/tables/IBotType";
+import { Chances, Generation, IBotType, Inventory } from "@spt/models/eft/common/tables/IBotType";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
 import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
@@ -25,6 +25,7 @@ import { BotInventoryGenerator } from "@spt/generators/BotInventoryGenerator";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ModConfig } from "../Globals/ModConfig";
+import { APBSBotWeaponGenerator } from "../ClassExtensions/APBSBotWeaponGenerator";
 
 /** Handle profile related client events */
 @injectable()
@@ -46,7 +47,8 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         @inject("BotEquipmentModGenerator") protected botEquipmentModGenerator: BotEquipmentModGenerator,
         @inject("ConfigServer") protected configServer: ConfigServer,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
-        @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter
+        @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
+        @inject("APBSBotWeaponGenerator") protected apbsBotWeaponGenerator: APBSBotWeaponGenerator
     )
     {
         super(logger, 
@@ -314,5 +316,77 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         }
 
         return false;
+    }
+
+    protected override generateAndAddWeaponsToBot(
+        templateInventory: Inventory, 
+        equipmentChances: Chances, 
+        sessionId: string, 
+        botInventory: PmcInventory, 
+        botRole: string, 
+        isPmc: boolean, 
+        itemGenerationLimitsMinMax: Generation, 
+        botLevel: number
+    ): void 
+    {
+        const weaponSlotsToFill = this.getDesiredWeaponsForBot(equipmentChances);
+        let hasBothPrimary = false;
+        if (weaponSlotsToFill[0].shouldSpawn && weaponSlotsToFill[1].shouldSpawn)
+        {
+            hasBothPrimary = true;
+        }
+        for (const weaponSlot of weaponSlotsToFill) 
+        {
+            // Add weapon to bot if true and bot json has something to put into the slot
+            if (weaponSlot.shouldSpawn && Object.keys(templateInventory.equipment[weaponSlot.slot]).length) {
+                this.apbsAddWeaponAndMagazinesToInventory(
+                    sessionId,
+                    weaponSlot,
+                    templateInventory,
+                    botInventory,
+                    equipmentChances,
+                    botRole,
+                    isPmc,
+                    itemGenerationLimitsMinMax,
+                    botLevel,
+                    hasBothPrimary
+                );
+            }
+        }
+    }
+
+    private apbsAddWeaponAndMagazinesToInventory(
+        sessionId: string,
+        weaponSlot: { slot: EquipmentSlots; shouldSpawn: boolean },
+        templateInventory: Inventory,
+        botInventory: PmcInventory,
+        equipmentChances: Chances,
+        botRole: string,
+        isPmc: boolean,
+        itemGenerationWeights: Generation,
+        botLevel: number,
+        hasBothPrimary: boolean
+    ): void 
+    {
+        const generatedWeapon = this.apbsBotWeaponGenerator.apbsGenerateRandomWeapon(
+            sessionId,
+            weaponSlot.slot,
+            templateInventory,
+            botInventory.equipment,
+            equipmentChances.weaponMods,
+            botRole,
+            isPmc,
+            botLevel,
+            hasBothPrimary
+        );
+
+        botInventory.items.push(...generatedWeapon.weapon);
+
+        this.botWeaponGenerator.addExtraMagazinesToInventory(
+            generatedWeapon,
+            itemGenerationWeights.items.magazines,
+            botInventory,
+            botRole
+        );
     }
 }
