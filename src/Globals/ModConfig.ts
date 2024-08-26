@@ -61,6 +61,7 @@ export interface Config
 {
     enableModdedWeapons: boolean,
     enableModdedEquipment: boolean,
+    enableModdedClothing: boolean,
     initalTierAppearance: number,
     onlyChads: boolean,
     tarkovAndChill: boolean,
@@ -74,6 +75,7 @@ export interface Config
     forceDustCover: boolean,
     forceScopeSlot: boolean,
     pmcLoot: boolean,
+    scavLoot: boolean,
     forceWeaponModLimits: boolean,
     scavWeaponDurability: [ number, number, number, number ],
     pmcWeaponDurability: [ number, number, number, number ],
