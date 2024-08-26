@@ -338,7 +338,8 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         for (const weaponSlot of weaponSlotsToFill) 
         {
             // Add weapon to bot if true and bot json has something to put into the slot
-            if (weaponSlot.shouldSpawn && Object.keys(templateInventory.equipment[weaponSlot.slot]).length) {
+            if (weaponSlot.shouldSpawn && Object.keys(templateInventory.equipment[weaponSlot.slot]).length) 
+            {
                 this.apbsAddWeaponAndMagazinesToInventory(
                     sessionId,
                     weaponSlot,
