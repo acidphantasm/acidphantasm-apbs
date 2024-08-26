@@ -77,9 +77,9 @@
         
 // Enable/Disable adding keys to Scav Backpack loot
 // Pick -ONE- option below and enable it if you would like to expand the backpack key pool for scavs.
-// All keys are self explanatory
-// Mechanical keys are keys that aren't keycards
-// Keycards are self explanatory
+// All keys include every key/keycard.
+// Mechanical keys are keys that aren't keycards. <- Recommended, if you are going to enable something
+// Keycards include ALL keycards. 
         "addAllKeysToScavs": false,
         "addOnlyMechanicalKeysToScavs": false,
         "addOnlyKeyCardsToScavs": false,
