@@ -52,6 +52,7 @@ export class BotConfigs
         if (ModConfig.config.forceDustCover) this.setForceDustCover();
         if (ModConfig.config.forceScopeSlot) this.setForceScopes();
         if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
+        if (!ModConfig.config.scavLoot) this.removeScavLoot();
     }
 
     private configureBotExperienceLevels(): void
@@ -456,5 +457,15 @@ export class BotConfigs
         if (ModConfig.config.addAllKeysToScavs) return BaseClasses.KEY
         if (ModConfig.config.addOnlyMechanicalKeysToScavs) return BaseClasses.KEY_MECHANICAL
         if (ModConfig.config.addOnlyKeyCardsToScavs) return BaseClasses.KEYCARD
+    }
+
+    private removeScavLoot(): void
+    {
+        this.tables.bots.types.assault.inventory.items.Backpack = {}
+        this.tables.bots.types.assault.inventory.items.Pockets = {}
+        this.tables.bots.types.assault.inventory.items.TacticalVest = {}
+        this.tables.bots.types.marksman.inventory.items.Backpack = {}
+        this.tables.bots.types.marksman.inventory.items.Pockets = {}
+        this.tables.bots.types.marksman.inventory.items.TacticalVest = {}
     }
 }
