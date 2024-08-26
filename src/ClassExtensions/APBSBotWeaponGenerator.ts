@@ -107,7 +107,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         // If not disabled via config, all bots follow this custom generation
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
         const weaponTpl = 
-            hasBothPrimary 
+            (hasBothPrimary && isPmc)
                 ? this.apbsPickWeightedWeaponTplFromPoolHasBothPrimary(equipmentSlot, botLevel, botRole, tierInfo)
                 : this.apbsPickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole, tierInfo)
         return this.apbsGenerateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierInfo)
