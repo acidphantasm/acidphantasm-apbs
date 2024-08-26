@@ -184,7 +184,7 @@ export class ModdedImportHelper
         const allApbsClothing = apbsClothing.filter(x => this.isCustomization(x._id, className));
         const difference:any = allItems.filter(x => !allApbsClothing.includes(x));
 
-        let moddedItems = difference;
+        const moddedItems = difference;
         
         //console.log(`${JSON.stringify(moddedItems)}`)
         if (moddedItems.length > 0)
