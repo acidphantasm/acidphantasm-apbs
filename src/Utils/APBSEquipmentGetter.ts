@@ -296,13 +296,10 @@ export class APBSEquipmentGetter
         {
             if (this.randomUtil.getChance100(ModConfig.config.slideChance))
             {
-                const oldTier = tierInfo;
                 const slideAmount = ModConfig.config.slideAmount;
                 const minTier = (tierInfo - slideAmount) <= 0 ? 1 : tierInfo - slideAmount
                 const maxTier = tierInfo - 1
                 tierInfo = this.newTierCalc(tierInfo, minTier, maxTier);
-
-                console.log(`Ammo Tier Passed Slide Chance ${ModConfig.config.slideChance}%, slid from ${oldTier} to ${tierInfo}`)
             }
         }
         const tierJson = this.getTierAmmoJson(tierInfo)
