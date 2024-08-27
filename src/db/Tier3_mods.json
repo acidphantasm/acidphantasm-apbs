@@ -597,8 +597,12 @@
   "55d355e64bdc2d962f8b4569": {
     "mod_barrel": [
       "55d35ee94bdc2d61338b4568",
+      "55d3632e4bdc2d972f8b4569",
       "5d440b93a4b9364276578d4b",
-      "5c0e2f94d174af029f650d56"
+      "5d440b9fa4b93601354d480c",
+      "5c0e2f94d174af029f650d56",
+      "63d3ce0446bd475bcb50f55f",
+      "63d3d44a2a49307baf09386d"
     ],
     "mod_handguard": [
       "5ae30db85acfc408fb139a05",
@@ -3182,8 +3186,13 @@
   },
   "59bfe68886f7746004266202": {
     "mod_barrel": [
+      "55d35ee94bdc2d61338b4568",
+      "55d3632e4bdc2d972f8b4569",
       "5d440b93a4b9364276578d4b",
-      "5c0e2f94d174af029f650d56"
+      "5d440b9fa4b93601354d480c",
+      "5c0e2f94d174af029f650d56",
+      "63d3ce0446bd475bcb50f55f",
+      "63d3d44a2a49307baf09386d"
     ],
     "mod_handguard": [
       "5ea16ada09aa976f2e7a51be",
@@ -9108,8 +9117,13 @@
   },
   "5c07a8770db8340023300450": {
     "mod_barrel": [
+      "55d35ee94bdc2d61338b4568",
+      "55d3632e4bdc2d972f8b4569",
       "5d440b93a4b9364276578d4b",
-      "5c0e2f94d174af029f650d56"
+      "5d440b9fa4b93601354d480c",
+      "5c0e2f94d174af029f650d56",
+      "63d3ce0446bd475bcb50f55f",
+      "63d3d44a2a49307baf09386d"
     ],
     "mod_handguard": [
       "5ae30db85acfc408fb139a05",
@@ -9185,8 +9199,7 @@
     ],
     "mod_reciever": [
       "5c0e2f26d174af02a9625114",
-      "55d355e64bdc2d962f8b4569",
-      "5d4405aaa4b9361e6a4e6bd3"
+      "55d355e64bdc2d962f8b4569"
     ],
     "mod_stock": [
       "5a33ca0fc4a282000d72292f",
@@ -9253,8 +9266,13 @@
   },
   "5c0e2f26d174af02a9625114": {
     "mod_barrel": [
+      "55d35ee94bdc2d61338b4568",
+      "55d3632e4bdc2d972f8b4569",
       "5d440b93a4b9364276578d4b",
-      "5c0e2f94d174af029f650d56"
+      "5d440b9fa4b93601354d480c",
+      "5c0e2f94d174af029f650d56",
+      "63d3ce0446bd475bcb50f55f",
+      "63d3d44a2a49307baf09386d"
     ],
     "mod_handguard": [
       "5ae30db85acfc408fb139a05",
@@ -12274,8 +12292,13 @@
   },
   "5d4405aaa4b9361e6a4e6bd3": {
     "mod_barrel": [
+      "55d35ee94bdc2d61338b4568",
+      "55d3632e4bdc2d972f8b4569",
       "5d440b93a4b9364276578d4b",
-      "5c0e2f94d174af029f650d56"
+      "5d440b9fa4b93601354d480c",
+      "5c0e2f94d174af029f650d56",
+      "63d3ce0446bd475bcb50f55f",
+      "63d3d44a2a49307baf09386d"
     ],
     "mod_handguard": [
       "5ae30db85acfc408fb139a05",
