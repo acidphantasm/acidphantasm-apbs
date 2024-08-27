@@ -46,6 +46,7 @@ export class ModdedImportHelper
             "66015072e9f84d5680039678",
             "59f9cabd86f7743a10721f46",
             "5abccb7dd8ce87001773e277",
+            "5b3b713c5acfc4330140bd8d",
             "56e33634d2720bd8058b456b", //backpacks
             "5e4abc6786f77406812bd572",
             "5e997f0b86f7741ac73993e2",
@@ -97,7 +98,7 @@ export class ModdedImportHelper
 
     private buildVanillaWeaponList(): void
     {
-        this.apbsLogger.log(Logging.WARN, "Checking for Modded Weapons...Support not granted for this feature...")
+        this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Weapons...Support not granted for this feature...")
         const tier7JSON = this.tierInformation.tier7
         
         const weapons: ITemplateItem = {};
@@ -126,7 +127,7 @@ export class ModdedImportHelper
 
     private buildVanillaEquipmentList(): void
     {
-        this.apbsLogger.log(Logging.WARN, "Checking for Modded Equipment...Support not granted for this feature...")
+        this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Equipment...Support not granted for this feature...")
         const tier7JSON = this.tierInformation.tier7
 
         const armours: ITemplateItem = {};
@@ -154,7 +155,7 @@ export class ModdedImportHelper
 
     private buildVanillaClothingList(): void
     {
-        this.apbsLogger.log(Logging.WARN, "Checking for Modded Clothing...Support not granted for this feature...")
+        this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Clothing...Support not granted for this feature...")
         const tier7JSON = this.tierInformation.tier7appearance
         const tier2JSON = this.tierInformation.tier2appearance
 
@@ -189,12 +190,8 @@ export class ModdedImportHelper
         //console.log(`${JSON.stringify(moddedItems)}`)
         if (moddedItems.length > 0)
         {
-            this.apbsLogger.log(Logging.WARN, `Importing Modded ${className}...`)
+            this.apbsLogger.log(Logging.WARN, `Importing ${moddedItems.length} Modded ${className}...`)
             this.pushClothing(moddedItems);
-        }
-        if (moddedItems.length == 0)
-        {
-            this.apbsLogger.log(Logging.WARN, `No Modded ${className} found...`)
         }
     }
 
@@ -252,13 +249,9 @@ export class ModdedImportHelper
         //console.log(`${JSON.stringify(moddedItems)}`)
         if (moddedItems.length > 0)
         {
-            this.apbsLogger.log(Logging.WARN, `Importing Modded ${className}...`)
+            this.apbsLogger.log(Logging.WARN, `Importing ${moddedItems.length} Modded ${className}...`)
             if (baseClass == BaseClasses.WEAPON) this.getSetModdedWeaponDetails(moddedItems);
             if (baseClass != BaseClasses.WEAPON) this.getSetModdedEquipmentDetails(moddedItems);
-        }
-        if (moddedItems.length == 0)
-        {
-            this.apbsLogger.log(Logging.WARN, `No Modded ${className} found...`)
         }
     }
 
@@ -351,12 +344,12 @@ export class ModdedImportHelper
             }
             if (weaponType == "secondary")
             {
-                tierJson.pmcUSEC.equipment.Holster[weaponId] = 4
-                tierJson.pmcBEAR.equipment.Holster[weaponId] = 4
-                tierJson.scav.equipment.Holster[weaponId] = 4
-                tierJson.default.equipment.Holster[weaponId] = 4
+                tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
+                tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
+                tierJson.scav.equipment.Holster[weaponId] = 1
+                tierJson.default.equipment.Holster[weaponId] = 3
 
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 4.`)
+                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 5.`)
             }
         }
     }
@@ -447,6 +440,12 @@ export class ModdedImportHelper
         for (const slot in parentSlotSlots)
         {
             const slotName = parentSlotSlots[slot]?._name;
+
+            if (parentSlotSlots[slot]?._props?.filters[0]?.Filter.includes("5649a2464bdc2d91118b45a8"))
+            {
+                parentSlotSlots[slot]._props.filters[0].Filter = [ "5649a2464bdc2d91118b45a8" ];
+            }
+
             for (const item in parentSlotSlots[slot]?._props?.filters[0]?.Filter)
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
