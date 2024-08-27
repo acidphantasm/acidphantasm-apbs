@@ -26,6 +26,13 @@
         "disableBossFollowerTierGeneration": false,
         "disableRaiderRogueTierGeneration": false,
 
+// Enable/Disable PMC ammo tier sliding
+// If set to true, it will enabling a sliding system for PMC ammo pools. If you enable this, the below numbers are the recommended amounts. Tweak as you wish.
+// Example: "pmcAmmoTierSlideAmount: 1 will allow a Tier5 PMC to "slide" down and pick from a Tier4 ammo pool, if it passes the roll for "slideChance".
+        "enablePMCAmmoTierSliding": false,
+        "slideAmount": 1,
+        "slideChance": 33,
+
 // Force weapon stocks
 // If set to true, will enforce all AI weapons to have stocks, if false - will use APBS values
         "forceStock": false,

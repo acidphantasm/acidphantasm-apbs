@@ -292,6 +292,19 @@ export class APBSEquipmentGetter
 
     public getAmmoByBotRole(botRole: string, tierInfo: number): Record<string, Record<string, number>>
     {
+        if ((botRole == "pmcusec" || botRole == "pmcbear") && ModConfig.config.enablePMCAmmoTierSliding)
+        {
+            if (this.randomUtil.getChance100(ModConfig.config.slideChance))
+            {
+                const oldTier = tierInfo;
+                const slideAmount = ModConfig.config.slideAmount;
+                const minTier = (tierInfo - slideAmount) <= 0 ? 1 : tierInfo - slideAmount
+                const maxTier = tierInfo - 1
+                tierInfo = this.newTierCalc(tierInfo, minTier, maxTier);
+
+                console.log(`Ammo Tier Passed Slide Chance ${ModConfig.config.slideChance}%, slid from ${oldTier} to ${tierInfo}`)
+            }
+        }
         const tierJson = this.getTierAmmoJson(tierInfo)
         switch (botRole)
         {
@@ -317,5 +330,11 @@ export class APBSEquipmentGetter
             case "pmcBEAR":
                 return tierJson.pmcBEAR.appearance;
         }
+    }
+
+    private newTierCalc(tierInfo: number, minTier: number, maxTier: number): number
+    {
+        const newTier = (Math.floor(Math.random() * (maxTier - minTier + 1) + minTier)) >= tierInfo  ? (tierInfo - 1) : (Math.floor(Math.random() * (maxTier - minTier + 1) + minTier))
+        return newTier;
     }
 }
