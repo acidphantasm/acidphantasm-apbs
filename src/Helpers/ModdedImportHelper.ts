@@ -18,6 +18,7 @@ export class ModdedImportHelper
 {
     private blacklist: any[];
     private attachmentBlacklist: any[];
+    private clothingBlacklist: any[];
 
     constructor(
         @inject("IDatabaseTables") protected tables: IDatabaseTables,
@@ -79,6 +80,28 @@ export class ModdedImportHelper
             "544a3f024bdc2d1d388b4568",
             "544a3d0a4bdc2d1b388b4567",
             "5648b62b4bdc2d9d488b4585"
+        ]
+
+        this.clothingBlacklist = [
+            "668bc5cd834c88e06b08b645", // All of this is Artem hands, because they are being configured as Body instead...Crackboooonnneee!!
+            "668bc5cd834c88e06b08b64a",
+            "668bc5cd834c88e06b08b64d",
+            "668bc5cd834c88e06b08b650",
+            "668bc5cd834c88e06b08b652",
+            "668bc5cd834c88e06b08b655",
+            "668bc5cd834c88e06b08b658",
+            "668bc5cd834c88e06b08b65b",
+            "668bc5cd834c88e06b08b65e",
+            "668bc5cd834c88e06b08b662",
+            "668bc5cd834c88e06b08b665",
+            "668bc5cd834c88e06b08b668",
+            "668bc5cd834c88e06b08b66b",
+            "668bc5cd834c88e06b08b66e",
+            "668bc5cd834c88e06b08b671",
+            "668bc5cd834c88e06b08b674",
+            "668bc5cd834c88e06b08b677",
+            "668bc5cd834c88e06b08b67a",
+            "668bc5cd834c88e06b08b67d"
         ]
     }
 
@@ -185,8 +208,21 @@ export class ModdedImportHelper
         const allApbsClothing = apbsClothing.filter(x => this.isCustomization(x._id, className));
         const difference:any = allItems.filter(x => !allApbsClothing.includes(x));
 
-        const moddedItems = difference;
+        let moddedItems = difference;
         
+        const blacklist = this.clothingBlacklist;
+        for (const item of difference)
+        {
+            for (const blacklistedItem of blacklist)
+            {
+                if (item._id == blacklistedItem)
+                {
+                    //console.log(`Blacklisted Item: ${item._id}`)
+                    moddedItems = moddedItems.filter(id => id._id != blacklistedItem)
+                }
+            }
+        }
+
         //console.log(`${JSON.stringify(moddedItems)}`)
         if (moddedItems.length > 0)
         {
@@ -210,13 +246,13 @@ export class ModdedImportHelper
             {
                 if (clothingList[item]._props.Side.includes("Bear"))
                 {
-                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcBEAR.appearance.feet[clothingList[item]._id] = 1
-                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcBEAR.appearance.body[clothingList[item]._id] = 1
+                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcBEAR.appearance.feet[clothingList[item]._id] = 10
+                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcBEAR.appearance.body[clothingList[item]._id] = 10
                 }
                 if (clothingList[item]._props.Side.includes("Usec"))
                 {
-                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcUSEC.appearance.feet[clothingList[item]._id] = 1
-                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcUSEC.appearance.body[clothingList[item]._id] = 1
+                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcUSEC.appearance.feet[clothingList[item]._id] = 10
+                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcUSEC.appearance.body[clothingList[item]._id] = 10
                 }
             }
         }        
