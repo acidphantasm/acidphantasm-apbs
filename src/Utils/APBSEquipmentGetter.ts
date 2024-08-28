@@ -143,6 +143,33 @@ export class APBSEquipmentGetter
         }
     }
 
+    public getAppearanceJson(tierInfo: number, ignoreCheck?: boolean)
+    {
+        if (!ignoreCheck) tierInfo = this.chadOrChill(tierInfo);
+        switch (tierInfo)
+        {
+            case 0:
+                return this.tierInformation.tier0appearance
+            case 1:
+                return this.tierInformation.tier1appearance
+            case 2:
+                return this.tierInformation.tier2appearance
+            case 3:
+                return this.tierInformation.tier3appearance
+            case 4:
+                return this.tierInformation.tier4appearance
+            case 5:
+                return this.tierInformation.tier5appearance
+            case 6:
+                return this.tierInformation.tier6appearance
+            case 7:
+                return this.tierInformation.tier7appearance
+            default:
+                this.apbsLogger.log(Logging.WARN, "Bot Level and Tier Information missing, your load order is probably incorrect. Defaulting to Tier1 appearance.");
+                return this.tierInformation.tier1appearance
+        }
+    }
+
     public getModsByBotRole(botRole: string, tierInfo: number): any
     {
         const tierJson = this.getTierModsJson(tierInfo)
@@ -265,6 +292,16 @@ export class APBSEquipmentGetter
 
     public getAmmoByBotRole(botRole: string, tierInfo: number): Record<string, Record<string, number>>
     {
+        if ((botRole == "pmcusec" || botRole == "pmcbear") && ModConfig.config.enablePMCAmmoTierSliding)
+        {
+            if (this.randomUtil.getChance100(ModConfig.config.slideChance))
+            {
+                const slideAmount = ModConfig.config.slideAmount;
+                const minTier = (tierInfo - slideAmount) <= 0 ? 1 : tierInfo - slideAmount
+                const maxTier = tierInfo - 1
+                tierInfo = this.newTierCalc(tierInfo, minTier, maxTier);
+            }
+        }
         const tierJson = this.getTierAmmoJson(tierInfo)
         switch (botRole)
         {
@@ -278,5 +315,23 @@ export class APBSEquipmentGetter
             default:
                 return tierJson.bossAmmo;
         }
+    }
+
+    public getPmcAppearance(botRole: string, tierInfo: number): Record<string, Record<string, number>>
+    {
+        const tierJson = this.getAppearanceJson(tierInfo)
+        switch (botRole)
+        {
+            case "pmcUSEC":
+                return tierJson.pmcUSEC.appearance;
+            case "pmcBEAR":
+                return tierJson.pmcBEAR.appearance;
+        }
+    }
+
+    private newTierCalc(tierInfo: number, minTier: number, maxTier: number): number
+    {
+        const newTier = (Math.floor(Math.random() * (maxTier - minTier + 1) + minTier)) >= tierInfo  ? (tierInfo - 1) : (Math.floor(Math.random() * (maxTier - minTier + 1) + minTier))
+        return newTier;
     }
 }

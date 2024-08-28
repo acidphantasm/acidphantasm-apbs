@@ -11,12 +11,14 @@ import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 
 import { ModConfig } from "../Globals/ModConfig";
+import { ICustomizationItem } from "@spt/models/eft/common/tables/ICustomizationItem";
 
 @injectable()
 export class ModdedImportHelper
 {
     private blacklist: any[];
     private attachmentBlacklist: any[];
+    private clothingBlacklist: any[];
 
     constructor(
         @inject("IDatabaseTables") protected tables: IDatabaseTables,
@@ -45,6 +47,7 @@ export class ModdedImportHelper
             "66015072e9f84d5680039678",
             "59f9cabd86f7743a10721f46",
             "5abccb7dd8ce87001773e277",
+            "5b3b713c5acfc4330140bd8d",
             "56e33634d2720bd8058b456b", //backpacks
             "5e4abc6786f77406812bd572",
             "5e997f0b86f7741ac73993e2",
@@ -73,7 +76,32 @@ export class ModdedImportHelper
             "5a1ead28fcdbcb001912fa9f",
             "63fc449f5bd61c6cf3784a88",
             "5b3b6dc75acfc47a8773fb1e",
-            "5c11046cd174af02a012e42b"
+            "5c11046cd174af02a012e42b",
+            "544a3f024bdc2d1d388b4568",
+            "544a3d0a4bdc2d1b388b4567",
+            "5648b62b4bdc2d9d488b4585"
+        ]
+
+        this.clothingBlacklist = [
+            "668bc5cd834c88e06b08b645", // All of this is Artem hands, because they are being configured as Body instead...Crackboooonnneee!!
+            "668bc5cd834c88e06b08b64a",
+            "668bc5cd834c88e06b08b64d",
+            "668bc5cd834c88e06b08b650",
+            "668bc5cd834c88e06b08b652",
+            "668bc5cd834c88e06b08b655",
+            "668bc5cd834c88e06b08b658",
+            "668bc5cd834c88e06b08b65b",
+            "668bc5cd834c88e06b08b65e",
+            "668bc5cd834c88e06b08b662",
+            "668bc5cd834c88e06b08b665",
+            "668bc5cd834c88e06b08b668",
+            "668bc5cd834c88e06b08b66b",
+            "668bc5cd834c88e06b08b66e",
+            "668bc5cd834c88e06b08b671",
+            "668bc5cd834c88e06b08b674",
+            "668bc5cd834c88e06b08b677",
+            "668bc5cd834c88e06b08b67a",
+            "668bc5cd834c88e06b08b67d"
         ]
     }
 
@@ -88,12 +116,12 @@ export class ModdedImportHelper
         }
         if (ModConfig.config.enableModdedWeapons) this.buildVanillaWeaponList();
         if (ModConfig.config.enableModdedEquipment) this.buildVanillaEquipmentList();
-        
+        if (ModConfig.config.enableModdedClothing) this.buildVanillaClothingList();
     }
 
     private buildVanillaWeaponList(): void
     {
-        this.apbsLogger.log(Logging.WARN, "Checking for Modded Weapons...Support not granted for this feature...")
+        this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Weapons...Support not granted for this feature...")
         const tier7JSON = this.tierInformation.tier7
         
         const weapons: ITemplateItem = {};
@@ -122,7 +150,7 @@ export class ModdedImportHelper
 
     private buildVanillaEquipmentList(): void
     {
-        this.apbsLogger.log(Logging.WARN, "Checking for Modded Equipment...Support not granted for this feature...")
+        this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Equipment...Support not granted for this feature...")
         const tier7JSON = this.tierInformation.tier7
 
         const armours: ITemplateItem = {};
@@ -146,6 +174,88 @@ export class ModdedImportHelper
             tacticalVests[element] = this.getItem(element);
         })
         this.getModdedItems(tacticalVests, BaseClasses.VEST, "Vests");
+    }
+
+    private buildVanillaClothingList(): void
+    {
+        this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Clothing...Support not granted for this feature...")
+        const tier7JSON = this.tierInformation.tier7appearance
+        const tier2JSON = this.tierInformation.tier2appearance
+
+        const body: ICustomizationItem = {};
+        const combinedBody = { ...tier7JSON.pmcUSEC.appearance.body, ...tier7JSON.pmcBEAR.appearance.body, ...tier2JSON.pmcUSEC.appearance.body, ...tier2JSON.pmcBEAR.appearance.body }
+        Object.keys(combinedBody).forEach(element => 
+        {
+            body[element] = this.getCustomization(element);
+        })
+        this.getModdedClothing(body, "Body");
+
+        const feet: ICustomizationItem = {};
+        const combinedFeet = { ...tier7JSON.pmcUSEC.appearance.feet, ...tier7JSON.pmcBEAR.appearance.feet, ...tier2JSON.pmcUSEC.appearance.feet, ...tier2JSON.pmcBEAR.appearance.feet }
+        Object.keys(combinedFeet).forEach(element => 
+        {
+            feet[element] = this.getCustomization(element);
+        })
+        this.getModdedClothing(feet, "Feet");
+    }
+
+    private getModdedClothing(clothingList: ICustomizationItem, className: string): void
+    {
+        const clothing = Object.values(this.databaseService.getTables().templates.customization);
+        const allItems = clothing.filter(x => this.isCustomization(x._id, className));
+        
+        const apbsClothing = Object.values(clothingList);
+        const allApbsClothing = apbsClothing.filter(x => this.isCustomization(x._id, className));
+        const difference:any = allItems.filter(x => !allApbsClothing.includes(x));
+
+        let moddedItems = difference;
+        
+        const blacklist = this.clothingBlacklist;
+        for (const item of difference)
+        {
+            for (const blacklistedItem of blacklist)
+            {
+                if (item._id == blacklistedItem)
+                {
+                    //console.log(`Blacklisted Item: ${item._id}`)
+                    moddedItems = moddedItems.filter(id => id._id != blacklistedItem)
+                }
+            }
+        }
+
+        //console.log(`${JSON.stringify(moddedItems)}`)
+        if (moddedItems.length > 0)
+        {
+            this.apbsLogger.log(Logging.WARN, `Importing ${moddedItems.length} Modded ${className}...`)
+            this.pushClothing(moddedItems);
+        }
+    }
+
+    private pushClothing(clothingList: ICustomizationItem): void
+    {
+        for (const object in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[object].tier
+            const tierJson = this.apbsEquipmentGetter.getAppearanceJson(tierNumber, true);
+
+            if (tierNumber < ModConfig.config.initalTierAppearance)
+            {
+                continue;
+            }
+            for (const item in clothingList)
+            {
+                if (clothingList[item]._props.Side.includes("Bear"))
+                {
+                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcBEAR.appearance.feet[clothingList[item]._id] = 10
+                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcBEAR.appearance.body[clothingList[item]._id] = 10
+                }
+                if (clothingList[item]._props.Side.includes("Usec"))
+                {
+                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcUSEC.appearance.feet[clothingList[item]._id] = 10
+                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcUSEC.appearance.body[clothingList[item]._id] = 10
+                }
+            }
+        }        
     }
 
     private getModdedItems(equipmentList: ITemplateItem, baseClass: BaseClasses, className: string): void
@@ -175,13 +285,9 @@ export class ModdedImportHelper
         //console.log(`${JSON.stringify(moddedItems)}`)
         if (moddedItems.length > 0)
         {
-            this.apbsLogger.log(Logging.WARN, `Importing Modded ${className}...`)
+            this.apbsLogger.log(Logging.WARN, `Importing ${moddedItems.length} Modded ${className}...`)
             if (baseClass == BaseClasses.WEAPON) this.getSetModdedWeaponDetails(moddedItems);
             if (baseClass != BaseClasses.WEAPON) this.getSetModdedEquipmentDetails(moddedItems);
-        }
-        if (moddedItems.length == 0)
-        {
-            this.apbsLogger.log(Logging.WARN, `No Modded ${className} found...`)
         }
     }
 
@@ -274,12 +380,12 @@ export class ModdedImportHelper
             }
             if (weaponType == "secondary")
             {
-                tierJson.pmcUSEC.equipment.Holster[weaponId] = 4
-                tierJson.pmcBEAR.equipment.Holster[weaponId] = 4
-                tierJson.scav.equipment.Holster[weaponId] = 4
-                tierJson.default.equipment.Holster[weaponId] = 4
+                tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
+                tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
+                tierJson.scav.equipment.Holster[weaponId] = 1
+                tierJson.default.equipment.Holster[weaponId] = 3
 
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 4.`)
+                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 5.`)
             }
         }
     }
@@ -370,6 +476,12 @@ export class ModdedImportHelper
         for (const slot in parentSlotSlots)
         {
             const slotName = parentSlotSlots[slot]?._name;
+
+            if (parentSlotSlots[slot]?._props?.filters[0]?.Filter.includes("5649a2464bdc2d91118b45a8"))
+            {
+                parentSlotSlots[slot]._props.filters[0].Filter = [ "5649a2464bdc2d91118b45a8" ];
+            }
+
             for (const item in parentSlotSlots[slot]?._props?.filters[0]?.Filter)
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
@@ -422,5 +534,37 @@ export class ModdedImportHelper
         }
 
         return undefined;
+    }
+
+    private getCustomization(tpl: string): ICustomizationItem
+    {
+        if (tpl in this.databaseService.getCustomization())
+        {
+            return this.databaseService.getCustomization()[tpl];
+        }
+
+        return undefined;
+    }
+
+    private isCustomization(tpl: string, type: string): boolean
+    {
+        if (tpl in this.databaseService.getCustomization())
+        {
+            const item = this.databaseService.getCustomization()[tpl];
+            if (item._props.Side == undefined)
+            {
+                return false;
+            }
+            if (item._props.Side.includes("Bear") || item._props.Side.includes("Usec"))
+            {
+                if (item._props.BodyPart == type)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        return false;
     }
 }

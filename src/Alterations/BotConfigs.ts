@@ -9,9 +9,10 @@ import { TierInformation } from "../Globals/TierInformation";
 import { ModConfig } from "../Globals/ModConfig";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { DatabaseService } from "@spt/services/DatabaseService";
-import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
+import { BaseClasses } from "@spt/models/enums/BaseClasses";
+import { ItemHelper } from "@spt/helpers/ItemHelper";
 
 
 @injectable()
@@ -24,6 +25,7 @@ export class BotConfigs
         @inject("IDatabaseTables") protected tables: IDatabaseTables,
         @inject("DatabaseService") protected database: DatabaseService,
         @inject("ConfigServer") protected configServer: ConfigServer,
+        @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
         @inject("APBSLogger") protected apbsLogger: APBSLogger
@@ -44,11 +46,13 @@ export class BotConfigs
         this.setPMCItemLimits();
         this.setPMCLoot();
         this.setPMCScopeWhitelist();
+        if (ModConfig.config.addAllKeysToScavs || ModConfig.config.addOnlyKeyCardsToScavs || ModConfig.config.addOnlyMechanicalKeysToScavs) this.pushScavKeys();
         if (ModConfig.config.enableCustomPlateChances) this.setPlateChances();
         if (ModConfig.config.forceStock) this.setForceStock();
         if (ModConfig.config.forceDustCover) this.setForceDustCover();
         if (ModConfig.config.forceScopeSlot) this.setForceScopes();
         if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
+        if (!ModConfig.config.scavLoot) this.removeScavLoot();
     }
 
     private configureBotExperienceLevels(): void
@@ -427,5 +431,41 @@ export class BotConfigs
                 "55818add4bdc2d5b648b456f"
             ]
         };
+    }
+
+    private pushScavKeys(): void
+    {
+        const scavBackpack = this.tables.bots.types.assault.inventory.items.Backpack
+        const items = Object.values(this.tables.templates.items);
+        const baseClass = this.getKeyConfig();
+        const allKeys = items.filter(x => this.itemHelper.isOfBaseclass(x._id, baseClass));
+
+        let count = 0;
+        for (const key in allKeys)
+        {
+            if (scavBackpack[allKeys[key]._id] == undefined)
+            {
+                scavBackpack[allKeys[key]._id] = 1;
+                count++
+            }
+        }
+        this.apbsLogger.log(Logging.DEBUG, `Added ${count} keys to Scav Backpacks (Key Class Added: ${baseClass})`)
+    }
+
+    private getKeyConfig(): BaseClasses
+    {
+        if (ModConfig.config.addAllKeysToScavs) return BaseClasses.KEY
+        if (ModConfig.config.addOnlyMechanicalKeysToScavs) return BaseClasses.KEY_MECHANICAL
+        if (ModConfig.config.addOnlyKeyCardsToScavs) return BaseClasses.KEYCARD
+    }
+
+    private removeScavLoot(): void
+    {
+        this.tables.bots.types.assault.inventory.items.Backpack = {}
+        this.tables.bots.types.assault.inventory.items.Pockets = {}
+        this.tables.bots.types.assault.inventory.items.TacticalVest = {}
+        this.tables.bots.types.marksman.inventory.items.Backpack = {}
+        this.tables.bots.types.marksman.inventory.items.Pockets = {}
+        this.tables.bots.types.marksman.inventory.items.TacticalVest = {}
     }
 }

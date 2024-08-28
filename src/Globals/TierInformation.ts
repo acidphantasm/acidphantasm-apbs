@@ -37,6 +37,15 @@ export class TierInformation
     public tier6ammo;
     public tier7ammo;
 
+    public tier0appearance;
+    public tier1appearance;
+    public tier2appearance;
+    public tier3appearance;
+    public tier4appearance;
+    public tier5appearance;
+    public tier6appearance;
+    public tier7appearance;
+
     public tiers = [
         {
             tier: 1,
@@ -158,33 +167,33 @@ export class TierInformation
                 "max": 30
             },
             "front_plate": {
-                "3": 10,
+                "3": 15,
                 "4": 70,
-                "5": 15,
+                "5": 10,
                 "6": 5
             },
             "back_plate": {
-                "3": 10,
+                "3": 15,
                 "4": 70,
-                "5": 15,
+                "5": 10,
                 "6": 5
             },
             "side_plate": {
-                "3": 10,
+                "3": 15,
                 "4": 70,
-                "5": 15,
+                "5": 10,
                 "6": 5
             },
             "left_side_plate": {
-                "3": 10,
+                "3": 15,
                 "4": 70,
-                "5": 15,
+                "5": 10,
                 "6": 5
             },
             "right_side_plate": {
-                "3": 10,
+                "3": 15,
                 "4": 70,
-                "5": 15,
+                "5": 10,
                 "6": 5
             }
         },

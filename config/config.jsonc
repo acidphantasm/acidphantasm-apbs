@@ -2,9 +2,11 @@
 // If you enable either of these settings, support will not be granted.
 // enableModdedWeapons - Any mods adding weapons loaded before APBS will have their weapons & attachments imported.
 // enableModdedEquipment - Any mods adding equipment loaded before APBS will be imported with their attachments (if any).
+// enableModdedClothing - Any mods adding clothing loaded before APBS will be imported.
 // initialTierAppearance - Whatever number (1-7) you put here, will be the first tier that imported mod items will be added to.
         "enableModdedWeapons": false,
         "enableModdedEquipment": false,
+        "enableModdedClothing": false,
         "initalTierAppearance": 3,
 
 // Looking for a challenge, or maybe just want to chill and wreck some bots?
@@ -16,13 +18,20 @@
         "tarkovAndChill": false,
         "blickyMode": false,
 
-// Disable specific bot generation
-// For each type that you disable, it will disable their tiered weapon and gear generation.
+// Enable/Disable specific bot generation
+// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation
         "disableScavTierGeneration": false,
         "disablePMCTierGeneration": false,
         "disableBossTierGeneration": false,
         "disableBossFollowerTierGeneration": false,
         "disableRaiderRogueTierGeneration": false,
+
+// Enable/Disable PMC ammo tier sliding
+// If set to true, it will enabling a sliding system for PMC ammo pools. If you enable this, the below numbers are the recommended amounts. Tweak as you wish.
+// Example: "pmcAmmoTierSlideAmount: 1 will allow a Tier5 PMC to "slide" down and pick from a Tier4 ammo pool, if it passes the roll for "slideChance".
+        "enablePMCAmmoTierSliding": false,
+        "slideAmount": 1,
+        "slideChance": 33,
 
 // Force weapon stocks
 // If set to true, will enforce all AI weapons to have stocks, if false - will use APBS values
@@ -41,9 +50,10 @@
 // If set to true, will enforce all AI weapons to be limited to 2 scopes and 2 lasers, if disabled the generation may go wild
         "forceWeaponModLimits": true,
 
-// Ehable/Disable PMC Loot
-// If set to true, will allow PMCs to have backpack/rig/pocket loot. If disabled, they will not.
+// Enable/Disable PMC/scav Loot
+// If set to true, will allow PMCs/scavs to have backpack/rig/pocket loot. If disabled, they will not.
         "pmcLoot": false,
+        "scavLoot": true,
 
 // Configure Weapon Durability per AI Bot Type
 // Numbers are as follows: [ minDurability, maxDurability, minDelta, maxDelta ]
@@ -74,6 +84,15 @@
         "guardSidePlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
         "raiderMainPlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
         "raiderSidePlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
+        
+// Enable/Disable adding keys to Scav Backpack loot
+// Pick -ONE- option below and enable it if you would like to expand the backpack key pool for scavs.
+// All keys include every key/keycard.
+// Mechanical keys are keys that aren't keycards. <- Recommended, if you are going to enable something
+// Keycards include ALL keycards. 
+        "addAllKeysToScavs": false,
+        "addOnlyMechanicalKeysToScavs": false,
+        "addOnlyKeyCardsToScavs": false,
 
 // Enable/Disable randomization of medical and food resource values
 // If set to true, all scavs and PMCs will have randomized resource values, based on the chances you set below, for medical and food items. 

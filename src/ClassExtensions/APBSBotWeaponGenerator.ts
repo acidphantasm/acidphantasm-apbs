@@ -68,7 +68,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             cloner)
     }
 
-    public override generateRandomWeapon(sessionId: string, equipmentSlot: string, botTemplateInventory: Inventory, weaponParentId: string, modChances: ModsChances, botRole: string, isPmc: boolean, botLevel: number): GenerateWeaponResult 
+    public apbsGenerateRandomWeapon(sessionId: string, equipmentSlot: string, botTemplateInventory: Inventory, weaponParentId: string, modChances: ModsChances, botRole: string, isPmc: boolean, botLevel: number, hasBothPrimary: boolean): GenerateWeaponResult 
     {
         // If the profile was just created, then use vanilla weapon gen
         if (this.raidInformation.freshProfile)
@@ -106,12 +106,35 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
 
         // If not disabled via config, all bots follow this custom generation
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-        const weaponTpl = this.apbsPickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole, tierInfo);
+        const weaponTpl = 
+            (hasBothPrimary && isPmc)
+                ? this.apbsPickWeightedWeaponTplFromPoolHasBothPrimary(equipmentSlot, botLevel, botRole, tierInfo)
+                : this.apbsPickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole, tierInfo)
         return this.apbsGenerateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierInfo)
     }
 
+    private apbsPickWeightedWeaponTplFromPoolHasBothPrimary(equipmentSlot: string, botLevel: number, botRole: string, tierInfo: number): string
+    {
+        let rangeType = "ShortRange";
+        if (equipmentSlot == "FirstPrimaryWeapon")
+        {
+            if (this.raidInformation.location == "Woods") rangeType = "LongRange";
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
+            return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
+        }
+        if (equipmentSlot == "SecondPrimaryWeapon")
+        {
+            if (this.raidInformation.location != "Woods") rangeType = "LongRange";
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
+            return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
+        }
+        
+        const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+        return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
+    }
+
     private apbsPickWeightedWeaponTplFromPool(equipmentSlot: string, botLevel: number, botRole: string, tierInfo: number): string
-    {        
+    {
         if (equipmentSlot == "FirstPrimaryWeapon" || equipmentSlot == "SecondPrimaryWeapon")
         {
             const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);

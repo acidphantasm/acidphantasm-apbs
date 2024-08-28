@@ -10,7 +10,7 @@
                 "FaceCover": 60,
                 "FirstPrimaryWeapon": 100,
                 "Headwear": 80,
-                "Holster": 5,
+                "Holster": 15,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 5,
                 "TacticalVest": 99,
@@ -190,7 +190,7 @@
                 "FaceCover": 60,
                 "FirstPrimaryWeapon": 100,
                 "Headwear": 80,
-                "Holster": 5,
+                "Holster": 15,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 5,
                 "TacticalVest": 99,
@@ -370,7 +370,7 @@
                 "FaceCover": 20,
                 "FirstPrimaryWeapon": 100,
                 "Headwear": 60,
-                "Holster": 15,
+                "Holster": 20,
                 "Pockets": 100,
                 "Scabbard": 100,
                 "SecondPrimaryWeapon": 0,
@@ -442,11 +442,10 @@
                     "backpackLoot": {
                         "weights": {
                             "0": 1,
-                            "1": 8,
-                            "2": 12,
-                            "3": 10,
-                            "4": 4,
-                            "5": 1
+                            "1": 3,
+                            "2": 8,
+                            "3": 3,
+                            "4": 1
                         },
                     "whitelist": []
                     },

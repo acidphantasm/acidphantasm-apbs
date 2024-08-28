@@ -9,7 +9,7 @@ import { ProbabilityHelper } from "@spt/helpers/ProbabilityHelper";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { Item } from "@spt/models/eft/common/tables/IItem";
-import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { ITemplateItem, Slot } from "@spt/models/eft/common/tables/ITemplateItem";
 import { ModSpawn } from "@spt/models/enums/ModSpawn";
 import { IFilterPlateModsForSlotByLevelResult, Result } from "@spt/models/spt/bots/IFilterPlateModsForSlotByLevelResult";
 import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
@@ -31,6 +31,8 @@ import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ModConfig } from "../Globals/ModConfig";
 import { RaidInformation } from "../Globals/RaidInformation";
+import { IModToSpawnRequest } from "@spt/models/spt/bots/IModToSpawnRequest";
+import { IChooseRandomCompatibleModResult } from "@spt/models/spt/bots/IChooseRandomCompatibleModResult";
 
 /** Handle profile related client events */
 @injectable()
@@ -360,5 +362,78 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         result.plateModTpls = platesOfDesiredLevel.map((item) => item._id);
 
         return result;
+    }
+    
+    protected override pickWeaponModTplForSlotFromPool(
+        modPool: string[],
+        parentSlot: Slot,
+        choiceTypeEnum: ModSpawn,
+        weapon: Item[],
+        modSlotName: string
+    ): IChooseRandomCompatibleModResult 
+    {
+        let chosenTpl: string;
+        const exhaustableModPool = new ExhaustableArray(modPool, this.randomUtil, this.cloner);
+        let chosenModResult: IChooseRandomCompatibleModResult = { incompatible: true, found: false, reason: "unknown" };
+        const modParentFilterList = parentSlot._props.filters[0].Filter;
+
+        // How many times can a mod for the slot be blocked before we stop trying
+        const maxBlockedAttempts = Math.round(modPool.length); 
+        let blockedAttemptCount = 0;
+        while (exhaustableModPool.hasValues())
+        {
+            chosenTpl = exhaustableModPool.getRandomValue()!;
+            if (choiceTypeEnum === ModSpawn.DEFAULT_MOD && modPool.length === 1) 
+            {
+                // Default mod wanted and only one choice in pool
+                chosenModResult.found = true;
+                chosenModResult.incompatible = false;
+                chosenModResult.chosenTpl = chosenTpl;
+
+                break;
+            }
+
+            // Check chosen item is on the allowed list of the parent
+            const isOnModParentFilterList = modParentFilterList.includes(chosenTpl);
+            if (!isOnModParentFilterList) 
+            {
+                // Try again
+                continue;
+            }
+
+            chosenModResult = this.botGeneratorHelper.isWeaponModIncompatibleWithCurrentMods(
+                weapon,
+                chosenTpl,
+                modSlotName
+            );
+
+            if (chosenModResult.slotBlocked) 
+            {
+                // Give max of x attempts of picking a mod if blocked by another
+                if (blockedAttemptCount > maxBlockedAttempts) 
+                {
+                    blockedAttemptCount = 0;
+                    break;
+                }
+
+                blockedAttemptCount++;
+
+                // Try again
+                continue;
+            }
+
+            // Some mod combos will never work, make sure this isnt the case
+            if (!(chosenModResult.incompatible || this.weaponModComboIsIncompatible(weapon, chosenTpl))) 
+            {
+                // Success
+                chosenModResult.found = true;
+                chosenModResult.incompatible = false;
+                chosenModResult.chosenTpl = chosenTpl;
+
+                break;
+            }
+        }
+
+        return chosenModResult;
     }
 }

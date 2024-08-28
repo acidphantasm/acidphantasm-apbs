@@ -129,10 +129,10 @@ export class APBSStaticRouterHooks
         if (info.timeVariant === "CURR") this.raidInformation.currentTime = this.parseTime(gameTime, 0, info.location)
         this.raidInformation.nightTime = this.isNight(this.raidInformation.currentTime);
 
-        this.apbsLogger.log(Logging.WARN, "-----Raid Information-----");
-        this.apbsLogger.log(Logging.WARN, `| Location: ${this.raidInformation.location}`);
-        this.apbsLogger.log(Logging.WARN, `| Time: ${this.raidInformation.currentTime}`);
-        this.apbsLogger.log(Logging.WARN, `| Night: ${this.raidInformation.nightTime}`);
+        this.apbsLogger.log(Logging.WARN, "---Raid Information---");
+        this.apbsLogger.log(Logging.WARN, `Location: ${this.raidInformation.location}`);
+        this.apbsLogger.log(Logging.WARN, `Time: ${this.raidInformation.currentTime}`);
+        this.apbsLogger.log(Logging.WARN, `Night: ${this.raidInformation.nightTime}`);
     }
 
     private parseTime(time, hourDiff, location) 
