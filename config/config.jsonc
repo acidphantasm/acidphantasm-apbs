@@ -138,6 +138,18 @@
         "tier5EquipmentBlacklist": [],
         "tier6EquipmentBlacklist": [],
         "tier7EquipmentBlacklist": [],
+        
+// Blacklist specific weapons from all AI
+// Configure per tier blacklists
+// Example.. this will blacklist PKP and PKM from all bots in Tier1
+// tier1EquipmentBlacklist: [ "64ca3d3954fc657e230529cc", "64637076203536ad5600c990" ]
+        "tier1WeaponBlacklist": [],
+        "tier2WeaponBlacklist": [],
+        "tier3WeaponBlacklist": [],
+        "tier4WeaponBlacklist": [],
+        "tier5WeaponBlacklist": [],
+        "tier6WeaponBlacklist": [],
+        "tier7WeaponBlacklist": [],
 
 // LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
 // Examples: 
