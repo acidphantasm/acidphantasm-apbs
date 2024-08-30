@@ -79,6 +79,7 @@ export interface Config
     forceScopeSlot: boolean,
     pmcLoot: boolean,
     scavLoot: boolean,
+    enableScavAttachmentTiering: boolean,
     forceWeaponModLimits: boolean,
     scavWeaponDurability: [ number, number, number, number ],
     pmcWeaponDurability: [ number, number, number, number ],

@@ -178,7 +178,7 @@ export class APBSEquipmentGetter
             case "marksman":
             case "cursedassault":
             case "assault":
-                if (ModConfig.config.blickyMode || ModConfig.config.onlyChads) return tierJson;
+                if (ModConfig.config.blickyMode || ModConfig.config.onlyChads || ModConfig.config.enableScavAttachmentTiering) return tierJson;
                 else return this.tierInformation.tier1mods;
             default:
                 return tierJson;
