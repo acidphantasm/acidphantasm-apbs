@@ -27,9 +27,10 @@ export class ModConfig
         {
             this.setTierLevelDeviation();
         }
-        this.logger.debug(`[APBS] Mod Config - FOR SUPPORT FOLKS ❤❤`)
+        this.logger.debug("[APBS] Mod Config - FOR SUPPORT FOLKS ❤❤")
         this.logger.debug(`[APBS] Import Mod Weapons: ${ModConfig.config.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
         this.logger.debug(`[APBS] Import Mod Equipment: ${ModConfig.config.enableModdedEquipment} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Import Mod Clothing: ${ModConfig.config.enableModdedClothing} <- MUST BE FALSE FOR SUPPORT`)
     }
 
     private setTierLevelDeviation(): void
