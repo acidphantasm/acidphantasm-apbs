@@ -53,6 +53,7 @@ export class BotConfigs
         if (ModConfig.config.forceScopeSlot) this.setForceScopes();
         if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
         if (!ModConfig.config.scavLoot) this.removeScavLoot();
+        if (ModConfig.config.bossesHaveLegaMedals) this.addLegaMedalsToBosses();
     }
 
     private configureBotExperienceLevels(): void
@@ -467,5 +468,34 @@ export class BotConfigs
         this.tables.bots.types.marksman.inventory.items.Backpack = {}
         this.tables.bots.types.marksman.inventory.items.Pockets = {}
         this.tables.bots.types.marksman.inventory.items.TacticalVest = {}
+    }
+
+    private addLegaMedalsToBosses(): void
+    {
+        let chance = ModConfig.config.legaMedalChance;
+        if (chance <= 0) chance = 1;
+        if (chance >= 100) chance = 99;
+
+        for (const botType in this.tables.bots.types)
+        {
+            if (!botType.includes("boss") || botType == "bosstest")
+            {
+                continue;
+            }
+            const boss = this.tables.bots.types[botType].inventory.items.Pockets;
+            const bossTotal = Object.values(boss).reduce((a, b) => a + b, 0);
+
+            let value = 0;
+            let guess = 0;
+            //let rollChance = 0;
+            //let count = 0
+            //count = Object.keys(boss).length;
+
+            guess = chance / 100 * bossTotal;
+            value = Math.round((chance / 100) * (bossTotal + guess));
+            //rollChance = value / (bossTotal + value)
+            //this.apbsLogger.log(Logging.WARN, `${botType}: ${bossTotal} --- if value: ${value} then chance is ${rollChance}`);
+            boss["6656560053eaaa7a23349c86"] = value;
+        }
     }
 }
