@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/quotes */
+import { injectable, inject } from "tsyringe";
+
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
-import { TierInformation } from "../Globals/TierInformation";
 import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
-import { injectable, inject } from "tsyringe";
-import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { ITemplateItem, ItemType } from "@spt/models/eft/common/tables/ITemplateItem";
 import { DatabaseService } from "@spt/services/DatabaseService";
-import { APBSLogger } from "../Utils/APBSLogger";
-import { Logging } from "../Enums/Logging";
+import { ICustomizationItem } from "@spt/models/eft/common/tables/ICustomizationItem";
 
 import { ModConfig } from "../Globals/ModConfig";
-import { ICustomizationItem } from "@spt/models/eft/common/tables/ICustomizationItem";
+import { vanillaItemList, vanillaClothingList } from "../Globals/VanillaItemLists";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
+import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
+import { TierInformation } from "../Globals/TierInformation";
 
 @injectable()
 export class ModdedImportHelper
@@ -122,25 +124,24 @@ export class ModdedImportHelper
     private buildVanillaWeaponList(): void
     {
         this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Weapons...Support not granted for this feature...")
-        const tier7JSON = this.tierInformation.tier7
         
         const weapons: ITemplateItem = {};
-        Object.keys(tier7JSON.scav.equipment.FirstPrimaryWeapon.LongRange).forEach(element => 
+        vanillaItemList.equipment.LongRange.forEach(element => 
         {
             weapons[element] = this.getItem(element)
         })
         
-        Object.keys(tier7JSON.scav.equipment.FirstPrimaryWeapon.ShortRange).forEach(element => 
+        vanillaItemList.equipment.ShortRange.forEach(element => 
         {
             weapons[element] = this.getItem(element);
         })
 
-        Object.keys(tier7JSON.scav.equipment.Holster).forEach(element => 
+        vanillaItemList.equipment.Holster.forEach(element => 
         {
             weapons[element] = this.getItem(element);
         })
 
-        Object.keys(tier7JSON.scav.equipment.Scabbard).forEach(element => 
+        vanillaItemList.equipment.Scabbard.forEach(element => 
         {
             weapons[element] = this.getItem(element);
         })
@@ -151,25 +152,24 @@ export class ModdedImportHelper
     private buildVanillaEquipmentList(): void
     {
         this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Equipment...Support not granted for this feature...")
-        const tier7JSON = this.tierInformation.tier7
 
         const armours: ITemplateItem = {};
-        Object.keys(tier7JSON.scav.equipment.ArmorVest).forEach(element => 
+        vanillaItemList.equipment.ArmorVest.forEach(element => 
         {
             armours[element] = this.getItem(element);
         })
         this.getModdedItems(armours, BaseClasses.ARMOR, "Armours");
 
         const headwear: ITemplateItem = {};
-        Object.keys(tier7JSON.scav.equipment.Headwear).forEach(element => 
+        vanillaItemList.equipment.Headwear.forEach(element => 
         {
             headwear[element] = this.getItem(element);
         })
         this.getModdedItems(headwear, BaseClasses.HEADWEAR, "Helmets");
 
         const tacticalVests: ITemplateItem = {};
-        const combinedTacticalVests = { ...tier7JSON.scav.equipment.TacticalVest, ...tier7JSON.scav.equipment.ArmouredRig }
-        Object.keys(combinedTacticalVests).forEach(element => 
+        
+        vanillaItemList.equipment.TacticalVest.forEach(element => 
         {
             tacticalVests[element] = this.getItem(element);
         })
@@ -179,20 +179,16 @@ export class ModdedImportHelper
     private buildVanillaClothingList(): void
     {
         this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Clothing...Support not granted for this feature...")
-        const tier7JSON = this.tierInformation.tier7appearance
-        const tier2JSON = this.tierInformation.tier2appearance
 
         const body: ICustomizationItem = {};
-        const combinedBody = { ...tier7JSON.pmcUSEC.appearance.body, ...tier7JSON.pmcBEAR.appearance.body, ...tier2JSON.pmcUSEC.appearance.body, ...tier2JSON.pmcBEAR.appearance.body }
-        Object.keys(combinedBody).forEach(element => 
+        vanillaClothingList.appearance.body.forEach(element => 
         {
             body[element] = this.getCustomization(element);
         })
         this.getModdedClothing(body, "Body");
 
         const feet: ICustomizationItem = {};
-        const combinedFeet = { ...tier7JSON.pmcUSEC.appearance.feet, ...tier7JSON.pmcBEAR.appearance.feet, ...tier2JSON.pmcUSEC.appearance.feet, ...tier2JSON.pmcBEAR.appearance.feet }
-        Object.keys(combinedFeet).forEach(element => 
+        vanillaClothingList.appearance.feet.forEach(element => 
         {
             feet[element] = this.getCustomization(element);
         })
@@ -246,13 +242,13 @@ export class ModdedImportHelper
             {
                 if (clothingList[item]._props.Side.includes("Bear"))
                 {
-                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcBEAR.appearance.feet[clothingList[item]._id] = 10
-                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcBEAR.appearance.body[clothingList[item]._id] = 10
+                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcBEAR.appearance.feet[clothingList[item]._id] = 1
+                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcBEAR.appearance.body[clothingList[item]._id] = 1
                 }
                 if (clothingList[item]._props.Side.includes("Usec"))
                 {
-                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcUSEC.appearance.feet[clothingList[item]._id] = 10
-                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcUSEC.appearance.body[clothingList[item]._id] = 10
+                    if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcUSEC.appearance.feet[clothingList[item]._id] = 1
+                    if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcUSEC.appearance.body[clothingList[item]._id] = 1
                 }
             }
         }        
