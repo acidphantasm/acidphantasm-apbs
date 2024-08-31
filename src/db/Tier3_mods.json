@@ -9888,8 +9888,7 @@
       "5e569a2e56edd02abe09f280"
     ],
     "mod_mount_001": [
-      "5c471c2d2e22164bef5d077f",
-      "5dfcd0e547101c39625f66f9"
+      "5c471c2d2e22164bef5d077f"
     ],
     "mod_pistol_grip": [
       "5c471be12e221602b66cd9ac"
@@ -9935,8 +9934,6 @@
   },
   "5c471c2d2e22164bef5d077f": {
     "mod_handguard": [
-      "5e5699df2161e06ac158df6f",
-      "5e56991336989c75ab4f03f6",
       "5c471c6c2e221602b66cd9ae"
     ],
     "mod_sight_rear": [
