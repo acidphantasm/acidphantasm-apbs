@@ -160,6 +160,17 @@ export class BlacklistHelper
                         this.apbsLogger.log(Logging.WARN, `Did not blacklist "${weaponBlacklist[item]}" as it would make the Tier${tier} ${botType} Holster pool empty`)
                         continue;
                     }
+                    if (Object.keys(tierJSON[botType].equipment.Scabbard).includes(itemDetails._id))
+                    {
+                        if (Object.keys(tierJSON[botType].equipment.Scabbard).length > 1)
+                        {
+                            delete tierJSON[botType].equipment.Scabbard[itemDetails._id]
+                            this.apbsLogger.log(Logging.DEBUG, `Added "${weaponBlacklist[item]}" to blacklist for Tier${tier} ${botType} Scabbard pool`)
+                            continue;
+                        }
+                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${weaponBlacklist[item]}" as it would make the Tier${tier} ${botType} Scabbard pool empty`)
+                        continue;
+                    }
                 }
             }
             if (itemDetails == undefined)
