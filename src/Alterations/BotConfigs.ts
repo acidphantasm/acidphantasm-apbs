@@ -54,6 +54,7 @@ export class BotConfigs
         if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
         if (!ModConfig.config.scavLoot) this.removeScavLoot();
         if (ModConfig.config.bossesHaveLegaMedals) this.addLegaMedalsToBosses();
+        if (ModConfig.config.enableScavEqualEquipmentTiering) this.setIdenticalScavWeights();
     }
 
     private configureBotExperienceLevels(): void
@@ -247,10 +248,16 @@ export class BotConfigs
         const botConfigEquipment = this.botConfig.equipment
         for (const botType in botConfigEquipment)
         {
-            botConfigEquipment[botType].weaponModLimits = {                
-                "scopeLimit": 2,
-                "lightLaserLimit": 2
-            };
+            if (botConfigEquipment[botType].weaponModLimits == undefined) 
+            {
+                botConfigEquipment[botType].weaponModLimits = 
+                {
+                    "scopeLimit": 2,
+                    "lightLaserLimit": 1
+                }
+            }
+            botConfigEquipment[botType].weaponModLimits.scopeLimit = ModConfig.config.scopeLimit;
+            botConfigEquipment[botType].weaponModLimits.lightLaserLimit = ModConfig.config.tacticalLimit;
         }
     }
 
@@ -496,6 +503,37 @@ export class BotConfigs
             //rollChance = value / (bossTotal + value)
             //this.apbsLogger.log(Logging.WARN, `${botType}: ${bossTotal} --- if value: ${value} then chance is ${rollChance}`);
             boss["6656560053eaaa7a23349c86"] = value;
+        }
+    }
+
+    private setIdenticalScavWeights(): void
+    {
+        for (const tierObject in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[tierObject].tier
+            const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber);
+            const scav = tierJson.scav.equipment
+            for (const slot in scav)
+            {
+                if (slot == "SecondPrimaryWeapon" || slot == "ArmBand") continue;
+                if (slot == "FirstPrimaryWeapon")
+                {
+                    for (const subSlot in scav[slot])
+                    {
+                        for (const item in scav[slot][subSlot])
+                        {
+                            scav[slot][subSlot][item] = 1;
+                            console.log(`${item}: ${scav[slot][subSlot][item]}`);
+                        }
+                    }
+                    continue;
+                }
+                for (const item in scav[slot])
+                {
+                    scav[slot][item] = 1;
+                    console.log(`${item}: ${scav[slot][item]}`);
+                }
+            }
         }
     }
 }

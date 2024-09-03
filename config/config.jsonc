@@ -47,8 +47,10 @@
         "forceScopeSlot": false,
 
 // Force weapon mod count limits
-// If set to true, will enforce all AI weapons to be limited to 2 scopes and 2 lasers, if disabled the generation may go wild
+// If set to true, will enforce all AI weapons to be limited to the scopeLimit & tacticalLimit, if disabled the generation may go wild
         "forceWeaponModLimits": true,
+        "scopeLimit": 2,
+        "tacticalLimit": 1,
 
 // Enable/Disable PMC/scav Loot
 // If set to true, will allow PMCs/scavs to have backpack/rig/pocket loot. If disabled, they will not.
@@ -56,15 +58,16 @@
         "scavLoot": true,
 
 // Enable/Disable Bosses having Lega Medals in their loot
-// If set to true, will allow bosses will have Lega Medals at a roughly 20% chance. If disabled, they will not.
+// If set to true, will allow bosses will have Lega Medals at a rate roughly equal to "legaMedalChance". If disabled, they will not.
 // This setting removes the need to also have my "Bosses Have Lega Medals" mod installed - if you enable this and also keep that installed, you will double the chances of finding Lega Medals.
         "bossesHaveLegaMedals": false,
         "legaMedalChance": 15,
 
-// Enable/Disable Scav weapon/equipment attachment Tiering
-// This does not need to be enabled to have the *challenge* mods work properly
-// If set to true, will allow scavs to get additional weapon/equipment attachments as they tier up. If disabled, they will always have tier 1 attachments.
+// Enable/Disabe Scav specific tiering options
+// "enableScavAttachmentTiering" - If set to true, will allow scavs to get additional weapon/equipment attachments as they tier up. If disabled, they will always have tier 1 attachments.
+// "enableScavEqualChanceEquipmentTiering" - If set to true, will allow scavs to have equal chances for any equipment in their pools. If disabled, they will use APBS defaults (low chances for good gear).
         "enableScavAttachmentTiering": false,
+        "enableScavEqualEquipmentTiering": false,
         
 // Configure Weapon Durability per AI Bot Type
 // Numbers are as follows: [ minDurability, maxDurability, minDelta, maxDelta ]
