@@ -1,4 +1,4 @@
-{    
+{
     "pmcUSEC": {
         "chances": {
             "equipment": {
@@ -40,7 +40,7 @@
                 "mod_handguard": 100,
                 "mod_launcher": 1,
                 "mod_magazine": 100,
-                "mod_mount": 30,
+                "mod_mount": 55,
                 "mod_mount_000": 50,
                 "mod_mount_001": 35,
                 "mod_mount_002": 35,
@@ -220,7 +220,7 @@
                 "mod_handguard": 100,
                 "mod_launcher": 1,
                 "mod_magazine": 100,
-                "mod_mount": 30,
+                "mod_mount": 55,
                 "mod_mount_000": 50,
                 "mod_mount_001": 35,
                 "mod_mount_002": 35,
@@ -1602,7 +1602,7 @@
                 "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_stock": 100,
-                "mod_mount_000": 0,
+                "mod_mount_000": 95,
                 "mod_mount_002": 100,
                 "mod_muzzle": 66,
                 "mod_mount": 0,
