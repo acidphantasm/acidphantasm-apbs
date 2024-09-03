@@ -68,7 +68,16 @@
 // "enableScavEqualChanceEquipmentTiering" - If set to true, will allow scavs to have equal chances for any equipment in their pools. If disabled, they will use APBS defaults (low chances for good gear).
         "enableScavAttachmentTiering": false,
         "enableScavEqualEquipmentTiering": false,
-        
+
+// Enable/Disable adding keys to Scav Backpack loot
+// Pick -ONE- option below and enable it if you would like to expand the backpack key pool for scavs.
+// All keys include every key/keycard.
+// Mechanical keys are keys that aren't keycards. <- Recommended, if you are going to enable something
+// Keycards include ALL keycards. 
+        "addAllKeysToScavs": false,
+        "addOnlyMechanicalKeysToScavs": false,
+        "addOnlyKeyCardsToScavs": false,
+
 // Configure Weapon Durability per AI Bot Type
 // Numbers are as follows: [ minDurability, maxDurability, minDelta, maxDelta ]
 // Example: [ 50, 90, 0, 25 ]
@@ -98,15 +107,6 @@
         "guardSidePlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
         "raiderMainPlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
         "raiderSidePlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
-        
-// Enable/Disable adding keys to Scav Backpack loot
-// Pick -ONE- option below and enable it if you would like to expand the backpack key pool for scavs.
-// All keys include every key/keycard.
-// Mechanical keys are keys that aren't keycards. <- Recommended, if you are going to enable something
-// Keycards include ALL keycards. 
-        "addAllKeysToScavs": false,
-        "addOnlyMechanicalKeysToScavs": false,
-        "addOnlyKeyCardsToScavs": false,
 
 // Enable/Disable randomization of medical and food resource values
 // If set to true, all scavs and PMCs will have randomized resource values, based on the chances you set below, for medical and food items. 
@@ -129,7 +129,7 @@
         "tier5AmmoBlacklist": [],
         "tier6AmmoBlacklist": [],
         "tier7AmmoBlacklist": [],
-        
+
 // Blacklist specific equipment from all AI
 // Configure per tier blacklists
 // Example.. this will blacklist BlackRock chest rig and GSSh-01 headset from all bots in Tier1
@@ -141,7 +141,7 @@
         "tier5EquipmentBlacklist": [],
         "tier6EquipmentBlacklist": [],
         "tier7EquipmentBlacklist": [],
-        
+
 // Blacklist specific weapons from all AI
 // Configure per tier blacklists
 // Example.. this will blacklist PKP and PKM from all bots in Tier1
@@ -159,6 +159,7 @@
 // "tier1LevelDelta": [ 5, 5 ] --- While you are Tier1 (lv1-10), all AI will be leveled -5 to +5 of your level.
 // "tier2LevelDelta": [ 10, 25 ] --- While you are Tier2 (lv11-20), all AI will be leveled -10 to +25 of your level.
 // "enableCustomLevelDeltas" if true will use the values you set below, otherwise they will use APBS values
+// IF YOU WANT EVERY TIER AT EVERY LEVEL, SET ALL OF THESE TO: [ 79, 79 ]
         "enableCustomLevelDeltas": false,
         "tier1LevelDelta": [ 5, 5 ],
         "tier2LevelDelta": [ 7, 7 ],
