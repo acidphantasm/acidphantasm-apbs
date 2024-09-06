@@ -62,9 +62,9 @@ export class APBSEquipmentGetter
         }
     }
 
-    public getTierModsJson(tierInfo: number)
+    public getTierModsJson(tierInfo: number, ignoreCheck?: boolean)
     {
-        tierInfo = this.chadOrChill(tierInfo);
+        if (!ignoreCheck) tierInfo = this.chadOrChill(tierInfo);
         switch (tierInfo)
         {
             case 0:
