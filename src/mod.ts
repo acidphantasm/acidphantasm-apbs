@@ -49,11 +49,12 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
         this.instance.botConfigs.initialize();
         this.instance.moddedImportHelper.initialize();
 
-        if (this.instance.modInformation.versionNumber.includes("alpha"))
+        // Check and configure for Realism if necessary
+        const realism = this.instance.preSptModLoader.getImportedModsNames().includes("SPT-Realism");
+        if (realism)
         {
-            this.instance.apbsLogger.log(Logging.WARN, "THIS IS AN EARLY RELEASE BUILD")
-            this.instance.apbsLogger.log(Logging.WARN, "Do not report problems with this anywhere except #acidphantasm-mods in the SPT Discord.")
-            this.instance.apbsLogger.log(Logging.WARN, "Thank you for testing!")
+            this.instance.apbsLogger.log(Logging.WARN, "Realism Detected. Adding gas masks...")
+            this.instance.realismHelper.initialize();
         }
 
         const timeTaken = performance.now() - start;
@@ -67,6 +68,13 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
 
         //Do postSPTLoad stuff
         this.instance.blacklistHelper.initialize();
+
+        if (this.instance.modInformation.versionNumber.includes("alpha"))
+        {
+            this.instance.apbsLogger.log(Logging.WARN, "!!! THIS IS AN EARLY RELEASE BUILD !!!")
+            this.instance.apbsLogger.log(Logging.WARN, "Do not report problems with this anywhere except #acidphantasm-mods in the SPT Discord.")
+            this.instance.apbsLogger.log(Logging.WARN, "Thank you for testing!")
+        }
 
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postSptLoad`);
