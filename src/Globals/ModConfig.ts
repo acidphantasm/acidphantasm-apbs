@@ -80,8 +80,6 @@ export interface Config
     forceScopeSlot: boolean,
     pmcLoot: boolean,
     scavLoot: boolean,
-    bossesHaveLegaMedals: boolean,
-    legaMedalChance: number,
     enableScavAttachmentTiering: boolean,
     enableScavEqualEquipmentTiering: boolean,
     forceWeaponModLimits: boolean,

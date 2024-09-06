@@ -63,12 +63,6 @@
         "pmcLoot": false,
         "scavLoot": true,
 
-// Enable/Disable Bosses having Lega Medals in their loot
-// If set to true, will allow bosses will have Lega Medals at a rate roughly equal to "legaMedalChance". If disabled, they will not.
-// This setting removes the need to also have my "Bosses Have Lega Medals" mod installed - if you enable this and also keep that installed, you will double the chances of finding Lega Medals.
-        "bossesHaveLegaMedals": false,
-        "legaMedalChance": 15,
-
 // Enable/Disabe Scav specific tiering options
 // "enableScavAttachmentTiering" - If set to true, will allow scavs to get additional weapon/equipment attachments as they tier up. If disabled, they will always have tier 1 attachments.
 // "enableScavEqualChanceEquipmentTiering" - If set to true, will allow scavs to have equal chances for any equipment in their pools. If disabled, they will use APBS defaults (low chances for good gear).
