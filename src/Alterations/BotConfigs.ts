@@ -55,6 +55,7 @@ export class BotConfigs
         if (!ModConfig.config.scavLoot) this.removeScavLoot();
         if (ModConfig.config.bossesHaveLegaMedals) this.addLegaMedalsToBosses();
         if (ModConfig.config.enableScavEqualEquipmentTiering) this.setIdenticalScavWeights();
+        this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
     }
 
     private configureBotExperienceLevels(): void
@@ -511,7 +512,7 @@ export class BotConfigs
         for (const tierObject in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[tierObject].tier
-            const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber);
+            const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber, true);
             const scav = tierJson.scav.equipment
             for (const slot in scav)
             {
@@ -533,6 +534,23 @@ export class BotConfigs
                     scav[slot][item] = 1;
                     console.log(`${item}: ${scav[slot][item]}`);
                 }
+            }
+        }
+    }
+
+    private removeThermalGoggles(removeSome: boolean): void
+    {
+        for (const tierObject in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[tierObject].tier
+            const tierJson = this.apbsEquipmentGetter.getTierModsJson(tierNumber, true);
+            const tatmMods = tierJson["5a16b8a9fcdbcb00165aa6ca"].mod_nvg;
+            const index = tatmMods.indexOf("5c11046cd174af02a012e42b");
+
+            if (removeSome && tierNumber >= ModConfig.config.startTier) continue;
+            if (index > -1)
+            {
+                tatmMods.splice(index, 1)
             }
         }
     }

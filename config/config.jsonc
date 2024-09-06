@@ -52,6 +52,12 @@
         "scopeLimit": 2,
         "tacticalLimit": 1,
 
+// Enable/disable AI having T-7 thermal goggles
+// If set to true, will allow AI to spawn with T-7 thermal goggles, if false they will not.
+// "startTier" controls what tier the goggles will be available in. "5c110624d174af029e69734c"
+        "enableT7Thermals": false,
+        "startTier": 6,
+
 // Enable/Disable PMC/scav Loot
 // If set to true, will allow PMCs/scavs to have backpack/rig/pocket loot. If disabled, they will not.
         "pmcLoot": false,

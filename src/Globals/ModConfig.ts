@@ -1,5 +1,5 @@
 import { VFS } from "@spt/utils/VFS";
-import { container, inject, injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import jsonc from "jsonc";
 import path from "path";
 import { TierInformation } from "./TierInformation";
@@ -87,6 +87,8 @@ export interface Config
     forceWeaponModLimits: boolean,
     scopeLimit: number,
     tacticalLimit: number,
+    enableT7Thermals: boolean,
+    startTier: number,
     scavWeaponDurability: [ number, number, number, number ],
     pmcWeaponDurability: [ number, number, number, number ],
     bossWeaponDurability: [ number, number, number, number ],
