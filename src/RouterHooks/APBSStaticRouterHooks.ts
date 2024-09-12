@@ -227,6 +227,9 @@ export class APBSStaticRouterHooks
                 case "bossZryachiy":
                 case "bossTest":
                 case "bossKolontay":
+                case "bossBoar":
+                case "bossBoarSniper":
+                case "bosslegion":
                 case "followerBully":
                 case "followerGluharAssault":
                 case "followerGluharScout":
@@ -242,8 +245,6 @@ export class APBSStaticRouterHooks
                 case "followerBoar":
                 case "sectantPriest":
                 case "sectantWarrior":
-                case "bossBoar":
-                case "bossBoarSniper":
                 case "followerBoarClose1":
                 case "followerBoarClose2":
                 case "followerKolontayAssault":
