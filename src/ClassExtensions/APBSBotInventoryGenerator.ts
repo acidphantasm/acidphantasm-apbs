@@ -92,7 +92,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             chosenGameVersion
         );
         // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed
-        if (((botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")) && ModConfig.config.disableBossTierGeneration) || botRole == "bosslegion")
+        if (((botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")) && ModConfig.config.disableBossTierGeneration) || botRole == "bosslegion" || botRole == "bosspunisher")
         {
             this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
             this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
@@ -151,7 +151,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         let modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
         let apbsBot = true;
 
-        if ((ModConfig.config.disableBossTierGeneration && (botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena"))) || botRole == "bosslegion")
+        if ((ModConfig.config.disableBossTierGeneration && (botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena"))) || botRole == "bosslegion" || botRole == "bosspunisher")
         {
             equipmentPool = settings.rootEquipmentPool;
             randomisationDetails = settings.randomisationDetails;

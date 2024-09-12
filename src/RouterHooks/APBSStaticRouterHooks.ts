@@ -230,6 +230,7 @@ export class APBSStaticRouterHooks
                 case "bossBoar":
                 case "bossBoarSniper":
                 case "bosslegion":
+                case "bosspunisher":
                 case "followerBully":
                 case "followerGluharAssault":
                 case "followerGluharScout":
