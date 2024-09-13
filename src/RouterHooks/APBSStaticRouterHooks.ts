@@ -457,7 +457,8 @@ export class APBSStaticRouterHooks
             `Nickname: ${botDetails.name}`,
             `Level: ${botDetails.level}`,
             `Difficulty: ${botDetails.difficulty}`,
-            `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`
+            `GameVersion: ${botDetails.gameVersion}`,
+            `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`,
         ];
         let temporaryMessage2: string[] = [
             `Primary: ${botDetails.primaryID ?? "None" }`,

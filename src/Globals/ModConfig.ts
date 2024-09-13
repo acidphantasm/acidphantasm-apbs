@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { VFS } from "@spt/utils/VFS";
 import { inject, injectable } from "tsyringe";
 import jsonc from "jsonc";
@@ -72,6 +73,12 @@ export interface Config
     disableBossTierGeneration: boolean,
     disableBossFollowerTierGeneration: boolean,
     disableRaiderRogueTierGeneration: boolean,
+    gameVersionWeight: boolean, 
+    standard: number, 
+    left_behind: number, 
+    prepare_for_escape: number, 
+    edge_of_darkness: number, 
+    unheard_edition: number,
     enablePMCAmmoTierSliding: boolean,
     slideAmount: number,
     slideChance: number,

@@ -46,6 +46,7 @@ export class BotConfigs
         this.setPMCItemLimits();
         this.setPMCLoot();
         this.setPMCScopeWhitelist();
+        if (ModConfig.config.gameVersionWeight) this.setPMCGameVersionWeights();
         if (ModConfig.config.addAllKeysToScavs || ModConfig.config.addOnlyKeyCardsToScavs || ModConfig.config.addOnlyMechanicalKeysToScavs) this.pushScavKeys();
         if (ModConfig.config.enableCustomPlateChances) this.setPlateChances();
         if (ModConfig.config.forceStock) this.setForceStock();
@@ -523,5 +524,14 @@ export class BotConfigs
                 tatmMods.splice(index, 1)
             }
         }
+    }
+
+    private setPMCGameVersionWeights(): void
+    {
+        this.pmcConfig.gameVersionWeight.standard = ModConfig.config.standard;
+        this.pmcConfig.gameVersionWeight.left_behind = ModConfig.config.left_behind;
+        this.pmcConfig.gameVersionWeight.prepare_for_escape = ModConfig.config.prepare_for_escape;
+        this.pmcConfig.gameVersionWeight.edge_of_darkness = ModConfig.config.edge_of_darkness;
+        this.pmcConfig.gameVersionWeight.unheard_edition = ModConfig.config.unheard_edition;
     }
 }

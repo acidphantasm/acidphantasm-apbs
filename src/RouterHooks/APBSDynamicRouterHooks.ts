@@ -333,6 +333,7 @@ export class APBSDynamicRouterHooks
             `Nickname: ${botDetails.name}`,
             `Level: ${botDetails.level}`,
             `Difficulty: ${botDetails.difficulty}`,
+            `GameVersion: ${botDetails.gameVersion}`,
             `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`
         ];
         let temporaryMessage2: string[] = [

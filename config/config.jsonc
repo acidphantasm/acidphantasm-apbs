@@ -19,12 +19,22 @@
         "blickyMode": false,
 
 // Enable/Disable specific bot generation
-// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation
+// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation3
         "disableScavTierGeneration": false,
         "disablePMCTierGeneration": false,
         "disableBossTierGeneration": false,
         "disableBossFollowerTierGeneration": false,
         "disableRaiderRogueTierGeneration": false,
+
+// Enable/Disable custom game version weights for AI PMCs
+// If set to true, AI PMCs will roll their weights from the values below - if false will use SPT defaults.
+// The values listed below ARE the SPT defaults (for reference)
+        "gameVersionWeight": false,
+        "standard": 2,
+        "left_behind": 1,
+        "prepare_for_escape": 1,
+        "edge_of_darkness": 4,
+        "unheard_edition": 2,
 
 // Enable/Disable PMC ammo tier sliding
 // If set to true, it will enabling a sliding system for PMC ammo pools. If you enable this, the below numbers are the recommended amounts. Tweak as you wish.
