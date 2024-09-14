@@ -19,12 +19,22 @@
         "blickyMode": false,
 
 // Enable/Disable specific bot generation
-// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation
+// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation3
         "disableScavTierGeneration": false,
         "disablePMCTierGeneration": false,
         "disableBossTierGeneration": false,
         "disableBossFollowerTierGeneration": false,
         "disableRaiderRogueTierGeneration": false,
+
+// Enable/Disable custom game version weights for AI PMCs
+// If set to true, AI PMCs will roll their weights from the values below - if false will use SPT defaults.
+// The values listed below ARE the SPT defaults (for reference)
+        "gameVersionWeight": false,
+        "standard": 2,
+        "left_behind": 1,
+        "prepare_for_escape": 1,
+        "edge_of_darkness": 4,
+        "unheard_edition": 2,
 
 // Enable/Disable PMC ammo tier sliding
 // If set to true, it will enabling a sliding system for PMC ammo pools. If you enable this, the below numbers are the recommended amounts. Tweak as you wish.
@@ -47,13 +57,36 @@
         "forceScopeSlot": false,
 
 // Force weapon mod count limits
-// If set to true, will enforce all AI weapons to be limited to 2 scopes and 2 lasers, if disabled the generation may go wild
+// If set to true, will enforce all AI weapons to be limited to the scopeLimit & tacticalLimit, if disabled the generation may go wild
         "forceWeaponModLimits": true,
+        "scopeLimit": 2,
+        "tacticalLimit": 1,
+
+// Enable/disable AI having T-7 thermal goggles
+// If set to true, will allow AI to spawn with T-7 thermal goggles, if false they will not.
+// "startTier" controls what tier the goggles will be available in. "5c110624d174af029e69734c"
+        "enableT7Thermals": false,
+        "startTier": 6,
 
 // Enable/Disable PMC/scav Loot
 // If set to true, will allow PMCs/scavs to have backpack/rig/pocket loot. If disabled, they will not.
         "pmcLoot": false,
         "scavLoot": true,
+
+// Enable/Disabe Scav specific tiering options
+// "enableScavAttachmentTiering" - If set to true, will allow scavs to get additional weapon/equipment attachments as they tier up. If disabled, they will always have tier 1 attachments.
+// "enableScavEqualChanceEquipmentTiering" - If set to true, will allow scavs to have equal chances for any equipment in their pools. If disabled, they will use APBS defaults (low chances for good gear).
+        "enableScavAttachmentTiering": false,
+        "enableScavEqualEquipmentTiering": false,
+
+// Enable/Disable adding keys to Scav Backpack loot
+// Pick -ONE- option below and enable it if you would like to expand the backpack key pool for scavs.
+// All keys include every key/keycard.
+// Mechanical keys are keys that aren't keycards. <- Recommended, if you are going to enable something
+// Keycards include ALL keycards. 
+        "addAllKeysToScavs": false,
+        "addOnlyMechanicalKeysToScavs": false,
+        "addOnlyKeyCardsToScavs": false,
 
 // Configure Weapon Durability per AI Bot Type
 // Numbers are as follows: [ minDurability, maxDurability, minDelta, maxDelta ]
@@ -84,15 +117,6 @@
         "guardSidePlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
         "raiderMainPlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
         "raiderSidePlateChance":  [ 75, 75, 75, 75, 75, 75, 75 ],
-        
-// Enable/Disable adding keys to Scav Backpack loot
-// Pick -ONE- option below and enable it if you would like to expand the backpack key pool for scavs.
-// All keys include every key/keycard.
-// Mechanical keys are keys that aren't keycards. <- Recommended, if you are going to enable something
-// Keycards include ALL keycards. 
-        "addAllKeysToScavs": false,
-        "addOnlyMechanicalKeysToScavs": false,
-        "addOnlyKeyCardsToScavs": false,
 
 // Enable/Disable randomization of medical and food resource values
 // If set to true, all scavs and PMCs will have randomized resource values, based on the chances you set below, for medical and food items. 
@@ -115,7 +139,7 @@
         "tier5AmmoBlacklist": [],
         "tier6AmmoBlacklist": [],
         "tier7AmmoBlacklist": [],
-        
+
 // Blacklist specific equipment from all AI
 // Configure per tier blacklists
 // Example.. this will blacklist BlackRock chest rig and GSSh-01 headset from all bots in Tier1
@@ -128,11 +152,24 @@
         "tier6EquipmentBlacklist": [],
         "tier7EquipmentBlacklist": [],
 
+// Blacklist specific weapons from all AI
+// Configure per tier blacklists
+// Example.. this will blacklist PKP and PKM from all bots in Tier1
+// tier1EquipmentBlacklist: [ "64ca3d3954fc657e230529cc", "64637076203536ad5600c990" ]
+        "tier1WeaponBlacklist": [],
+        "tier2WeaponBlacklist": [],
+        "tier3WeaponBlacklist": [],
+        "tier4WeaponBlacklist": [],
+        "tier5WeaponBlacklist": [],
+        "tier6WeaponBlacklist": [],
+        "tier7WeaponBlacklist": [],
+
 // LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
 // Examples: 
 // "tier1LevelDelta": [ 5, 5 ] --- While you are Tier1 (lv1-10), all AI will be leveled -5 to +5 of your level.
 // "tier2LevelDelta": [ 10, 25 ] --- While you are Tier2 (lv11-20), all AI will be leveled -10 to +25 of your level.
 // "enableCustomLevelDeltas" if true will use the values you set below, otherwise they will use APBS values
+// IF YOU WANT EVERY TIER AT EVERY LEVEL, SET ALL OF THESE TO: [ 79, 79 ]
         "enableCustomLevelDeltas": false,
         "tier1LevelDelta": [ 5, 5 ],
         "tier2LevelDelta": [ 7, 7 ],

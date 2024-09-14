@@ -1,4 +1,4 @@
-{    
+{
     "pmcUSEC": {
         "chances": {
             "equipment": {
@@ -40,7 +40,7 @@
                 "mod_handguard": 100,
                 "mod_launcher": 5,
                 "mod_magazine": 100,
-                "mod_mount": 85,
+                "mod_mount": 90,
                 "mod_mount_000": 85,
                 "mod_mount_001": 65,
                 "mod_mount_002": 65,
@@ -67,10 +67,10 @@
                 "mod_stock_001": 100,
                 "mod_stock_akms": 100,
                 "mod_stock_axis": 100,
-                "mod_tactical": 30,
+                "mod_tactical": 5,
                 "mod_tactical001": 55,
                 "mod_tactical002": 55,
-                "mod_tactical_000": 20,
+                "mod_tactical_000": 5,
                 "mod_tactical_001": 55,
                 "mod_tactical_002": 55,
                 "mod_tactical_003": 55,
@@ -240,7 +240,7 @@
                 "mod_handguard": 100,
                 "mod_launcher": 5,
                 "mod_magazine": 100,
-                "mod_mount": 85,
+                "mod_mount": 90,
                 "mod_mount_000": 85,
                 "mod_mount_001": 65,
                 "mod_mount_002": 65,
@@ -267,10 +267,10 @@
                 "mod_stock_001": 100,
                 "mod_stock_akms": 100,
                 "mod_stock_axis": 100,
-                "mod_tactical": 30,
+                "mod_tactical": 5,
                 "mod_tactical001": 55,
                 "mod_tactical002": 55,
-                "mod_tactical_000": 20,
+                "mod_tactical_000": 5,
                 "mod_tactical_001": 55,
                 "mod_tactical_002": 55,
                 "mod_tactical_003": 55,
@@ -1642,7 +1642,7 @@
                 "mod_barrel": 100,
                 "mod_magazine": 100,
                 "mod_stock": 100,
-                "mod_mount_000": 0,
+                "mod_mount_000": 95,
                 "mod_mount_002": 100,
                 "mod_muzzle": 66,
                 "mod_mount": 0,

@@ -97,7 +97,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         let spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
 
         // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed
-        if (ModConfig.config.disableBossTierGeneration && (botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")))
+        if ((ModConfig.config.disableBossTierGeneration && (botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena"))) || botRole == "bosslegion" || botRole == "bosspunisher")
         {
             spawnChances = settings.spawnChances;
             compatibleModsPool = settings.modPool[parentTemplate._id];

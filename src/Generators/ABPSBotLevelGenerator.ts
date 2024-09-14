@@ -52,7 +52,16 @@ export class APBSBotLevelGenerator
                 
                 if (botGenerationDetails.isPlayerScav)
                 {
-                    const level = this.raidInformation.freshProfile == true ? 1 : this.profileHelper.getPmcProfile(this.raidInformation.sessionId)?.Info?.Level
+                    let level = this.raidInformation.freshProfile == true ? 1 : this.profileHelper.getPmcProfile(this.raidInformation.sessionId)?.Info?.Level;
+
+                    // Level only stays undefined when a Fika dedicated profile is created due to this.raidInformation.freshProfile never being set.
+                    // As Fika never calls /client/profile/status
+                    if (level === undefined)
+                    {
+                        this.raidInformation.freshProfile = true;
+                        level = 1;
+                    }
+                    
                     const exp = this.profileHelper.getExperience(level);
                     const tier = this.apbsTierGetter.getTierByLevel(level);
                     bot.Info.Tier = this.chadOrChill(tier.toString());

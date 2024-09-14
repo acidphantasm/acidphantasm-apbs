@@ -34,6 +34,13 @@ export class BlacklistHelper
         if (ModConfig.config.tier5EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier5EquipmentBlacklist, 5);
         if (ModConfig.config.tier6EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier6EquipmentBlacklist, 6);
         if (ModConfig.config.tier7EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier7EquipmentBlacklist, 7);
+        if (ModConfig.config.tier1WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier1WeaponBlacklist, 1);
+        if (ModConfig.config.tier2WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier2WeaponBlacklist, 2);
+        if (ModConfig.config.tier3WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier3WeaponBlacklist, 3);
+        if (ModConfig.config.tier4WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier4WeaponBlacklist, 4);
+        if (ModConfig.config.tier5WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier5WeaponBlacklist, 5);
+        if (ModConfig.config.tier6WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier6WeaponBlacklist, 6);
+        if (ModConfig.config.tier7WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier7WeaponBlacklist, 7);
     }
 
     
@@ -58,7 +65,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `Added "${ammoBlacklist[item]}" to blacklist for Tier${tier} ${botType} pool`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${ammoBlacklist[item]}" as it would make the Tier${tier} ${botType} pool empty for ${ammo}`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${ammoBlacklist[item]}" as it would make the Tier${tier} ${botType} ${ammo} pool empty`)
                             continue;
                         }
                     }
@@ -91,7 +98,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `Added "${equipmentBlacklist[item]}" to blacklist for Tier${tier} ${botType} equipment pool`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${equipmentBlacklist[item]}" as it would make the Tier${tier} ${botType} equipment pool empty for ${equipmentSlot}`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${equipmentBlacklist[item]}" as it would make the Tier${tier} ${botType} ${equipmentSlot} pool empty`)
                             continue;
                         }
                     }
@@ -100,6 +107,75 @@ export class BlacklistHelper
             if (itemDetails == undefined)
             {
                 this.apbsLogger.log(Logging.WARN, `"${equipmentBlacklist[item]}" in Equipment Blacklist is an invalid item ID.`)
+            }
+        }
+    }
+
+    private removeBlacklistedWeapons(weaponBlacklist: string[], tier: number): void
+    {
+        const tierJSON = this.apbsEquipmentGetter.getTierJson(tier, true);
+        for (const item in weaponBlacklist)
+        {
+            const itemDetails = this.getItem(weaponBlacklist[item])
+            if (itemDetails != undefined)
+            {
+                for (const botType in tierJSON)
+                {
+                    for (const equipmentSlot in tierJSON[botType].equipment.FirstPrimaryWeapon)
+                    {
+                        if (Object.keys(tierJSON[botType].equipment.FirstPrimaryWeapon[equipmentSlot]).includes(itemDetails._id))
+                        {
+                            if (Object.keys(tierJSON[botType].equipment.FirstPrimaryWeapon[equipmentSlot]).length > 1)
+                            {
+                                delete tierJSON[botType].equipment.FirstPrimaryWeapon[equipmentSlot][itemDetails._id]
+                                this.apbsLogger.log(Logging.DEBUG, `Added "${weaponBlacklist[item]}" to blacklist for Tier${tier} ${botType} ${equipmentSlot} pool`)
+                                continue;
+                            }
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${weaponBlacklist[item]}" as it would make the Tier${tier} ${botType} ${equipmentSlot} pool empty`)
+                            continue;
+                        }
+                    }
+                    for (const equipmentSlot in tierJSON[botType].equipment.SecondPrimaryWeapon)
+                    {
+                        if (Object.keys(tierJSON[botType].equipment.SecondPrimaryWeapon[equipmentSlot]).includes(itemDetails._id))
+                        {
+                            if (Object.keys(tierJSON[botType].equipment.SecondPrimaryWeapon[equipmentSlot]).length > 1)
+                            {
+                                delete tierJSON[botType].equipment.SecondPrimaryWeapon[equipmentSlot][itemDetails._id]
+                                this.apbsLogger.log(Logging.DEBUG, `Added "${weaponBlacklist[item]}" to blacklist for Tier${tier} ${botType} ${equipmentSlot} pool`)
+                                continue;
+                            }
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${weaponBlacklist[item]}" as it would make the Tier${tier} ${botType} ${equipmentSlot} pool empty`)
+                            continue;
+                        }
+                    }
+                    if (Object.keys(tierJSON[botType].equipment.Holster).includes(itemDetails._id))
+                    {
+                        if (Object.keys(tierJSON[botType].equipment.Holster).length > 1)
+                        {
+                            delete tierJSON[botType].equipment.Holster[itemDetails._id]
+                            this.apbsLogger.log(Logging.DEBUG, `Added "${weaponBlacklist[item]}" to blacklist for Tier${tier} ${botType} Holster pool`)
+                            continue;
+                        }
+                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${weaponBlacklist[item]}" as it would make the Tier${tier} ${botType} Holster pool empty`)
+                        continue;
+                    }
+                    if (Object.keys(tierJSON[botType].equipment.Scabbard).includes(itemDetails._id))
+                    {
+                        if (Object.keys(tierJSON[botType].equipment.Scabbard).length > 1)
+                        {
+                            delete tierJSON[botType].equipment.Scabbard[itemDetails._id]
+                            this.apbsLogger.log(Logging.DEBUG, `Added "${weaponBlacklist[item]}" to blacklist for Tier${tier} ${botType} Scabbard pool`)
+                            continue;
+                        }
+                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${weaponBlacklist[item]}" as it would make the Tier${tier} ${botType} Scabbard pool empty`)
+                        continue;
+                    }
+                }
+            }
+            if (itemDetails == undefined)
+            {
+                this.apbsLogger.log(Logging.WARN, `"${weaponBlacklist[item]}" in Weapon Blacklist is an invalid item ID.`)
             }
         }
     }

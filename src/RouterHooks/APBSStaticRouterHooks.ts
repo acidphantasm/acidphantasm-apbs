@@ -227,6 +227,10 @@ export class APBSStaticRouterHooks
                 case "bossZryachiy":
                 case "bossTest":
                 case "bossKolontay":
+                case "bossBoar":
+                case "bossBoarSniper":
+                case "bosslegion":
+                case "bosspunisher":
                 case "followerBully":
                 case "followerGluharAssault":
                 case "followerGluharScout":
@@ -242,8 +246,6 @@ export class APBSStaticRouterHooks
                 case "followerBoar":
                 case "sectantPriest":
                 case "sectantWarrior":
-                case "bossBoar":
-                case "bossBoarSniper":
                 case "followerBoarClose1":
                 case "followerBoarClose2":
                 case "followerKolontayAssault":
@@ -455,7 +457,8 @@ export class APBSStaticRouterHooks
             `Nickname: ${botDetails.name}`,
             `Level: ${botDetails.level}`,
             `Difficulty: ${botDetails.difficulty}`,
-            `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`
+            `GameVersion: ${botDetails.gameVersion}`,
+            `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`,
         ];
         let temporaryMessage2: string[] = [
             `Primary: ${botDetails.primaryID ?? "None" }`,

@@ -49,6 +49,7 @@ import { APBSBotLootGenerator } from "./ClassExtensions/APBSBotLootGenerator";
 import { ModConfig } from "./Globals/ModConfig";
 import { JSONHelper } from "./Helpers/JSONHelper";
 import { BlacklistHelper } from "./Helpers/BlacklistHelper";
+import { RealismHelper } from "./Helpers/RealismHelper";
 
 export class InstanceManager 
 {
@@ -100,6 +101,7 @@ export class InstanceManager
     public tables: IDatabaseTables;
     public botConfigs: BotConfigs;
     public moddedImportHelper: ModdedImportHelper;
+    public realismHelper: RealismHelper;
     //#endregion
 
     //#region accessible in or after PostSptLoad
@@ -189,6 +191,7 @@ export class InstanceManager
         // Custom Classes
         this.botConfigs = new BotConfigs(this.tables, this.database, this.configServer, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
         this.moddedImportHelper = new ModdedImportHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
+        this.realismHelper = new RealismHelper(this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
 
     }
 

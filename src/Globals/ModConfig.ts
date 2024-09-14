@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { VFS } from "@spt/utils/VFS";
-import { container, inject, injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import jsonc from "jsonc";
 import path from "path";
 import { TierInformation } from "./TierInformation";
@@ -27,9 +28,10 @@ export class ModConfig
         {
             this.setTierLevelDeviation();
         }
-        this.logger.debug(`[APBS] Mod Config - FOR SUPPORT FOLKS ❤❤`)
+        this.logger.debug("[APBS] Mod Config - FOR SUPPORT FOLKS ❤❤")
         this.logger.debug(`[APBS] Import Mod Weapons: ${ModConfig.config.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
         this.logger.debug(`[APBS] Import Mod Equipment: ${ModConfig.config.enableModdedEquipment} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Import Mod Clothing: ${ModConfig.config.enableModdedClothing} <- MUST BE FALSE FOR SUPPORT`)
     }
 
     private setTierLevelDeviation(): void
@@ -71,6 +73,12 @@ export interface Config
     disableBossTierGeneration: boolean,
     disableBossFollowerTierGeneration: boolean,
     disableRaiderRogueTierGeneration: boolean,
+    gameVersionWeight: boolean, 
+    standard: number, 
+    left_behind: number, 
+    prepare_for_escape: number, 
+    edge_of_darkness: number, 
+    unheard_edition: number,
     enablePMCAmmoTierSliding: boolean,
     slideAmount: number,
     slideChance: number,
@@ -79,7 +87,13 @@ export interface Config
     forceScopeSlot: boolean,
     pmcLoot: boolean,
     scavLoot: boolean,
+    enableScavAttachmentTiering: boolean,
+    enableScavEqualEquipmentTiering: boolean,
     forceWeaponModLimits: boolean,
+    scopeLimit: number,
+    tacticalLimit: number,
+    enableT7Thermals: boolean,
+    startTier: number,
     scavWeaponDurability: [ number, number, number, number ],
     pmcWeaponDurability: [ number, number, number, number ],
     bossWeaponDurability: [ number, number, number, number ],
@@ -118,6 +132,13 @@ export interface Config
     tier5EquipmentBlacklist: string[],
     tier6EquipmentBlacklist: string[],
     tier7EquipmentBlacklist: string[],
+    tier1WeaponBlacklist: string[],
+    tier2WeaponBlacklist: string[],
+    tier3WeaponBlacklist: string[],
+    tier4WeaponBlacklist: string[],
+    tier5WeaponBlacklist: string[],
+    tier6WeaponBlacklist: string[],
+    tier7WeaponBlacklist: string[],
     enableCustomLevelDeltas: boolean,
     tier1LevelDelta: [ number, number ],
     tier2LevelDelta: [ number, number ],

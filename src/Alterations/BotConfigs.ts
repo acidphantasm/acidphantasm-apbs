@@ -46,6 +46,7 @@ export class BotConfigs
         this.setPMCItemLimits();
         this.setPMCLoot();
         this.setPMCScopeWhitelist();
+        if (ModConfig.config.gameVersionWeight) this.setPMCGameVersionWeights();
         if (ModConfig.config.addAllKeysToScavs || ModConfig.config.addOnlyKeyCardsToScavs || ModConfig.config.addOnlyMechanicalKeysToScavs) this.pushScavKeys();
         if (ModConfig.config.enableCustomPlateChances) this.setPlateChances();
         if (ModConfig.config.forceStock) this.setForceStock();
@@ -53,6 +54,8 @@ export class BotConfigs
         if (ModConfig.config.forceScopeSlot) this.setForceScopes();
         if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
         if (!ModConfig.config.scavLoot) this.removeScavLoot();
+        if (ModConfig.config.enableScavEqualEquipmentTiering) this.setIdenticalScavWeights();
+        this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
     }
 
     private configureBotExperienceLevels(): void
@@ -246,10 +249,16 @@ export class BotConfigs
         const botConfigEquipment = this.botConfig.equipment
         for (const botType in botConfigEquipment)
         {
-            botConfigEquipment[botType].weaponModLimits = {                
-                "scopeLimit": 2,
-                "lightLaserLimit": 2
-            };
+            if (botConfigEquipment[botType].weaponModLimits == undefined) 
+            {
+                botConfigEquipment[botType].weaponModLimits = 
+                {
+                    "scopeLimit": 2,
+                    "lightLaserLimit": 1
+                }
+            }
+            botConfigEquipment[botType].weaponModLimits.scopeLimit = ModConfig.config.scopeLimit;
+            botConfigEquipment[botType].weaponModLimits.lightLaserLimit = ModConfig.config.tacticalLimit;
         }
     }
 
@@ -467,5 +476,62 @@ export class BotConfigs
         this.tables.bots.types.marksman.inventory.items.Backpack = {}
         this.tables.bots.types.marksman.inventory.items.Pockets = {}
         this.tables.bots.types.marksman.inventory.items.TacticalVest = {}
+    }
+
+    private setIdenticalScavWeights(): void
+    {
+        for (const tierObject in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[tierObject].tier
+            const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber, true);
+            const scav = tierJson.scav.equipment
+            for (const slot in scav)
+            {
+                if (slot == "SecondPrimaryWeapon" || slot == "ArmBand") continue;
+                if (slot == "FirstPrimaryWeapon")
+                {
+                    for (const subSlot in scav[slot])
+                    {
+                        for (const item in scav[slot][subSlot])
+                        {
+                            scav[slot][subSlot][item] = 1;
+                            console.log(`${item}: ${scav[slot][subSlot][item]}`);
+                        }
+                    }
+                    continue;
+                }
+                for (const item in scav[slot])
+                {
+                    scav[slot][item] = 1;
+                    console.log(`${item}: ${scav[slot][item]}`);
+                }
+            }
+        }
+    }
+
+    private removeThermalGoggles(removeSome: boolean): void
+    {
+        for (const tierObject in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[tierObject].tier
+            const tierJson = this.apbsEquipmentGetter.getTierModsJson(tierNumber, true);
+            const tatmMods = tierJson["5a16b8a9fcdbcb00165aa6ca"].mod_nvg;
+            const index = tatmMods.indexOf("5c11046cd174af02a012e42b");
+
+            if (removeSome && tierNumber >= ModConfig.config.startTier) continue;
+            if (index > -1)
+            {
+                tatmMods.splice(index, 1)
+            }
+        }
+    }
+
+    private setPMCGameVersionWeights(): void
+    {
+        this.pmcConfig.gameVersionWeight.standard = ModConfig.config.standard;
+        this.pmcConfig.gameVersionWeight.left_behind = ModConfig.config.left_behind;
+        this.pmcConfig.gameVersionWeight.prepare_for_escape = ModConfig.config.prepare_for_escape;
+        this.pmcConfig.gameVersionWeight.edge_of_darkness = ModConfig.config.edge_of_darkness;
+        this.pmcConfig.gameVersionWeight.unheard_edition = ModConfig.config.unheard_edition;
     }
 }
