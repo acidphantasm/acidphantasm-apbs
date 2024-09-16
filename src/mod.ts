@@ -37,10 +37,12 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
 
         if (ModConfig.config.usePreset)
         {
+            this.instance.raidInformation.usingDefaultDB = false;
             this.instance.jsonHelper.usePreset(ModConfig.config.presetName);
         }
         else 
         {
+            this.instance.raidInformation.usingDefaultDB = true;
             this.instance.jsonHelper.buildTierJson();
         }
 
