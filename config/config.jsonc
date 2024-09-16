@@ -1,4 +1,9 @@
 {
+// Enable/Disable using a preset
+// Presets are to be built and shared among APBS users. If enabled, ensure that you set the "presetName" to the name of the folder of your preset
+        "usePreset": false,
+        "presetName": "default",
+
 // If you enable either of these settings, support will not be granted.
 // enableModdedWeapons - Any mods adding weapons loaded before APBS will have their weapons & attachments imported.
 // enableModdedEquipment - Any mods adding equipment loaded before APBS will be imported with their attachments (if any).
