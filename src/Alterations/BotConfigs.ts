@@ -28,9 +28,9 @@ export class BotConfigs
         @inject("DatabaseService") protected database: DatabaseService,
         @inject("ConfigServer") protected configServer: ConfigServer,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
+        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
-        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
         @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
