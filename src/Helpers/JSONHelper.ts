@@ -55,12 +55,15 @@ import Tier7appearance = require("../db/Tier7_appearance.json");
 @injectable()
 export class JSONHelper
 {
+    count: number;
     constructor(
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
         @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
-    {}
+    {
+        this.count = 0
+    }
 
     public buildTierJson(): void
     {
@@ -122,9 +125,14 @@ export class JSONHelper
             return;
         }
         const files = fs.readdirSync(folderPath);
-        if (files.length != 35)
+        if (files.length < 35)
         {
-            this.missingFileCount(folderName);
+            this.missingFileCount(folderName, 0);
+            return;
+        }
+        if (files.length > 35)
+        {
+            this.missingFileCount(folderName, 1);
             return;
         }
 
@@ -132,13 +140,13 @@ export class JSONHelper
         for (const item of files)
         {
             const filePath = path.join(folderPath, item);
-            this.mapFileToTier(filePath, folderName, item)
+            this.mapFileToTierType(filePath, folderName, item)
         }
         
-        this.apbsLogger.log(Logging.WARN, `"${folderName}" preset loaded...`);
+        if (this.count == 35) this.apbsLogger.log(Logging.WARN, `"${folderName}" preset loaded...`);
     }
 
-    private mapFileToTier(filePath: string, folderName: string,  item: string): void
+    private mapFileToTierType(filePath: string, folderName: string,  item: string): void
     {
         let tier = 0;
         let type = "none";
@@ -152,7 +160,7 @@ export class JSONHelper
 
         if (tier == 0) 
         {
-            this.missingFileCount(folderName)
+            this.invalidFileName(folderName, item);
             return;
         }
 
@@ -164,15 +172,16 @@ export class JSONHelper
 
         if (type == "none") 
         {
-            this.missingFileCount(folderName)
+            this.invalidFileName(folderName, item);
             return;
         }
 
-        this.mapTierFile(filePath, tier, type);
+        this.configureTierType(filePath, tier, type);
     }
 
-    private mapTierFile(filePath: string, tier: number, type: string):void
+    private configureTierType(filePath: string, tier: number, type: string):void
     {
+        this.count++;
         this.tierInformation.tier0 = Tier0equipment;
         this.tierInformation.tier0mods = Tier0mods;
         this.tierInformation.tier0chances = Tier0chances;
@@ -288,10 +297,20 @@ export class JSONHelper
                 return;
         }
     }
-    private missingFileCount(folderName: string): void
+    
+    private missingFileCount(folderName: string, errorType: number): void
+    {
+        const error = errorType == 0 ? "Missing files" : "Extra files found";
+        this.raidInformation.usingDefaultDB = true;
+        this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid. ${error}. Report issue to author of preset.`);
+        this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");
+        this.buildTierJson();
+    }
+    
+    private invalidFileName(folderName: string, item: string): void
     {
         this.raidInformation.usingDefaultDB = true;
-        this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid. Missing files. Report issue to author of preset.`);
+        this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid. "${item}" is incorrectly named. Report issue to author of preset.`);
         this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");
         this.buildTierJson();
     }
@@ -300,7 +319,7 @@ export class JSONHelper
     {
         this.raidInformation.usingDefaultDB = true;
         this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid.`);
-        this.apbsLogger.log(Logging.ERR, `Verify the named preset folder exists in "${presetFolder}" and is named properly.`);
+        this.apbsLogger.log(Logging.ERR, `Verify the preset folder exists in "${presetFolder}" and is named properly.`);
         this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");
         this.buildTierJson();
     }
