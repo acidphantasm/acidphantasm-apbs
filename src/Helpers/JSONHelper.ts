@@ -1,5 +1,11 @@
 import { injectable, inject } from "tsyringe";
+import * as path from "path";
+import * as fs from "fs";
+
 import { TierInformation } from "../Globals/TierInformation";
+import { RaidInformation } from "../Globals/RaidInformation";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
 
 import Tier0 = require("../db/Tier0_equipment.json");
 import Tier1 = require("../db/Tier1_equipment.json");
@@ -50,7 +56,9 @@ import Tier7appearance = require("../db/Tier7_appearance.json");
 export class JSONHelper
 {
     constructor(
-        @inject("TierInformation") protected tierInformation: TierInformation
+        @inject("TierInformation") protected tierInformation: TierInformation,
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {}
 
@@ -100,5 +108,26 @@ export class JSONHelper
         this.tierInformation.tier5appearance = Tier5appearance;
         this.tierInformation.tier6appearance = Tier6appearance;
         this.tierInformation.tier7appearance = Tier7appearance;
+    }
+
+    public usePreset(presetName: string): void
+    {
+        const folderName = presetName;
+        const presetFolder = path.join(path.dirname(__filename), "..", "..", "presets");
+        const folderPath = path.join(presetFolder, folderName);
+
+        if (!fs.existsSync(folderPath)) 
+        {
+            this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid.`);
+            this.apbsLogger.log(Logging.ERR, `Verify the named preset folder exists in "${presetFolder}" and is named properly.`);
+            this.apbsLogger.log(Logging.WARN, "Using default APBS database instead of preset...");
+            this.raidInformation.usingDefaultDB = true;
+            this.buildTierJson();
+            return;
+        }
+        this.raidInformation.usingDefaultDB = false;
+        const files = fs.readdirSync(folderPath);
+
+        console.log(files);
     }
 }

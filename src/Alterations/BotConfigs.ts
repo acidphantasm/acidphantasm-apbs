@@ -5,14 +5,16 @@ import { ConfigServer } from "@spt/servers/ConfigServer";
 import { IBotConfig } from "@spt/models/spt/config/IBotConfig";
 import { IPmcConfig } from "@spt/models/spt/config/IPmcConfig";
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
-import { TierInformation } from "../Globals/TierInformation";
-import { ModConfig } from "../Globals/ModConfig";
-import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { DatabaseService } from "@spt/services/DatabaseService";
-import { APBSLogger } from "../Utils/APBSLogger";
-import { Logging } from "../Enums/Logging";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
+
+import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
+import { TierInformation } from "../Globals/TierInformation";
+import { RaidInformation } from "../Globals/RaidInformation";
+import { ModConfig } from "../Globals/ModConfig";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
 
 
 @injectable()
@@ -27,6 +29,7 @@ export class BotConfigs
         @inject("ConfigServer") protected configServer: ConfigServer,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("TierInformation") protected tierInformation: TierInformation,
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
         @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
@@ -55,7 +58,7 @@ export class BotConfigs
         if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
         if (!ModConfig.config.scavLoot) this.removeScavLoot();
         if (ModConfig.config.enableScavEqualEquipmentTiering) this.setIdenticalScavWeights();
-        this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
+        if (!ModConfig.config.usePreset || this.raidInformation.usingDefaultDB) this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
     }
 
     private configureBotExperienceLevels(): void

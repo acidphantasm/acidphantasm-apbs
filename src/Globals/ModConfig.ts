@@ -61,6 +61,8 @@ export class ModConfig
 
 export interface Config
 {
+    usePreset: boolean,
+    presetName: string,
     enableModdedWeapons: boolean,
     enableModdedEquipment: boolean,
     enableModdedClothing: boolean,

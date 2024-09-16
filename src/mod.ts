@@ -8,6 +8,7 @@ import { IPostSptLoadMod } from "@spt/models/external/IPostSptLoadMod";
 // Custom
 import { Logging } from "./Enums/Logging";
 import { InstanceManager } from "./InstanceManager";
+import { ModConfig } from "./Globals/ModConfig";
 
 class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
 {
@@ -34,7 +35,14 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
         this.instance.apbsStaticRouterHooks.registerRouterHooks();
         this.instance.apbsBotLevelGenerator.registerBotLevelGenerator(container);
 
-        this.instance.jsonHelper.buildTierJson();
+        if (ModConfig.config.usePreset)
+        {
+            this.instance.jsonHelper.usePreset(ModConfig.config.presetName);
+        }
+        else 
+        {
+            this.instance.jsonHelper.buildTierJson();
+        }
 
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.preSptLoad`);
