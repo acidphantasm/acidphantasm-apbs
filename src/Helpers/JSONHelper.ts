@@ -292,7 +292,7 @@ export class JSONHelper
     {
         this.raidInformation.usingDefaultDB = true;
         this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid. Missing files. Report issue to author of preset.`);
-        this.apbsLogger.log(Logging.WARN, "Using default APBS database instead of preset...");
+        this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");
         this.buildTierJson();
     }
 
@@ -301,7 +301,7 @@ export class JSONHelper
         this.raidInformation.usingDefaultDB = true;
         this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid.`);
         this.apbsLogger.log(Logging.ERR, `Verify the named preset folder exists in "${presetFolder}" and is named properly.`);
-        this.apbsLogger.log(Logging.WARN, "Using default APBS database instead of preset...");
+        this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");
         this.buildTierJson();
     }
 }
