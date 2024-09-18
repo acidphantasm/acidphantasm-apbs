@@ -472,9 +472,8 @@ export class ModdedImportHelper
             tierJson.pmcBEAR.equipment[equipmentSlot][itemID] = weight
             tierJson.scav.equipment[equipmentSlot][itemID] = 1
             tierJson.default.equipment[equipmentSlot][itemID] = weight
-
-            this.apbsLogger.log(Logging.DEBUG, `Added ${itemID} to ${equipmentSlot} - Tier ${tierNumber} - Weight: ${weight}.`)
         }
+        this.apbsLogger.log(Logging.DEBUG, `[Tier${ModConfig.config.initalTierAppearance}+] Added ${itemID} to ${equipmentSlot}.`)
     }
 
     private pushItemAndPrimaryMods(itemID, itemSlots): void
