@@ -343,6 +343,7 @@ export class ModdedImportHelper
 
     private pushWeaponToTiers(weaponId: string, weaponType: string, parentClass: string): void
     {
+        let range = "";
         for (const object in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[object].tier
@@ -371,7 +372,7 @@ export class ModdedImportHelper
                     tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
                     tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
                     tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
-                    this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Adding ${weaponId} to Long & Short range weapons.`)
+                    range = "Long & Short range";
                     continue;
                 case parentClass == "5447b6254bdc2dc3278b4568" && weaponType == "primary":
                 case parentClass == "5447b6194bdc2d67278b4567" && weaponType == "primary":
@@ -383,7 +384,7 @@ export class ModdedImportHelper
                     tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
                     tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
                     tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 1
-                    this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Adding ${weaponId} to Long range weapons.`)
+                    range = "Long range"
                     continue;                
                 case parentClass == "5447b5f14bdc2d61278b4567" && weaponType == "primary":
                 case parentClass == "5447bed64bdc2d97278b4568" && weaponType == "primary":
@@ -401,7 +402,7 @@ export class ModdedImportHelper
                         tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
                         tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
                         tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
-                        this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Adding ${weaponId} to Short range weapons.`)
+                        range = "Short range"
                     }
                     continue;
                 case parentClass == "5447b5cf4bdc2d65278b4567" && weaponType == "secondary":
@@ -411,7 +412,7 @@ export class ModdedImportHelper
                     tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
                     tierJson.scav.equipment.Holster[weaponId] = 1
                     tierJson.default.equipment.Holster[weaponId] = 3
-                    this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Adding ${weaponId} to Holster weapons.`)
+                    range = "Holster"
                     continue;
                 default:
                     if (weaponType == "primary")
@@ -432,7 +433,7 @@ export class ModdedImportHelper
                         tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
                         tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
                         tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
-                        this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Parent Class Not Found - Adding ${weaponId} to Long & Short range weapons.`)
+                        range = "Long & Short range"
                     }
                     if (weaponType == "secondary")
                     {
@@ -440,11 +441,12 @@ export class ModdedImportHelper
                         tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
                         tierJson.scav.equipment.Holster[weaponId] = 1
                         tierJson.default.equipment.Holster[weaponId] = 3
-                        this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Parent Class Not Found - Adding ${weaponId} to Holster weapons.`)
+                        range = "Holster"
                     }
                     continue;
             }
         }
+        this.apbsLogger.log(Logging.DEBUG, `[Tier${ModConfig.config.initalTierAppearance}+] Adding ${weaponId} to ${range} weapons.`)
     }
 
     private pushEquipmentToTiers(itemID: string, equipmentSlot: string, gridLength: number, equipmentSlotsLength: number): void
