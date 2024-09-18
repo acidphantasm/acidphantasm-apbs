@@ -133,7 +133,7 @@
         "pmcFoodFullChance": 65,
         "pmcMedFullChance": 65,
 
-// Blacklist specific ammo types from all AI
+// Blacklist specific ammo types from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
 // Configure per tier blacklists
 // Example.. this will blacklist 9x19 RIP and 5.45x39mm PP from all bots in Tier1
 // tier1AmmoBlacklist: [ "5c0d56a986f774449d5de529", "56dff2ced2720bb4668b4567" ]
@@ -145,7 +145,7 @@
         "tier6AmmoBlacklist": [],
         "tier7AmmoBlacklist": [],
 
-// Blacklist specific equipment from all AI
+// Blacklist specific equipment from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
 // Configure per tier blacklists
 // Example.. this will blacklist BlackRock chest rig and GSSh-01 headset from all bots in Tier1
 // tier1EquipmentBlacklist: [ "5648a69d4bdc2ded0b8b457b", "5b432b965acfc47a8774094e" ]
@@ -157,7 +157,7 @@
         "tier6EquipmentBlacklist": [],
         "tier7EquipmentBlacklist": [],
 
-// Blacklist specific weapons from all AI
+// Blacklist specific weapons from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
 // Configure per tier blacklists
 // Example.. this will blacklist PKP and PKM from all bots in Tier1
 // tier1EquipmentBlacklist: [ "64ca3d3954fc657e230529cc", "64637076203536ad5600c990" ]
@@ -169,7 +169,7 @@
         "tier6WeaponBlacklist": [],
         "tier7WeaponBlacklist": [],
 
-// Blacklist specific attachments from all AI
+// Blacklist specific attachments from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
 // Configure per tier blacklists - very useful setting for those that play with modded weapon/equipment importing
 // Example.. this will blacklist "AK 7.62x39 aluminium 10-round magazine" and "Ops-Core SLAAP Armor Helmet Plate" from all bots in Tier1
 // tier1EquipmentBlacklist: [ "5b1fd4e35acfc40018633c39", "5c0e66e2d174af02a96252f4" ]
