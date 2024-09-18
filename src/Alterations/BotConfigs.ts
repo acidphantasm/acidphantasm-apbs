@@ -58,7 +58,7 @@ export class BotConfigs
         if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
         if (!ModConfig.config.scavLoot) this.removeScavLoot();
         if (ModConfig.config.enableScavEqualEquipmentTiering) this.setIdenticalScavWeights();
-        if (!ModConfig.config.usePreset || this.raidInformation.usingDefaultDB) this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
+        this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
     }
 
     private configureBotExperienceLevels(): void
