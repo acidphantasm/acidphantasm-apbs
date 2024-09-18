@@ -12,7 +12,8 @@
 // pmcWeaponWeights - Weight of modded weapons being added to PMCs
 // scavWeaponWeights - Weight of modded weapons being added to Scavs
 // followerWeaponWeights - Weight of modded weapons being added to boss followers (not Goons)
-// Higher weights = more often. Lower weights = less often. If you add a LOT of mod weapons, I suggest using a lower value.
+// Higher weights = more often. Lower weights = less often. If you add a LOT of mod weapons, I suggest using a lower value. 
+// REVIEW THE APBS LOGS TO TUNE YOUR CONFIG. (\user\mods\acidphantasm-progressivebotsystem\logs)
         "enableModdedWeapons": false,
         "enableModdedEquipment": false,
         "enableModdedClothing": false,
@@ -23,7 +24,7 @@
 
 // Looking for a challenge, or maybe just want to chill and wreck some bots?
 // Enable "onlyChads" to force all bots to be Tier7, or enable "tarkovAndChill" to force all bots to be Tier1
-// Enabling both will enable chaos mode, bots will pull gear and weapons from completely random Tiers during generation. It's chaos. (scavs still pull crap weapon mods and ammo)
+// Enabling both will enable chaos mode, bots will pull gear and weapons from completely random Tiers during generation. It's chaos.
 // Alternatively, enable "blickyMode" to give everyone a blicky. It's actually the real chill mode.
 // Side note on "blickyMode" - it breaks some boss guards. Don't report it. It's a joke mode. It also won't do anything if either of the other two "modes" are enabled.
         "onlyChads": false,
@@ -31,7 +32,7 @@
         "blickyMode": false,
 
 // Enable/Disable specific bot generation
-// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation3
+// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation.
         "disableScavTierGeneration": false,
         "disablePMCTierGeneration": false,
         "disableBossTierGeneration": false,
