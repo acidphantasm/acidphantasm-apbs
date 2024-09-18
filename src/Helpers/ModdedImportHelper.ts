@@ -446,7 +446,7 @@ export class ModdedImportHelper
                     continue;
             }
         }
-        this.apbsLogger.log(Logging.DEBUG, `[Tier${ModConfig.config.initalTierAppearance}+] Adding ${weaponId} to ${range} weapons.`)
+        this.apbsLogger.log(Logging.DEBUG, `[Tier${ModConfig.config.initalTierAppearance}+] Added ${weaponId} to ${range} weapons.`)
     }
 
     private pushEquipmentToTiers(itemID: string, equipmentSlot: string, gridLength: number, equipmentSlotsLength: number): void
