@@ -344,6 +344,10 @@ export class ModdedImportHelper
     private pushWeaponToTiers(weaponId: string, weaponType: string, parentClass: string): void
     {
         let range = "";
+        const pmcWeight = ModConfig.config.pmcWeaponWeights <= 0 ? 1 : ModConfig.config.pmcWeaponWeights;
+        const scavWeight = ModConfig.config.scavWeaponWeights <= 0 ? 1 : ModConfig.config.scavWeaponWeights;
+        const defaultWeight = ModConfig.config.followerWeaponWeights <= 0 ? 1 : ModConfig.config.followerWeaponWeights;
+
         for (const object in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[object].tier
@@ -356,34 +360,34 @@ export class ModdedImportHelper
             switch (true) 
             {
                 case parentClass == "5447b5fc4bdc2d87278b4567" && weaponType == "primary":
-                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
-                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
-                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
-                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
-                    tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 0
-                    tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
-                    tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 7
-                    tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 7
-                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
-                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
-                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
-                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
-                    tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 0
-                    tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
-                    tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
-                    tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
+                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = scavWeight
+                    tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                    tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = scavWeight
+                    tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                    tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                    tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = defaultWeight
+                    tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                    tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = defaultWeight
                     range = "Long & Short range";
                     continue;
                 case parentClass == "5447b6254bdc2dc3278b4568" && weaponType == "primary":
                 case parentClass == "5447b6194bdc2d67278b4567" && weaponType == "primary":
-                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
-                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
-                    tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 7
-                    tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 1
-                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
-                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
-                    tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
-                    tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 1
+                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = scavWeight
+                    tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = scavWeight
+                    tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                    tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = defaultWeight
                     range = "Long range"
                     continue;                
                 case parentClass == "5447b5f14bdc2d61278b4567" && weaponType == "primary":
@@ -394,14 +398,14 @@ export class ModdedImportHelper
                 case parentClass == "5447b6094bdc2dc3278b4567" && weaponType == "primary":
                     if (weaponType == "primary")
                     {
-                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
-                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
-                        tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
-                        tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 7
-                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
-                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
-                        tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
-                        tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
+                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                        tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                        tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = defaultWeight
+                        tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = defaultWeight
                         range = "Short range"
                     }
                     continue;
@@ -417,22 +421,22 @@ export class ModdedImportHelper
                 default:
                     if (weaponType == "primary")
                     {
-                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
-                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
-                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
-                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
-                        tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 0
-                        tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
-                        tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 7
-                        tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 7
-                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
-                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
-                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
-                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
-                        tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 0
-                        tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
-                        tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
-                        tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
+                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = scavWeight
+                        tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                        tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = scavWeight
+                        tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                        tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                        tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = defaultWeight
+                        tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                        tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = defaultWeight
                         range = "Long & Short range"
                     }
                     if (weaponType == "secondary")

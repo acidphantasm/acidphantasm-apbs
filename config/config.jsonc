@@ -9,10 +9,17 @@
 // enableModdedEquipment - Any mods adding equipment loaded before APBS will be imported with their attachments (if any).
 // enableModdedClothing - Any mods adding clothing loaded before APBS will be imported.
 // initialTierAppearance - Whatever number (1-7) you put here, will be the first tier that imported mod items will be added to.
+// pmcWeaponWeights - Weight of modded weapons being added to PMCs
+// scavWeaponWeights - Weight of modded weapons being added to Scavs
+// followerWeaponWeights - Weight of modded weapons being added to boss followers (not Goons)
+// Higher weights = more often. Lower weights = less often. If you add a LOT of mod weapons, I suggest using a lower value.
         "enableModdedWeapons": false,
         "enableModdedEquipment": false,
         "enableModdedClothing": false,
         "initalTierAppearance": 3,
+        "pmcWeaponWeights": 10,
+        "scavWeaponWeights": 1,
+        "followerWeaponWeights": 7,
 
 // Looking for a challenge, or maybe just want to chill and wreck some bots?
 // Enable "onlyChads" to force all bots to be Tier7, or enable "tarkovAndChill" to force all bots to be Tier1
