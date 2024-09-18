@@ -169,6 +169,18 @@
         "tier6WeaponBlacklist": [],
         "tier7WeaponBlacklist": [],
 
+// Blacklist specific attachments from all AI
+// Configure per tier blacklists - very useful setting for those that play with modded weapon/equipment importing
+// Example.. this will blacklist "AK 7.62x39 aluminium 10-round magazine" and "Ops-Core SLAAP Armor Helmet Plate" from all bots in Tier1
+// tier1EquipmentBlacklist: [ "5b1fd4e35acfc40018633c39", "5c0e66e2d174af02a96252f4" ]
+        "tier1AttachmentBlacklist": [],
+        "tier2AttachmentBlacklist": [],
+        "tier3AttachmentBlacklist": [],
+        "tier4AttachmentBlacklist": [],
+        "tier5AttachmentBlacklist": [],
+        "tier6AttachmentBlacklist": [],
+        "tier7AttachmentBlacklist": [],
+
 // LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
 // Examples: 
 // "tier1LevelDelta": [ 5, 5 ] --- While you are Tier1 (lv1-10), all AI will be leveled -5 to +5 of your level.
