@@ -297,7 +297,7 @@ export class ModdedImportHelper
             const weaponChamber = modWeaponPool[weapon]?._props?.Chambers;
             const weaponType = modWeaponPool[weapon]?._props?.weapUseType;
 
-            this.pushWeaponToTiers(weaponId, weaponType);
+            this.pushWeaponToTiers(weaponId, weaponType, weaponParent);
             this.pushItemAndPrimaryMods(weaponId, weaponSlots);
 
             //console.log(JSON.stringify(modWeaponPool[weapon]))            
@@ -341,7 +341,7 @@ export class ModdedImportHelper
         }
     }
 
-    private pushWeaponToTiers(weaponId: string, weaponType: string): void
+    private pushWeaponToTiers(weaponId: string, weaponType: string, parentClass: string): void
     {
         for (const object in this.tierInformation.tiers)
         {
@@ -352,36 +352,97 @@ export class ModdedImportHelper
             {
                 continue;
             }
-            if (weaponType == "primary")
+            switch (true) 
             {
-                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
-                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
-                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
-                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
-                tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 0
-                tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
-                tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 7
-                tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 7
-                
-                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
-                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
-                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
-                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
-                tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 0
-                tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
-                tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
-                tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
-
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 10.`)
-            }
-            if (weaponType == "secondary")
-            {
-                tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
-                tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
-                tierJson.scav.equipment.Holster[weaponId] = 1
-                tierJson.default.equipment.Holster[weaponId] = 3
-
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 5.`)
+                case parentClass == "5447b5fc4bdc2d87278b4567" && weaponType == "primary":
+                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
+                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
+                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
+                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
+                    tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 0
+                    tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
+                    tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 7
+                    tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 7
+                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
+                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
+                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
+                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
+                    tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 0
+                    tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
+                    tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
+                    tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
+                    this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Adding ${weaponId} to Long & Short range weapons.`)
+                    continue;
+                case parentClass == "5447b6254bdc2dc3278b4568" && weaponType == "primary":
+                case parentClass == "5447b6194bdc2d67278b4567" && weaponType == "primary":
+                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
+                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
+                    tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 7
+                    tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 1
+                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
+                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
+                    tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
+                    tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 1
+                    this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Adding ${weaponId} to Long range weapons.`)
+                    continue;                
+                case parentClass == "5447b5f14bdc2d61278b4567" && weaponType == "primary":
+                case parentClass == "5447bed64bdc2d97278b4568" && weaponType == "primary":
+                case parentClass == "5447b5e04bdc2d62278b4567" && weaponType == "primary":
+                case parentClass == "5447b5cf4bdc2d65278b4567" && weaponType == "primary":
+                case parentClass == "617f1ef5e8b54b0998387733" && weaponType == "primary":
+                case parentClass == "5447b6094bdc2dc3278b4567" && weaponType == "primary":
+                    if (weaponType == "primary")
+                    {
+                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
+                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
+                        tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
+                        tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 7
+                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
+                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
+                        tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
+                        tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
+                        this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Adding ${weaponId} to Short range weapons.`)
+                    }
+                    continue;
+                case parentClass == "5447b5cf4bdc2d65278b4567" && weaponType == "secondary":
+                case parentClass == "617f1ef5e8b54b0998387733" && weaponType == "secondary":
+                case parentClass == "5447b6094bdc2dc3278b4567" && weaponType == "secondary":
+                    tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
+                    tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
+                    tierJson.scav.equipment.Holster[weaponId] = 1
+                    tierJson.default.equipment.Holster[weaponId] = 3
+                    this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Adding ${weaponId} to Holster weapons.`)
+                    continue;
+                default:
+                    if (weaponType == "primary")
+                    {
+                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
+                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
+                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
+                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
+                        tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 0
+                        tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
+                        tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 7
+                        tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 7
+                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
+                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
+                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
+                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
+                        tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 0
+                        tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
+                        tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
+                        tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
+                        this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Parent Class Not Found - Adding ${weaponId} to Long & Short range weapons.`)
+                    }
+                    if (weaponType == "secondary")
+                    {
+                        tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
+                        tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
+                        tierJson.scav.equipment.Holster[weaponId] = 1
+                        tierJson.default.equipment.Holster[weaponId] = 3
+                        this.apbsLogger.log(Logging.DEBUG, `[Tier${tierNumber}] Parent Class Not Found - Adding ${weaponId} to Holster weapons.`)
+                    }
+                    continue;
             }
         }
     }
@@ -425,7 +486,6 @@ export class ModdedImportHelper
 
                 if (this.attachmentBlacklist.includes(slotFilterItem)) 
                 {
-                    this.apbsLogger.log(Logging.DEBUG, `Skipping ${slotFilterItem} due to internal blacklist`)
                     continue;
                 }
                 if (this.tierInformation.tier1mods[itemID] == undefined)
@@ -484,7 +544,6 @@ export class ModdedImportHelper
                 
                 if (this.attachmentBlacklist.includes(slotFilterItem)) 
                 {
-                    this.apbsLogger.log(Logging.DEBUG, `Skipping ${slotFilterItem} due to internal blacklist`)
                     continue;
                 }
                 if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
