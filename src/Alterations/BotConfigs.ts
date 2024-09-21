@@ -59,6 +59,7 @@ export class BotConfigs
         if (!ModConfig.config.scavLoot) this.removeScavLoot();
         if (ModConfig.config.enableScavEqualEquipmentTiering) this.setIdenticalScavWeights();
         this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
+        if (ModConfig.config.enableCustomLevelDeltas) this.setLevelDeltas();
     }
 
     private configureBotExperienceLevels(): void
@@ -536,5 +537,29 @@ export class BotConfigs
         this.pmcConfig.gameVersionWeight.prepare_for_escape = ModConfig.config.prepare_for_escape;
         this.pmcConfig.gameVersionWeight.edge_of_darkness = ModConfig.config.edge_of_darkness;
         this.pmcConfig.gameVersionWeight.unheard_edition = ModConfig.config.unheard_edition;
+    }
+
+    private setLevelDeltas(): void
+    {
+        this.tierInformation.tiers[0].botMinLevelVariance = ModConfig.config.tier1LevelDelta[0]
+        this.tierInformation.tiers[0].botMaxLevelVariance = ModConfig.config.tier1LevelDelta[1]
+
+        this.tierInformation.tiers[1].botMinLevelVariance = ModConfig.config.tier2LevelDelta[0]
+        this.tierInformation.tiers[1].botMaxLevelVariance = ModConfig.config.tier2LevelDelta[1]
+
+        this.tierInformation.tiers[2].botMinLevelVariance = ModConfig.config.tier3LevelDelta[0]
+        this.tierInformation.tiers[2].botMaxLevelVariance = ModConfig.config.tier3LevelDelta[1]
+
+        this.tierInformation.tiers[3].botMinLevelVariance = ModConfig.config.tier4LevelDelta[0]
+        this.tierInformation.tiers[3].botMaxLevelVariance = ModConfig.config.tier4LevelDelta[1]
+
+        this.tierInformation.tiers[4].botMinLevelVariance = ModConfig.config.tier5LevelDelta[0]
+        this.tierInformation.tiers[4].botMaxLevelVariance = ModConfig.config.tier5LevelDelta[1]
+
+        this.tierInformation.tiers[5].botMinLevelVariance = ModConfig.config.tier6LevelDelta[0]
+        this.tierInformation.tiers[5].botMaxLevelVariance = ModConfig.config.tier6LevelDelta[1]
+
+        this.tierInformation.tiers[6].botMinLevelVariance = ModConfig.config.tier7LevelDelta[0]
+        this.tierInformation.tiers[6].botMaxLevelVariance = ModConfig.config.tier7LevelDelta[1]
     }
 }

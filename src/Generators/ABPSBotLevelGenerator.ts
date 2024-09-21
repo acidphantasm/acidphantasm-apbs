@@ -72,6 +72,11 @@ export class APBSBotLevelGenerator
                     return result;                    
                 }
 
+                if (!botGenerationDetails.isPmc && ModConfig.config.enableScavCustomLevelDeltas)
+                {
+                    
+                }
+
                 const expTable = this.databaseService.getGlobals().config.exp.level.exp_table;
                 const botLevelRange = this.apbsGetRelativeBotLevelRange(botGenerationDetails, levelDetails, expTable.length);
                 const min = botLevelRange.min <= 0 ? 1 : botLevelRange.min;

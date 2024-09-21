@@ -20,7 +20,7 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
         this.instance.preSptLoad(container, "APBS");
 
         // Set Mod Configuration Settings
-        this.instance.modConfig.setModConfiguration()
+        this.instance.modConfig.serverLogDetails()
 
         // Check and configure for Questing Bots if necessary
         const questingBots = this.instance.preSptModLoader.getImportedModsNames().includes("DanW-SPTQuestingBots");
