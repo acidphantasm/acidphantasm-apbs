@@ -56,6 +56,13 @@
         "slideAmount": 1,
         "slideChance": 33,
 
+// Enable/Disable using individual weapon type attachment chances.
+// If set to true, will allow generation to use individual category based weapon attachment chances, if false - all weapons use the same attachment chance pool.
+// For Preset Makers: 
+// If the below setting is false, "weaponMods" in the chances.json is the attachment chance rolls used.
+// If the below setting is true, then you must also fill out each weapons category of chances.
+        "usePerWeaponTypeAttachmentChances": true,
+
 // Force weapon stocks
 // If set to true, will enforce all AI weapons to have stocks, if false - will use APBS values
         "forceStock": false,
