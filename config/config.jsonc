@@ -61,7 +61,7 @@
 // For Preset Makers: 
 // If the below setting is false, "weaponMods" in the chances.json is the attachment chance rolls used.
 // If the below setting is true, then you must also fill out each weapons category of chances.
-        "usePerWeaponTypeAttachmentChances": true,
+        "enablePerWeaponTypeAttachmentChances": true,
 
 // Force weapon stocks
 // If set to true, will enforce all AI weapons to have stocks, if false - will use APBS values

@@ -165,7 +165,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         let weaponChances = apbsModChances.weaponMods;
         const weaponItemTemplate = this.itemHelper.getItem(weaponTpl)[1];
 
-        if (ModConfig.config.usePerWeaponTypeAttachmentChances)
+        if (ModConfig.config.enablePerWeaponTypeAttachmentChances)
         {
             switch (weaponItemTemplate._parent)
             {

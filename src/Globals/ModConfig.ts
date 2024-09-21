@@ -87,7 +87,7 @@ export interface Config
     enablePMCAmmoTierSliding: boolean,
     slideAmount: number,
     slideChance: number,
-    usePerWeaponTypeAttachmentChances: boolean,
+    enablePerWeaponTypeAttachmentChances: boolean,
     forceStock: boolean,
     forceDustCover: boolean,
     forceScopeSlot: boolean,
