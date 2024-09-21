@@ -3,7 +3,7 @@
         "chances": {
             "equipment": {
                 "ArmBand": 75,
-                "ArmorVest": 60,
+                "ArmorVest": 40,
                 "Backpack": 75,
                 "Earpiece": 55,
                 "Eyewear": 5,
@@ -158,7 +158,7 @@
                 "mod_pistolgrip": 100,
                 "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
-                "mod_scope": 55,
+                "mod_scope": 100,
                 "mod_scope_000": 75,
                 "mod_scope_001": 5,
                 "mod_scope_002": 5,
@@ -209,7 +209,7 @@
                 "mod_pistolgrip": 100,
                 "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
-                "mod_scope": 55,
+                "mod_scope": 100,
                 "mod_scope_000": 75,
                 "mod_scope_001": 5,
                 "mod_scope_002": 5,
@@ -643,7 +643,7 @@
         "chances": {
             "equipment": {
                 "ArmBand": 75,
-                "ArmorVest": 60,
+                "ArmorVest": 40,
                 "Backpack": 75,
                 "Earpiece": 55,
                 "Eyewear": 5,
@@ -798,7 +798,7 @@
                 "mod_pistolgrip": 100,
                 "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
-                "mod_scope": 55,
+                "mod_scope": 100,
                 "mod_scope_000": 75,
                 "mod_scope_001": 5,
                 "mod_scope_002": 5,
@@ -849,7 +849,7 @@
                 "mod_pistolgrip": 100,
                 "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
-                "mod_scope": 55,
+                "mod_scope": 100,
                 "mod_scope_000": 75,
                 "mod_scope_001": 5,
                 "mod_scope_002": 5,
