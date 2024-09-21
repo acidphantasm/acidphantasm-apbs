@@ -3,7 +3,7 @@
         "chances": {
             "equipment": {
                 "ArmBand": 75,
-                "ArmorVest": 65,
+                "ArmorVest": 50,
                 "Backpack": 80,
                 "Earpiece": 75,
                 "Eyewear": 5,
@@ -644,7 +644,7 @@
         "chances": {
             "equipment": {
                 "ArmBand": 75,
-                "ArmorVest": 65,
+                "ArmorVest": 50,
                 "Backpack": 80,
                 "Earpiece": 75,
                 "Eyewear": 5,

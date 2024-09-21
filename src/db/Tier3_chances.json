@@ -3,7 +3,7 @@
         "chances": {
             "equipment": {
                 "ArmBand": 75,
-                "ArmorVest": 65,
+                "ArmorVest": 60,
                 "Backpack": 90,
                 "Earpiece": 85,
                 "Eyewear": 5,
@@ -12,7 +12,7 @@
                 "Headwear": 100,
                 "Holster": 25,
                 "Scabbard": 100,
-                "SecondPrimaryWeapon": 10,
+                "SecondPrimaryWeapon": 5,
                 "TacticalVest": 99,
                 "SecuredContainer": 100,
                 "Pockets": 100
@@ -656,7 +656,7 @@
         "chances": {
             "equipment": {
                 "ArmBand": 75,
-                "ArmorVest": 65,
+                "ArmorVest": 60,
                 "Backpack": 90,
                 "Earpiece": 85,
                 "Eyewear": 5,
@@ -665,7 +665,7 @@
                 "Headwear": 100,
                 "Holster": 25,
                 "Scabbard": 100,
-                "SecondPrimaryWeapon": 10,
+                "SecondPrimaryWeapon": 5,
                 "TacticalVest": 99,
                 "SecuredContainer": 100,
                 "Pockets": 100
