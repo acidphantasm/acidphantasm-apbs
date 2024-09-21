@@ -72,9 +72,22 @@ export class APBSBotLevelGenerator
                     return result;                    
                 }
 
-                if (!botGenerationDetails.isPmc && ModConfig.config.enableScavCustomLevelDeltas)
+                if (!botGenerationDetails.isPmc && !botGenerationDetails.isPlayerScav && ModConfig.config.enableScavCustomLevelDeltas)
                 {
+                    const expTable = this.databaseService.getGlobals().config.exp.level.exp_table;
+                    const botLevelRange = this.apbsGetRelativeBotLevelRange(botGenerationDetails, levelDetails, expTable.length);
+                    const min = botLevelRange.min <= 0 ? 1 : botLevelRange.min;
+                    const max = botLevelRange.max >= 79 ? 79 : botLevelRange.max;
+                    const level = this.randomUtil.getInt(min, max);
+                    const exp = this.profileHelper.getExperience(level);
+                    const tier = this.apbsTierGetter.getTierByLevel(level);
+                    bot.Info.Tier = this.chadOrChill(tier.toString());
                     
+                    const result: IRandomisedBotLevelResult = {
+                        level,
+                        exp 
+                    };
+                    return result;
                 }
 
                 const expTable = this.databaseService.getGlobals().config.exp.level.exp_table;
@@ -132,6 +145,12 @@ export class APBSBotLevelGenerator
 
         let minLevel = botGenerationDetails.playerLevel - this.apbsTierGetter.getTierLowerLevelDeviation(botGenerationDetails.playerLevel);
         let maxLevel = botGenerationDetails.playerLevel + this.apbsTierGetter.getTierUpperLevelDeviation(botGenerationDetails.playerLevel);
+
+        if (ModConfig.config.enableScavCustomLevelDeltas && !botGenerationDetails.isPmc && !botGenerationDetails.isPlayerScav && (botGenerationDetails.role.includes("assault") || botGenerationDetails.role == "marksman"))
+        {
+            minLevel = botGenerationDetails.playerLevel - this.apbsTierGetter.getScavTierLowerLevelDeviation(botGenerationDetails.playerLevel);
+            maxLevel = botGenerationDetails.playerLevel + this.apbsTierGetter.getScavTierUpperLevelDeviation(botGenerationDetails.playerLevel);
+        }
 
         // Bound the level to the min/max possible
         maxLevel = Math.min(Math.max(maxLevel, minPossibleLevel), maxPossibleLevel);

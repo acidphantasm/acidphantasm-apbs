@@ -60,6 +60,7 @@ export class BotConfigs
         if (ModConfig.config.enableScavEqualEquipmentTiering) this.setIdenticalScavWeights();
         this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
         if (ModConfig.config.enableCustomLevelDeltas) this.setLevelDeltas();
+        if (ModConfig.config.enableScavCustomLevelDeltas) this.setScavLevelDeltas();
     }
 
     private configureBotExperienceLevels(): void
@@ -561,5 +562,29 @@ export class BotConfigs
 
         this.tierInformation.tiers[6].botMinLevelVariance = ModConfig.config.tier7LevelDelta[0]
         this.tierInformation.tiers[6].botMaxLevelVariance = ModConfig.config.tier7LevelDelta[1]
+    }
+
+    private setScavLevelDeltas(): void
+    {
+        this.tierInformation.tiers[0].scavMinLevelVariance = ModConfig.config.tier1ScavLevelDelta[0]
+        this.tierInformation.tiers[0].scavMaxLevelVariance = ModConfig.config.tier1ScavLevelDelta[1]
+
+        this.tierInformation.tiers[1].scavMinLevelVariance = ModConfig.config.tier2ScavLevelDelta[0]
+        this.tierInformation.tiers[1].scavMaxLevelVariance = ModConfig.config.tier2ScavLevelDelta[1]
+
+        this.tierInformation.tiers[2].scavMinLevelVariance = ModConfig.config.tier3ScavLevelDelta[0]
+        this.tierInformation.tiers[2].scavMaxLevelVariance = ModConfig.config.tier3ScavLevelDelta[1]
+
+        this.tierInformation.tiers[3].scavMinLevelVariance = ModConfig.config.tier4ScavLevelDelta[0]
+        this.tierInformation.tiers[3].scavMaxLevelVariance = ModConfig.config.tier4ScavLevelDelta[1]
+
+        this.tierInformation.tiers[4].scavMinLevelVariance = ModConfig.config.tier5ScavLevelDelta[0]
+        this.tierInformation.tiers[4].scavMaxLevelVariance = ModConfig.config.tier5ScavLevelDelta[1]
+
+        this.tierInformation.tiers[5].scavMinLevelVariance = ModConfig.config.tier6ScavLevelDelta[0]
+        this.tierInformation.tiers[5].scavMaxLevelVariance = ModConfig.config.tier6ScavLevelDelta[1]
+
+        this.tierInformation.tiers[6].scavMinLevelVariance = ModConfig.config.tier7ScavLevelDelta[0]
+        this.tierInformation.tiers[6].scavMaxLevelVariance = ModConfig.config.tier7ScavLevelDelta[1]
     }
 }

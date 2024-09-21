@@ -132,5 +132,13 @@ export interface Config
     tier5LevelDelta: [ number, number ],
     tier6LevelDelta: [ number, number ],
     tier7LevelDelta: [ number, number ],
+    enableScavCustomLevelDeltas: boolean,
+    tier1ScavLevelDelta: [ number, number ],
+    tier2ScavLevelDelta: [ number, number ],
+    tier3ScavLevelDelta: [ number, number ],
+    tier4ScavLevelDelta: [ number, number ],
+    tier5ScavLevelDelta: [ number, number ],
+    tier6ScavLevelDelta: [ number, number ],
+    tier7ScavLevelDelta: [ number, number ],
     enableDebugLog: boolean,
 }

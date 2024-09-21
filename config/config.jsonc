@@ -212,6 +212,21 @@
         "tier6LevelDelta": [ 55, 20 ],
         "tier7LevelDelta": [ 60, 20 ],
 
+// LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
+// Examples: 
+// "tier2ScavLevelDelta": [ 10, -10 ] --- While you are Tier2 (lv11-20), scavs will be leveled -10 to -10 of your level. (always 25 levels behind you)
+// "tier3ScavLevelDelta": [ 30, -10 ] --- While you are Tier3 (lv21-30), scavs will be leveled -30 to -10 of your level. (always 10 to 30 levels behind you)
+// "enableScavCustomLevelDeltas" if true will use the values you set below, otherwise they will use APBS values
+// Default values below will always spawn scavs that are at least 1 tier below you unless you are Tier1.
+        "enableScavCustomLevelDeltas": false,
+        "tier1ScavLevelDelta": [ 10, 0 ],
+        "tier2ScavLevelDelta": [ 20, -10 ],
+        "tier3ScavLevelDelta": [ 30, -10 ],
+        "tier4ScavLevelDelta": [ 40, -10 ],
+        "tier5ScavLevelDelta": [ 50, -10 ],
+        "tier6ScavLevelDelta": [ 60, -10 ],
+        "tier7ScavLevelDelta": [ 70, -10 ],
+
 // Enable/disable debug logging
         "enableDebugLog": true
 }
