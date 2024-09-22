@@ -50,6 +50,7 @@ import { ModConfig } from "./Globals/ModConfig";
 import { JSONHelper } from "./Helpers/JSONHelper";
 import { BlacklistHelper } from "./Helpers/BlacklistHelper";
 import { RealismHelper } from "./Helpers/RealismHelper";
+import { APBSTester } from "./Utils/APBSTester";
 
 export class InstanceManager 
 {
@@ -95,6 +96,7 @@ export class InstanceManager
     public apbsBotInventoryGenerator: APBSBotInventoryGenerator;
     public jsonHelper: JSONHelper;
     public modConfig: ModConfig;
+    public apbsTester: APBSTester;
     //#endregion
 
     //#region accessible in or after postDBLoad
@@ -145,6 +147,8 @@ export class InstanceManager
         this.modInformation = container.resolve<ModInformation>("ModInformation");
         this.container.register<APBSLogger>("APBSLogger", APBSLogger, { lifecycle: Lifecycle.Singleton });
         this.apbsLogger = container.resolve<APBSLogger>("APBSLogger");
+        this.container.register<APBSTester>("APBSTester", APBSTester, { lifecycle: Lifecycle.Singleton })
+        this.apbsTester = container.resolve<APBSTester>("APBSTester");
         this.container.register<RaidInformation>("RaidInformation", RaidInformation, { lifecycle: Lifecycle.Singleton });
         this.raidInformation = container.resolve<RaidInformation>("RaidInformation");
         this.container.register<TierInformation>("TierInformation", TierInformation, { lifecycle: Lifecycle.Singleton });

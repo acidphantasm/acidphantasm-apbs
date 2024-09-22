@@ -7,6 +7,9 @@ import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 import { RaidInformation } from "../Globals/RaidInformation";
+import { ModInformation } from "../Globals/ModInformation";
+import { APBSTester } from "../Utils/APBSTester";
+import { DatabaseService } from "@spt/services/DatabaseService";
 
 @injectable()
 export class APBSStaticRouterHooks
@@ -17,6 +20,9 @@ export class APBSStaticRouterHooks
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("WeatherGenerator") protected weatherGenerator: WeatherGenerator,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("ModInformation") protected modInformation: ModInformation,
+        @inject("DatabaseService") protected databaseService: DatabaseService,
+        @inject("APBSTester") protected apbsTester: APBSTester,
         @inject("ProfileHelper") protected profileHelper: ProfileHelper
     )
     {}
@@ -60,6 +66,11 @@ export class APBSStaticRouterHooks
                         try 
                         {
                             this.logLocation(info);
+                            if (this.modInformation.testMode && this.modInformation.clearAssortPreRaid)
+                            {
+                                const tables = this.databaseService.getTables();
+                                this.apbsTester.clearAssort(tables.traders[this.modInformation.testTrader]);
+                            }
                         }
                         catch (err) 
                         {

@@ -14,6 +14,7 @@ import { RaidInformation } from "../Globals/RaidInformation";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ModConfig } from "../Globals/ModConfig";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
+import { ModInformation } from "../Globals/ModInformation";
 
 /** Handle profile related client events */
 @injectable()
@@ -27,6 +28,7 @@ export class APBSBotLevelGenerator
         @inject("ProfileHelper") protected profileHelper: ProfileHelper,
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("ModInformation") protected modInformation: ModInformation,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter
     )
     {}
@@ -50,6 +52,20 @@ export class APBSBotLevelGenerator
                 console.log(`Original Tier: ${tier} - New Tier ${newTier}`)
                 */
                 
+                if (this.modInformation.testMode && this.modInformation.testBotRole.includes(botGenerationDetails.role.toLowerCase()))
+                {
+                    const level = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)?.Info?.Level;
+                    const exp = this.profileHelper.getExperience(level);
+                    const tier = this.apbsTierGetter.getTierByLevel(level);
+                    bot.Info.Tier = this.chadOrChill(tier.toString());
+                    
+                    const result: IRandomisedBotLevelResult = {
+                        level,
+                        exp 
+                    };
+                    return result;
+                }
+
                 if (botGenerationDetails.isPlayerScav)
                 {
                     let level = this.raidInformation.freshProfile == true ? 1 : this.profileHelper.getPmcProfile(this.raidInformation.sessionId)?.Info?.Level;

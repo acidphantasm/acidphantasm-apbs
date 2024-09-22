@@ -25,6 +25,9 @@ import { RaidInformation } from "../Globals/RaidInformation";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { ModConfig } from "../Globals/ModConfig";
 import { Logging } from "../Enums/Logging";
+import { APBSTester } from "../Utils/APBSTester";
+import { ModInformation } from "../Globals/ModInformation";
+import { Money } from "@spt/models/enums/Money";
 
 /** Handle profile related client events */
 @injectable()
@@ -49,7 +52,9 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
-        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter
+        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
+        @inject("APBSTester") protected apbsTester: APBSTester,
+        @inject("ModInformation") protected modInformation: ModInformation
     )
     {
         super(logger, 
@@ -298,6 +303,34 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             const ubglTemplate = this.itemHelper.getItem(ubglMod._tpl)[1];
             ubglAmmoTpl = this.getWeightedCompatibleAmmo(botTemplateInventory.Ammo, ubglTemplate);
             this.fillUbgl(weaponWithModsArray, ubglMod, ubglAmmoTpl);
+        }
+        
+        // This is for testing...
+        if (this.modInformation.testMode && this.modInformation.testBotRole.includes(botRole.toLowerCase()))
+        {
+            const tables = this.databaseService.getTables();
+            const assortWeapon: any = this.cloner.clone(weaponWithModsArray);
+            for (const item in assortWeapon)
+            {
+                const oldID = assortWeapon[item]._id
+                const newID = this.hashUtil.generate();
+                assortWeapon[item]._id = newID;
+                
+                // Loop array again to fix parentID
+                for (const i in assortWeapon)
+                {
+                    if (assortWeapon[i].parentId == oldID) 
+                    {
+                        assortWeapon[i].parentId = newID
+                    }
+                }
+            }
+            this.apbsTester.createComplexAssortItem(assortWeapon)
+                .addUnlimitedStackCount()
+                .addMoneyCost(Money.ROUBLES, 20000)
+                .addBuyRestriction(3)
+                .addLoyaltyLevel(1)
+                .export(tables.traders[this.modInformation.testTrader]);
         }
 
         return {

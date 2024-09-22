@@ -31,8 +31,9 @@ import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ModConfig } from "../Globals/ModConfig";
 import { RaidInformation } from "../Globals/RaidInformation";
-import { IModToSpawnRequest } from "@spt/models/spt/bots/IModToSpawnRequest";
 import { IChooseRandomCompatibleModResult } from "@spt/models/spt/bots/IChooseRandomCompatibleModResult";
+import { ModInformation } from "../Globals/ModInformation";
+import { APBSTester } from "../Utils/APBSTester";
 
 /** Handle profile related client events */
 @injectable()
@@ -61,7 +62,9 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         @inject("PrimaryCloner") protected cloner: ICloner,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
-        @inject("RaidInformation") protected raidInformation: RaidInformation
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("ModInformation") protected modInformation: ModInformation,
+        @inject("APBSTester") protected apbsTester: APBSTester
     )
     {
         super(logger, 

@@ -7,5 +7,10 @@ export class ModInformation
     public logPath: string = path.join(path.dirname(__filename), "..", "..", "logs");
     public profilePath: string = path.join(path.dirname(__filename), "..", "..", "..", "..", "profiles");
     public versionNumber: string = modPackage.version;
+
+    public testMode: boolean = true;
+    public testBotRole: (string)[] = [ "pmcusec" ]
+    public testTrader: string = "apbs"
+    public clearAssortPreRaid: boolean = true;
 }
 
