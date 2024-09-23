@@ -49,6 +49,7 @@ export class BotConfigs
         this.setPMCItemLimits();
         this.setPMCLoot();
         this.setPMCScopeWhitelist();
+        this.setPMCSlotIDsToMakeRequired();
         if (ModConfig.config.gameVersionWeight) this.setPMCGameVersionWeights();
         if (ModConfig.config.addAllKeysToScavs || ModConfig.config.addOnlyKeyCardsToScavs || ModConfig.config.addOnlyMechanicalKeysToScavs) this.pushScavKeys();
         if (ModConfig.config.enableCustomPlateChances) this.setPlateChances();
@@ -586,5 +587,10 @@ export class BotConfigs
 
         this.tierInformation.tiers[6].scavMinLevelVariance = ModConfig.config.tier7ScavLevelDelta[0]
         this.tierInformation.tiers[6].scavMaxLevelVariance = ModConfig.config.tier7ScavLevelDelta[1]
+    }
+
+    private setPMCSlotIDsToMakeRequired(): void
+    {
+        this.botConfig.equipment.pmc.weaponSlotIdsToMakeRequired = [ "mod_reciever", "mod_stock" ]
     }
 }
