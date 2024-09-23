@@ -28,6 +28,7 @@ import { Logging } from "../Enums/Logging";
 import { APBSTester } from "../Utils/APBSTester";
 import { ModInformation } from "../Globals/ModInformation";
 import { Money } from "@spt/models/enums/Money";
+import { APBSBotEquipmentModGenerator } from "./APBSBotEquipmentModGenerator";
 
 /** Handle profile related client events */
 @injectable()
@@ -54,6 +55,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         @inject("RaidInformation") protected raidInformation: RaidInformation,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
         @inject("APBSTester") protected apbsTester: APBSTester,
+        @inject("APBSBotEquipmentModGenerator") protected apbsBotEquipmentModGenerator: APBSBotEquipmentModGenerator,
         @inject("ModInformation") protected modInformation: ModInformation
     )
     {
@@ -262,9 +264,10 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                 modLimits: modLimits,
                 weaponStats: {}
             };
-            weaponWithModsArray = this.botEquipmentModGenerator.generateModsForWeapon(
+            weaponWithModsArray = this.apbsBotEquipmentModGenerator.apbsGenerateModsForWeapon(
                 sessionId,
-                generateWeaponModsRequest
+                generateWeaponModsRequest,
+                isPmc
             );
         }
 
