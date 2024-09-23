@@ -8,8 +8,8 @@ export class ModInformation
     public profilePath: string = path.join(path.dirname(__filename), "..", "..", "..", "..", "profiles");
     public versionNumber: string = modPackage.version;
 
-    public testMode: boolean = true;
-    public testBotRole: (string)[] = [ "pmcusec" ]
+    public testMode: boolean = false;
+    public testBotRole: (string)[] = [ "pmcusec", "pmcbear" ]
     public testTrader: string = "apbs"
     public clearAssortPreRaid: boolean = true;
 }
