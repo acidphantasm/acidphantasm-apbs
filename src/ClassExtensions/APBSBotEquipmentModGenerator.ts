@@ -473,7 +473,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         return chosenModResult;
     }
     
-    public override generateModsForWeapon(sessionId: string, request: IGenerateWeaponRequest): Item[] 
+    public apbsGenerateModsForWeapon(sessionId: string, request: IGenerateWeaponRequest, isPmc: boolean): Item[] 
     {
         const pmcProfile = this.profileHelper.getPmcProfile(sessionId);
 
@@ -583,12 +583,14 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             {
                 continue;
             }
-
+            
             // If item is a mount for scopes, set scope chance to 100%, this helps fix empty mounts appearing on weapons
             if (this.modSlotCanHoldScope(modSlot, modToAddTemplate._parent)) 
             {
                 // mod_mount was picked to be added to weapon, force scope chance to ensure its filled
-                const scopeSlots = ["mod_scope", "mod_scope_000", "mod_scope_001", "mod_scope_002", "mod_scope_003"];
+                let scopeSlots = ["mod_scope", "mod_scope_000", "mod_scope_001", "mod_scope_002", "mod_scope_003"];
+                if (isPmc) scopeSlots =  ["mod_scope", "mod_scope_000"]
+                
                 this.adjustSlotSpawnChances(request.modSpawnChances, scopeSlots, 100);
 
                 // Hydrate pool of mods that fit into mount as its a randomisable slot
@@ -604,14 +606,17 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 }
             }
 
-            // If picked item is muzzle adapter that can hold a child, adjust spawn chance
-            if (this.modSlotCanHoldMuzzleDevices(modSlot, modToAddTemplate._parent)) 
+            if (!isPmc)
             {
-                const muzzleSlots = ["mod_muzzle", "mod_muzzle_000", "mod_muzzle_001"];
-                // Make chance of muzzle devices 33%
-                this.adjustSlotSpawnChances(request.modSpawnChances, muzzleSlots, 33);
+                // If picked item is muzzle adapter that can hold a child, adjust spawn chance
+                if (this.modSlotCanHoldMuzzleDevices(modSlot, modToAddTemplate._parent)) 
+                {
+                    const muzzleSlots = ["mod_muzzle", "mod_muzzle_000", "mod_muzzle_001"];
+                    // Make chance of muzzle devices 95%
+                    this.adjustSlotSpawnChances(request.modSpawnChances, muzzleSlots, 95);
+                }
             }
-
+            
             // If front/rear sight are to be added, set opposite to 100% chance
             if (this.modIsFrontOrRearSight(modSlot, modToAddTemplate._id)) 
             {
@@ -720,7 +725,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                         weaponStats: request.weaponStats
                     };
                     // Call self recursively to add mods to this mod
-                    this.generateModsForWeapon(sessionId, recursiveRequestData);
+                    this.apbsGenerateModsForWeapon(sessionId, recursiveRequestData, isPmc);
                 }
             }
         }
