@@ -9,7 +9,7 @@ import { ProbabilityHelper } from "@spt/helpers/ProbabilityHelper";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { Item } from "@spt/models/eft/common/tables/IItem";
-import { ITemplateItem, Slot } from "@spt/models/eft/common/tables/ITemplateItem";
+import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { ModSpawn } from "@spt/models/enums/ModSpawn";
 import { IFilterPlateModsForSlotByLevelResult, Result } from "@spt/models/spt/bots/IFilterPlateModsForSlotByLevelResult";
 import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
@@ -399,29 +399,46 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
 
         return result;
     }
-    
-    protected override pickWeaponModTplForSlotFromPool(
+
+    protected override getCompatibleModFromPool(
         modPool: string[],
-        parentSlot: Slot,
-        choiceTypeEnum: ModSpawn,
-        weapon: Item[],
-        modSlotName: string
+        modSpawnType: ModSpawn,
+        weapon: Item[]
     ): IChooseRandomCompatibleModResult 
     {
-        let chosenTpl: string;
-        const exhaustableModPool = new ExhaustableArray(modPool, this.randomUtil, this.cloner);
-        let chosenModResult: IChooseRandomCompatibleModResult = { incompatible: true, found: false, reason: "unknown" };
-        const modParentFilterList = parentSlot._props.filters[0].Filter;
+        // Create exhaustable pool to pick mod item from
+        const exhaustableModPool = this.createExhaustableArray(modPool);
 
-        // How many times can a mod for the slot be blocked before we stop trying
-        const maxBlockedAttempts = Math.round(modPool.length); 
+        // Create default response if no compatible item is found below
+        const chosenModResult: IChooseRandomCompatibleModResult = {
+            incompatible: true,
+            found: false,
+            reason: "unknown"
+        };
+
+        // Limit how many attempts to find a compatible mod can occur before giving up
+        const maxBlockedAttempts = Math.round(modPool.length); // 75% of pool size
         let blockedAttemptCount = 0;
-        while (exhaustableModPool.hasValues())
+        let chosenTpl: string;
+        while (exhaustableModPool.hasValues()) 
         {
-            chosenTpl = exhaustableModPool.getRandomValue()!;
-            if (choiceTypeEnum === ModSpawn.DEFAULT_MOD && modPool.length === 1) 
+            chosenTpl = exhaustableModPool.getRandomValue();
+            const pickedItemDetails = this.itemHelper.getItem(chosenTpl);
+            if (!pickedItemDetails[0]) 
             {
-                // Default mod wanted and only one choice in pool
+                // Not valid item, try again
+                continue;
+            }
+
+            if (!pickedItemDetails[1]._props) 
+            {
+                // no props data, try again
+                continue;
+            }
+
+            // Success - Default wanted + only 1 item in pool
+            if (modSpawnType === ModSpawn.DEFAULT_MOD && modPool.length === 1) 
+            {
                 chosenModResult.found = true;
                 chosenModResult.incompatible = false;
                 chosenModResult.chosenTpl = chosenTpl;
@@ -429,45 +446,38 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 break;
             }
 
-            // Check chosen item is on the allowed list of the parent
-            const isOnModParentFilterList = modParentFilterList.includes(chosenTpl);
-            if (!isOnModParentFilterList) 
-            {
-                // Try again
-                continue;
-            }
-
-            chosenModResult = this.botGeneratorHelper.isWeaponModIncompatibleWithCurrentMods(
-                weapon,
-                chosenTpl,
-                modSlotName
+            // Check if existing weapon mods are incompatible with chosen item
+            const existingItemBlockingChoice = weapon.find((item) =>
+                pickedItemDetails[1]._props.ConflictingItems?.includes(item._tpl)
             );
-
-            if (chosenModResult.slotBlocked) 
+            if (existingItemBlockingChoice) 
             {
                 // Give max of x attempts of picking a mod if blocked by another
                 if (blockedAttemptCount > maxBlockedAttempts) 
                 {
-                    blockedAttemptCount = 0;
+                    blockedAttemptCount = 0; // reset
                     break;
                 }
 
                 blockedAttemptCount++;
 
-                // Try again
+                // Not compatible - Try again
                 continue;
             }
 
-            // Some mod combos will never work, make sure this isnt the case
-            if (!(chosenModResult.incompatible || this.weaponModComboIsIncompatible(weapon, chosenTpl))) 
+            // Edge case- Some mod combos will never work, make sure this isnt the case
+            if (this.weaponModComboIsIncompatible(weapon, chosenTpl)) 
             {
-                // Success
-                chosenModResult.found = true;
-                chosenModResult.incompatible = false;
-                chosenModResult.chosenTpl = chosenTpl;
-
+                chosenModResult.reason = `Chosen weapon mod: ${chosenTpl} can never be compatible with existing weapon mods`;
                 break;
             }
+
+            // Success
+            chosenModResult.found = true;
+            chosenModResult.incompatible = false;
+            chosenModResult.chosenTpl = chosenTpl;
+
+            break;
         }
 
         return chosenModResult;
@@ -552,7 +562,9 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 ammoTpl: request.ammoTpl,
                 parentTemplate: request.parentTemplate,
                 modSpawnResult: modSpawnResult,
-                weaponStats: request.weaponStats
+                weaponStats: request.weaponStats,
+                conflictingItemTpls: request.conflictingItemTpls,
+                botData: request.botData
             };
             const modToAdd = this.chooseModToPutIntoSlot(modToSpawnRequest);
 
@@ -724,7 +736,8 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                             equipmentRole: request.botData.equipmentRole
                         },
                         modLimits: request.modLimits,
-                        weaponStats: request.weaponStats
+                        weaponStats: request.weaponStats,
+                        conflictingItemTpls: request.conflictingItemTpls
                     };
                     // Call self recursively to add mods to this mod
                     this.apbsGenerateModsForWeapon(sessionId, recursiveRequestData, isPmc);

@@ -267,6 +267,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
                 );
             }
 
+            const backpackLootRoubleTotal = this.getBackpackRoubleTotalByLevel(botLevel, isPmc);
             this.addLootFromPool(
                 this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.BACKPACK, botJsonTemplate),
                 [EquipmentSlots.BACKPACK],
@@ -274,7 +275,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
                 botInventory,
                 botRole,
                 botItemLimits,
-                this.pmcConfig.maxBackpackLootTotalRub,
+                backpackLootRoubleTotal,
                 isPmc,
                 containersIdFull
             );
