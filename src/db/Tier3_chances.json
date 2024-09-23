@@ -3,7 +3,7 @@
         "chances": {
             "equipment": {
                 "ArmBand": 20,
-                "ArmorVest": 60,
+                "ArmorVest": 55,
                 "Backpack": 90,
                 "Earpiece": 85,
                 "Eyewear": 20,
@@ -252,7 +252,7 @@
                 "mod_mount_004": 15,
                 "mod_mount_005": 15,
                 "mod_mount_006": 15,
-                "mod_muzzle": 100,
+                "mod_muzzle": 33,
                 "mod_muzzle_000": 60,
                 "mod_muzzle_001": 20,
                 "mod_pistol_grip": 100,
@@ -656,7 +656,7 @@
         "chances": {
             "equipment": {
                 "ArmBand": 20,
-                "ArmorVest": 60,
+                "ArmorVest": 55,
                 "Backpack": 90,
                 "Earpiece": 85,
                 "Eyewear": 20,
@@ -847,7 +847,7 @@
                 "mod_launcher": 1,
                 "mod_magazine": 100,
                 "mod_mount": 75,
-                "mod_mount_000": 50,
+                "mod_mount_000": 85,
                 "mod_mount_001": 15,
                 "mod_mount_002": 15,
                 "mod_mount_003": 15,
@@ -905,7 +905,7 @@
                 "mod_mount_004": 15,
                 "mod_mount_005": 15,
                 "mod_mount_006": 15,
-                "mod_muzzle": 100,
+                "mod_muzzle": 33,
                 "mod_muzzle_000": 60,
                 "mod_muzzle_001": 20,
                 "mod_pistol_grip": 100,
