@@ -34,6 +34,10 @@ import { RaidInformation } from "../Globals/RaidInformation";
 import { IChooseRandomCompatibleModResult } from "@spt/models/spt/bots/IChooseRandomCompatibleModResult";
 import { ModInformation } from "../Globals/ModInformation";
 import { APBSTester } from "../Utils/APBSTester";
+import { Money } from "@spt/models/enums/Money";
+import { IGenerateWeaponRequest } from "@spt/models/spt/bots/IGenerateWeaponRequest";
+import { IModToSpawnRequest } from "@spt/models/spt/bots/IModToSpawnRequest";
+import { BaseClasses } from "@spt/models/enums/BaseClasses";
 
 /** Handle profile related client events */
 @injectable()
@@ -260,6 +264,35 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 this.generateModsForEquipment(equipment, modId, modTemplate[1], settings, forceSpawn);
             }
         }
+        
+        // This is for testing...
+        if (this.modInformation.testMode && this.modInformation.testBotRole.includes(botRole.toLowerCase()))
+        {
+            const tables = this.databaseService.getTables();
+            const assortEquipment = this.cloner.clone(equipment);
+            for (const item in assortEquipment)
+            {
+                const oldID = assortEquipment[item]._id
+                const newID = this.hashUtil.generate();
+                assortEquipment[item]._id = newID;
+                
+                // Loop array again to fix parentID
+                for (const i in assortEquipment)
+                {
+                    if (assortEquipment[i].parentId == oldID) 
+                    {
+                        assortEquipment[i].parentId = newID
+                    }
+                }
+            }
+            this.apbsTester.createComplexAssortItem(assortEquipment)
+                .addUnlimitedStackCount()
+                .addMoneyCost(Money.ROUBLES, 20000)
+                .addBuyRestriction(3)
+                .addLoyaltyLevel(1)
+                .export(tables.traders[this.modInformation.testTrader]);
+        }
+
         return equipment;
     }
 
@@ -438,5 +471,260 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         }
 
         return chosenModResult;
+    }
+    
+    public override generateModsForWeapon(sessionId: string, request: IGenerateWeaponRequest): Item[] 
+    {
+        const pmcProfile = this.profileHelper.getPmcProfile(sessionId);
+
+        // Get pool of mods that fit weapon
+        const compatibleModsPool = request.modPool[request.parentTemplate._id];
+
+        if (
+            !(
+                request.parentTemplate._props.Slots.length ||
+                request.parentTemplate._props.Cartridges?.length ||
+                request.parentTemplate._props.Chambers?.length
+            )
+        ) 
+        {
+            this.logger.error(
+                this.localisationService.getText("bot-unable_to_add_mods_to_weapon_missing_ammo_slot", {
+                    weaponName: request.parentTemplate._name,
+                    weaponId: request.parentTemplate._id,
+                    botRole: request.botData.role
+                })
+            );
+
+            return request.weapon;
+        }
+
+        const botEquipConfig = this.botConfig.equipment[request.botData.equipmentRole];
+        const botEquipBlacklist = this.botEquipmentFilterService.getBotEquipmentBlacklist(
+            request.botData.equipmentRole,
+            pmcProfile.Info.Level
+        );
+        const botWeaponSightWhitelist = this.botEquipmentFilterService.getBotWeaponSightWhitelist(
+            request.botData.equipmentRole
+        );
+        const randomisationSettings = this.botHelper.getBotRandomizationDetails(request.botData.level, botEquipConfig);
+
+        // Iterate over mod pool and choose mods to attach
+        const sortedModKeys = this.sortModKeys(Object.keys(compatibleModsPool));
+        for (const modSlot of sortedModKeys) 
+        {
+            // Check weapon has slot for mod to fit in
+            const modsParentSlot = this.getModItemSlotFromDb(modSlot, request.parentTemplate);
+            if (!modsParentSlot) 
+            {
+                this.logger.error(
+                    this.localisationService.getText("bot-weapon_missing_mod_slot", {
+                        modSlot: modSlot,
+                        weaponId: request.parentTemplate._id,
+                        weaponName: request.parentTemplate._name,
+                        botRole: request.botData.role
+                    })
+                );
+
+                continue;
+            }
+
+            // Check spawn chance of mod
+            const modSpawnResult = this.shouldModBeSpawned(
+                modsParentSlot,
+                modSlot,
+                request.modSpawnChances,
+                botEquipConfig
+            );
+            if (modSpawnResult === ModSpawn.SKIP) 
+            {
+                continue;
+            }
+
+            const isRandomisableSlot = randomisationSettings?.randomisedWeaponModSlots?.includes(modSlot) ?? false;
+            const modToSpawnRequest: IModToSpawnRequest = {
+                modSlot: modSlot,
+                isRandomisableSlot: isRandomisableSlot,
+                botWeaponSightWhitelist: botWeaponSightWhitelist,
+                botEquipBlacklist: botEquipBlacklist,
+                itemModPool: compatibleModsPool,
+                weapon: request.weapon,
+                ammoTpl: request.ammoTpl,
+                parentTemplate: request.parentTemplate,
+                modSpawnResult: modSpawnResult,
+                weaponStats: request.weaponStats
+            };
+            const modToAdd = this.chooseModToPutIntoSlot(modToSpawnRequest);
+
+            // Compatible mod not found
+            if (!modToAdd || typeof modToAdd === "undefined") 
+            {
+                continue;
+            }
+
+            if (
+                !this.isModValidForSlot(modToAdd, modsParentSlot, modSlot, request.parentTemplate, request.botData.role)
+            ) 
+            {
+                continue;
+            }
+
+            const modToAddTemplate = modToAdd[1];
+            // Skip adding mod to weapon if type limit reached
+            if (
+                this.botWeaponModLimitService.weaponModHasReachedLimit(
+                    request.botData.equipmentRole,
+                    modToAddTemplate,
+                    request.modLimits,
+                    request.parentTemplate,
+                    request.weapon
+                )
+            ) 
+            {
+                continue;
+            }
+
+            // If item is a mount for scopes, set scope chance to 100%, this helps fix empty mounts appearing on weapons
+            if (this.modSlotCanHoldScope(modSlot, modToAddTemplate._parent)) 
+            {
+                // mod_mount was picked to be added to weapon, force scope chance to ensure its filled
+                const scopeSlots = ["mod_scope", "mod_scope_000", "mod_scope_001", "mod_scope_002", "mod_scope_003"];
+                this.adjustSlotSpawnChances(request.modSpawnChances, scopeSlots, 100);
+
+                // Hydrate pool of mods that fit into mount as its a randomisable slot
+                if (isRandomisableSlot) 
+                {
+                    // Add scope mods to modPool dictionary to ensure the mount has a scope in the pool to pick
+                    this.addCompatibleModsForProvidedMod(
+                        "mod_scope",
+                        modToAddTemplate,
+                        request.modPool,
+                        botEquipBlacklist
+                    );
+                }
+            }
+
+            // If picked item is muzzle adapter that can hold a child, adjust spawn chance
+            if (this.modSlotCanHoldMuzzleDevices(modSlot, modToAddTemplate._parent)) 
+            {
+                const muzzleSlots = ["mod_muzzle", "mod_muzzle_000", "mod_muzzle_001"];
+                // Make chance of muzzle devices 33%
+                this.adjustSlotSpawnChances(request.modSpawnChances, muzzleSlots, 33);
+            }
+
+            // If front/rear sight are to be added, set opposite to 100% chance
+            if (this.modIsFrontOrRearSight(modSlot, modToAddTemplate._id)) 
+            {
+                request.modSpawnChances.mod_sight_front = 100;
+                request.modSpawnChances.mod_sight_rear = 100;
+            }
+
+            // Handguard mod can take a sub handguard mod + weapon has no UBGL (takes same slot)
+            // Force spawn chance to be 100% to ensure it gets added
+            if (
+                modSlot === "mod_handguard" &&
+                modToAddTemplate._props.Slots.some((slot) => slot._name === "mod_handguard") &&
+                !request.weapon.some((item) => item.slotId === "mod_launcher")
+            ) 
+            {
+                // Needed for handguards with lower
+                request.modSpawnChances.mod_handguard = 100;
+            }
+
+            // If stock mod can take a sub stock mod, force spawn chance to be 100% to ensure sub-stock gets added
+            // Or if mod_stock is configured to be forced on
+            if (
+                modSlot === "mod_stock" &&
+                modToAddTemplate._props.Slots.some(
+                    (slot) => slot._name.includes("mod_stock") || botEquipConfig.forceStock
+                )
+            ) 
+            {
+                // Stock mod can take additional stocks, could be a locking device, force 100% chance
+                const stockSlots = ["mod_stock", "mod_stock_000", "mod_stock_akms"];
+                this.adjustSlotSpawnChances(request.modSpawnChances, stockSlots, 100);
+            }
+
+            // Gather stats on mods being added to weapon
+            if (this.itemHelper.isOfBaseclass(modToAddTemplate._id, BaseClasses.IRON_SIGHT)) 
+            {
+                if (modSlot === "mod_sight_front") 
+                {
+                    request.weaponStats.hasFrontIronSight = true;
+                }
+                else if (modSlot === "mod_sight_rear") 
+                {
+                    request.weaponStats.hasRearIronSight = true;
+                }
+            }
+            else if (
+                !request.weaponStats.hasOptic &&
+                this.itemHelper.isOfBaseclass(modToAddTemplate._id, BaseClasses.SIGHTS)
+            ) 
+            {
+                request.weaponStats.hasOptic = true;
+            }
+
+            const modId = this.hashUtil.generate();
+            request.weapon.push(
+                this.createModItem(
+                    modId,
+                    modToAddTemplate._id,
+                    request.weaponId,
+                    modSlot,
+                    modToAddTemplate,
+                    request.botData.role
+                )
+            );
+
+            // I first thought we could use the recursive generateModsForItems as previously for cylinder magazines.
+            // However, the recursion doesn't go over the slots of the parent mod but over the modPool which is given by the bot config
+            // where we decided to keep cartridges instead of camoras. And since a CylinderMagazine only has one cartridge entry and
+            // this entry is not to be filled, we need a special handling for the CylinderMagazine
+            const modParentItem = this.itemHelper.getItem(modToAddTemplate._parent)[1];
+            if (this.botWeaponGeneratorHelper.magazineIsCylinderRelated(modParentItem._name)) 
+            {
+                // We don't have child mods, we need to create the camoras for the magazines instead
+                this.fillCamora(request.weapon, request.modPool, modId, modToAddTemplate);
+            }
+            else 
+            {
+                let containsModInPool = Object.keys(request.modPool).includes(modToAddTemplate._id);
+
+                // Sometimes randomised slots are missing sub-mods, if so, get values from mod pool service
+                // Check for a randomisable slot + without data in modPool + item being added as additional slots
+                if (isRandomisableSlot && !containsModInPool && modToAddTemplate._props.Slots.length > 0) 
+                {
+                    const modFromService = this.botEquipmentModPoolService.getModsForWeaponSlot(modToAddTemplate._id);
+                    if (Object.keys(modFromService ?? {}).length > 0) 
+                    {
+                        request.modPool[modToAddTemplate._id] = modFromService;
+                        containsModInPool = true;
+                    }
+                }
+                if (containsModInPool) 
+                {
+                    const recursiveRequestData: IGenerateWeaponRequest = {
+                        weapon: request.weapon,
+                        modPool: request.modPool,
+                        weaponId: modId,
+                        parentTemplate: modToAddTemplate,
+                        modSpawnChances: request.modSpawnChances,
+                        ammoTpl: request.ammoTpl,
+                        botData: {
+                            role: request.botData.role,
+                            level: request.botData.level,
+                            equipmentRole: request.botData.equipmentRole
+                        },
+                        modLimits: request.modLimits,
+                        weaponStats: request.weaponStats
+                    };
+                    // Call self recursively to add mods to this mod
+                    this.generateModsForWeapon(sessionId, recursiveRequestData);
+                }
+            }
+        }
+
+        return request.weapon;
     }
 }
