@@ -191,7 +191,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                     break;
                 case "5447b5e04bdc2d62278b4567":
                     weaponChances = apbsModChances.smg;
-                    break;            
+                    break;
                 case "5447b5cf4bdc2d65278b4567":
                     weaponChances = apbsModChances.handgun;
                     break;
@@ -200,6 +200,9 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                     break;
                 case "5447b6094bdc2dc3278b4567":
                     weaponChances = apbsModChances.shotgun;
+                    break;
+                case "5447bedf4bdc2d87278b4568":
+                    weaponChances = apbsModChances.weaponMods;
                     break;
                 default:
                     weaponChances = apbsModChances.weaponMods;
@@ -309,7 +312,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         if (this.modInformation.testMode && this.modInformation.testBotRole.includes(botRole.toLowerCase()))
         {
             const tables = this.databaseService.getTables();
-            const assortWeapon: any = this.cloner.clone(weaponWithModsArray);
+            const assortWeapon = this.cloner.clone(weaponWithModsArray);
             for (const item in assortWeapon)
             {
                 const oldID = assortWeapon[item]._id
