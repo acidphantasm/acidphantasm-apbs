@@ -12,6 +12,7 @@
 // pmcWeaponWeights - Weight of modded weapons being added to PMCs
 // scavWeaponWeights - Weight of modded weapons being added to Scavs
 // followerWeaponWeights - Weight of modded weapons being added to boss followers (not Goons)
+// enableSafeGuard - Enables preventing weapon importing from bastardizing vanilla weapons. If you disable this, you will get cursed vanilla weapons.
 // Higher weights = more often. Lower weights = less often. If you add a LOT of mod weapons, I suggest using a lower value. 
 // REVIEW THE APBS LOGS TO TUNE YOUR CONFIG. (\user\mods\acidphantasm-progressivebotsystem\logs)
         "enableModdedWeapons": false,
@@ -21,6 +22,7 @@
         "pmcWeaponWeights": 10,
         "scavWeaponWeights": 1,
         "followerWeaponWeights": 7,
+        "enableSafeGuard": true,
 
 // Enable/Disable Realism Gas Mask Compatibility
 // APBS automatically detects Realism and adds gas masks to bots due to Radiation Zones. If you dont want this to happen, set to true.
