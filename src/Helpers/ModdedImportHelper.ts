@@ -14,6 +14,7 @@ import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { TierInformation } from "../Globals/TierInformation";
+import { APBSAttachmentChecker } from "../Utils/APBSAttachmentChecker";
 
 @injectable()
 export class ModdedImportHelper
@@ -28,6 +29,7 @@ export class ModdedImportHelper
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
+        @inject("APBSAttachmentChecker") protected apbsAttachmentChecker: APBSAttachmentChecker,
         @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
@@ -582,7 +584,7 @@ export class ModdedImportHelper
                 }
                 if (!this.tierInformation.tier1mods[parentSlotItemID][slotName].includes(slotFilterItem))
                 {
-                    if (slotExists) continue;
+                    if (slotExists && this.apbsAttachmentChecker.isVanillaItem(parentSlotItemID) && ModConfig.config.enableSafeGuard) continue;
                     this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem)
