@@ -9,7 +9,7 @@ export class ModInformation
     public versionNumber: string = modPackage.version;
 
     public testMode: boolean = false;
-    public testBotRole: (string)[] = [ "pmcusec", "pmcbear", "bossknight", "followerbirdeye", "followerbigpipe", "assault", "marksman" ]
+    public testBotRole: (string)[] = [ "pmcusec", "pmcbear" ]
     public testTrader: string = "apbs"
     public clearAssortPreRaid: boolean = true;
 }
