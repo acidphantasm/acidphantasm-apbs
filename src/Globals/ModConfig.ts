@@ -42,6 +42,7 @@ export interface Config
     pmcWeaponWeights: number,
     scavWeaponWeights: number,
     followerWeaponWeights: number,
+    disableRealismGasMasks: boolean,
     onlyChads: boolean,
     tarkovAndChill: boolean,
     blickyMode: boolean,

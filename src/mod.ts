@@ -61,7 +61,7 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
 
         // Check and configure for Realism if necessary
         const realism = this.instance.preSptModLoader.getImportedModsNames().includes("SPT-Realism");
-        if (realism)
+        if (realism && !ModConfig.config.disableRealismGasMasks)
         {
             this.instance.apbsLogger.log(Logging.WARN, "Realism Detected. Adding gas masks...")
             this.instance.realismHelper.initialize();
