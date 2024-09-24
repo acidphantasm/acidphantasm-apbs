@@ -66,6 +66,9 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
             this.instance.apbsLogger.log(Logging.WARN, "Realism Detected. Adding gas masks...")
             this.instance.realismHelper.initialize();
         }
+        
+        // Only do this if you need to build a new attachment list
+        // this.instance.apbsAttachmentChecker.buildAttachmentList();
 
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postDBLoad`);
