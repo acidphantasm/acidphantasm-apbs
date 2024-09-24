@@ -81,7 +81,9 @@ export class ModdedImportHelper
             "5c11046cd174af02a012e42b",
             "544a3f024bdc2d1d388b4568",
             "544a3d0a4bdc2d1b388b4567",
-            "5648b62b4bdc2d9d488b4585"
+            "5648b62b4bdc2d9d488b4585",
+            "5c0e2ff6d174af02a1659d4a",
+            "5c0e2f5cd174af02a012cfc9"
         ]
 
         this.clothingBlacklist = [
@@ -482,6 +484,8 @@ export class ModdedImportHelper
 
     private pushItemAndPrimaryMods(itemID, itemSlots): void
     {
+        this.pushCalibersToAmmoPools(itemID);
+
         for (const slot in itemSlots)
         {
             const slotName = itemSlots[slot]?._name;
@@ -489,7 +493,8 @@ export class ModdedImportHelper
             {
                 const slotFilterItem = itemSlots[slot]?._props?.filters[0]?.Filter[item];
 
-                if (this.attachmentBlacklist.includes(slotFilterItem)) 
+                const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
+                if (this.attachmentBlacklist.includes(slotFilterItem) || !itemExistsCheck[0]) 
                 {
                     continue;
                 }
@@ -534,6 +539,8 @@ export class ModdedImportHelper
         const parentSlotItemID = parentSlotItemData?._id;
         const parentSlotSlots = parentSlotItemData?._props?.Slots;
 
+        if (parentSlotSlots == undefined || parentSlotSlots.length == 0) return;
+
         for (const slot in parentSlotSlots)
         {
             const slotName = parentSlotSlots[slot]?._name;
@@ -546,8 +553,9 @@ export class ModdedImportHelper
             for (const item in parentSlotSlots[slot]?._props?.filters[0]?.Filter)
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
-                
-                if (this.attachmentBlacklist.includes(slotFilterItem)) 
+                let slotExists = true;
+                const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
+                if (this.attachmentBlacklist.includes(slotFilterItem) || !itemExistsCheck[0]) 
                 {
                     continue;
                 }
@@ -563,6 +571,7 @@ export class ModdedImportHelper
                 }
                 if (this.tierInformation.tier1mods[parentSlotItemID][slotName] == undefined)
                 {
+                    slotExists = false;
                     this.tierInformation.tier1mods[parentSlotItemID][slotName] = [];
                     this.tierInformation.tier2mods[parentSlotItemID][slotName] = [];
                     this.tierInformation.tier3mods[parentSlotItemID][slotName] = [];
@@ -573,6 +582,7 @@ export class ModdedImportHelper
                 }
                 if (!this.tierInformation.tier1mods[parentSlotItemID][slotName].includes(slotFilterItem))
                 {
+                    if (slotExists) continue;
                     this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem)
@@ -581,6 +591,41 @@ export class ModdedImportHelper
                     this.tierInformation.tier6mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier7mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.recursivePushChildrenMods(slotFilterItem);
+                }
+            }
+        }
+    }
+
+    private pushCalibersToAmmoPools(itemID: string): void
+    {
+        const itemDetails = this.itemHelper.getItem(itemID)
+        const itemCaliber = itemDetails[1]?._props?.ammoCaliber
+
+        if (!Object.keys(this.tierInformation.tier1ammo.scavAmmo).includes(itemCaliber) && itemCaliber != undefined)
+        {
+            const chamberFilter = itemDetails[1]?._props?.Chambers[0]?._props?.filters[0]?.Filter
+            if (chamberFilter && chamberFilter.length > 0)
+            {
+                for (const botPool in this.tierInformation.tier1ammo)
+                {
+                    this.tierInformation.tier1ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier2ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier3ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier4ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier5ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier6ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier7ammo[botPool][itemCaliber] = {};
+                    for (const item in chamberFilter)
+                    {
+                        const ammo = chamberFilter[item]
+                        this.tierInformation.tier1ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier2ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier3ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier4ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier5ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier6ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier7ammo[botPool][itemCaliber][ammo] = 1;
+                    }
                 }
             }
         }
