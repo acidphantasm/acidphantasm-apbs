@@ -147,12 +147,13 @@
 // Enable/Disable randomization of medical and food resource values
 // If set to true, all scavs and PMCs will have randomized resource values, based on the chances you set below, for medical and food items. 
 // If disabled the items will always be full resource values. 
-// Example.. true means an AFAK on a PMC has a 65% chance to be 400/400 and 35% chance to be between 0% and 40% used (it would spawn somewhere between 240/400 to 400/400).
+// Explanation: "pmcMedRates": [ Chance for full resource value available, Minimum percent of item randomized between min and max resource ]
+// Example.. "pmcMedRates": [ 65, 20 ] --- AFAK on a PMC has a 65% chance to be 400/400 and 35% chance to be between 0% and 80% used (it would spawn somewhere between 80/400 to 400/400).
         "enableConsumableResourceRandomization": true,
-        "scavFoodFullChance": 25,
-        "scavMedFullChance": 25,
-        "pmcFoodFullChance": 65,
-        "pmcMedFullChance": 65,
+        "scavFoodRates": [ 25, 60 ],
+        "scavMedRates": [ 25, 60 ],
+        "pmcFoodRates": [ 65, 60 ],
+        "pmcMedRates": [ 65, 60 ],
 
 // Blacklist specific ammo types from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
 // Configure per tier blacklists

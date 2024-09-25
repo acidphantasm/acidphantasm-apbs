@@ -94,10 +94,10 @@ export interface Config
     addOnlyMechanicalKeysToScavs: boolean,
     addOnlyKeyCardsToScavs: boolean,
     enableConsumableResourceRandomization: boolean,
-    scavFoodFullChance: number,
-    scavMedFullChance: number,
-    pmcFoodFullChance: number,
-    pmcMedFullChance: number,
+    scavFoodRates: [ number, number ]
+    scavMedRates: [ number, number ]
+    pmcFoodRates: [ number, number ]
+    pmcMedRates: [ number, number ]
     tier1AmmoBlacklist: string[],
     tier2AmmoBlacklist: string[],
     tier3AmmoBlacklist: string[],
