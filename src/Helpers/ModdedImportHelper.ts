@@ -85,7 +85,10 @@ export class ModdedImportHelper
             "544a3d0a4bdc2d1b388b4567",
             "5648b62b4bdc2d9d488b4585",
             "5c0e2ff6d174af02a1659d4a",
-            "5c0e2f5cd174af02a012cfc9"
+            "5c0e2f5cd174af02a012cfc9",
+            "5c6592372e221600133e47d7",
+            "544a378f4bdc2d30388b4567",
+            "5d1340bdd7ad1a0e8d245aab"
         ]
 
         this.clothingBlacklist = [
