@@ -606,6 +606,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 }
             }
 
+            /*
             if (!isPmc)
             {
                 // If picked item is muzzle adapter that can hold a child, adjust spawn chance
@@ -616,6 +617,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                     this.adjustSlotSpawnChances(request.modSpawnChances, muzzleSlots, 95);
                 }
             }
+            */
             
             // If front/rear sight are to be added, set opposite to 100% chance
             if (this.modIsFrontOrRearSight(modSlot, modToAddTemplate._id)) 
