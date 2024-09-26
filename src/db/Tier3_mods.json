@@ -4797,10 +4797,6 @@
       "651a8bf3a8520e48047bf708",
       "651a8e529829226ceb67c319"
     ],
-    "mod_tactical": [
-      "57fd23e32459772d0805bcf1",
-      "5a7b483fe899ef0016170d15"
-    ],
     "mod_mount_000": [
       "5c0102aa0db834001b734ba1"
     ],
@@ -13380,10 +13376,6 @@
     ],
     "mod_mount_003": [
       "5e569a0156edd02abe09f27d"
-    ],
-    "mod_tactical": [
-      "57fd23e32459772d0805bcf1",
-      "5a7b483fe899ef0016170d15"
     ]
   },
   "5e569a2e56edd02abe09f280": {
@@ -14377,9 +14369,6 @@
     ],
     "mod_sight_rear": [
       "5fc0fa957283c4046c58147e"
-    ],
-    "mod_tactical": [
-      "57fd23e32459772d0805bcf1"
     ]
   },
   "5fc22d7c187fea44d52eda44": {
