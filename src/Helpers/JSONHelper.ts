@@ -1,14 +1,20 @@
 import { injectable, inject } from "tsyringe";
-import { TierInformation } from "../Globals/TierInformation";
+import * as path from "path";
+import * as fs from "fs";
 
-import Tier0 = require("../db/Tier0_equipment.json");
-import Tier1 = require("../db/Tier1_equipment.json");
-import Tier2 = require("../db/Tier2_equipment.json");
-import Tier3 = require("../db/Tier3_equipment.json");
-import Tier4 = require("../db/Tier4_equipment.json");
-import Tier5 = require("../db/Tier5_equipment.json");
-import Tier6 = require("../db/Tier6_equipment.json");
-import Tier7 = require("../db/Tier7_equipment.json");
+import { TierInformation } from "../Globals/TierInformation";
+import { RaidInformation } from "../Globals/RaidInformation";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
+
+import Tier0equipment = require("../db/Tier0_equipment.json");
+import Tier1equipment = require("../db/Tier1_equipment.json");
+import Tier2equipment = require("../db/Tier2_equipment.json");
+import Tier3equipment = require("../db/Tier3_equipment.json");
+import Tier4equipment = require("../db/Tier4_equipment.json");
+import Tier5equipment = require("../db/Tier5_equipment.json");
+import Tier6equipment = require("../db/Tier6_equipment.json");
+import Tier7equipment = require("../db/Tier7_equipment.json");
 
 import Tier0mods = require("../db/Tier0_mods.json");
 import Tier1mods = require("../db/Tier1_mods.json");
@@ -49,21 +55,26 @@ import Tier7appearance = require("../db/Tier7_appearance.json");
 @injectable()
 export class JSONHelper
 {
+    count: number;
     constructor(
-        @inject("TierInformation") protected tierInformation: TierInformation
+        @inject("TierInformation") protected tierInformation: TierInformation,
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
-    {}
+    {
+        this.count = 0
+    }
 
     public buildTierJson(): void
     {
-        this.tierInformation.tier0 = Tier0;
-        this.tierInformation.tier1 = Tier1;
-        this.tierInformation.tier2 = Tier2;
-        this.tierInformation.tier3 = Tier3;
-        this.tierInformation.tier4 = Tier4;
-        this.tierInformation.tier5 = Tier5;
-        this.tierInformation.tier6 = Tier6;
-        this.tierInformation.tier7 = Tier7;
+        this.tierInformation.tier0 = Tier0equipment;
+        this.tierInformation.tier1 = Tier1equipment;
+        this.tierInformation.tier2 = Tier2equipment;
+        this.tierInformation.tier3 = Tier3equipment;
+        this.tierInformation.tier4 = Tier4equipment;
+        this.tierInformation.tier5 = Tier5equipment;
+        this.tierInformation.tier6 = Tier6equipment;
+        this.tierInformation.tier7 = Tier7equipment;
 
         this.tierInformation.tier0mods = Tier0mods;
         this.tierInformation.tier1mods = Tier1mods;
@@ -100,5 +111,218 @@ export class JSONHelper
         this.tierInformation.tier5appearance = Tier5appearance;
         this.tierInformation.tier6appearance = Tier6appearance;
         this.tierInformation.tier7appearance = Tier7appearance;
+    }
+
+    public usePreset(presetName: string): void
+    {
+        const folderName = presetName;
+        const presetFolder = path.join(path.dirname(__filename), "..", "..", "presets");
+        const folderPath = path.join(presetFolder, folderName);
+
+        if (!fs.existsSync(folderPath)) 
+        {
+            this.missingPresetFolder(folderName, presetFolder);
+            return;
+        }
+        const files = fs.readdirSync(folderPath);
+        if (files.length < 35)
+        {
+            this.missingFileCount(folderName, 0);
+            return;
+        }
+        if (files.length > 35)
+        {
+            this.missingFileCount(folderName, 1);
+            return;
+        }
+
+        this.raidInformation.usingDefaultDB = false;
+        for (const item of files)
+        {
+            const filePath = path.join(folderPath, item);
+            this.mapFileToTierType(filePath, folderName, item)
+        }
+        
+        if (this.count == 35) this.apbsLogger.log(Logging.WARN, `"${folderName}" preset loaded...`);
+    }
+
+    private mapFileToTierType(filePath: string, folderName: string,  item: string): void
+    {
+        let tier = 0;
+        let type = "none";
+        if (item.includes("1")) tier = 1;
+        if (item.includes("2")) tier = 2;
+        if (item.includes("3")) tier = 3;
+        if (item.includes("4")) tier = 4;
+        if (item.includes("5")) tier = 5;
+        if (item.includes("6")) tier = 6;
+        if (item.includes("7")) tier = 7;
+
+        if (tier == 0) 
+        {
+            this.invalidFileName(folderName, item);
+            return;
+        }
+
+        if (item.includes("equipment")) type = "equipment";
+        if (item.includes("mods")) type = "mods";
+        if (item.includes("chances")) type = "chances";
+        if (item.includes("ammo")) type = "ammo";
+        if (item.includes("appearance")) type = "appearance";
+
+        if (type == "none") 
+        {
+            this.invalidFileName(folderName, item);
+            return;
+        }
+
+        this.configureTierType(filePath, tier, type);
+    }
+
+    private configureTierType(filePath: string, tier: number, type: string):void
+    {
+        this.count++;
+        this.tierInformation.tier0 = Tier0equipment;
+        this.tierInformation.tier0mods = Tier0mods;
+        this.tierInformation.tier0chances = Tier0chances;
+        this.tierInformation.tier0ammo = Tier0ammo;
+        this.tierInformation.tier0appearance = Tier0appearance;
+
+        switch (true) 
+        {
+            case tier == 1 && type == "equipment": 
+                this.tierInformation.tier1 = require(filePath);
+                return;
+            case tier == 2 && type == "equipment": 
+                this.tierInformation.tier2 = require(filePath);
+                return;
+            case tier == 3 && type == "equipment":
+                this.tierInformation.tier3 = require(filePath);
+                return;
+            case tier == 4 && type == "equipment":
+                this.tierInformation.tier4 = require(filePath);
+                return;
+            case tier == 5 && type == "equipment":
+                this.tierInformation.tier5 = require(filePath);
+                return;
+            case tier == 6 && type == "equipment":
+                this.tierInformation.tier6 = require(filePath);
+                return;
+            case tier == 7 && type == "equipment":
+                this.tierInformation.tier7 = require(filePath);
+                return;
+            case tier == 1 && type == "mods":
+                this.tierInformation.tier1mods = require(filePath);
+                return;
+            case tier == 2 && type == "mods":
+                this.tierInformation.tier2mods = require(filePath);
+                return;
+            case tier == 3 && type == "mods":
+                this.tierInformation.tier3mods = require(filePath);
+                return;
+            case tier == 4 && type == "mods":
+                this.tierInformation.tier4mods = require(filePath);
+                return;
+            case tier == 5 && type == "mods":
+                this.tierInformation.tier5mods = require(filePath);
+                return;
+            case tier == 6 && type == "mods":
+                this.tierInformation.tier6mods = require(filePath);
+                return;
+            case tier == 7 && type == "mods":
+                this.tierInformation.tier7mods = require(filePath);
+                return;
+            case tier == 1 && type == "chances":
+                this.tierInformation.tier1chances = require(filePath);
+                return;
+            case tier == 2 && type == "chances":
+                this.tierInformation.tier2chances = require(filePath);
+                return;
+            case tier == 3 && type == "chances":
+                this.tierInformation.tier3chances = require(filePath);
+                return;
+            case tier == 4 && type == "chances":
+                this.tierInformation.tier4chances = require(filePath);
+                return;
+            case tier == 5 && type == "chances":
+                this.tierInformation.tier5chances = require(filePath);
+                return;
+            case tier == 6 && type == "chances":
+                this.tierInformation.tier6chances = require(filePath);
+                return;
+            case tier == 7 && type == "chances":
+                this.tierInformation.tier7chances = require(filePath);
+                return;
+            case tier == 1 && type == "ammo":
+                this.tierInformation.tier1ammo = require(filePath);
+                return;
+            case tier == 2 && type == "ammo":
+                this.tierInformation.tier2ammo = require(filePath);
+                return;
+            case tier == 3 && type == "ammo":
+                this.tierInformation.tier3ammo = require(filePath);
+                return;
+            case tier == 4 && type == "ammo":
+                this.tierInformation.tier4ammo = require(filePath);
+                return;
+            case tier == 5 && type == "ammo":
+                this.tierInformation.tier5ammo = require(filePath);
+                return;
+            case tier == 6 && type == "ammo":
+                this.tierInformation.tier6ammo = require(filePath);
+                return;
+            case tier == 7 && type == "ammo":
+                this.tierInformation.tier7ammo = require(filePath);
+                return;
+            case tier == 1 && type == "appearance":
+                this.tierInformation.tier1appearance = require(filePath);
+                return;
+            case tier == 2 && type == "appearance":
+                this.tierInformation.tier2appearance = require(filePath);
+                return;
+            case tier == 3 && type == "appearance":
+                this.tierInformation.tier3appearance = require(filePath);
+                return;
+            case tier == 4 && type == "appearance":
+                this.tierInformation.tier4appearance = require(filePath);
+                return;
+            case tier == 5 && type == "appearance":
+                this.tierInformation.tier5appearance = require(filePath);
+                return;
+            case tier == 6 && type == "appearance":
+                this.tierInformation.tier6appearance = require(filePath);
+                return;
+            case tier == 7 && type == "appearance":
+                this.tierInformation.tier7appearance = require(filePath);
+                return;
+        }
+    }
+    
+    private missingFileCount(folderName: string, errorType: number): void
+    {
+        const error = errorType == 0 ? "Missing files" : "Extra files found";
+        this.raidInformation.usingDefaultDB = true;
+        this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid.`);
+        this.apbsLogger.log(Logging.ERR, `${error}. Report issue to author of preset.`);
+        this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");
+        this.buildTierJson();
+    }
+    
+    private invalidFileName(folderName: string, item: string): void
+    {
+        this.raidInformation.usingDefaultDB = true;
+        this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid.`);
+        this.apbsLogger.log(Logging.ERR, `"${item}" is incorrectly named. Report issue to author of preset.`);
+        this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");
+        this.buildTierJson();
+    }
+
+    private missingPresetFolder(folderName: string, presetFolder: string): void
+    {
+        this.raidInformation.usingDefaultDB = true;
+        this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid.`);
+        this.apbsLogger.log(Logging.ERR, `Verify the preset folder exists in "${presetFolder}" and is named properly.`);
+        this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");
+        this.buildTierJson();
     }
 }

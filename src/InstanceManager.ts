@@ -50,6 +50,8 @@ import { ModConfig } from "./Globals/ModConfig";
 import { JSONHelper } from "./Helpers/JSONHelper";
 import { BlacklistHelper } from "./Helpers/BlacklistHelper";
 import { RealismHelper } from "./Helpers/RealismHelper";
+import { APBSTester } from "./Utils/APBSTester";
+import { APBSAttachmentChecker } from "./Utils/APBSAttachmentChecker";
 
 export class InstanceManager 
 {
@@ -93,8 +95,10 @@ export class InstanceManager
     public apbsStaticRouterHooks: APBSStaticRouterHooks;
     public apbsDynamicRouterHooks: APBSDynamicRouterHooks;
     public apbsBotInventoryGenerator: APBSBotInventoryGenerator;
+    public apbsAttachmentChecker: APBSAttachmentChecker;
     public jsonHelper: JSONHelper;
     public modConfig: ModConfig;
+    public apbsTester: APBSTester;
     //#endregion
 
     //#region accessible in or after postDBLoad
@@ -145,6 +149,8 @@ export class InstanceManager
         this.modInformation = container.resolve<ModInformation>("ModInformation");
         this.container.register<APBSLogger>("APBSLogger", APBSLogger, { lifecycle: Lifecycle.Singleton });
         this.apbsLogger = container.resolve<APBSLogger>("APBSLogger");
+        this.container.register<APBSTester>("APBSTester", APBSTester, { lifecycle: Lifecycle.Singleton })
+        this.apbsTester = container.resolve<APBSTester>("APBSTester");
         this.container.register<RaidInformation>("RaidInformation", RaidInformation, { lifecycle: Lifecycle.Singleton });
         this.raidInformation = container.resolve<RaidInformation>("RaidInformation");
         this.container.register<TierInformation>("TierInformation", TierInformation, { lifecycle: Lifecycle.Singleton });
@@ -163,6 +169,8 @@ export class InstanceManager
         this.apbsBotLevelGenerator = container.resolve<APBSBotLevelGenerator>("APBSBotLevelGenerator");
         this.container.register<JSONHelper>("JSONHelper", JSONHelper, { lifecycle: Lifecycle.Singleton });
         this.jsonHelper = container.resolve<JSONHelper>("JSONHelper");
+        this.container.register<APBSAttachmentChecker>("APBSAttachmentChecker", APBSAttachmentChecker, { lifecycle: Lifecycle.Singleton })
+        this.apbsAttachmentChecker = container.resolve<APBSAttachmentChecker>("APBSAttachmentChecker");
 
         // Class Extension Override
         this.container.register<APBSBotGenerator>("APBSBotGenerator", APBSBotGenerator);
@@ -189,8 +197,8 @@ export class InstanceManager
         this.tables = container.resolve<DatabaseService>("DatabaseService").getTables();
 
         // Custom Classes
-        this.botConfigs = new BotConfigs(this.tables, this.database, this.configServer, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
-        this.moddedImportHelper = new ModdedImportHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
+        this.botConfigs = new BotConfigs(this.tables, this.database, this.configServer, this.itemHelper, this.apbsEquipmentGetter, this.tierInformation, this.raidInformation, this.apbsLogger);
+        this.moddedImportHelper = new ModdedImportHelper(this.tables, this.database, this.itemHelper, this.tierInformation, this.apbsEquipmentGetter, this.apbsAttachmentChecker, this.apbsLogger);
         this.realismHelper = new RealismHelper(this.tierInformation, this.apbsEquipmentGetter, this.apbsLogger);
 
     }

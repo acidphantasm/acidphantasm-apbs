@@ -1,17 +1,36 @@
 {
+// Enable/Disable using a preset
+// Presets are to be built and shared among APBS users. If enabled, ensure that you set the "presetName" to the name of the folder of your preset
+        "usePreset": false,
+        "presetName": "example",
+
 // If you enable either of these settings, support will not be granted.
 // enableModdedWeapons - Any mods adding weapons loaded before APBS will have their weapons & attachments imported.
 // enableModdedEquipment - Any mods adding equipment loaded before APBS will be imported with their attachments (if any).
 // enableModdedClothing - Any mods adding clothing loaded before APBS will be imported.
 // initialTierAppearance - Whatever number (1-7) you put here, will be the first tier that imported mod items will be added to.
+// pmcWeaponWeights - Weight of modded weapons being added to PMCs
+// scavWeaponWeights - Weight of modded weapons being added to Scavs
+// followerWeaponWeights - Weight of modded weapons being added to boss followers (not Goons)
+// enableSafeGuard - Enables preventing weapon importing from bastardizing vanilla weapons. If you disable this, you will get cursed vanilla weapons.
+// Higher weights = more often. Lower weights = less often. If you add a LOT of mod weapons, I suggest using a lower value. 
+// REVIEW THE APBS LOGS TO TUNE YOUR CONFIG. (\user\mods\acidphantasm-progressivebotsystem\logs)
         "enableModdedWeapons": false,
         "enableModdedEquipment": false,
         "enableModdedClothing": false,
         "initalTierAppearance": 3,
+        "pmcWeaponWeights": 10,
+        "scavWeaponWeights": 1,
+        "followerWeaponWeights": 7,
+        "enableSafeGuard": true,
+
+// Enable/Disable Realism Gas Mask Compatibility
+// APBS automatically detects Realism and adds gas masks to bots due to Radiation Zones. If you dont want this to happen, set to true.
+        "disableRealismGasMasks": false,
 
 // Looking for a challenge, or maybe just want to chill and wreck some bots?
 // Enable "onlyChads" to force all bots to be Tier7, or enable "tarkovAndChill" to force all bots to be Tier1
-// Enabling both will enable chaos mode, bots will pull gear and weapons from completely random Tiers during generation. It's chaos. (scavs still pull crap weapon mods and ammo)
+// Enabling both will enable chaos mode, bots will pull gear and weapons from completely random Tiers during generation. It's chaos.
 // Alternatively, enable "blickyMode" to give everyone a blicky. It's actually the real chill mode.
 // Side note on "blickyMode" - it breaks some boss guards. Don't report it. It's a joke mode. It also won't do anything if either of the other two "modes" are enabled.
         "onlyChads": false,
@@ -19,7 +38,7 @@
         "blickyMode": false,
 
 // Enable/Disable specific bot generation
-// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation3
+// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation.
         "disableScavTierGeneration": false,
         "disablePMCTierGeneration": false,
         "disableBossTierGeneration": false,
@@ -42,6 +61,13 @@
         "enablePMCAmmoTierSliding": false,
         "slideAmount": 1,
         "slideChance": 33,
+
+// Enable/Disable using individual weapon type attachment chances.
+// If set to true, will allow generation to use individual category based weapon attachment chances, if false - all weapons use the same attachment chance pool.
+// For Preset Makers: 
+// If the below setting is false, "weaponMods" in the chances.json is the attachment chance rolls used.
+// If the below setting is true, then you must also fill out each weapons category of chances.
+        "enablePerWeaponTypeAttachmentChances": true,
 
 // Force weapon stocks
 // If set to true, will enforce all AI weapons to have stocks, if false - will use APBS values
@@ -121,14 +147,15 @@
 // Enable/Disable randomization of medical and food resource values
 // If set to true, all scavs and PMCs will have randomized resource values, based on the chances you set below, for medical and food items. 
 // If disabled the items will always be full resource values. 
-// Example.. true means an AFAK on a PMC has a 65% chance to be 400/400 and 35% chance to be between 0% and 40% used (it would spawn somewhere between 240/400 to 400/400).
+// Explanation: "pmcMedRates": [ Chance for full resource value available, Minimum percent of item randomized between min and max resource ]
+// Example.. "pmcMedRates": [ 65, 20 ] --- AFAK on a PMC has a 65% chance to be 400/400 and 35% chance to be between 0% and 80% used (it would spawn somewhere between 80/400 to 400/400).
         "enableConsumableResourceRandomization": true,
-        "scavFoodFullChance": 25,
-        "scavMedFullChance": 25,
-        "pmcFoodFullChance": 65,
-        "pmcMedFullChance": 65,
+        "scavFoodRates": [ 25, 60 ],
+        "scavMedRates": [ 25, 60 ],
+        "pmcFoodRates": [ 65, 60 ],
+        "pmcMedRates": [ 65, 60 ],
 
-// Blacklist specific ammo types from all AI
+// Blacklist specific ammo types from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
 // Configure per tier blacklists
 // Example.. this will blacklist 9x19 RIP and 5.45x39mm PP from all bots in Tier1
 // tier1AmmoBlacklist: [ "5c0d56a986f774449d5de529", "56dff2ced2720bb4668b4567" ]
@@ -140,7 +167,7 @@
         "tier6AmmoBlacklist": [],
         "tier7AmmoBlacklist": [],
 
-// Blacklist specific equipment from all AI
+// Blacklist specific equipment from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
 // Configure per tier blacklists
 // Example.. this will blacklist BlackRock chest rig and GSSh-01 headset from all bots in Tier1
 // tier1EquipmentBlacklist: [ "5648a69d4bdc2ded0b8b457b", "5b432b965acfc47a8774094e" ]
@@ -152,7 +179,7 @@
         "tier6EquipmentBlacklist": [],
         "tier7EquipmentBlacklist": [],
 
-// Blacklist specific weapons from all AI
+// Blacklist specific weapons from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
 // Configure per tier blacklists
 // Example.. this will blacklist PKP and PKM from all bots in Tier1
 // tier1EquipmentBlacklist: [ "64ca3d3954fc657e230529cc", "64637076203536ad5600c990" ]
@@ -164,20 +191,48 @@
         "tier6WeaponBlacklist": [],
         "tier7WeaponBlacklist": [],
 
+// Blacklist specific attachments from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
+// Configure per tier blacklists - very useful setting for those that play with modded weapon/equipment importing
+// Example.. this will blacklist "AK 7.62x39 aluminium 10-round magazine" and "Ops-Core SLAAP Armor Helmet Plate" from all bots in Tier1
+// tier1EquipmentBlacklist: [ "5b1fd4e35acfc40018633c39", "5c0e66e2d174af02a96252f4" ]
+        "tier1AttachmentBlacklist": [],
+        "tier2AttachmentBlacklist": [],
+        "tier3AttachmentBlacklist": [],
+        "tier4AttachmentBlacklist": [],
+        "tier5AttachmentBlacklist": [],
+        "tier6AttachmentBlacklist": [],
+        "tier7AttachmentBlacklist": [],
+
 // LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
 // Examples: 
 // "tier1LevelDelta": [ 5, 5 ] --- While you are Tier1 (lv1-10), all AI will be leveled -5 to +5 of your level.
 // "tier2LevelDelta": [ 10, 25 ] --- While you are Tier2 (lv11-20), all AI will be leveled -10 to +25 of your level.
 // "enableCustomLevelDeltas" if true will use the values you set below, otherwise they will use APBS values
+// THE BELOW VALUES BY DEFAULT ARE APBS DEFAULTS
 // IF YOU WANT EVERY TIER AT EVERY LEVEL, SET ALL OF THESE TO: [ 79, 79 ]
         "enableCustomLevelDeltas": false,
-        "tier1LevelDelta": [ 5, 5 ],
-        "tier2LevelDelta": [ 7, 7 ],
-        "tier3LevelDelta": [ 10, 10 ],
-        "tier4LevelDelta": [ 15, 15 ],
-        "tier5LevelDelta": [ 15, 15 ],
-        "tier6LevelDelta": [ 20, 20 ],
-        "tier7LevelDelta": [ 30, 20 ],
+        "tier1LevelDelta": [ 10, 5 ],
+        "tier2LevelDelta": [ 15, 7 ],
+        "tier3LevelDelta": [ 25, 10 ],
+        "tier4LevelDelta": [ 35, 15 ],
+        "tier5LevelDelta": [ 45, 15 ],
+        "tier6LevelDelta": [ 55, 20 ],
+        "tier7LevelDelta": [ 60, 20 ],
+
+// LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
+// Examples: 
+// "tier2ScavLevelDelta": [ 10, -10 ] --- While you are Tier2 (lv11-20), scavs will be leveled -10 to -10 of your level. (always 10 levels behind you)
+// "tier3ScavLevelDelta": [ 30, -10 ] --- While you are Tier3 (lv21-30), scavs will be leveled -30 to -10 of your level. (always 10 to 30 levels behind you)
+// "enableScavCustomLevelDeltas" if true will use the values you set below, otherwise they will use APBS values
+// Default values below will always spawn scavs that are at least 1 tier below you unless you are Tier1.
+        "enableScavCustomLevelDeltas": false,
+        "tier1ScavLevelDelta": [ 10, 0 ],
+        "tier2ScavLevelDelta": [ 20, -10 ],
+        "tier3ScavLevelDelta": [ 30, -10 ],
+        "tier4ScavLevelDelta": [ 40, -10 ],
+        "tier5ScavLevelDelta": [ 50, -10 ],
+        "tier6ScavLevelDelta": [ 60, -10 ],
+        "tier7ScavLevelDelta": [ 70, -10 ],
 
 // Enable/disable debug logging
         "enableDebugLog": true

@@ -22,49 +22,28 @@ export class ModConfig
         ModConfig.config = jsonc.parse(this.vfs.readFile(path.resolve(__dirname, "../../config/config.jsonc")));
     }
 
-    public setModConfiguration(): void
+    public serverLogDetails(): void
     {
-        if (ModConfig.config.enableCustomLevelDeltas)
-        {
-            this.setTierLevelDeviation();
-        }
         this.logger.debug("[APBS] Mod Config - FOR SUPPORT FOLKS ❤❤")
         this.logger.debug(`[APBS] Import Mod Weapons: ${ModConfig.config.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
         this.logger.debug(`[APBS] Import Mod Equipment: ${ModConfig.config.enableModdedEquipment} <- MUST BE FALSE FOR SUPPORT`)
         this.logger.debug(`[APBS] Import Mod Clothing: ${ModConfig.config.enableModdedClothing} <- MUST BE FALSE FOR SUPPORT`)
     }
-
-    private setTierLevelDeviation(): void
-    {
-        this.tierInformation.tiers[0].botMinLevelVariance = ModConfig.config.tier1LevelDelta[0]
-        this.tierInformation.tiers[0].botMaxLevelVariance = ModConfig.config.tier1LevelDelta[1]
-
-        this.tierInformation.tiers[1].botMinLevelVariance = ModConfig.config.tier2LevelDelta[0]
-        this.tierInformation.tiers[1].botMaxLevelVariance = ModConfig.config.tier2LevelDelta[1]
-
-        this.tierInformation.tiers[2].botMinLevelVariance = ModConfig.config.tier3LevelDelta[0]
-        this.tierInformation.tiers[2].botMaxLevelVariance = ModConfig.config.tier3LevelDelta[1]
-
-        this.tierInformation.tiers[3].botMinLevelVariance = ModConfig.config.tier4LevelDelta[0]
-        this.tierInformation.tiers[3].botMaxLevelVariance = ModConfig.config.tier4LevelDelta[1]
-
-        this.tierInformation.tiers[4].botMinLevelVariance = ModConfig.config.tier5LevelDelta[0]
-        this.tierInformation.tiers[4].botMaxLevelVariance = ModConfig.config.tier5LevelDelta[1]
-
-        this.tierInformation.tiers[5].botMinLevelVariance = ModConfig.config.tier6LevelDelta[0]
-        this.tierInformation.tiers[5].botMaxLevelVariance = ModConfig.config.tier6LevelDelta[1]
-
-        this.tierInformation.tiers[6].botMinLevelVariance = ModConfig.config.tier7LevelDelta[0]
-        this.tierInformation.tiers[6].botMaxLevelVariance = ModConfig.config.tier7LevelDelta[1]
-    }
 }
 
 export interface Config
 {
+    usePreset: boolean,
+    presetName: string,
     enableModdedWeapons: boolean,
     enableModdedEquipment: boolean,
     enableModdedClothing: boolean,
     initalTierAppearance: number,
+    pmcWeaponWeights: number,
+    scavWeaponWeights: number,
+    followerWeaponWeights: number,
+    enableSafeGuard: boolean,
+    disableRealismGasMasks: boolean,
     onlyChads: boolean,
     tarkovAndChill: boolean,
     blickyMode: boolean,
@@ -82,6 +61,7 @@ export interface Config
     enablePMCAmmoTierSliding: boolean,
     slideAmount: number,
     slideChance: number,
+    enablePerWeaponTypeAttachmentChances: boolean,
     forceStock: boolean,
     forceDustCover: boolean,
     forceScopeSlot: boolean,
@@ -114,10 +94,10 @@ export interface Config
     addOnlyMechanicalKeysToScavs: boolean,
     addOnlyKeyCardsToScavs: boolean,
     enableConsumableResourceRandomization: boolean,
-    scavFoodFullChance: number,
-    scavMedFullChance: number,
-    pmcFoodFullChance: number,
-    pmcMedFullChance: number,
+    scavFoodRates: [ number, number ]
+    scavMedRates: [ number, number ]
+    pmcFoodRates: [ number, number ]
+    pmcMedRates: [ number, number ]
     tier1AmmoBlacklist: string[],
     tier2AmmoBlacklist: string[],
     tier3AmmoBlacklist: string[],
@@ -139,6 +119,13 @@ export interface Config
     tier5WeaponBlacklist: string[],
     tier6WeaponBlacklist: string[],
     tier7WeaponBlacklist: string[],
+    tier1AttachmentBlacklist: string[],
+    tier2AttachmentBlacklist: string[],
+    tier3AttachmentBlacklist: string[],
+    tier4AttachmentBlacklist: string[],
+    tier5AttachmentBlacklist: string[],
+    tier6AttachmentBlacklist: string[],
+    tier7AttachmentBlacklist: string[],
     enableCustomLevelDeltas: boolean,
     tier1LevelDelta: [ number, number ],
     tier2LevelDelta: [ number, number ],
@@ -147,5 +134,13 @@ export interface Config
     tier5LevelDelta: [ number, number ],
     tier6LevelDelta: [ number, number ],
     tier7LevelDelta: [ number, number ],
+    enableScavCustomLevelDeltas: boolean,
+    tier1ScavLevelDelta: [ number, number ],
+    tier2ScavLevelDelta: [ number, number ],
+    tier3ScavLevelDelta: [ number, number ],
+    tier4ScavLevelDelta: [ number, number ],
+    tier5ScavLevelDelta: [ number, number ],
+    tier6ScavLevelDelta: [ number, number ],
+    tier7ScavLevelDelta: [ number, number ],
     enableDebugLog: boolean,
 }

@@ -17,6 +17,8 @@ export class RaidInformation
 
     public sessionId: string;
 
+    public usingDefaultDB: boolean;
+
     public mapWeights = {
         "bigmap":
         {

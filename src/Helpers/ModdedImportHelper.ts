@@ -4,7 +4,7 @@ import { injectable, inject } from "tsyringe";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
-import { ITemplateItem, ItemType } from "@spt/models/eft/common/tables/ITemplateItem";
+import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { DatabaseService } from "@spt/services/DatabaseService";
 import { ICustomizationItem } from "@spt/models/eft/common/tables/ICustomizationItem";
 
@@ -14,6 +14,7 @@ import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { TierInformation } from "../Globals/TierInformation";
+import { APBSAttachmentChecker } from "../Utils/APBSAttachmentChecker";
 
 @injectable()
 export class ModdedImportHelper
@@ -28,6 +29,7 @@ export class ModdedImportHelper
         @inject("ItemHelper") protected itemHelper: ItemHelper,
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
+        @inject("APBSAttachmentChecker") protected apbsAttachmentChecker: APBSAttachmentChecker,
         @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
@@ -81,7 +83,12 @@ export class ModdedImportHelper
             "5c11046cd174af02a012e42b",
             "544a3f024bdc2d1d388b4568",
             "544a3d0a4bdc2d1b388b4567",
-            "5648b62b4bdc2d9d488b4585"
+            "5648b62b4bdc2d9d488b4585",
+            "5c0e2ff6d174af02a1659d4a",
+            "5c0e2f5cd174af02a012cfc9",
+            "5c6592372e221600133e47d7",
+            "544a378f4bdc2d30388b4567",
+            "5d1340bdd7ad1a0e8d245aab"
         ]
 
         this.clothingBlacklist = [
@@ -125,54 +132,34 @@ export class ModdedImportHelper
     {
         this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Weapons...Support not granted for this feature...")
         
+        // Build the joined list for every weapon used in APBS
         const weapons: ITemplateItem = {};
-        vanillaItemList.equipment.LongRange.forEach(element => 
-        {
-            weapons[element] = this.getItem(element)
-        })
-        
-        vanillaItemList.equipment.ShortRange.forEach(element => 
-        {
-            weapons[element] = this.getItem(element);
-        })
+        vanillaItemList.equipment.LongRange.forEach(element => weapons[element] = this.getItem(element))        
+        vanillaItemList.equipment.ShortRange.forEach(element => weapons[element] = this.getItem(element))
+        vanillaItemList.equipment.Holster.forEach(element => weapons[element] = this.getItem(element))
+        vanillaItemList.equipment.Scabbard.forEach(element => weapons[element] = this.getItem(element))
 
-        vanillaItemList.equipment.Holster.forEach(element => 
-        {
-            weapons[element] = this.getItem(element);
-        })
-
-        vanillaItemList.equipment.Scabbard.forEach(element => 
-        {
-            weapons[element] = this.getItem(element);
-        })
-
+        // Push this list to the function to filter and import
         this.getModdedItems(weapons, BaseClasses.WEAPON, "Weapons");
     }
 
     private buildVanillaEquipmentList(): void
     {
         this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Equipment...Support not granted for this feature...")
-
+        
+        // Build the joined list for every armour type used in APBS
         const armours: ITemplateItem = {};
-        vanillaItemList.equipment.ArmorVest.forEach(element => 
-        {
-            armours[element] = this.getItem(element);
-        })
-        this.getModdedItems(armours, BaseClasses.ARMOR, "Armours");
+        vanillaItemList.equipment.ArmorVest.forEach(element => armours[element] = this.getItem(element))
 
         const headwear: ITemplateItem = {};
-        vanillaItemList.equipment.Headwear.forEach(element => 
-        {
-            headwear[element] = this.getItem(element);
-        })
-        this.getModdedItems(headwear, BaseClasses.HEADWEAR, "Helmets");
+        vanillaItemList.equipment.Headwear.forEach(element => headwear[element] = this.getItem(element))
 
-        const tacticalVests: ITemplateItem = {};
+        const tacticalVests: ITemplateItem = {};        
+        vanillaItemList.equipment.TacticalVest.forEach(element => tacticalVests[element] = this.getItem(element))
         
-        vanillaItemList.equipment.TacticalVest.forEach(element => 
-        {
-            tacticalVests[element] = this.getItem(element);
-        })
+        // Push these lists to the function to filter and import
+        this.getModdedItems(armours, BaseClasses.ARMOR, "Armours");
+        this.getModdedItems(headwear, BaseClasses.HEADWEAR, "Helmets");
         this.getModdedItems(tacticalVests, BaseClasses.VEST, "Vests");
     }
 
@@ -180,64 +167,54 @@ export class ModdedImportHelper
     {
         this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Clothing...Support not granted for this feature...")
 
+        // Build the joined list for every body & feet type used in APBS
         const body: ICustomizationItem = {};
-        vanillaClothingList.appearance.body.forEach(element => 
-        {
-            body[element] = this.getCustomization(element);
-        })
-        this.getModdedClothing(body, "Body");
+        vanillaClothingList.appearance.body.forEach(element => body[element] = this.getCustomization(element))
 
         const feet: ICustomizationItem = {};
-        vanillaClothingList.appearance.feet.forEach(element => 
-        {
-            feet[element] = this.getCustomization(element);
-        })
+        vanillaClothingList.appearance.feet.forEach(element => feet[element] = this.getCustomization(element))
+
+        // Push these lists to the function to filter and import
+        this.getModdedClothing(body, "Body");
         this.getModdedClothing(feet, "Feet");
     }
 
     private getModdedClothing(clothingList: ICustomizationItem, className: string): void
     {
-        const clothing = Object.values(this.databaseService.getTables().templates.customization);
-        const allItems = clothing.filter(x => this.isCustomization(x._id, className));
-        
-        const apbsClothing = Object.values(clothingList);
-        const allApbsClothing = apbsClothing.filter(x => this.isCustomization(x._id, className));
-        const difference:any = allItems.filter(x => !allApbsClothing.includes(x));
+        // Compare SPT database values to APBS values, filter down to the difference (assuming they are either modded, or not in the APBS database).
+        const databaseClothing = Object.values(this.databaseService.getTables().templates.customization);
+        const allClothing = databaseClothing.filter(x => this.isCustomization(x._id, className));
+        const moddedClothing = Object.values(clothingList);
+        const allApbsClothing = moddedClothing.filter(x => this.isCustomization(x._id, className));
 
-        let moddedItems = difference;
-        
-        const blacklist = this.clothingBlacklist;
-        for (const item of difference)
+        let clothingToBeImported = allClothing.filter(x => !allApbsClothing.includes(x));
+
+        // Filter out blacklisted items
+        for (const item of clothingToBeImported)
         {
-            for (const blacklistedItem of blacklist)
-            {
-                if (item._id == blacklistedItem)
-                {
-                    //console.log(`Blacklisted Item: ${item._id}`)
-                    moddedItems = moddedItems.filter(id => id._id != blacklistedItem)
-                }
-            }
+            if (this.clothingBlacklist.includes(item._id)) clothingToBeImported = clothingToBeImported.filter(id => id._id != item._id)
         }
 
-        //console.log(`${JSON.stringify(moddedItems)}`)
-        if (moddedItems.length > 0)
+        // Push clothing to APBS database
+        if (clothingToBeImported.length > 0)
         {
-            this.apbsLogger.log(Logging.WARN, `Importing ${moddedItems.length} Modded ${className}...`)
-            this.pushClothing(moddedItems);
+            this.apbsLogger.log(Logging.WARN, `Importing ${clothingToBeImported.length} Modded ${className}...`)
+            this.pushClothing(clothingToBeImported);
         }
     }
 
-    private pushClothing(clothingList: ICustomizationItem): void
+    private pushClothing(clothingList: ICustomizationItem[]): void
     {
+        // Loop each tier to add clothing to every tier
         for (const object in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[object].tier
             const tierJson = this.apbsEquipmentGetter.getAppearanceJson(tierNumber, true);
 
-            if (tierNumber < ModConfig.config.initalTierAppearance)
-            {
-                continue;
-            }
+            // Skip tiers based on configuration
+            if (tierNumber < ModConfig.config.initalTierAppearance) continue;
+
+            // Add each item from the clothing list to each tier JSON - this completes the import
             for (const item in clothingList)
             {
                 if (clothingList[item]._props.Side.includes("Bear"))
@@ -256,147 +233,193 @@ export class ModdedImportHelper
 
     private getModdedItems(equipmentList: ITemplateItem, baseClass: BaseClasses, className: string): void
     {
+        // Compare SPT database values to APBS values, filter down to the difference (assuming they are either modded, or not in the APBS database).
         const items = Object.values(this.tables.templates.items);
         const allItems = items.filter(x => this.itemHelper.isOfBaseclass(x._id, baseClass));
-        
         const tieredItems = Object.values(equipmentList);
         const allTieredItems = tieredItems.filter(x => this.itemHelper.isOfBaseclass(x._id, baseClass));
-        const difference:any = allItems.filter(x => !allTieredItems.includes(x));
 
-        let moddedItems = difference;
+        let itemsToBeImported = allItems.filter(x => !allTieredItems.includes(x));
         
-        const blacklist = this.blacklist
-        for (const item of difference)
+        // Filter out blacklisted items
+        for (const item of itemsToBeImported)
         {
-            for (const blacklistedItem of blacklist)
-            {
-                if (item._id == blacklistedItem)
-                {
-                    //console.log(`Blacklisted Item: ${item._id}`)
-                    moddedItems = moddedItems.filter(id => id._id != blacklistedItem)
-                }
-            }
+            if (this.blacklist.includes(item._id)) itemsToBeImported = itemsToBeImported.filter(id => id._id != item._id)
         }
 
-        //console.log(`${JSON.stringify(moddedItems)}`)
-        if (moddedItems.length > 0)
+        // Push items to APBS database depending on if they are weapons or equipment
+        if (itemsToBeImported.length > 0)
         {
-            this.apbsLogger.log(Logging.WARN, `Importing ${moddedItems.length} Modded ${className}...`)
-            if (baseClass == BaseClasses.WEAPON) this.getSetModdedWeaponDetails(moddedItems);
-            if (baseClass != BaseClasses.WEAPON) this.getSetModdedEquipmentDetails(moddedItems);
+            this.apbsLogger.log(Logging.WARN, `Importing ${itemsToBeImported.length} Modded ${className}...`)
+            if (baseClass == BaseClasses.WEAPON) this.getSetModdedWeaponDetails(itemsToBeImported);
+            if (baseClass != BaseClasses.WEAPON) this.getSetModdedEquipmentDetails(itemsToBeImported);
         }
     }
 
-    private getSetModdedWeaponDetails(modWeaponPool): void
+    private getSetModdedWeaponDetails(weaponPool: ITemplateItem[]): void
     {
-        for (const weapon in modWeaponPool)
+        // Loop each weapon in the pool of weapons to be imported - push them individually
+        for (const weapon in weaponPool)
         {
-            const weaponParent = modWeaponPool[weapon]._parent;
-            const weaponId = modWeaponPool[weapon]._id;
-            const weaponSlots = modWeaponPool[weapon]?._props?.Slots;
-            const weaponChamber = modWeaponPool[weapon]?._props?.Chambers;
-            const weaponType = modWeaponPool[weapon]?._props?.weapUseType;
+            const weaponParent = weaponPool[weapon]._parent;
+            const weaponId = weaponPool[weapon]._id;
+            const weaponSlots = weaponPool[weapon]?._props?.Slots;
+            const weaponType = weaponPool[weapon]?._props?.weapUseType;
 
-            this.pushWeaponToTiers(weaponId, weaponType);
+            // Push Weapon details to relevant pools
+            this.pushCalibersToAmmoPools(weaponId)
+            this.pushWeaponToTiers(weaponId, weaponType, weaponParent);
             this.pushItemAndPrimaryMods(weaponId, weaponSlots);
-
-            //console.log(JSON.stringify(modWeaponPool[weapon]))            
-            //console.log(`Weapon Parent: ${weaponParent} | Weapon ID: ${weaponId} | WeaponSlots: ${JSON.stringify(weaponSlots)} | WeaponChamber: ${JSON.stringify(weaponChamber)} | WeaponType: ${weaponType}`)
         }
     }
 
-    private getSetModdedEquipmentDetails(modEquipmentPool): void
+    private getSetModdedEquipmentDetails(equipmentPool: ITemplateItem[]): void
     {
-        for (const equipment in modEquipmentPool)
+        // Loop each equipment in the pool of equipment to be imported - push them individually
+        for (const equipment in equipmentPool)
         {
-            const equipmentParent = modEquipmentPool[equipment]._parent;
-            const equipmentId = modEquipmentPool[equipment]._id;
-            const equipmentSlots = modEquipmentPool[equipment]?._props?.Slots;
-            const equipmentSlotsLength = modEquipmentPool[equipment]?._props?.Slots.length;
-            const gridLength = modEquipmentPool[equipment]?._props?.Grids.length;
-            let equipmentSlot;
+            const equipmentParent = equipmentPool[equipment]._parent;
+            const equipmentId = equipmentPool[equipment]._id;
+            const equipmentSlots = equipmentPool[equipment]?._props?.Slots;
+            const equipmentSlotsLength = equipmentPool[equipment]?._props?.Slots.length;
+            const gridLength = equipmentPool[equipment]?._props?.Grids.length;
+            let equipmentSlot: string;
 
-            if (equipmentParent == "5448e5284bdc2dcb718b4567" && (equipmentSlots.length == 0 || equipmentSlots == undefined))
-            {
-                equipmentSlot = "TacticalVest"
-            }
-            if (equipmentParent == "5448e5284bdc2dcb718b4567" && equipmentSlots.length >= 1)
-            {
-                equipmentSlot = "ArmouredRig"
-            }
-            if (equipmentParent == "5448e54d4bdc2dcc718b4568")
-            {
-                equipmentSlot = "ArmorVest"
-            }
-            if (equipmentParent == "5a341c4086f77401f2541505")
-            {
-                equipmentSlot = "Headwear"
-            }
+            // Set equipmentSlot string to the proper value - this is only done to separate TacticalVests & ArmouredRigs
+            if (equipmentParent == "5448e5284bdc2dcb718b4567" && (equipmentSlots.length == 0 || equipmentSlots == undefined)) equipmentSlot = "TacticalVest"
+            if (equipmentParent == "5448e5284bdc2dcb718b4567" && equipmentSlots.length >= 1) equipmentSlot = "ArmouredRig"
+            if (equipmentParent == "5448e54d4bdc2dcc718b4568") equipmentSlot = "ArmorVest"
+            if (equipmentParent == "5a341c4086f77401f2541505") equipmentSlot = "Headwear"
 
+            // Push Equipment details to relevant pools
             this.pushEquipmentToTiers(equipmentId, equipmentSlot, gridLength, equipmentSlotsLength);
             this.pushItemAndPrimaryMods(equipmentId, equipmentSlots);
-
-            //console.log(JSON.stringify(modEquipmentPool[equipment]))
-            //console.log(`Equipment Parent: ${equipmentParent} | Equipment ID: ${equipmentId} | Equipment Slot Length: ${equipmentSlots.length} | Equipment Type: ${equipmentSlot}`)
         }
     }
 
-    private pushWeaponToTiers(weaponId: string, weaponType: string): void
+    private pushWeaponToTiers(weaponId: string, weaponType: string, parentClass: string): void
     {
+        // Define weights to use, and which range they go to (for logging).
+        let range = "";
+        const pmcWeight = ModConfig.config.pmcWeaponWeights <= 0 ? 1 : ModConfig.config.pmcWeaponWeights;
+        const scavWeight = ModConfig.config.scavWeaponWeights <= 0 ? 1 : ModConfig.config.scavWeaponWeights;
+        const defaultWeight = ModConfig.config.followerWeaponWeights <= 0 ? 1 : ModConfig.config.followerWeaponWeights;
+
+        // Loop over each tier to easily use the proper tierJSON
         for (const object in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[object].tier
             const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber, true);
 
-            if (tierNumber < ModConfig.config.initalTierAppearance)
-            {
-                continue;
-            }
-            if (weaponType == "primary")
-            {
-                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
-                tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
-                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 10
-                tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 10
-                tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 0
-                tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 1
-                tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = 7
-                tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = 7
-                
-                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
-                tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
-                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 10
-                tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 10
-                tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 0
-                tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 1
-                tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = 7
-                tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = 7
+            // Skip tiers based on configuration
+            if (tierNumber < ModConfig.config.initalTierAppearance) continue;
 
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Primary/Secondary Weapons - Tier ${tierNumber} - Weight: 10.`)
-            }
-            if (weaponType == "secondary")
+            // Use multiple variable switch to set specific weapon "types" to the correct pool
+            switch (true) 
             {
-                tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
-                tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
-                tierJson.scav.equipment.Holster[weaponId] = 1
-                tierJson.default.equipment.Holster[weaponId] = 3
-
-                this.apbsLogger.log(Logging.DEBUG, `Added ${weaponId} to Holster Weapons - Tier ${tierNumber} - Weight: 5.`)
+                case parentClass == "5447b5fc4bdc2d87278b4567" && weaponType == "primary":
+                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = scavWeight
+                    tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                    tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = scavWeight
+                    tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                    tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                    tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = defaultWeight
+                    tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                    tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = defaultWeight
+                    range = "Long & Short range";
+                    continue;
+                case parentClass == "5447b6254bdc2dc3278b4568" && weaponType == "primary":
+                case parentClass == "5447b6194bdc2d67278b4567" && weaponType == "primary":
+                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                    tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = scavWeight
+                    tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = scavWeight
+                    tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                    tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                    range = "Long range"
+                    continue;                
+                case parentClass == "5447b5f14bdc2d61278b4567" && weaponType == "primary":
+                case parentClass == "5447bed64bdc2d97278b4568" && weaponType == "primary":
+                case parentClass == "5447b5e04bdc2d62278b4567" && weaponType == "primary":
+                case parentClass == "5447b5cf4bdc2d65278b4567" && weaponType == "primary":
+                case parentClass == "617f1ef5e8b54b0998387733" && weaponType == "primary":
+                case parentClass == "5447b6094bdc2dc3278b4567" && weaponType == "primary":
+                    tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                    tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                    tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                    tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = defaultWeight
+                    tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = defaultWeight
+                    range = "Short range"
+                    continue;
+                case parentClass == "5447b5cf4bdc2d65278b4567" && weaponType == "secondary":
+                case parentClass == "617f1ef5e8b54b0998387733" && weaponType == "secondary":
+                case parentClass == "5447b6094bdc2dc3278b4567" && weaponType == "secondary":
+                    tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
+                    tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
+                    tierJson.scav.equipment.Holster[weaponId] = 1
+                    tierJson.default.equipment.Holster[weaponId] = 3
+                    range = "Holster"
+                    continue;
+                default:
+                    if (weaponType == "primary")
+                    {
+                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                        tierJson.pmcUSEC.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                        tierJson.pmcUSEC.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                        tierJson.pmcBEAR.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.LongRange[weaponId] = pmcWeight
+                        tierJson.pmcBEAR.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = pmcWeight
+                        tierJson.scav.equipment.FirstPrimaryWeapon.LongRange[weaponId] = scavWeight
+                        tierJson.scav.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                        tierJson.scav.equipment.SecondPrimaryWeapon.LongRange[weaponId] = scavWeight
+                        tierJson.scav.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = scavWeight
+                        tierJson.default.equipment.SecondPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                        tierJson.default.equipment.SecondPrimaryWeapon.ShortRange[weaponId] = defaultWeight
+                        tierJson.default.equipment.FirstPrimaryWeapon.LongRange[weaponId] = defaultWeight
+                        tierJson.default.equipment.FirstPrimaryWeapon.ShortRange[weaponId] = defaultWeight
+                        range = "Long & Short range"
+                    }
+                    if (weaponType == "secondary")
+                    {
+                        tierJson.pmcUSEC.equipment.Holster[weaponId] = 5
+                        tierJson.pmcBEAR.equipment.Holster[weaponId] = 5
+                        tierJson.scav.equipment.Holster[weaponId] = 1
+                        tierJson.default.equipment.Holster[weaponId] = 3
+                        range = "Holster"
+                    }
+                    continue;
             }
         }
+        this.apbsLogger.log(Logging.DEBUG, `[Tier${ModConfig.config.initalTierAppearance}+] Added ${weaponId} to ${range} weapons.`)
     }
 
     private pushEquipmentToTiers(itemID: string, equipmentSlot: string, gridLength: number, equipmentSlotsLength: number): void
     {
+        // Loop over each tier to easily use the proper tierJSON
         for (const object in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[object].tier
             const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber, true);
 
-            if (tierNumber < ModConfig.config.initalTierAppearance)
-            {
-                continue;
-            }
+            // Skip tiers based on configuration
+            if (tierNumber < ModConfig.config.initalTierAppearance) continue;
+
+            // Set weights based on witch slot they are in. Check TacticalVests for belts (low grid count) and check Helmets to see if armoured or decorative
             let weight;
             if (equipmentSlot == "TacticalVest" && gridLength > 10) weight = 10;
             if (equipmentSlot == "TacticalVest" && gridLength <= 10) weight = 1;
@@ -405,29 +428,34 @@ export class ModdedImportHelper
             if (equipmentSlot == "Headwear" && equipmentSlotsLength > 0) weight = 6;
             if (equipmentSlot == "Headwear" && equipmentSlotsLength == 0) weight = 1;
 
+            // Add the equipment to the proper slot and correct weight
             tierJson.pmcUSEC.equipment[equipmentSlot][itemID] = weight
             tierJson.pmcBEAR.equipment[equipmentSlot][itemID] = weight
             tierJson.scav.equipment[equipmentSlot][itemID] = 1
             tierJson.default.equipment[equipmentSlot][itemID] = weight
-
-            this.apbsLogger.log(Logging.DEBUG, `Added ${itemID} to ${equipmentSlot} - Tier ${tierNumber} - Weight: ${weight}.`)
         }
+        this.apbsLogger.log(Logging.DEBUG, `[Tier${ModConfig.config.initalTierAppearance}+] Added ${itemID} to ${equipmentSlot}.`)
     }
 
     private pushItemAndPrimaryMods(itemID, itemSlots): void
     {
+        // Loop over all slots of the item
         for (const slot in itemSlots)
         {
             const slotName = itemSlots[slot]?._name;
-            for (const item in itemSlots[slot]?._props?.filters[0]?.Filter)
-            {
-                const slotFilterItem = itemSlots[slot]?._props?.filters[0]?.Filter[item];
+            const slotFilter = itemSlots[slot]?._props?.filters[0]?.Filter
 
-                if (this.attachmentBlacklist.includes(slotFilterItem)) 
-                {
-                    this.apbsLogger.log(Logging.DEBUG, `Skipping ${slotFilterItem} due to internal blacklist`)
-                    continue;
-                }
+            // Loop over all items in the filter for the slot
+            for (const item in slotFilter)
+            {
+                const slotFilterItem = slotFilter[item];
+
+                // Check if the item is actually a valid item, or is on the blacklist
+                // WTT puts itemIDs in their mods that don't exist in the database for some reason (probably unreleased mods)
+                const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
+                if (this.attachmentBlacklist.includes(slotFilterItem) || !itemExistsCheck[0]) continue;
+
+                // Check if the itemID already exists in the tierJsons, if not - create it in them all.
                 if (this.tierInformation.tier1mods[itemID] == undefined)
                 {
                     this.tierInformation.tier1mods[itemID] = {};
@@ -438,6 +466,8 @@ export class ModdedImportHelper
                     this.tierInformation.tier6mods[itemID] = {};
                     this.tierInformation.tier7mods[itemID] = {};
                 }
+
+                // Check if the itemID's slot already exists in the tierJsons, if not - create it in them all.
                 if (this.tierInformation.tier1mods[itemID][slotName] == undefined)
                 {
                     this.tierInformation.tier1mods[itemID][slotName] = [];
@@ -448,6 +478,8 @@ export class ModdedImportHelper
                     this.tierInformation.tier6mods[itemID][slotName] = [];
                     this.tierInformation.tier7mods[itemID][slotName] = [];
                 }
+
+                // Check if the itemID's slot doesn't already contain the item to import, if it doesn't - add it
                 if (!this.tierInformation.tier1mods[itemID][slotName].includes(slotFilterItem))
                 {
                     this.tierInformation.tier1mods[itemID][slotName].push(slotFilterItem);
@@ -457,6 +489,8 @@ export class ModdedImportHelper
                     this.tierInformation.tier5mods[itemID][slotName].push(slotFilterItem);
                     this.tierInformation.tier6mods[itemID][slotName].push(slotFilterItem);
                     this.tierInformation.tier7mods[itemID][slotName].push(slotFilterItem);
+
+                    // Push any children mods
                     this.recursivePushChildrenMods(slotFilterItem);
                 }
             }
@@ -469,24 +503,36 @@ export class ModdedImportHelper
         const parentSlotItemID = parentSlotItemData?._id;
         const parentSlotSlots = parentSlotItemData?._props?.Slots;
 
+        // Exit if there are no children
+        if (parentSlotSlots == undefined || parentSlotSlots.length == 0) return;
+
+        // Loop over all slots of the parent
         for (const slot in parentSlotSlots)
         {
             const slotName = parentSlotSlots[slot]?._name;
-
-            if (parentSlotSlots[slot]?._props?.filters[0]?.Filter.includes("5649a2464bdc2d91118b45a8"))
+            let slotFilter = parentSlotSlots[slot]?._props?.filters[0]?.Filter;
+            // If a slot's filters contain the canted sight mount, remove all other items from the filter - this ensures ONLY the canted sight is added
+            if (slotFilter.includes("5649a2464bdc2d91118b45a8"))
             {
-                parentSlotSlots[slot]._props.filters[0].Filter = [ "5649a2464bdc2d91118b45a8" ];
+                slotFilter = [ "5649a2464bdc2d91118b45a8" ];
             }
 
-            for (const item in parentSlotSlots[slot]?._props?.filters[0]?.Filter)
+            // Loop over each item in the slot's filters
+            for (const item in slotFilter)
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
-                
-                if (this.attachmentBlacklist.includes(slotFilterItem)) 
-                {
-                    this.apbsLogger.log(Logging.DEBUG, `Skipping ${slotFilterItem} due to internal blacklist`)
-                    continue;
-                }
+                const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
+
+                // Check if the item is actually a valid item, or is on the blacklist
+                // WTT puts itemIDs in their mods that don't exist in the database for some reason (probably unreleased mods)
+                if (this.attachmentBlacklist.includes(slotFilterItem) || !itemExistsCheck[0]) continue;
+
+                // Check if the parent mod & the child mod are vanilla or modded
+                // This allows preventing mods adding vanilla mods to vanilla weapons
+                const isVanillaParent = this.apbsAttachmentChecker.isVanillaItem(parentSlotItemID);
+                const isVanillaItem = this.apbsAttachmentChecker.isVanillaItem(slotFilterItem);
+
+                // Check if the PARENT itemID already exists in the tierJsons, if not - create it in all tierJSONs.
                 if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
                 {
                     this.tierInformation.tier1mods[parentSlotItemID] = {};
@@ -497,6 +543,8 @@ export class ModdedImportHelper
                     this.tierInformation.tier6mods[parentSlotItemID] = {};
                     this.tierInformation.tier7mods[parentSlotItemID] = {};
                 }
+
+                // Check if the PARENT itemID already exists with the slotName, if not - create it in all tierJSONs
                 if (this.tierInformation.tier1mods[parentSlotItemID][slotName] == undefined)
                 {
                     this.tierInformation.tier1mods[parentSlotItemID][slotName] = [];
@@ -507,8 +555,14 @@ export class ModdedImportHelper
                     this.tierInformation.tier6mods[parentSlotItemID][slotName] = [];
                     this.tierInformation.tier7mods[parentSlotItemID][slotName] = [];
                 }
+
+                // Check if the PARENT itemID's slot doesn't already contain the item to import
                 if (!this.tierInformation.tier1mods[parentSlotItemID][slotName].includes(slotFilterItem))
                 {
+                    // Additionally, check if the parent mod & child mod are vanilla as well as checking the config safeguard
+                    if (isVanillaParent && isVanillaItem && ModConfig.config.enableSafeGuard) continue;
+
+                    // Finally push the child mod to the proper tierJSONs
                     this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem)
@@ -516,7 +570,50 @@ export class ModdedImportHelper
                     this.tierInformation.tier5mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier6mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier7mods[parentSlotItemID][slotName].push(slotFilterItem)
+
+                    // Push any children mods
                     this.recursivePushChildrenMods(slotFilterItem);
+                }
+            }
+        }
+    }
+
+    private pushCalibersToAmmoPools(itemID: string): void
+    {
+        const itemDetails = this.itemHelper.getItem(itemID)
+        const itemCaliber = itemDetails[1]?._props?.ammoCaliber
+
+        // Check if the Caliber exists on tierJSON or is valid
+        if (!Object.keys(this.tierInformation.tier1ammo.scavAmmo).includes(itemCaliber) && itemCaliber != undefined)
+        {
+            const chamberFilter = itemDetails[1]?._props?.Chambers[0]?._props?.filters[0]?.Filter
+
+            // If the chamber is valid and has items, add them to the tierJSONs
+            if (chamberFilter && chamberFilter.length > 0)
+            {
+                for (const botPool in this.tierInformation.tier1ammo)
+                {
+                    // Since the Caliber doesn't exist, create them empty to prevent undefined error below
+                    this.tierInformation.tier1ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier2ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier3ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier4ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier5ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier6ammo[botPool][itemCaliber] = {};
+                    this.tierInformation.tier7ammo[botPool][itemCaliber] = {};
+
+                    // Push each item in the filter to the tierJSON
+                    for (const item in chamberFilter)
+                    {
+                        const ammo = chamberFilter[item]
+                        this.tierInformation.tier1ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier2ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier3ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier4ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier5ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier6ammo[botPool][itemCaliber][ammo] = 1;
+                        this.tierInformation.tier7ammo[botPool][itemCaliber][ammo] = 1;
+                    }
                 }
             }
         }

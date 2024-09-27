@@ -23,4 +23,14 @@ export class APBSTierGetter
     {
         return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<=playerMaximumLevel)?.botMinLevelVariance
     }
+
+    public getScavTierUpperLevelDeviation(level:number): number
+    {
+        return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<=playerMaximumLevel)?.scavMaxLevelVariance
+    }
+
+    public getScavTierLowerLevelDeviation(level:number): number
+    {
+        return this.tierInformation.tiers.find(({playerMinimumLevel,playerMaximumLevel}) => level>=playerMinimumLevel && level<=playerMaximumLevel)?.scavMinLevelVariance
+    }
 }

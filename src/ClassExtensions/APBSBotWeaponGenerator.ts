@@ -24,6 +24,11 @@ import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper"
 import { RaidInformation } from "../Globals/RaidInformation";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { ModConfig } from "../Globals/ModConfig";
+import { Logging } from "../Enums/Logging";
+import { APBSTester } from "../Utils/APBSTester";
+import { ModInformation } from "../Globals/ModInformation";
+import { Money } from "@spt/models/enums/Money";
+import { APBSBotEquipmentModGenerator } from "./APBSBotEquipmentModGenerator";
 
 /** Handle profile related client events */
 @injectable()
@@ -48,7 +53,10 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
-        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter
+        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
+        @inject("APBSTester") protected apbsTester: APBSTester,
+        @inject("APBSBotEquipmentModGenerator") protected apbsBotEquipmentModGenerator: APBSBotEquipmentModGenerator,
+        @inject("ModInformation") protected modInformation: ModInformation
     )
     {
         super(logger, 
@@ -161,8 +169,49 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
     {
         const modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
         const apbsModChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-        const weaponChances = apbsModChances.weaponMods;
+        let weaponChances = apbsModChances.weaponMods;
         const weaponItemTemplate = this.itemHelper.getItem(weaponTpl)[1];
+
+        if (ModConfig.config.enablePerWeaponTypeAttachmentChances)
+        {
+            switch (weaponItemTemplate._parent)
+            {
+                case "5447b5fc4bdc2d87278b4567":
+                    weaponChances = apbsModChances.assaultCarbine;
+                    break;
+                case "5447b6254bdc2dc3278b4568":
+                    weaponChances = apbsModChances.sniperRifle;
+                    break;
+                case "5447b6194bdc2d67278b4567":
+                    weaponChances = apbsModChances.marksmanRifle;
+                    break;
+                case "5447b5f14bdc2d61278b4567":
+                    weaponChances = apbsModChances.assaultRifle;
+                    break;
+                case "5447bed64bdc2d97278b4568":
+                    weaponChances = apbsModChances.machinegun;
+                    break;
+                case "5447b5e04bdc2d62278b4567":
+                    weaponChances = apbsModChances.smg;
+                    break;
+                case "5447b5cf4bdc2d65278b4567":
+                    weaponChances = apbsModChances.handgun;
+                    break;
+                case "617f1ef5e8b54b0998387733":
+                    weaponChances = apbsModChances.revolver;
+                    break;
+                case "5447b6094bdc2dc3278b4567":
+                    weaponChances = apbsModChances.shotgun;
+                    break;
+                case "5447bedf4bdc2d87278b4568":
+                    weaponChances = apbsModChances.weaponMods;
+                    break;
+                default:
+                    weaponChances = apbsModChances.weaponMods;
+                    this.apbsLogger.log(Logging.WARN, `ItemTemplate._parent is missing classification - Report to acidphantasm - ${weaponItemTemplate._parent}`)
+                    break;
+            }
+        }
 
         if (!weaponItemTemplate)
         {
@@ -215,9 +264,10 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                 modLimits: modLimits,
                 weaponStats: {}
             };
-            weaponWithModsArray = this.botEquipmentModGenerator.generateModsForWeapon(
+            weaponWithModsArray = this.apbsBotEquipmentModGenerator.apbsGenerateModsForWeapon(
                 sessionId,
-                generateWeaponModsRequest
+                generateWeaponModsRequest,
+                isPmc
             );
         }
 
@@ -259,6 +309,34 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             const ubglTemplate = this.itemHelper.getItem(ubglMod._tpl)[1];
             ubglAmmoTpl = this.getWeightedCompatibleAmmo(botTemplateInventory.Ammo, ubglTemplate);
             this.fillUbgl(weaponWithModsArray, ubglMod, ubglAmmoTpl);
+        }
+        
+        // This is for testing...
+        if (this.modInformation.testMode && this.modInformation.testBotRole.includes(botRole.toLowerCase()))
+        {
+            const tables = this.databaseService.getTables();
+            const assortWeapon = this.cloner.clone(weaponWithModsArray);
+            for (const item in assortWeapon)
+            {
+                const oldID = assortWeapon[item]._id
+                const newID = this.hashUtil.generate();
+                assortWeapon[item]._id = newID;
+                
+                // Loop array again to fix parentID
+                for (const i in assortWeapon)
+                {
+                    if (assortWeapon[i].parentId == oldID) 
+                    {
+                        assortWeapon[i].parentId = newID
+                    }
+                }
+            }
+            this.apbsTester.createComplexAssortItem(assortWeapon)
+                .addUnlimitedStackCount()
+                .addMoneyCost(Money.ROUBLES, 20000)
+                .addBuyRestriction(3)
+                .addLoyaltyLevel(1)
+                .export(tables.traders[this.modInformation.testTrader]);
         }
 
         return {

@@ -8,6 +8,7 @@ import { IPostSptLoadMod } from "@spt/models/external/IPostSptLoadMod";
 // Custom
 import { Logging } from "./Enums/Logging";
 import { InstanceManager } from "./InstanceManager";
+import { ModConfig } from "./Globals/ModConfig";
 
 class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
 {
@@ -19,7 +20,7 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
         this.instance.preSptLoad(container, "APBS");
 
         // Set Mod Configuration Settings
-        this.instance.modConfig.setModConfiguration()
+        this.instance.modConfig.serverLogDetails()
 
         // Check and configure for Questing Bots if necessary
         const questingBots = this.instance.preSptModLoader.getImportedModsNames().includes("DanW-SPTQuestingBots");
@@ -34,7 +35,16 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
         this.instance.apbsStaticRouterHooks.registerRouterHooks();
         this.instance.apbsBotLevelGenerator.registerBotLevelGenerator(container);
 
-        this.instance.jsonHelper.buildTierJson();
+        if (ModConfig.config.usePreset)
+        {
+            this.instance.raidInformation.usingDefaultDB = false;
+            this.instance.jsonHelper.usePreset(ModConfig.config.presetName);
+        }
+        else 
+        {
+            this.instance.raidInformation.usingDefaultDB = true;
+            this.instance.jsonHelper.buildTierJson();
+        }
 
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.preSptLoad`);
@@ -51,11 +61,14 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
 
         // Check and configure for Realism if necessary
         const realism = this.instance.preSptModLoader.getImportedModsNames().includes("SPT-Realism");
-        if (realism)
+        if (realism && !ModConfig.config.disableRealismGasMasks)
         {
             this.instance.apbsLogger.log(Logging.WARN, "Realism Detected. Adding gas masks...")
             this.instance.realismHelper.initialize();
         }
+        
+        // Only do this if you need to build a new attachment list
+        // this.instance.apbsAttachmentChecker.buildAttachmentList();
 
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postDBLoad`);
