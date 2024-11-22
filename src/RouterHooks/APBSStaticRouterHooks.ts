@@ -14,6 +14,16 @@ import { DatabaseService } from "@spt/services/DatabaseService";
 @injectable()
 export class APBSStaticRouterHooks
 {
+    private grenadeList = [
+        "5710c24ad2720bc3458b45a3", 
+        "58d3db5386f77426186285a0", 
+        "618a431df1eb8e24b8741deb", 
+        "5448be9a4bdc2dfd2f8b456a", 
+        "5e32f56fcb6d5863cc5e5ee4", 
+        "5e340dcdcb6d5863cc5e5efb", 
+        "617fd91e5539a84ec44ce155"
+    ]
+
     constructor(
         @inject("StaticRouterModService") protected staticRouterService: StaticRouterModService,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
@@ -56,10 +66,10 @@ export class APBSStaticRouterHooks
         );
         this.apbsLogger.log(Logging.DEBUG, "Bot Generation Router registered");
         this.staticRouterService.registerStaticRouter(
-            "APBS-StartRaidStateRouter",
+            "APBS-StartMatchRouter",
             [
                 {
-                    url: "/client/raid/configuration",
+                    url: "/client/match/local/start",
                     action: async (url, info, sessionId, output) => 
                     {
                         this.raidInformation.sessionId = sessionId;
@@ -74,7 +84,7 @@ export class APBSStaticRouterHooks
                         }
                         catch (err) 
                         {
-                            this.apbsLogger.log(Logging.WARN, "Raid Start Router hook failed.\n", `${err.stack}`);
+                            this.apbsLogger.log(Logging.WARN, "Match Start Router hook failed.\n", `${err.stack}`);
                         }
                         return output;
                     }
@@ -82,7 +92,7 @@ export class APBSStaticRouterHooks
             ],
             "APBS"
         );
-        this.apbsLogger.log(Logging.DEBUG, "Raid Configuration Router registered");
+        this.apbsLogger.log(Logging.DEBUG, "Match Start Router registered");
         this.staticRouterService.registerStaticRouter(
             "APBS-GameStartRouter",
             [
@@ -323,17 +333,7 @@ export class APBSStaticRouterHooks
         let grenadeCount = 0;
         for (const item in botDetails) 
         {
-            if (botDetails[item]._tpl === ("5710c24ad2720bc3458b45a3" || 
-                "58d3db5386f77426186285a0" || 
-                "618a431df1eb8e24b8741deb" || 
-                "5448be9a4bdc2dfd2f8b456a" || 
-                "5e32f56fcb6d5863cc5e5ee4" || 
-                "5e340dcdcb6d5863cc5e5efb" || 
-                "617fd91e5539a84ec44ce155" )) 
-            {
-                grenadeCount++;
-            }
-            
+            if (this.grenadeList.includes(botDetails[item]._tpl)) grenadeCount++;
         }
 
         const primaryWeapon = botDetails.find(e => e.slotId === "FirstPrimaryWeapon");
@@ -469,7 +469,7 @@ export class APBSStaticRouterHooks
             `Level: ${botDetails.level}`,
             `Difficulty: ${botDetails.difficulty}`,
             `GameVersion: ${botDetails.gameVersion}`,
-            `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`,
+            `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`
         ];
         let temporaryMessage2: string[] = [
             `Primary: ${botDetails.primaryID ?? "None" }`,
