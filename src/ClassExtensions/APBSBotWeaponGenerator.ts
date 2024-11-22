@@ -4,7 +4,7 @@ import { DatabaseService } from "@spt/services/DatabaseService";
 import { RandomUtil } from "@spt/utils/RandomUtil";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
-import { Inventory, ModsChances } from "@spt/models/eft/common/tables/IBotType";
+import { IInventory, IModsChances } from "@spt/models/eft/common/tables/IBotType";
 import { GenerateWeaponResult } from "@spt/models/spt/bots/GenerateWeaponResult";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
@@ -76,7 +76,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             cloner)
     }
 
-    public apbsGenerateRandomWeapon(sessionId: string, equipmentSlot: string, botTemplateInventory: Inventory, weaponParentId: string, modChances: ModsChances, botRole: string, isPmc: boolean, botLevel: number, hasBothPrimary: boolean): GenerateWeaponResult 
+    public apbsGenerateRandomWeapon(sessionId: string, equipmentSlot: string, botTemplateInventory: IInventory, weaponParentId: string, modChances: IModsChances, botRole: string, isPmc: boolean, botLevel: number, hasBothPrimary: boolean): GenerateWeaponResult 
     {
         // If the profile was just created, then use vanilla weapon gen
         if (this.raidInformation.freshProfile)
@@ -158,9 +158,9 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         sessionId: string,
         weaponTpl: string,
         equipmentSlot: string,
-        botTemplateInventory: Inventory,
+        botTemplateInventory: IInventory,
         weaponParentId: string,
-        modChances: ModsChances,
+        modChances: IModsChances,
         botRole: string,
         isPmc: boolean,
         botLevel: number,

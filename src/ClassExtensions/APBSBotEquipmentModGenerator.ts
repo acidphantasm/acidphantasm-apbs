@@ -8,7 +8,7 @@ import { PresetHelper } from "@spt/helpers/PresetHelper";
 import { ProbabilityHelper } from "@spt/helpers/ProbabilityHelper";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
-import { Item } from "@spt/models/eft/common/tables/IItem";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { ModSpawn } from "@spt/models/enums/ModSpawn";
 import { IFilterPlateModsForSlotByLevelResult, Result } from "@spt/models/spt/bots/IFilterPlateModsForSlotByLevelResult";
@@ -38,6 +38,7 @@ import { Money } from "@spt/models/enums/Money";
 import { IGenerateWeaponRequest } from "@spt/models/spt/bots/IGenerateWeaponRequest";
 import { IModToSpawnRequest } from "@spt/models/spt/bots/IModToSpawnRequest";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
+import { IEquipmentFilterDetails } from "@spt/models/spt/config/IBotConfig";
 
 /** Handle profile related client events */
 @injectable()
@@ -92,12 +93,12 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             cloner)
     }
 
-    public override generateModsForEquipment(equipment: Item[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, shouldForceSpawn: boolean): Item[]
+    public override generateModsForEquipment(equipment: IItem[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, specificBlacklist: IEquipmentFilterDetails, shouldForceSpawn: boolean): IItem[]
     {
         let forceSpawn = shouldForceSpawn;
 
-        const botRole = settings.botRole;
-        const tier = this.apbsTierGetter.getTierByLevel(settings.botLevel);
+        const botRole = settings.botData.role;
+        const tier = this.apbsTierGetter.getTierByLevel(settings.botData.level);
         const tieredModPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tier)
         let compatibleModsPool = tieredModPool[parentTemplate._id]
         let actualModPool = tieredModPool;
@@ -138,7 +139,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         if (!compatibleModsPool)
         {
             this.logger.warning(
-                `bot: ${settings.botRole} lacks a mod slot pool for item: ${parentTemplate._id} ${parentTemplate._name}`);
+                `bot: ${botRole} lacks a mod slot pool for item: ${parentTemplate._id} ${parentTemplate._name}`);
         }
 
         // Iterate over mod pool and choose mods to add to item
@@ -154,7 +155,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                         modSlot: modSlotName,
                         parentId: parentTemplate._id,
                         parentName: parentTemplate._name,
-                        botRole: settings.botRole
+                        botRole: botRole
                     })
                 );
                 continue;
@@ -261,7 +262,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             if (Object.keys(actualModPool).includes(modTpl))
             {
                 // Call self recursively with item being checkced item we just added to bot
-                this.generateModsForEquipment(equipment, modId, modTemplate[1], settings, forceSpawn);
+                this.generateModsForEquipment(equipment, modId, modTemplate[1], settings, specificBlacklist, forceSpawn);
             }
         }
         
@@ -312,7 +313,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         // Get the front/back/side weights based on bots level
         const plateSlotWeights = settings.botEquipmentConfig?.armorPlateWeighting?.find(
             (armorWeight) =>
-                settings.botLevel >= armorWeight.levelRange.min && settings.botLevel <= armorWeight.levelRange.max);
+                settings.botData.level >= armorWeight.levelRange.min && settings.botData.level <= armorWeight.levelRange.max);
         if (!plateSlotWeights)
         {
             // No weights, return original array of plate tpls
@@ -359,7 +360,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
 
         if (platesOfDesiredLevel.length === 0)
         {
-            this.logger.debug(`${settings.botRole} - Plate filter was too restrictive for armor: ${armorItem._id}. Tried ${tries} times. Using mod items default plate.`);
+            this.logger.debug(`${settings.botData.role} - Plate filter was too restrictive for armor: ${armorItem._id}. Tried ${tries} times. Using mod items default plate.`);
 
             const relatedItemDbModSlot = armorItem._props.Slots.find((slot) => slot._name.toLowerCase() === modSlot);
             const defaultPlate = relatedItemDbModSlot._props.filters[0].Plate;
@@ -403,7 +404,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
     protected override getCompatibleModFromPool(
         modPool: string[],
         modSpawnType: ModSpawn,
-        weapon: Item[]
+        weapon: IItem[]
     ): IChooseRandomCompatibleModResult 
     {
         // Create exhaustable pool to pick mod item from
@@ -483,7 +484,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         return chosenModResult;
     }
     
-    public apbsGenerateModsForWeapon(sessionId: string, request: IGenerateWeaponRequest, isPmc: boolean): Item[] 
+    public apbsGenerateModsForWeapon(sessionId: string, request: IGenerateWeaponRequest, isPmc: boolean): IItem[] 
     {
         const pmcProfile = this.profileHelper.getPmcProfile(sessionId);
 
@@ -555,6 +556,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             const modToSpawnRequest: IModToSpawnRequest = {
                 modSlot: modSlot,
                 isRandomisableSlot: isRandomisableSlot,
+                randomisationSettings: randomisationSettings,
                 botWeaponSightWhitelist: botWeaponSightWhitelist,
                 botEquipBlacklist: botEquipBlacklist,
                 itemModPool: compatibleModsPool,

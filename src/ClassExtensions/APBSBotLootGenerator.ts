@@ -7,8 +7,8 @@ import { HandbookHelper } from "@spt/helpers/HandbookHelper";
 import { InventoryHelper } from "@spt/helpers/InventoryHelper";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
-import { Inventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBase";
-import { GenerationWeightingItems, IBotType } from "@spt/models/eft/common/tables/IBotType";
+import { IInventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBase";
+import { IGenerationWeightingItems, IBotType } from "@spt/models/eft/common/tables/IBotType";
 import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
 import { LootCacheType } from "@spt/models/spt/bots/IBotLootCache";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
@@ -77,7 +77,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
         
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
         const chances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-        const itemCounts: GenerationWeightingItems = chances.generation.items;
+        const itemCounts: IGenerationWeightingItems = chances.generation.items;
 
         if (
             !itemCounts.backpackLoot.weights

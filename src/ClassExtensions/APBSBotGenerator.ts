@@ -20,10 +20,11 @@ import { BotLevelGenerator } from "@spt/generators/BotLevelGenerator";
 import { SeasonalEventService } from "@spt/services/SeasonalEventService";
 import { TimeUtil } from "@spt/utils/TimeUtil";
 import { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
-import { Appearance } from "@spt/models/eft/common/tables/IBotType";
-import { BotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
+import { IAppearance } from "@spt/models/eft/common/tables/IBotType";
+import { IBotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
 import { IWildBody } from "@spt/models/eft/common/IGlobals";
 import { BotNameService } from "@spt/services/BotNameService";
+import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 
 /** Handle profile related client events */
 @injectable()
@@ -42,6 +43,7 @@ export class APBSBotGenerator extends BotGenerator
         @inject("BotEquipmentFilterService") protected botEquipmentFilterService: BotEquipmentFilterService,
         @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper,
         @inject("BotHelper") protected botHelper: BotHelper,
+        @inject("BotGeneratorHelper") protected botGeneratorHelper: BotGeneratorHelper,
         @inject("SeasonalEventService") protected seasonalEventService: SeasonalEventService,
         @inject("ItemFilterService") protected itemFilterService: ItemFilterService,
         @inject("BotNameService") protected botNameService: BotNameService,
@@ -62,6 +64,7 @@ export class APBSBotGenerator extends BotGenerator
             botEquipmentFilterService, 
             weightedRandomHelper, 
             botHelper, 
+            botGeneratorHelper,
             seasonalEventService,
             itemFilterService, 
             botNameService,
@@ -69,7 +72,7 @@ export class APBSBotGenerator extends BotGenerator
             cloner)
     }
 
-    protected override setBotAppearance(bot: IBotBase, appearance: Appearance, botGenerationDetails: BotGenerationDetails): void
+    protected override setBotAppearance(bot: IBotBase, appearance: IAppearance, botGenerationDetails: IBotGenerationDetails): void
     {
         if (botGenerationDetails.isPmc)
         {
