@@ -52,11 +52,14 @@ export class ModdedImportHelper
             "59f9cabd86f7743a10721f46",
             "5abccb7dd8ce87001773e277",
             "5b3b713c5acfc4330140bd8d",
+            "66d98233302686954b0c6f81",
+            "66d9f1abb16d9aacf5068468",
             "56e33634d2720bd8058b456b", //backpacks
             "5e4abc6786f77406812bd572",
             "5e997f0b86f7741ac73993e2",
             "61b9e1aaef9a1b5d6a79899a",
             "61c18db6dfd64163ea78fbb4", //headwear
+            "66bdc28a0b603c26902b2011",
             "65749cb8e0423b9ebe0c79c9",
             "60a7acf20c5cb24b01346648",
             "636270263f2495c26f00b007",
