@@ -698,6 +698,12 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 )
             );
 
+            // Update conflicting item list now item has been chosen
+            for (const conflictingItem of modToAddTemplate._props.ConflictingItems) 
+            {
+                request.conflictingItemTpls.add(conflictingItem);
+            }
+
             // I first thought we could use the recursive generateModsForItems as previously for cylinder magazines.
             // However, the recursion doesn't go over the slots of the parent mod but over the modPool which is given by the bot config
             // where we decided to keep cartridges instead of camoras. And since a CylinderMagazine only has one cartridge entry and
