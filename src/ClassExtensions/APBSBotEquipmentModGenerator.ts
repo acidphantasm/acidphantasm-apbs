@@ -135,6 +135,12 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             compatibleModsPool = settings.modPool[parentTemplate._id];
             actualModPool = settings.modPool;
         }
+        if (botRole.includes("infected"))
+        {
+            spawnChances = settings.spawnChances;
+            compatibleModsPool = settings.modPool[parentTemplate._id];
+            actualModPool = settings.modPool;
+        }
 
         if (!compatibleModsPool)
         {
@@ -155,7 +161,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                         modSlot: modSlotName,
                         parentId: parentTemplate._id,
                         parentName: parentTemplate._name,
-                        botRole: botRole
+                        botRole: settings.botData.role
                     })
                 );
                 continue;
@@ -262,7 +268,14 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             if (Object.keys(actualModPool).includes(modTpl))
             {
                 // Call self recursively with item being checkced item we just added to bot
-                this.generateModsForEquipment(equipment, modId, modTemplate[1], settings, specificBlacklist, forceSpawn);
+                this.generateModsForEquipment(
+                    equipment,
+                    modId,
+                    modTemplate[1],
+                    settings,
+                    specificBlacklist,
+                    forceSpawn
+                );
             }
         }
         
@@ -654,16 +667,10 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
 
             // If stock mod can take a sub stock mod, force spawn chance to be 100% to ensure sub-stock gets added
             // Or if mod_stock is configured to be forced on
-            if (
-                modSlot === "mod_stock" &&
-                modToAddTemplate._props.Slots.some(
-                    (slot) => slot._name.includes("mod_stock") || botEquipConfig.forceStock
-                )
-            ) 
-            {
+            if (this.shouldForceSubStockSlots(modSlot, botEquipConfig, modToAddTemplate)) {
                 // Stock mod can take additional stocks, could be a locking device, force 100% chance
-                const stockSlots = ["mod_stock", "mod_stock_000", "mod_stock_akms"];
-                this.adjustSlotSpawnChances(request.modSpawnChances, stockSlots, 100);
+                const subStockSlots = ["mod_stock", "mod_stock_000", "mod_stock_001", "mod_stock_akms"];
+                this.adjustSlotSpawnChances(request.modSpawnChances, subStockSlots, 100);
             }
 
             // Gather stats on mods being added to weapon

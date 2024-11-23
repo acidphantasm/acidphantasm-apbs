@@ -211,6 +211,14 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             modPool = settings.modPool;
             apbsBot = false;
         }
+        if (botRole.includes("infected"))
+        {
+            equipmentPool = settings.rootEquipmentPool;
+            randomisationDetails = settings.randomisationDetails;
+            wornItemChances = settings.spawnChances;
+            modPool = settings.modPool;
+            apbsBot = false;
+        }
         
         if (apbsBot && equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
         {
