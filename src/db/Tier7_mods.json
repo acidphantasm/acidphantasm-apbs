@@ -147,7 +147,7 @@
     ]
   },
   "67069d02ad91f3a63c0bc2b0": {
-    "mod_tactical": [
+    "mod_tactical_000": [
       "5cc9c20cd7f00c001336c65d",
       "56def37dd2720bec348b456a",
       "5a5f1ce64f39f90b401987bc",
@@ -155,7 +155,19 @@
       "6272370ee4013c5d7e31f418",
       "6272379924e29f06af4d5ecb",
       "626becf9582c3e319310b837",
-      "5d10b49bd7ad1a1a560708b0",
+      "544909bb4bdc2d6f028b4577",
+      "5c06595c0db834001a66af6c",
+      "5c5952732e2216398b5abda2",
+      "644a3df63b0b6f03e101e065"
+    ],
+    "mod_tactical_001": [
+      "5cc9c20cd7f00c001336c65d",
+      "56def37dd2720bec348b456a",
+      "5a5f1ce64f39f90b401987bc",
+      "560d657b4bdc2da74d8b4572",
+      "6272370ee4013c5d7e31f418",
+      "6272379924e29f06af4d5ecb",
+      "626becf9582c3e319310b837",
       "544909bb4bdc2d6f028b4577",
       "5c06595c0db834001a66af6c",
       "5c5952732e2216398b5abda2",
