@@ -11,6 +11,15 @@ import { RaidInformation } from "../Globals/RaidInformation";
 @injectable()
 export class APBSDynamicRouterHooks
 {
+    private grenadeList = [
+        "5710c24ad2720bc3458b45a3", 
+        "58d3db5386f77426186285a0", 
+        "618a431df1eb8e24b8741deb", 
+        "5448be9a4bdc2dfd2f8b456a", 
+        "5e32f56fcb6d5863cc5e5ee4", 
+        "5e340dcdcb6d5863cc5e5efb", 
+        "617fd91e5539a84ec44ce155"
+    ]
     constructor(
         @inject("DynamicRouterModService") protected dynamicRouterModService: DynamicRouterModService,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
@@ -180,6 +189,7 @@ export class APBSDynamicRouterHooks
         let backPlateID;
         let lSidePlateID;
         let rSidePlateID;
+        let scabbardID;
 
         let canHavePlates = false;
 
@@ -188,17 +198,7 @@ export class APBSDynamicRouterHooks
         let grenadeCount = 0;
         for (const item in botDetails) 
         {
-            if (botDetails[item]._tpl === ("5710c24ad2720bc3458b45a3" || 
-                "58d3db5386f77426186285a0" || 
-                "618a431df1eb8e24b8741deb" || 
-                "5448be9a4bdc2dfd2f8b456a" || 
-                "5e32f56fcb6d5863cc5e5ee4" || 
-                "5e340dcdcb6d5863cc5e5efb" || 
-                "617fd91e5539a84ec44ce155" )) 
-            {
-                grenadeCount++;
-            }
-            
+            if (this.grenadeList.includes(botDetails[item]._tpl)) grenadeCount++;            
         }
 
         const primaryWeapon = botDetails.find(e => e.slotId === "FirstPrimaryWeapon");
@@ -250,6 +250,12 @@ export class APBSDynamicRouterHooks
         if (typeof earPro !== "undefined") 
         {
             earProID = this.itemHelper.getItemName(earPro._tpl);
+        }
+
+        const scabbard = botDetails.find(e => e.slotId === "Scabbard");
+        if (typeof scabbard !== "undefined") 
+        {
+            scabbardID = this.itemHelper.getItemName(scabbard._tpl);
         }
 
         const armourVest = botDetails.find(e => e.slotId === "ArmorVest") ?? botDetails.find(e => e.slotId === "TacticalVest");
@@ -310,6 +316,7 @@ export class APBSDynamicRouterHooks
             backPlateID,
             lSidePlateID,
             rSidePlateID,
+            scabbardID,
             grenadeCount
         }
     }
@@ -333,7 +340,7 @@ export class APBSDynamicRouterHooks
             `Nickname: ${botDetails.name}`,
             `Level: ${botDetails.level}`,
             `Difficulty: ${botDetails.difficulty}`,
-            `GameVersion: ${botDetails.gameVersion}`,
+            `GameVersion: ${botDetails.gameVersion ?? "None" }`,
             `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`
         ];
         let temporaryMessage2: string[] = [
@@ -342,7 +349,8 @@ export class APBSDynamicRouterHooks
             `Secondary: ${botDetails.secondaryID ?? "None" }`,
             `Secondary Caliber: ${botDetails.secondaryCaliberID ?? "None" }`,
             `Holster: ${botDetails.holsterID ?? "None" }`,
-            `Holster Caliber: ${botDetails.holsterCaliberID ?? "None" }`
+            `Holster Caliber: ${botDetails.holsterCaliberID ?? "None" }`,
+            `Melee: ${botDetails.scabbardID ?? "None" }`
         ];
         let temporaryMessage3: string[] = [
             `Helmet: ${botDetails.helmetID ?? "None" }`,

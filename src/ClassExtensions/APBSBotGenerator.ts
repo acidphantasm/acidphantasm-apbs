@@ -8,7 +8,6 @@ import { ConfigServer } from "@spt/servers/ConfigServer";
 import { BotEquipmentFilterService } from "@spt/services/BotEquipmentFilterService";
 import { DatabaseService } from "@spt/services/DatabaseService";
 import { ItemFilterService } from "@spt/services/ItemFilterService";
-import { LocalisationService } from "@spt/services/LocalisationService";
 import { HashUtil } from "@spt/utils/HashUtil";
 import { RandomUtil } from "@spt/utils/RandomUtil";
 import { ICloner } from "@spt/utils/cloners/ICloner";
@@ -18,13 +17,14 @@ import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { BotGenerator } from "@spt/generators/BotGenerator";
 import { BotInventoryGenerator } from "@spt/generators/BotInventoryGenerator";
 import { BotLevelGenerator } from "@spt/generators/BotLevelGenerator";
-import { BotDifficultyHelper } from "@spt/helpers/BotDifficultyHelper";
 import { SeasonalEventService } from "@spt/services/SeasonalEventService";
 import { TimeUtil } from "@spt/utils/TimeUtil";
 import { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
-import { Appearance } from "@spt/models/eft/common/tables/IBotType";
-import { BotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
+import { IAppearance } from "@spt/models/eft/common/tables/IBotType";
+import { IBotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
 import { IWildBody } from "@spt/models/eft/common/IGlobals";
+import { BotNameService } from "@spt/services/BotNameService";
+import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 
 /** Handle profile related client events */
 @injectable()
@@ -43,10 +43,10 @@ export class APBSBotGenerator extends BotGenerator
         @inject("BotEquipmentFilterService") protected botEquipmentFilterService: BotEquipmentFilterService,
         @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper,
         @inject("BotHelper") protected botHelper: BotHelper,
-        @inject("BotDifficultyHelper") protected botDifficultyHelper: BotDifficultyHelper,
+        @inject("BotGeneratorHelper") protected botGeneratorHelper: BotGeneratorHelper,
         @inject("SeasonalEventService") protected seasonalEventService: SeasonalEventService,
-        @inject("LocalisationService") protected localisationService: LocalisationService,
         @inject("ItemFilterService") protected itemFilterService: ItemFilterService,
+        @inject("BotNameService") protected botNameService: BotNameService,
         @inject("ConfigServer") protected configServer: ConfigServer,
         @inject("PrimaryCloner") protected cloner: ICloner,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
@@ -64,15 +64,15 @@ export class APBSBotGenerator extends BotGenerator
             botEquipmentFilterService, 
             weightedRandomHelper, 
             botHelper, 
-            botDifficultyHelper, 
+            botGeneratorHelper,
             seasonalEventService,
-            localisationService, 
             itemFilterService, 
+            botNameService,
             configServer, 
             cloner)
     }
 
-    protected override setBotAppearance(bot: IBotBase, appearance: Appearance, botGenerationDetails: BotGenerationDetails): void
+    protected override setBotAppearance(bot: IBotBase, appearance: IAppearance, botGenerationDetails: IBotGenerationDetails): void
     {
         if (botGenerationDetails.isPmc)
         {

@@ -6,9 +6,10 @@ import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
 import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { BotHelper } from "@spt/helpers/BotHelper";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
+import { ContextVariableType } from "@spt/context/ContextVariableType";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
-import { Inventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBase";
-import { Chances, Generation, IBotType, Inventory } from "@spt/models/eft/common/tables/IBotType";
+import { IInventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBase";
+import { IChances, IGeneration, IBotType, IInventory } from "@spt/models/eft/common/tables/IBotType";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
 import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
@@ -26,6 +27,11 @@ import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ModConfig } from "../Globals/ModConfig";
 import { APBSBotWeaponGenerator } from "../ClassExtensions/APBSBotWeaponGenerator";
+import { ApplicationContext } from "@spt/context/ApplicationContext";
+import { ProfileHelper } from "@spt/helpers/ProfileHelper";
+import { WeatherHelper } from "@spt/helpers/WeatherHelper";
+import { BotEquipmentFilterService } from "@spt/services/BotEquipmentFilterService";
+import { IGetRaidConfigurationRequestData } from "@spt/models/eft/match/IGetRaidConfigurationRequestData";
 
 /** Handle profile related client events */
 @injectable()
@@ -36,13 +42,17 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         @inject("HashUtil") protected hashUtil: HashUtil,
         @inject("RandomUtil") protected randomUtil: RandomUtil,
         @inject("DatabaseService") protected databaseService: DatabaseService,
+        @inject("ApplicationContext") protected applicationContext: ApplicationContext,
         @inject("BotWeaponGenerator") protected botWeaponGenerator: BotWeaponGenerator,
         @inject("BotLootGenerator") protected botLootGenerator: BotLootGenerator,
         @inject("BotGeneratorHelper") protected botGeneratorHelper: BotGeneratorHelper,
+        @inject("ProfileHelper") protected profileHelper: ProfileHelper,
         @inject("BotHelper") protected botHelper: BotHelper,
         @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
+        @inject("WeatherHelper") protected weatherHelper: WeatherHelper,
         @inject("LocalisationService") protected localisationService: LocalisationService,
+        @inject("BotEquipmentFilterService") protected botEquipmentFilterService: BotEquipmentFilterService,
         @inject("BotEquipmentModPoolService") protected botEquipmentModPoolService: BotEquipmentModPoolService,
         @inject("BotEquipmentModGenerator") protected botEquipmentModGenerator: BotEquipmentModGenerator,
         @inject("ConfigServer") protected configServer: ConfigServer,
@@ -55,13 +65,17 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             hashUtil, 
             randomUtil, 
             databaseService, 
+            applicationContext,
             botWeaponGenerator, 
             botLootGenerator, 
             botGeneratorHelper, 
+            profileHelper,
             botHelper, 
             weightedRandomHelper, 
             itemHelper,
+            weatherHelper,
             localisationService, 
+            botEquipmentFilterService,
             botEquipmentModPoolService, 
             botEquipmentModGenerator, 
             configServer)
@@ -82,14 +96,20 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
 
         // Generate base inventory with no items
         const botInventory = this.generateInventoryBase();
+        
+        const raidConfig = this.applicationContext
+            .getLatestValue(ContextVariableType.RAID_CONFIGURATION)
+            ?.getValue<IGetRaidConfigurationRequestData>();
 
         this.generateAndAddEquipmentToBot(
+            sessionId,
             templateInventory,
             wornItemChances,
             botRole,
             botInventory,
             botLevel,
-            chosenGameVersion
+            chosenGameVersion,
+            raidConfig
         );
         // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed
         if (((botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")) && ModConfig.config.disableBossTierGeneration) || botRole == "bosslegion" || botRole == "bosspunisher")
@@ -141,8 +161,8 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
     protected override generateEquipment = (settings: IGenerateEquipmentProperties): boolean => 
     {
         const equipmentSlot = settings.rootEquipmentSlot as string;
-        const botRole = settings.botRole;
-        const botLevel = settings.botLevel;
+        const botRole = settings.botData.role;
+        const botLevel = settings.botData.level;
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
         
         let equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
@@ -184,6 +204,14 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             apbsBot = false;
         }
         if (ModConfig.config.disableScavTierGeneration && (botRole.includes("assault") || botRole.includes("marksman")))
+        {
+            equipmentPool = settings.rootEquipmentPool;
+            randomisationDetails = settings.randomisationDetails;
+            wornItemChances = settings.spawnChances;
+            modPool = settings.modPool;
+            apbsBot = false;
+        }
+        if (botRole.includes("infected"))
         {
             equipmentPool = settings.rootEquipmentPool;
             randomisationDetails = settings.randomisationDetails;
@@ -261,7 +289,6 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                     {
                         return false;
                     }
-
                     attempts++;
                 }
                 else 
@@ -279,36 +306,42 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                 _tpl: pickedItemDb._id,
                 parentId: settings.inventory.equipment,
                 slotId: settings.rootEquipmentSlot,
-                ...this.botGeneratorHelper.generateExtraPropertiesForItem(pickedItemDb, botRole)
+                ...this.botGeneratorHelper.generateExtraPropertiesForItem(pickedItemDb, settings.botData.role)
             };
 
-            // Use dynamic mod pool if enabled in config for this bot
-            const botEquipmentRole = this.botGeneratorHelper.getBotEquipmentRole(botRole);
+            const botEquipBlacklist = this.botEquipmentFilterService.getBotEquipmentBlacklist(
+                settings.botData.equipmentRole,
+                settings.generatingPlayerLevel
+            );
+
+            // Edge case: Filter the armor items mod pool if bot exists in config dict + config has armor slot
             if (
-                this.botConfig.equipment[botEquipmentRole] &&
+                this.botConfig.equipment[settings.botData.equipmentRole] &&
                 randomisationDetails?.randomisedArmorSlots?.includes(settings.rootEquipmentSlot)
             ) 
             {
+                // Filter out mods from relevant blacklist
                 modPool[pickedItemDb._id] = this.getFilteredDynamicModsForItem(
                     pickedItemDb._id,
-                    this.botConfig.equipment[botEquipmentRole].blacklist
+                    botEquipBlacklist.equipment
                 );
             }
 
-            // Item has slots, fill them
+            // Does item have slots for sub-mods to be inserted into
             if (pickedItemDb._props.Slots?.length > 0 && !settings.generateModsBlacklist?.includes(pickedItemDb._id)) 
             {
-                const items = this.botEquipmentModGenerator.generateModsForEquipment(
+                const childItemsToAdd = this.botEquipmentModGenerator.generateModsForEquipment(
                     [item],
                     id,
                     pickedItemDb,
-                    settings
+                    settings,
+                    botEquipBlacklist
                 );
-                settings.inventory.items.push(...items);
-            }
+                settings.inventory.items.push(...childItemsToAdd);
+            } 
             else 
             {
-                // No slots, push root item only
+                // No slots, add root item only
                 settings.inventory.items.push(item);
             }
 
@@ -319,13 +352,13 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
     }
 
     protected override generateAndAddWeaponsToBot(
-        templateInventory: Inventory, 
-        equipmentChances: Chances, 
+        templateInventory: IInventory, 
+        equipmentChances: IChances, 
         sessionId: string, 
         botInventory: PmcInventory, 
         botRole: string, 
         isPmc: boolean, 
-        itemGenerationLimitsMinMax: Generation, 
+        itemGenerationLimitsMinMax: IGeneration, 
         botLevel: number
     ): void 
     {
@@ -359,12 +392,12 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
     private apbsAddWeaponAndMagazinesToInventory(
         sessionId: string,
         weaponSlot: { slot: EquipmentSlots; shouldSpawn: boolean },
-        templateInventory: Inventory,
+        templateInventory: IInventory,
         botInventory: PmcInventory,
-        equipmentChances: Chances,
+        equipmentChances: IChances,
         botRole: string,
         isPmc: boolean,
-        itemGenerationWeights: Generation,
+        itemGenerationWeights: IGeneration,
         botLevel: number,
         hasBothPrimary: boolean
     ): void 

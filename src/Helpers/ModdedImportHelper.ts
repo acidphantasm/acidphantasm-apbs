@@ -52,11 +52,14 @@ export class ModdedImportHelper
             "59f9cabd86f7743a10721f46",
             "5abccb7dd8ce87001773e277",
             "5b3b713c5acfc4330140bd8d",
+            "66d98233302686954b0c6f81",
+            "66d9f1abb16d9aacf5068468",
             "56e33634d2720bd8058b456b", //backpacks
             "5e4abc6786f77406812bd572",
             "5e997f0b86f7741ac73993e2",
             "61b9e1aaef9a1b5d6a79899a",
             "61c18db6dfd64163ea78fbb4", //headwear
+            "66bdc28a0b603c26902b2011",
             "65749cb8e0423b9ebe0c79c9",
             "60a7acf20c5cb24b01346648",
             "636270263f2495c26f00b007",
@@ -88,7 +91,13 @@ export class ModdedImportHelper
             "5c0e2f5cd174af02a012cfc9",
             "5c6592372e221600133e47d7",
             "544a378f4bdc2d30388b4567",
-            "5d1340bdd7ad1a0e8d245aab"
+            "5d1340bdd7ad1a0e8d245aab",
+            "671d85439ae8365d69117ba6",
+            "670e8eab8c1bb0e5a7075acf",
+            "671d8617a3e45c1f5908278c",
+            "671d8ac8a3e45c1f59082799",
+            "671d8b38b769f0d88c0950f8",
+            "671d8b8c0959c721a50ca838"
         ]
 
         this.clothingBlacklist = [

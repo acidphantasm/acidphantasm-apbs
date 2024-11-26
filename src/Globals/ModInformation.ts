@@ -10,7 +10,7 @@ export class ModInformation
 
     public testMode: boolean = false;
     public testBotRole: (string)[] = [ "pmcusec", "pmcbear" ]
-    public testTrader: string = "apbs"
+    public testTrader: string = "6741449944c5b44c53741ccc"
     public clearAssortPreRaid: boolean = true;
 }
 

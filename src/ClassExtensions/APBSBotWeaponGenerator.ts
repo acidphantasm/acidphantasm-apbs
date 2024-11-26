@@ -4,14 +4,14 @@ import { DatabaseService } from "@spt/services/DatabaseService";
 import { RandomUtil } from "@spt/utils/RandomUtil";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
-import { Inventory, ModsChances } from "@spt/models/eft/common/tables/IBotType";
-import { GenerateWeaponResult } from "@spt/models/spt/bots/GenerateWeaponResult";
+import { IInventory, IModsChances } from "@spt/models/eft/common/tables/IBotType";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { LocalisationService } from "@spt/services/LocalisationService";
 import { IGenerateWeaponRequest } from "@spt/models/spt/bots/IGenerateWeaponRequest";
+import { IGenerateWeaponResult } from "@spt/models/spt/bots/IGenerateWeaponResult";
 import { HashUtil } from "@spt/utils/HashUtil";
 import { ICloner } from "@spt/utils/cloners/ICloner";
 import { ConfigServer } from "@spt/servers/ConfigServer";
@@ -76,7 +76,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             cloner)
     }
 
-    public apbsGenerateRandomWeapon(sessionId: string, equipmentSlot: string, botTemplateInventory: Inventory, weaponParentId: string, modChances: ModsChances, botRole: string, isPmc: boolean, botLevel: number, hasBothPrimary: boolean): GenerateWeaponResult 
+    public apbsGenerateRandomWeapon(sessionId: string, equipmentSlot: string, botTemplateInventory: IInventory, weaponParentId: string, modChances: IModsChances, botRole: string, isPmc: boolean, botLevel: number, hasBothPrimary: boolean): IGenerateWeaponResult 
     {
         // If the profile was just created, then use vanilla weapon gen
         if (this.raidInformation.freshProfile)
@@ -111,6 +111,11 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
             return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
         }
+        if (botRole.includes("infected"))
+        {
+            const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
+            return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);            
+        }        
 
         // If not disabled via config, all bots follow this custom generation
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
@@ -158,14 +163,14 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         sessionId: string,
         weaponTpl: string,
         equipmentSlot: string,
-        botTemplateInventory: Inventory,
+        botTemplateInventory: IInventory,
         weaponParentId: string,
-        modChances: ModsChances,
+        modChances: IModsChances,
         botRole: string,
         isPmc: boolean,
         botLevel: number,
         tierInfo: number
-    ): GenerateWeaponResult
+    ): IGenerateWeaponResult
     {
         const modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
         const apbsModChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
@@ -258,11 +263,12 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                 modPool: modPool,
                 weaponId: weaponWithModsArray[0]._id, // Weapon root id
                 parentTemplate: weaponItemTemplate,
-                modSpawnChances: weaponChances,
+                modSpawnChances: modChances,
                 ammoTpl: ammoTpl,
                 botData: { role: botRole, level: botLevel, equipmentRole: botEquipmentRole },
                 modLimits: modLimits,
-                weaponStats: {}
+                weaponStats: {},
+                conflictingItemTpls: new Set()
             };
             weaponWithModsArray = this.apbsBotEquipmentModGenerator.apbsGenerateModsForWeapon(
                 sessionId,

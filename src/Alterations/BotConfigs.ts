@@ -529,7 +529,6 @@ export class BotConfigs
                         for (const item in scav[slot][subSlot])
                         {
                             scav[slot][subSlot][item] = 1;
-                            console.log(`${item}: ${scav[slot][subSlot][item]}`);
                         }
                     }
                     continue;
@@ -537,7 +536,6 @@ export class BotConfigs
                 for (const item in scav[slot])
                 {
                     scav[slot][item] = 1;
-                    console.log(`${item}: ${scav[slot][item]}`);
                 }
             }
         }

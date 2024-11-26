@@ -5,7 +5,7 @@ import { RandomUtil } from "@spt/utils/RandomUtil";
 import { BotLevelGenerator } from "@spt/generators/BotLevelGenerator";
 import { MinMax } from "@spt/models/common/MinMax";
 import { IRandomisedBotLevelResult } from "@spt/models/eft/bot/IRandomisedBotLevelResult";
-import { BotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
+import { IBotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
@@ -37,7 +37,7 @@ export class APBSBotLevelGenerator
     {    
         container.afterResolution("BotLevelGenerator", (_t, result: BotLevelGenerator) => 
         {
-            result.generateBotLevel = (levelDetails: MinMax, botGenerationDetails: BotGenerationDetails, bot: APBSIBotBase): IRandomisedBotLevelResult => 
+            result.generateBotLevel = (levelDetails: MinMax, botGenerationDetails: IBotGenerationDetails, bot: APBSIBotBase): IRandomisedBotLevelResult => 
             {
 
                 /* 
@@ -141,7 +141,7 @@ export class APBSBotLevelGenerator
     }
 
     protected apbsGetRelativeBotLevelRange(
-        botGenerationDetails: BotGenerationDetails,
+        botGenerationDetails: IBotGenerationDetails,
         levelDetails: MinMax,
         maxAvailableLevel: number
     ): MinMax 
