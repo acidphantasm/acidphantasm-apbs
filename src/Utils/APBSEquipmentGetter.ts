@@ -217,6 +217,8 @@ export class APBSEquipmentGetter
                 return (range == undefined) ? tierJson.bosssanitar.equipment[slot] : tierJson.bosssanitar.equipment[slot][range];
             case "bosstagilla":
                 return (range == undefined) ? tierJson.bosstagilla.equipment[slot] : tierJson.bosstagilla.equipment[slot][range];
+            case "bosspartisan":
+                return (range == undefined) ? tierJson.bosspartisan.equipment[slot] : tierJson.bosspartisan.equipment[slot][range];
             case "bossknight":
                 return (range == undefined) ? tierJson.bossknight.equipment[slot] : tierJson.bossknight.equipment[slot][range];
             case "followerbigpipe":
@@ -271,6 +273,8 @@ export class APBSEquipmentGetter
                 return tierJson.bosssanitar.chances;
             case "bosstagilla":
                 return tierJson.bosstagilla.chances;
+            case "bosspartisan":
+                return tierJson.bosspartisan.chances;
             case "bosszryachiy":
                 return tierJson.bosszryachiy.chances;
             case "followerbigpipe":
