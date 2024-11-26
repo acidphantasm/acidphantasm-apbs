@@ -189,6 +189,7 @@ export class APBSDynamicRouterHooks
         let backPlateID;
         let lSidePlateID;
         let rSidePlateID;
+        let scabbardID;
 
         let canHavePlates = false;
 
@@ -251,6 +252,12 @@ export class APBSDynamicRouterHooks
             earProID = this.itemHelper.getItemName(earPro._tpl);
         }
 
+        const scabbard = botDetails.find(e => e.slotId === "Scabbard");
+        if (typeof scabbard !== "undefined") 
+        {
+            scabbardID = this.itemHelper.getItemName(scabbard._tpl);
+        }
+
         const armourVest = botDetails.find(e => e.slotId === "ArmorVest") ?? botDetails.find(e => e.slotId === "TacticalVest");
         if (typeof armourVest !== "undefined") 
         {
@@ -309,6 +316,7 @@ export class APBSDynamicRouterHooks
             backPlateID,
             lSidePlateID,
             rSidePlateID,
+            scabbardID,
             grenadeCount
         }
     }
@@ -332,7 +340,7 @@ export class APBSDynamicRouterHooks
             `Nickname: ${botDetails.name}`,
             `Level: ${botDetails.level}`,
             `Difficulty: ${botDetails.difficulty}`,
-            `GameVersion: ${botDetails.gameVersion}`,
+            `GameVersion: ${botDetails.gameVersion ?? "None" }`,
             `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`
         ];
         let temporaryMessage2: string[] = [
@@ -341,7 +349,8 @@ export class APBSDynamicRouterHooks
             `Secondary: ${botDetails.secondaryID ?? "None" }`,
             `Secondary Caliber: ${botDetails.secondaryCaliberID ?? "None" }`,
             `Holster: ${botDetails.holsterID ?? "None" }`,
-            `Holster Caliber: ${botDetails.holsterCaliberID ?? "None" }`
+            `Holster Caliber: ${botDetails.holsterCaliberID ?? "None" }`,
+            `Melee: ${botDetails.scabbardID ?? "None" }`
         ];
         let temporaryMessage3: string[] = [
             `Helmet: ${botDetails.helmetID ?? "None" }`,
