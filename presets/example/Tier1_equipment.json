@@ -24,10 +24,7 @@
                     "6718817435e3cfd9550d2c27": 5,
                     "5c488a752e221602b412af63": 15,
                     "623063e994fc3f7b302a9696": 7,
-                    "5447a9cd4bdc2dbd208b4567": 7,
-                    "6680304edadb7aa61d00cef0": 5,
-                    "668e71a8dadf42204c032ce1": 5,
-                    "66992b349950f5f4cd06029f": 5
+                    "5447a9cd4bdc2dbd208b4567": 7
                 }
             },
             "Holster": {
@@ -74,10 +71,7 @@
                     "6718817435e3cfd9550d2c27": 5,
                     "5c488a752e221602b412af63": 15,
                     "623063e994fc3f7b302a9696": 7,
-                    "5447a9cd4bdc2dbd208b4567": 7,
-                    "6680304edadb7aa61d00cef0": 5,
-                    "668e71a8dadf42204c032ce1": 5,
-                    "66992b349950f5f4cd06029f": 5
+                    "5447a9cd4bdc2dbd208b4567": 7
                 }
             },
             "Pockets": {
@@ -498,10 +492,7 @@
                     "587e02ff24597743df3deaeb": 20,
                     "574d967124597745970e7c94": 20,
                     "5c501a4d2e221602b412b540": 20,
-                    "5de652c31b7e3716273428be": 20,
-                    "6680304edadb7aa61d00cef0": 5,
-                    "668e71a8dadf42204c032ce1": 5,
-                    "66992b349950f5f4cd06029f": 5
+                    "5de652c31b7e3716273428be": 20
                 }
             },
             "Holster": {
@@ -1682,6 +1673,78 @@
                 "609e860ebd219504d8507525": 242,
                 "61bcc89aef0f505f0c6cd0fc": 67
             }
+        }
+    },
+    "bosspartisan": {
+        "equipment": {
+            "FirstPrimaryWeapon": {
+                "LongRange": {
+                    "59ff346386f77477562ff5e2": 100,
+                    "5ab8e9fcd8ce870019439434": 100,
+                    "5ac66d725acfc43b321d4b60": 25,
+                    "5bf3e0490db83400196199af": 100,
+                    "5abcbc27d8ce8700182eceeb": 98,
+                    "6410733d5dd49d77bd07847e": 51,
+                    "5ac66d2e5acfc43b321d4b53": 24
+                },
+                "ShortRange": {
+                    "59ff346386f77477562ff5e2": 100,
+                    "5ab8e9fcd8ce870019439434": 100,
+                    "5ac66d725acfc43b321d4b60": 25,
+                    "5bf3e0490db83400196199af": 100,
+                    "5abcbc27d8ce8700182eceeb": 98,
+                    "6410733d5dd49d77bd07847e": 51,
+                    "5ac66d2e5acfc43b321d4b53": 24
+                }
+            },
+            "Holster": {
+                "5a17f98cfcdbcb0980087290": 1
+            },
+            "Scabbard": {
+                "57e26ea924597715ca604a09": 100,
+                "57e26fc7245977162a14b800": 100,
+                "5bead2e00db834001c062938": 100,
+                "5c012ffc0db834001d23f03f": 100,
+                "54491bb74bdc2d09088b4567": 100,
+                "5bffdc370db834001d23eca8": 100,
+                "5c0126f40db834002a125382": 50
+            },
+            "SecondPrimaryWeapon": {
+                "LongRange": {
+                    "606dae0ab0e443224b421bb7": 100,
+                    "54491c4f4bdc2db1078b4568": 100,
+                    "5580223e4bdc2d1c128b457f": 100,
+                    "56dee2bdd2720bc8328b4567": 100,
+                    "60db29ce99594040e04c4a27": 100
+                },
+                "ShortRange": {
+                    "606dae0ab0e443224b421bb7": 100,
+                    "54491c4f4bdc2db1078b4568": 100,
+                    "5580223e4bdc2d1c128b457f": 100,
+                    "56dee2bdd2720bc8328b4567": 100,
+                    "60db29ce99594040e04c4a27": 100
+                }
+            },
+            "Pockets": {
+                "64cbd95a29b9b4283e216ff5": 1
+            },
+            "SecuredContainer": {
+                "5c0a794586f77461c458f892": 1
+            },
+            "ArmBand": {},
+            "ArmorVest": {},
+            "Backpack": {
+                "66a9f98f3bd5a41b162030f4": 1
+            },
+            "Earpiece": {},
+            "Eyewear": {
+                "5aa2b923e5b5b000137b7589": 144,
+                "5d6d2ef3a4b93618084f58bd": 143
+            },
+            "FaceCover": {},
+            "Headwear": {},
+            "TacticalVest": {},
+            "ArmouredRig": {}
         }
     },
     "bosszryachiy": {
