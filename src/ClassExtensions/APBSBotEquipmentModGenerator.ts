@@ -135,7 +135,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             compatibleModsPool = settings.modPool[parentTemplate._id];
             actualModPool = settings.modPool;
         }
-        if (botRole.includes("infected"))
+        if (botRole.includes("infected") || botRole.includes("spirit") || botRole.includes("skier") || botRole.includes("peacemaker"))
         {
             spawnChances = settings.spawnChances;
             compatibleModsPool = settings.modPool[parentTemplate._id];
