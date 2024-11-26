@@ -104,6 +104,7 @@ export class APBSDynamicRouterHooks
                     break;
                 case "bossBully":
                 case "bossTagilla":
+                case "bossPartisan":
                 case "bossGluhar":
                 case "bossKilla":
                 case "bossKojaniy":
@@ -146,6 +147,11 @@ export class APBSDynamicRouterHooks
                 case "shooterBTR":
                 case "skier":
                 case "peacemaker":
+                case "infectedAssault":
+                case "infectedCivil":
+                case "infectedLaborant":
+                case "infectedPmc":
+                case "infectedTagilla":
                     this.apbsLogger.log( 
                         Logging.EVENT,
                         "---------------------------------------------------QB Bot spawned from cache---------------------------------------------------",

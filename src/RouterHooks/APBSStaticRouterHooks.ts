@@ -240,6 +240,7 @@ export class APBSStaticRouterHooks
                     break;
                 case "bossBully":
                 case "bossTagilla":
+                case "bossPartisan":
                 case "bossGluhar":
                 case "bossKilla":
                 case "bossKojaniy":
@@ -282,6 +283,11 @@ export class APBSStaticRouterHooks
                 case "shooterBTR":
                 case "skier":
                 case "peacemaker":
+                case "infectedAssault":
+                case "infectedCivil":
+                case "infectedLaborant":
+                case "infectedPmc":
+                case "infectedTagilla":
                     this.apbsLogger.log( 
                         Logging.EVENT,
                         "-----------------------------------------------------Bot spawned from cache-----------------------------------------------------",
