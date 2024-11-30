@@ -263,7 +263,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                 modPool: modPool,
                 weaponId: weaponWithModsArray[0]._id, // Weapon root id
                 parentTemplate: weaponItemTemplate,
-                modSpawnChances: modChances,
+                modSpawnChances: weaponChances,
                 ammoTpl: ammoTpl,
                 botData: { role: botRole, level: botLevel, equipmentRole: botEquipmentRole },
                 modLimits: modLimits,
