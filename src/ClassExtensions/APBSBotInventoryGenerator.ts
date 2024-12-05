@@ -147,6 +147,14 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
     
             return botInventory;
         }
+        
+        if (botRole.includes("infected") || botRole.includes("spirit") || botRole.includes("skier") || botRole.includes("peacemaker") || botRole.includes("gifter"))
+        {
+            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
+            this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
+    
+            return botInventory;
+        }
 
         // APBS generation chances instead
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
