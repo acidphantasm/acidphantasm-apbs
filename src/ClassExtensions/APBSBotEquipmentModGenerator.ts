@@ -135,7 +135,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             compatibleModsPool = settings.modPool[parentTemplate._id];
             actualModPool = settings.modPool;
         }
-        if (botRole.includes("infected") || botRole.includes("spirit") || botRole.includes("skier") || botRole.includes("peacemaker"))
+        if (botRole.includes("infected") || botRole.includes("spirit") || botRole.includes("skier") || botRole.includes("peacemaker") || botRole.includes("gifter"))
         {
             spawnChances = settings.spawnChances;
             compatibleModsPool = settings.modPool[parentTemplate._id];
@@ -667,7 +667,8 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
 
             // If stock mod can take a sub stock mod, force spawn chance to be 100% to ensure sub-stock gets added
             // Or if mod_stock is configured to be forced on
-            if (this.shouldForceSubStockSlots(modSlot, botEquipConfig, modToAddTemplate)) {
+            if (this.shouldForceSubStockSlots(modSlot, botEquipConfig, modToAddTemplate)) 
+            {
                 // Stock mod can take additional stocks, could be a locking device, force 100% chance
                 const subStockSlots = ["mod_stock", "mod_stock_000", "mod_stock_001", "mod_stock_akms"];
                 this.adjustSlotSpawnChances(request.modSpawnChances, subStockSlots, 100);

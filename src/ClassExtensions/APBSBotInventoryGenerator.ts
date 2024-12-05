@@ -219,7 +219,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             modPool = settings.modPool;
             apbsBot = false;
         }
-        if (botRole.includes("infected") || botRole.includes("spirit") || botRole.includes("skier") || botRole.includes("peacemaker"))
+        if (botRole.includes("infected") || botRole.includes("spirit") || botRole.includes("skier") || botRole.includes("peacemaker") || botRole.includes("gifter"))
         {
             equipmentPool = settings.rootEquipmentPool;
             randomisationDetails = settings.randomisationDetails;
