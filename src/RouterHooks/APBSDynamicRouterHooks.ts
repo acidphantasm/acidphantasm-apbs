@@ -147,6 +147,7 @@ export class APBSDynamicRouterHooks
                 case "shooterBTR":
                 case "skier":
                 case "peacemaker":
+                case "gifter":
                 case "infectedAssault":
                 case "infectedCivil":
                 case "infectedLaborant":
