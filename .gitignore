@@ -6,4 +6,3 @@
 .eslintrc.json
 build.mjs
 package-lock.json
-tsconfig.json
