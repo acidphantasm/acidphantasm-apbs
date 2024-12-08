@@ -534,7 +534,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         const randomisationSettings = this.botHelper.getBotRandomizationDetails(request.botData.level, botEquipConfig);
 
         // Iterate over mod pool and choose mods to attach
-        const sortedModKeys = this.sortModKeys(Object.keys(compatibleModsPool));
+        const sortedModKeys = this.sortModKeys(Object.keys(compatibleModsPool), request.parentTemplate._id);
         for (const modSlot of sortedModKeys) 
         {
             // Check weapon has slot for mod to fit in
