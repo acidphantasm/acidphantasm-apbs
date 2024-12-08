@@ -2,7 +2,7 @@
 
 import { inject, injectable } from "tsyringe";
 import { APBSLogger } from "./APBSLogger";
-import { Item } from "@spt/models/eft/common/tables/IItem";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
 import { HashUtil } from "@spt/utils/HashUtil";
 import { IBarterScheme, ITrader } from "@spt/models/eft/common/tables/ITrader";
 import { Money } from "@spt/models/enums/Money";
@@ -11,7 +11,7 @@ import { Logging } from "../Enums/Logging";
 @injectable()
 export class APBSTester
 {
-    protected itemsToSell: Item[] = [];
+    protected itemsToSell: IItem[] = [];
     protected barterScheme: Record<string, IBarterScheme[][]> = {};
     protected loyaltyLevel: Record<string, number> = {};
 
@@ -21,7 +21,7 @@ export class APBSTester
     )
     {}
 
-    public createComplexAssortItem(items: Item[]): APBSTester
+    public createComplexAssortItem(items: IItem[]): APBSTester
     {
         items[0].parentId = "hideout";
         items[0].slotId = "hideout";
