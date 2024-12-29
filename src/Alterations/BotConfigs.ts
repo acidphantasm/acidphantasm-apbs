@@ -50,6 +50,7 @@ export class BotConfigs
         this.setPMCLoot();
         this.setPMCScopeWhitelist();
         this.setPMCSlotIDsToMakeRequired();
+        this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
         if (ModConfig.config.gameVersionWeight) this.setPMCGameVersionWeights();
         if (ModConfig.config.addAllKeysToScavs || ModConfig.config.addOnlyKeyCardsToScavs || ModConfig.config.addOnlyMechanicalKeysToScavs) this.pushScavKeys();
         if (ModConfig.config.enableCustomPlateChances) this.setPlateChances();
@@ -59,9 +60,9 @@ export class BotConfigs
         if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
         if (!ModConfig.config.scavLoot) this.removeScavLoot();
         if (ModConfig.config.enableScavEqualEquipmentTiering) this.setIdenticalScavWeights();
-        this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
         if (ModConfig.config.enableCustomLevelDeltas) this.setLevelDeltas();
         if (ModConfig.config.enableScavCustomLevelDeltas) this.setScavLevelDeltas();
+        if (ModConfig.config.forceMuzzle) this.setMuzzleChances();
     }
 
     private configureBotExperienceLevels(): void
@@ -618,5 +619,30 @@ export class BotConfigs
     private setPMCSlotIDsToMakeRequired(): void
     {
         this.botConfig.equipment.pmc.weaponSlotIdsToMakeRequired = [ "mod_reciever", "mod_stock" ]
+    }    
+
+    private setMuzzleChances(): void
+    {
+        for (const tierObject in this.tierInformation.tiers)
+        {
+            const tierNumber = this.tierInformation.tiers[tierObject].tier
+            const tierJson = this.apbsEquipmentGetter.getTierChancesJson(tierNumber);
+            const usec = tierJson.pmcUSEC.chances
+            const bear = tierJson.pmcBEAR.chances
+            for (const type in usec)
+            {
+                if (type == "equipment" || type == "equipmentMods" || type == "generation") continue;
+
+                const arrayPosition = tierNumber - 1;
+
+                usec[type].mod_muzzle = ModConfig.config.muzzleChance[arrayPosition]
+                usec[type].mod_muzzle_000 = ModConfig.config.muzzleChance[arrayPosition]
+                usec[type].mod_muzzle_000 = ModConfig.config.muzzleChance[arrayPosition]
+
+                bear[type].mod_muzzle = ModConfig.config.muzzleChance[arrayPosition]
+                bear[type].mod_muzzle_000 = ModConfig.config.muzzleChance[arrayPosition]
+                bear[type].mod_muzzle_000 = ModConfig.config.muzzleChance[arrayPosition]
+            }
+        }
     }
 }
