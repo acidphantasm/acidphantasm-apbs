@@ -633,18 +633,16 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 }
             }
 
-            /*
-            if (!isPmc)
+            
+            if (ModConfig.config.forceChildrenMuzzle)
             {
                 // If picked item is muzzle adapter that can hold a child, adjust spawn chance
                 if (this.modSlotCanHoldMuzzleDevices(modSlot, modToAddTemplate._parent)) 
                 {
                     const muzzleSlots = ["mod_muzzle", "mod_muzzle_000", "mod_muzzle_001"];
-                    // Make chance of muzzle devices 95%
-                    this.adjustSlotSpawnChances(request.modSpawnChances, muzzleSlots, 95);
+                    this.adjustSlotSpawnChances(request.modSpawnChances, muzzleSlots, 100);
                 }
             }
-            */
             
             // If front/rear sight are to be added, set opposite to 100% chance
             if (this.modIsFrontOrRearSight(modSlot, modToAddTemplate._id)) 
