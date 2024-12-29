@@ -61,27 +61,27 @@ export class TierInformation
             playerMinimumLevel: 11,
             playerMaximumLevel: 20,
             botMinLevelVariance: 15,
-            botMaxLevelVariance: 7,
+            botMaxLevelVariance: 5,
             scavMinLevelVariance: 15,
-            scavMaxLevelVariance: 7
+            scavMaxLevelVariance: 5
         },
         {
             tier: 3,
             playerMinimumLevel: 21,
             playerMaximumLevel: 30,
             botMinLevelVariance: 25,
-            botMaxLevelVariance: 10,
+            botMaxLevelVariance: 7,
             scavMinLevelVariance: 25,
-            scavMaxLevelVariance: 10
+            scavMaxLevelVariance: 7
         },
         {
             tier: 4,
             playerMinimumLevel: 31,
             playerMaximumLevel: 40,
             botMinLevelVariance: 35,
-            botMaxLevelVariance: 15,
+            botMaxLevelVariance: 10,
             scavMinLevelVariance: 35,
-            scavMaxLevelVariance: 15
+            scavMaxLevelVariance: 10
         },
         {
             tier: 5,

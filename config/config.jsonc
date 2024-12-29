@@ -220,9 +220,9 @@
 // IF YOU WANT EVERY TIER AT EVERY LEVEL, SET ALL OF THESE TO: [ 79, 79 ]
         "enableCustomLevelDeltas": false,
         "tier1LevelDelta": [ 10, 5 ],
-        "tier2LevelDelta": [ 15, 7 ],
-        "tier3LevelDelta": [ 25, 10 ],
-        "tier4LevelDelta": [ 35, 15 ],
+        "tier2LevelDelta": [ 15, 5 ],
+        "tier3LevelDelta": [ 25, 7 ],
+        "tier4LevelDelta": [ 35, 10 ],
         "tier5LevelDelta": [ 45, 15 ],
         "tier6LevelDelta": [ 55, 20 ],
         "tier7LevelDelta": [ 60, 20 ],
