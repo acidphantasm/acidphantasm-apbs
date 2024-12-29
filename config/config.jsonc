@@ -82,6 +82,14 @@
 // This slot is *MOSTLY* optics but it's sometimes a laser/flashlight depending on gun, if false - will use APBS values
         "forceScopeSlot": false,
 
+// Force weapon muzzles
+// "forceMuzzle" If set to true, will enforce all AI PMC weapons to have muzzles based on the chance configured, if false - will use APBS values
+// "muzzleChance" chance of muzzle being selected (overrides preset and database values)
+// "forceChildrenMuzzle" If set to true, enforces muzzle children to also spawn (so if it rolls to pick a threaded adapter, the child silencer will be forced to spawn), if false - will roll those slots independently 
+        "forceMuzzle": false,
+        "muzzleChance": [ 10, 25, 40, 55, 65, 75, 75 ],
+        "forceChildrenMuzzle": false,
+
 // Force weapon mod count limits
 // If set to true, will enforce all AI weapons to be limited to the scopeLimit & tacticalLimit, if disabled the generation may go wild
         "forceWeaponModLimits": true,
@@ -212,9 +220,9 @@
 // IF YOU WANT EVERY TIER AT EVERY LEVEL, SET ALL OF THESE TO: [ 79, 79 ]
         "enableCustomLevelDeltas": false,
         "tier1LevelDelta": [ 10, 5 ],
-        "tier2LevelDelta": [ 15, 7 ],
-        "tier3LevelDelta": [ 25, 10 ],
-        "tier4LevelDelta": [ 35, 15 ],
+        "tier2LevelDelta": [ 15, 5 ],
+        "tier3LevelDelta": [ 25, 7 ],
+        "tier4LevelDelta": [ 35, 10 ],
         "tier5LevelDelta": [ 45, 15 ],
         "tier6LevelDelta": [ 55, 20 ],
         "tier7LevelDelta": [ 60, 20 ],
