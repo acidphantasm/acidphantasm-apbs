@@ -63,6 +63,7 @@ export interface Config
     slideChance: number,
     enablePerWeaponTypeAttachmentChances: boolean,
     forceStock: boolean,
+    stockButtpadChance: number,
     forceDustCover: boolean,
     forceScopeSlot: boolean,
     forceMuzzle: boolean,
