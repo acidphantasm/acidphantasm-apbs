@@ -71,7 +71,9 @@
 
 // Force weapon stocks
 // If set to true, will enforce all AI weapons to have stocks, if false - will use APBS values
+// "stockButtpadChance" will allow dynamic configuration of any butt pads spawning on a stock that can take them.
         "forceStock": false,
+        "stockButtpadChance": 50,
 
 // Force weapon dust covers
 // If set to true, will enforce all AI weapons to have dust covers, if false - will use APBS values
