@@ -84,8 +84,9 @@
 
 // Force weapon muzzles
 // "forceMuzzle" If set to true, will enforce all AI PMC weapons to have muzzles based on the chance configured, if false - will use APBS values
-// "muzzleChance" chance of muzzle being selected (overrides preset and database values)
+// "muzzleChance" chance of muzzle being selected (overrides preset and database values) for each tier [ T1, T2, T3, T4, T5, T6, T7 ]
 // "forceChildrenMuzzle" If set to true, enforces muzzle children to also spawn (so if it rolls to pick a threaded adapter, the child silencer will be forced to spawn), if false - will roll those slots independently 
+// "forceChildrenMuzzle" works regardless of you setting forceMuzzle or not - if you just want to see more children adapters spawn, just set this true
         "forceMuzzle": false,
         "muzzleChance": [ 10, 25, 40, 55, 65, 75, 75 ],
         "forceChildrenMuzzle": false,
