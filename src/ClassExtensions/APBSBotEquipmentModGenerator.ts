@@ -25,20 +25,21 @@ import { LocalisationService } from "@spt/services/LocalisationService";
 import { HashUtil } from "@spt/utils/HashUtil";
 import { RandomUtil } from "@spt/utils/RandomUtil";
 import { ICloner } from "@spt/utils/cloners/ICloner";
-
-import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
-import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
-import { APBSTierGetter } from "../Utils/APBSTierGetter";
-import { ModConfig } from "../Globals/ModConfig";
-import { RaidInformation } from "../Globals/RaidInformation";
-import { IChooseRandomCompatibleModResult } from "@spt/models/spt/bots/IChooseRandomCompatibleModResult";
-import { ModInformation } from "../Globals/ModInformation";
-import { APBSTester } from "../Utils/APBSTester";
 import { Money } from "@spt/models/enums/Money";
 import { IGenerateWeaponRequest } from "@spt/models/spt/bots/IGenerateWeaponRequest";
 import { IModToSpawnRequest } from "@spt/models/spt/bots/IModToSpawnRequest";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { IEquipmentFilterDetails } from "@spt/models/spt/config/IBotConfig";
+import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
+import { IChooseRandomCompatibleModResult } from "@spt/models/spt/bots/IChooseRandomCompatibleModResult";
+
+import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
+import { APBSTierGetter } from "../Utils/APBSTierGetter";
+import { ModConfig } from "../Globals/ModConfig";
+import { RaidInformation } from "../Globals/RaidInformation";
+import { ModInformation } from "../Globals/ModInformation";
+import { APBSTester } from "../Utils/APBSTester";
+import { vanillaButtpads } from "../Globals/VanillaItemLists";
 
 /** Handle profile related client events */
 @injectable()
@@ -609,6 +610,14 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             ) 
             {
                 continue;
+            }
+
+            if (vanillaButtpads.includes(modToAddTemplate._id))
+            {
+                if (!this.randomUtil.getChance100(ModConfig.config.stockButtpadChance))
+                {
+                    continue;
+                }
             }
             
             // If item is a mount for scopes, set scope chance to 100%, this helps fix empty mounts appearing on weapons
