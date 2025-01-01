@@ -52,6 +52,7 @@ import { BlacklistHelper } from "./Helpers/BlacklistHelper";
 import { RealismHelper } from "./Helpers/RealismHelper";
 import { APBSTester } from "./Utils/APBSTester";
 import { APBSAttachmentChecker } from "./Utils/APBSAttachmentChecker";
+import { SeasonalEventService } from "@spt/services/SeasonalEventService";
 
 export class InstanceManager 
 {
@@ -86,6 +87,7 @@ export class InstanceManager
     public botGeneratorHelper: BotGeneratorHelper;
     public repairService: RepairService;
     public vfs: VFS;
+    public seasonalEventService: SeasonalEventService;
 
     public apbsLogger: APBSLogger;
     public apbsTierGetter: APBSTierGetter;
@@ -143,6 +145,7 @@ export class InstanceManager
         this.repairService = container.resolve<RepairService>("RepairService");
         this.cloner = container.resolve<ICloner>("PrimaryCloner");
         this.vfs = container.resolve<VFS>("VFS");
+        this.seasonalEventService = container.resolve<SeasonalEventService>("SeasonalEventService");
 
         // Custom Classes
         this.container.register<ModInformation>("ModInformation", ModInformation, { lifecycle: Lifecycle.Singleton })
