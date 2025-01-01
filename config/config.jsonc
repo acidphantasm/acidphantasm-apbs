@@ -24,6 +24,11 @@
         "followerWeaponWeights": 7,
         "enableSafeGuard": true,
 
+// Enable/Disable PMC Seasonal Clothing
+// If true, PMCs will wear seasonal appropriate clothing to blend into the environment better. If disabled, clothing will be tiered by level instead.
+// If true, modded clothing will not import, regardless of setting, to protect the appearance of appropriate clothing.
+        "seasonalPmcAppearance": true,
+
 // Enable/Disable Realism Gas Mask Compatibility
 // APBS automatically detects Realism and adds gas masks to bots due to Radiation Zones. If you dont want this to happen, set to true.
         "disableRealismGasMasks": false,

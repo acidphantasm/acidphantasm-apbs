@@ -43,6 +43,7 @@ export interface Config
     scavWeaponWeights: number,
     followerWeaponWeights: number,
     enableSafeGuard: boolean,
+    seasonalPmcAppearance: boolean,
     disableRealismGasMasks: boolean,
     onlyChads: boolean,
     tarkovAndChill: boolean,
