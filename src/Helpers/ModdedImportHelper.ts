@@ -134,7 +134,7 @@ export class ModdedImportHelper
         }
         if (ModConfig.config.enableModdedWeapons) this.buildVanillaWeaponList();
         if (ModConfig.config.enableModdedEquipment) this.buildVanillaEquipmentList();
-        if (ModConfig.config.enableModdedClothing) this.buildVanillaClothingList();
+        if (ModConfig.config.enableModdedClothing && !ModConfig.config.seasonalPmcAppearance) this.buildVanillaClothingList();
     }
 
     private buildVanillaWeaponList(): void

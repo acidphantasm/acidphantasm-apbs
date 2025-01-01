@@ -8,6 +8,8 @@ import { APBSLogger } from "./APBSLogger";
 import { TierInformation } from "../Globals/TierInformation";
 import { ModConfig } from "../Globals/ModConfig";
 import { RandomUtil } from "@spt/utils/RandomUtil";
+import { Season } from "@spt/models/enums/Season";
+import { SeasonalEventService } from "@spt/services/SeasonalEventService";
 
 @injectable()
 export class APBSEquipmentGetter
@@ -18,7 +20,8 @@ export class APBSEquipmentGetter
         @inject("TierInformation") protected tierInformation: TierInformation,
         @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper,
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
-        @inject("RandomUtil") protected randomUtil: RandomUtil
+        @inject("RandomUtil") protected randomUtil: RandomUtil,
+        @inject("SeasonalEventService") protected seasonalEventService: SeasonalEventService
     )
     {}
 
@@ -321,14 +324,56 @@ export class APBSEquipmentGetter
         }
     }
 
-    public getPmcAppearance(botRole: string, tierInfo: number): Record<string, Record<string, number>>
+    public getPmcAppearance(botRole: string, tierInfo: number, getSeason?: boolean): Record<string, Record<string, number>>
     {
         const tierJson = this.getAppearanceJson(tierInfo)
         switch (botRole)
         {
             case "pmcUSEC":
+                if (getSeason && tierInfo != 0)
+                {
+                    const activeSeason: Season = this.seasonalEventService.getActiveWeatherSeason();
+                    switch (activeSeason)
+                    {
+                        case Season.SPRING_EARLY:
+                            return tierJson.earlySpring.pmcUSEC.appearance;
+                        case Season.SPRING:
+                            return tierJson.spring.pmcUSEC.appearance;
+                        case Season.SUMMER:
+                        case Season.STORM:
+                            return tierJson.summer.pmcUSEC.appearance;
+                        case Season.AUTUMN:
+                        case Season.AUTUMN_LATE:
+                            return tierJson.autumn.pmcUSEC.appearance;
+                        case Season.WINTER:
+                            return tierJson.winter.pmcUSEC.appearance;
+                        default:
+                            return tierJson.summer.pmcUSEC.appearance;
+                    }
+                }
                 return tierJson.pmcUSEC.appearance;
             case "pmcBEAR":
+                if (getSeason && tierInfo != 0)
+                {
+                    const activeSeason: Season = this.seasonalEventService.getActiveWeatherSeason();
+                    switch (activeSeason)
+                    {
+                        case Season.SPRING_EARLY:
+                            return tierJson.earlySpring.pmcBEAR.appearance;
+                        case Season.SPRING:
+                            return tierJson.spring.pmcBEAR.appearance;
+                        case Season.SUMMER:
+                        case Season.STORM:
+                            return tierJson.summer.pmcBEAR.appearance;
+                        case Season.AUTUMN:
+                        case Season.AUTUMN_LATE:
+                            return tierJson.autumn.pmcBEAR.appearance;
+                        case Season.WINTER:
+                            return tierJson.winter.pmcBEAR.appearance;
+                        default:
+                            return tierJson.summer.pmcBEAR.appearance;
+                    }
+                }
                 return tierJson.pmcBEAR.appearance;
         }
     }
