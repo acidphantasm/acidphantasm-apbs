@@ -24,6 +24,11 @@
         "followerWeaponWeights": 7,
         "enableSafeGuard": true,
 
+// Enable/Disable PMC Seasonal Clothing
+// If true, PMCs will wear seasonal appropriate clothing to blend into the environment better. If disabled, clothing will be tiered by level instead.
+// If true, modded clothing will not import, regardless of setting, to protect the appearance of appropriate clothing.
+        "seasonalPmcAppearance": true,
+
 // Enable/Disable Realism Gas Mask Compatibility
 // APBS automatically detects Realism and adds gas masks to bots due to Radiation Zones. If you dont want this to happen, set to true.
         "disableRealismGasMasks": false,
@@ -71,7 +76,9 @@
 
 // Force weapon stocks
 // If set to true, will enforce all AI weapons to have stocks, if false - will use APBS values
+// "stockButtpadChance" will allow dynamic configuration of any butt pads spawning on a stock that can take them.
         "forceStock": false,
+        "stockButtpadChance": 50,
 
 // Force weapon dust covers
 // If set to true, will enforce all AI weapons to have dust covers, if false - will use APBS values
@@ -84,8 +91,9 @@
 
 // Force weapon muzzles
 // "forceMuzzle" If set to true, will enforce all AI PMC weapons to have muzzles based on the chance configured, if false - will use APBS values
-// "muzzleChance" chance of muzzle being selected (overrides preset and database values)
+// "muzzleChance" chance of muzzle being selected (overrides preset and database values) for each tier [ T1, T2, T3, T4, T5, T6, T7 ]
 // "forceChildrenMuzzle" If set to true, enforces muzzle children to also spawn (so if it rolls to pick a threaded adapter, the child silencer will be forced to spawn), if false - will roll those slots independently 
+// "forceChildrenMuzzle" works regardless of you setting forceMuzzle or not - if you just want to see more children adapters spawn, just set this true
         "forceMuzzle": false,
         "muzzleChance": [ 10, 25, 40, 55, 65, 75, 75 ],
         "forceChildrenMuzzle": false,

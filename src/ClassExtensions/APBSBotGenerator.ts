@@ -25,6 +25,7 @@ import { IBotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails
 import { IWildBody } from "@spt/models/eft/common/IGlobals";
 import { BotNameService } from "@spt/services/BotNameService";
 import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
+import { ModConfig } from "../Globals/ModConfig";
 
 /** Handle profile related client events */
 @injectable()
@@ -78,12 +79,13 @@ export class APBSBotGenerator extends BotGenerator
         {
             const tier = this.apbsTierGetter.getTierByLevel(bot.Info.Level)
             const role = bot.Info.Settings.Role
-            const appearanceJson = this.apbsEquipmentGetter.getPmcAppearance(role, tier)
+            const getSeasonalAppearance = ModConfig.config.seasonalPmcAppearance ? true : false;
+            const appearanceJson = this.apbsEquipmentGetter.getPmcAppearance(role, tier, getSeasonalAppearance);
 
             bot.Customization.Head = this.weightedRandomHelper.getWeightedValue<string>(appearanceJson.head);
+            bot.Customization.Hands = this.weightedRandomHelper.getWeightedValue<string>(appearanceJson.hands);
             bot.Customization.Body = this.weightedRandomHelper.getWeightedValue<string>(appearanceJson.body);
             bot.Customization.Feet = this.weightedRandomHelper.getWeightedValue<string>(appearanceJson.feet);
-            bot.Customization.Hands = this.weightedRandomHelper.getWeightedValue<string>(appearanceJson.hands);
 
             const bodyGlobalDict = this.databaseService.getGlobals().config.Customization.SavageBody;
             const chosenBodyTemplate = this.databaseService.getCustomization()[bot.Customization.Body];
