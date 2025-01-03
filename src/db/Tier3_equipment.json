@@ -3,7 +3,7 @@
         "equipment": {
             "FirstPrimaryWeapon": {
                 "LongRange": {
-                    "5c07c60e0db834002330051f": 5,
+                    "5c07c60e0db834002330051f": 25,
                     "5d43021ca4b9362eab4b5e25": 25,
                     "5b0bbe4e5acfc40dc528a72d": 15,
                     "5bfea6e90db834001b7347f3": 25,
@@ -74,7 +74,7 @@
             },
             "SecondPrimaryWeapon": {
                 "LongRange": {
-                    "5c07c60e0db834002330051f": 5,
+                    "5c07c60e0db834002330051f": 25,
                     "5d43021ca4b9362eab4b5e25": 25,
                     "5b0bbe4e5acfc40dc528a72d": 15,
                     "5bfea6e90db834001b7347f3": 25,
