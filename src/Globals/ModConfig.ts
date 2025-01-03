@@ -71,6 +71,7 @@ export interface Config
     muzzleChance: [ number, number, number, number, number, number, number ],
     forceChildrenMuzzle: boolean,
     pmcLoot: boolean,
+    pmcLootBlacklistItems: string[],
     scavLoot: boolean,
     enableScavAttachmentTiering: boolean,
     enableScavEqualEquipmentTiering: boolean,

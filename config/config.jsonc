@@ -112,7 +112,10 @@
 
 // Enable/Disable PMC/scav Loot
 // If set to true, will allow PMCs/scavs to have backpack/rig/pocket loot. If disabled, they will not.
+// Add ItemIDs to the blacklist array to prevent them from spawning
+// Blacklist example "pmcLootBlacklistItems": ["6711039f9e648049e50b3307", "5c0e531286f7747fa54205c2"]
         "pmcLoot": false,
+        "pmcLootBlacklistItems": [ "6711039f9e648049e50b3307" ],
         "scavLoot": true,
 
 // Enable/Disabe Scav specific tiering options
