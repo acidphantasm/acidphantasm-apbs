@@ -336,7 +336,7 @@ export class APBSEquipmentGetter
                     switch (activeSeason)
                     {
                         case Season.SPRING_EARLY:
-                            return tierJson.earlySpring.pmcUSEC.appearance;
+                            return tierJson.springEarly.pmcUSEC.appearance;
                         case Season.SPRING:
                             return tierJson.spring.pmcUSEC.appearance;
                         case Season.SUMMER:
@@ -359,7 +359,7 @@ export class APBSEquipmentGetter
                     switch (activeSeason)
                     {
                         case Season.SPRING_EARLY:
-                            return tierJson.earlySpring.pmcBEAR.appearance;
+                            return tierJson.springEarly.pmcBEAR.appearance;
                         case Season.SPRING:
                             return tierJson.spring.pmcBEAR.appearance;
                         case Season.SUMMER:
