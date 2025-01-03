@@ -62,8 +62,8 @@ export class RaidInformation
         },
         "Woods":
         {
-            "LongRange": 90,
-            "ShortRange": 10
+            "LongRange": 60,
+            "ShortRange": 40
         },
         "Shoreline":
         {

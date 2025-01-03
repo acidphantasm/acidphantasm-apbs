@@ -336,6 +336,15 @@ export class BotConfigs
         this.pmcConfig.looseWeaponInBackpackLootMinMax.max = 0;
         if (ModConfig.config.pmcLoot)
         {
+            if (ModConfig.config.pmcLootBlacklistItems.length > 0)
+            {
+                for (const item in ModConfig.config.pmcLootBlacklistItems)
+                {
+                    this.pmcConfig.backpackLoot.blacklist.push(item);
+                    this.pmcConfig.vestLoot.blacklist.push(item);
+                    this.pmcConfig.pocketLoot.blacklist.push(item);
+                }
+            }
             for (const level in this.tierInformation.lootRandomization)
             {
                 this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["0"] =  1

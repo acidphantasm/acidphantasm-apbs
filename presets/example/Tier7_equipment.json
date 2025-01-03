@@ -4,8 +4,8 @@
             "FirstPrimaryWeapon": {
                 "LongRange": {
                     "5d43021ca4b9362eab4b5e25": 20,
-                    "5b0bbe4e5acfc40dc528a72d": 30,
-                    "5bfea6e90db834001b7347f3": 30,
+                    "5b0bbe4e5acfc40dc528a72d": 25,
+                    "5bfea6e90db834001b7347f3": 15,
                     "65290f395ae2ae97b80fdf2d": 15,
                     "6176aca650224f204c1da3fb": 15,
                     "5aafa857e5b5b00018480968": 25,
@@ -79,8 +79,8 @@
             "SecondPrimaryWeapon": {
                 "LongRange": {
                     "5d43021ca4b9362eab4b5e25": 20,
-                    "5b0bbe4e5acfc40dc528a72d": 30,
-                    "5bfea6e90db834001b7347f3": 30,
+                    "5b0bbe4e5acfc40dc528a72d": 25,
+                    "5bfea6e90db834001b7347f3": 15,
                     "65290f395ae2ae97b80fdf2d": 15,
                     "6176aca650224f204c1da3fb": 15,
                     "5aafa857e5b5b00018480968": 25,
