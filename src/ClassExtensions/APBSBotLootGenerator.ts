@@ -179,7 +179,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
             healingItemCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -194,7 +194,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
             drugItemCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -209,7 +209,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
             foodItemCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -224,7 +224,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
             drinkItemCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -239,7 +239,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
             currencyItemCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -269,7 +269,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
             grenadeCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
