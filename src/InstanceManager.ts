@@ -27,6 +27,7 @@ import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
 import { BotWeaponModLimitService } from "@spt/services/BotWeaponModLimitService";
 import { RepairService } from "@spt/services/RepairService";
+import { SeasonalEventService } from "@spt/services/SeasonalEventService";
 import { VFS } from "@spt/utils/VFS";
 
 // Custom
@@ -52,7 +53,8 @@ import { BlacklistHelper } from "./Helpers/BlacklistHelper";
 import { RealismHelper } from "./Helpers/RealismHelper";
 import { APBSTester } from "./Utils/APBSTester";
 import { APBSAttachmentChecker } from "./Utils/APBSAttachmentChecker";
-import { SeasonalEventService } from "@spt/services/SeasonalEventService";
+import { APBSBotLootCacheService } from "./ClassExtensions/APBSBotLootCacheService";
+import { APBSPlayerScavGenerator } from "./ClassExtensions/APBSPlayerScavGenerator";
 
 export class InstanceManager 
 {
@@ -182,6 +184,10 @@ export class InstanceManager
         this.container.register("BotInventoryGenerator", { useToken: "APBSBotInventoryGenerator" });
         this.container.register<APBSBotEquipmentModGenerator>("APBSBotEquipmentModGenerator", APBSBotEquipmentModGenerator);
         this.container.register("BotEquipmentModGenerator", { useToken: "APBSBotEquipmentModGenerator" });
+        this.container.register<APBSPlayerScavGenerator>("APBSPlayerScavGenerator", APBSPlayerScavGenerator);
+        this.container.register("PlayerScavGenerator", { useToken: "APBSPlayerScavGenerator" });
+        this.container.register<APBSBotLootCacheService>("APBSBotLootCacheService", APBSBotLootCacheService);
+        this.container.register("BotLootCacheService", { useToken: "APBSBotLootCacheService" });
         this.container.register<APBSBotLootGenerator>("APBSBotLootGenerator", APBSBotLootGenerator);
         this.container.register("BotLootGenerator", { useToken: "APBSBotLootGenerator" });
         this.container.register<APBSBotWeaponGenerator>("APBSBotWeaponGenerator", APBSBotWeaponGenerator);
