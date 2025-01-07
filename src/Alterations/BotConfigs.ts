@@ -40,25 +40,33 @@ export class BotConfigs
 
     public initialize(): void
     {
+        if (!ModConfig.config.disablePMCTierGeneration)
+        {
+            this.setPMCItemLimits();
+            this.setPMCLoot();
+            this.setPMCScopeWhitelist();
+            this.setPMCSlotIDsToMakeRequired();
+            if (ModConfig.config.gameVersionWeight) this.setPMCGameVersionWeights();
+        }
+        if (!ModConfig.config.disableScavTierGeneration)
+        {
+            if (ModConfig.config.addAllKeysToScavs || ModConfig.config.addOnlyKeyCardsToScavs || ModConfig.config.addOnlyMechanicalKeysToScavs) this.pushScavKeys();
+            if (!ModConfig.config.scavLoot) this.removeScavLoot();
+        }
+
         this.clearNoLongerNeededBotDetails();
         this.configureBotExperienceLevels();
         this.configurePlateWeightings();
         this.configureWeaponDurability();
         this.adjustNVG();
         this.setLootItemResourceRandomization();
-        this.setPMCItemLimits();
-        this.setPMCLoot();
-        this.setPMCScopeWhitelist();
-        this.setPMCSlotIDsToMakeRequired();
         this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
-        if (ModConfig.config.gameVersionWeight) this.setPMCGameVersionWeights();
-        if (ModConfig.config.addAllKeysToScavs || ModConfig.config.addOnlyKeyCardsToScavs || ModConfig.config.addOnlyMechanicalKeysToScavs) this.pushScavKeys();
+        
         if (ModConfig.config.enableCustomPlateChances) this.setPlateChances();
         if (ModConfig.config.forceStock) this.setForceStock();
         if (ModConfig.config.forceDustCover) this.setForceDustCover();
         if (ModConfig.config.forceScopeSlot) this.setForceScopes();
         if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
-        if (!ModConfig.config.scavLoot) this.removeScavLoot();
         if (ModConfig.config.enableScavEqualEquipmentTiering) this.setIdenticalScavWeights();
         if (ModConfig.config.enableCustomLevelDeltas) this.setLevelDeltas();
         if (ModConfig.config.enableScavCustomLevelDeltas) this.setScavLevelDeltas();
@@ -332,8 +340,12 @@ export class BotConfigs
 
     private setPMCLoot(): void
     {
+        const allBots = this.database.getTables().bots.types;
+
         this.pmcConfig.looseWeaponInBackpackLootMinMax.min = 0;
         this.pmcConfig.looseWeaponInBackpackLootMinMax.max = 0;
+        this.botConfig.equipment.pmc.randomisation = [];
+
         if (ModConfig.config.pmcLoot)
         {
             if (ModConfig.config.pmcLootBlacklistItems.length > 0)
@@ -345,77 +357,22 @@ export class BotConfigs
                     this.pmcConfig.pocketLoot.blacklist.push(item);
                 }
             }
-            for (const level in this.tierInformation.lootRandomization)
-            {
-                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["0"] =  1
-                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["3"] =  2
-                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["5"] =  5
-                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["8"] =  6
-                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["10"] =  5
-                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["12"] =  4
-                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["15"] =  4
-                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["20"] =  3
-                this.tierInformation.lootRandomization[level].generation.backpackLoot.weights["23"] =  1
-                
-                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["0"] =  1
-                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["1"] =  3
-                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["2"] =  4
-                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["3"] =  2
-                this.tierInformation.lootRandomization[level].generation.pocketLoot.weights["4"] =  1
-                
-                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["0"] =  1
-                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["1"] =  2
-                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["2"] =  3
-                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["3"] =  2
-                this.tierInformation.lootRandomization[level].generation.vestLoot.weights["4"] =  1
-            }
-            for (const tierObject in this.tierInformation.tiers)
-            {
-                const tierNumber = this.tierInformation.tiers[tierObject].tier
-                const tierJson = this.apbsEquipmentGetter.getTierChancesJson(tierNumber);
-
-                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["0"] = 4
-                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["1"] = 15
-                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["2"] = 40
-                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["3"] = 10
-                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["4"] = 8
-                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["5"] = 2
-                tierJson.pmcUSEC.chances.generation.items.backpackLoot.weights["10"] = 1
-                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["0"] = 4
-                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["1"] = 15
-                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["2"] = 40
-                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["3"] = 10
-                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["4"] = 8
-                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["5"] = 2
-                tierJson.pmcBEAR.chances.generation.items.backpackLoot.weights["10"] = 1
-
-                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["0"] = 4
-                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["1"] = 9
-                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["2"] = 1
-                tierJson.pmcUSEC.chances.generation.items.pocketLoot.weights["3"] = 1
-                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["0"] = 4
-                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["1"] = 9
-                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["2"] = 1
-                tierJson.pmcBEAR.chances.generation.items.pocketLoot.weights["3"] = 1
-
-                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["0"] = 2
-                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["1"] = 12
-                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["2"] = 1
-                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["3"] = 1
-                tierJson.pmcUSEC.chances.generation.items.vestLoot.weights["4"] = 1
-                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["0"] = 2
-                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["1"] = 12
-                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["2"] = 1
-                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["3"] = 1
-                tierJson.pmcBEAR.chances.generation.items.vestLoot.weights["4"] = 1
-            }            
-            this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
         }
-        else
+        if (!ModConfig.config.pmcLoot)
+        {            
+            this.botConfig.disableLootOnBotTypes.push("pmcusec", "pmcbear")
+        }
+        
+        for (const botType in allBots)
         {
-            this.botConfig.equipment.pmc.randomisation = this.tierInformation.lootRandomization;
+            if (botType == "pmcbear" || botType == "pmcusec")
+            {
+                allBots[botType].inventory.items.Backpack = {};
+                allBots[botType].inventory.items.Pockets = {};
+                allBots[botType].inventory.items.TacticalVest = {};
+                allBots[botType].inventory.items.SpecialLoot = {};
+            }
         }
-
     }
 
     private setPMCScopeWhitelist(): void
@@ -514,12 +471,7 @@ export class BotConfigs
 
     private removeScavLoot(): void
     {
-        this.tables.bots.types.assault.inventory.items.Backpack = {}
-        this.tables.bots.types.assault.inventory.items.Pockets = {}
-        this.tables.bots.types.assault.inventory.items.TacticalVest = {}
-        this.tables.bots.types.marksman.inventory.items.Backpack = {}
-        this.tables.bots.types.marksman.inventory.items.Pockets = {}
-        this.tables.bots.types.marksman.inventory.items.TacticalVest = {}
+        this.botConfig.disableLootOnBotTypes.push("assault", "marksman");
     }
 
     private setIdenticalScavWeights(): void
