@@ -45,7 +45,10 @@ export class APBSBotLootGenerator extends BotLootGenerator
         @inject("ConfigServer") protected configServer: ConfigServer,
         @inject("PrimaryCloner") protected cloner: ICloner,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
-        @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter
+        @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("APBSBotLootCacheService") protected apbsBotLootCacheService: APBSBotLootCacheService,
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
         super(logger, 
@@ -73,11 +76,19 @@ export class APBSBotLootGenerator extends BotLootGenerator
         botInventory: PmcInventory,
         botLevel: number
     ): void
-    {// Limits on item types to be added as loot
-        
+    {
+        // Limits on item types to be added as loot
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
         const chances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-        const itemCounts: IGenerationWeightingItems = chances.generation.items;
+        let itemCounts: IGenerationWeightingItems = chances.generation.items;
+        let useOriginalLootCache = false;
+
+        if (!this.raidInformation.isBotEnabled(botRole))
+        {
+            this.apbsLogger.log(Logging.DEBUG, `${botRole} is disabled - TRACE: generateLoot`);
+            itemCounts = botJsonTemplate.generation.items;
+            useOriginalLootCache = true;
+        }
 
         if (
             !itemCounts.backpackLoot.weights
