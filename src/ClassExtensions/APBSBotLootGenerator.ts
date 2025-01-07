@@ -23,6 +23,12 @@ import { BotLootGenerator } from "@spt/generators/BotLootGenerator";
 
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
+import { APBSBotLootCacheService } from "./APBSBotLootCacheService";
+import { RaidInformation } from "../Globals/RaidInformation";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
+import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { IItemSpawnLimitSettings } from "@spt/models/spt/bots/IItemSpawnLimitSettings";
 
 /** Handle profile related client events */
 @injectable()
@@ -157,7 +163,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Special items
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.SPECIAL, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.SPECIAL, botJsonTemplate) :
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.SPECIAL, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             specialLootItemCount,
             botInventory,
@@ -170,7 +178,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Healing items / Meds
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.HEALING_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.HEALING_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.HEALING_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             healingItemCount,
             botInventory,
@@ -183,7 +193,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Drugs
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.DRUG_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.DRUG_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.DRUG_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             drugItemCount,
             botInventory,
@@ -196,7 +208,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Food
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.FOOD_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.FOOD_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.FOOD_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             foodItemCount,
             botInventory,
@@ -209,7 +223,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Drink
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.DRINK_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.DRINK_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.DRINK_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             drinkItemCount,
             botInventory,
@@ -222,7 +238,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Currency
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.CURRENCY_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.CURRENCY_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.CURRENCY_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             currencyItemCount,
             botInventory,
@@ -235,7 +253,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Stims
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.STIM_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.STIM_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.STIM_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             stimItemCount,
             botInventory,
@@ -248,7 +268,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Grenades
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.GRENADE_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.GRENADE_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.GRENADE_ITEMS, botJsonTemplate, botLevel),
             [EquipmentSlots.POCKETS, EquipmentSlots.TACTICAL_VEST], // Can't use containersBotHasEquipped as we dont want grenades added to backpack
             grenadeCount,
             botInventory,
@@ -280,7 +302,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
             const backpackLootRoubleTotal = this.getBackpackRoubleTotalByLevel(botLevel, isPmc);
             this.addLootFromPool(
-                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.BACKPACK, botJsonTemplate),
+                useOriginalLootCache ?
+                    this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.BACKPACK, botJsonTemplate) : 
+                    this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.BACKPACK, botJsonTemplate, botLevel),
                 [EquipmentSlots.BACKPACK],
                 backpackLootCount,
                 botInventory,
@@ -297,7 +321,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
         {
             // Vest
             this.addLootFromPool(
-                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.VEST, botJsonTemplate),
+                useOriginalLootCache ?
+                    this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.VEST, botJsonTemplate) : 
+                    this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.VEST, botJsonTemplate, botLevel),
                 [EquipmentSlots.TACTICAL_VEST],
                 vestLootCount,
                 botInventory,
@@ -311,7 +337,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Pockets
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.POCKET, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.POCKET, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.POCKET, botJsonTemplate, botLevel),
             [EquipmentSlots.POCKETS],
             pocketLootCount,
             botInventory,
@@ -328,7 +356,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
         if (!isPmc || (isPmc && this.pmcConfig.addSecureContainerLootFromBotConfig))
         {
             this.addLootFromPool(
-                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.SECURE, botJsonTemplate),
+                useOriginalLootCache ?
+                    this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.SECURE, botJsonTemplate) : 
+                    this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.SECURE, botJsonTemplate, botLevel),
                 [EquipmentSlots.SECURED_CONTAINER],
                 50,
                 botInventory,
