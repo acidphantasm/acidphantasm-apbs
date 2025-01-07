@@ -31,6 +31,9 @@ import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { WeatherHelper } from "@spt/helpers/WeatherHelper";
 import { BotEquipmentFilterService } from "@spt/services/BotEquipmentFilterService";
 import { IGetRaidConfigurationRequestData } from "@spt/models/eft/match/IGetRaidConfigurationRequestData";
+import { RaidInformation } from "../Globals/RaidInformation";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
 
 /** Handle profile related client events */
 @injectable()
@@ -57,7 +60,9 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         @inject("ConfigServer") protected configServer: ConfigServer,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
-        @inject("APBSBotWeaponGenerator") protected apbsBotWeaponGenerator: APBSBotWeaponGenerator
+        @inject("APBSBotWeaponGenerator") protected apbsBotWeaponGenerator: APBSBotWeaponGenerator,
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
         super(logger, 
@@ -90,8 +95,8 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
     ): PmcInventory 
     {
         const templateInventory = botJsonTemplate.inventory;
-        let wornItemChances = botJsonTemplate.chances;
-        const itemGenerationLimitsMinMax = botJsonTemplate.generation;
+        const wornItemChances = botJsonTemplate.chances;
+        const itemGenerationLimitsMinMax: IGeneration = botJsonTemplate.generation;
 
         // Generate base inventory with no items
         const botInventory = this.generateInventoryBase();
@@ -110,55 +115,22 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             chosenGameVersion,
             raidConfig
         );
-        // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed
-        if (((botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena")) && ModConfig.config.disableBossTierGeneration) || botRole == "bosslegion" || botRole == "bosspunisher")
-        {
-            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
-            this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
-    
-            return botInventory;
-        }
-        if (botRole.includes("follower") && ModConfig.config.disableBossFollowerTierGeneration)
-        {
-            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
-            this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
-    
-            return botInventory;
-        }
-        if ((botRole.includes("exusec") || botRole.includes("pmcbot")) && !ModConfig.config.disableRaiderRogueTierGeneration)
-        {
-            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
-            this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
-    
-            return botInventory;
-        }
-        if (botRole.includes("pmc") && ModConfig.config.disablePMCTierGeneration)
-        {
-            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
-            this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
-    
-            return botInventory;
-        }
-        if ((botRole.includes("assault") || botRole.includes("marksman")) && ModConfig.config.disableScavTierGeneration)
-        {
-            this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
-            this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
-    
-            return botInventory;
-        }
         
-        if (botRole.includes("infected") || botRole.includes("spirit") || botRole.includes("skier") || botRole.includes("peacemaker") || botRole.includes("gifter"))
+        if (!this.raidInformation.isBotEnabled(botRole))
         {
+            this.apbsLogger.log(Logging.DEBUG, `${botRole} is disabled - TRACE: generateInventory`);
             this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
             this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
-    
+
             return botInventory;
         }
 
         // APBS generation chances instead
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-        wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-        this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
+        const chances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
+        const generation = chances.generation;
+        
+        this.generateAndAddWeaponsToBot(templateInventory, chances, sessionId, botInventory, botRole, isPmc, generation, botLevel);
         this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
 
         return botInventory;
@@ -178,48 +150,9 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         let modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
         let apbsBot = true;
 
-        if ((ModConfig.config.disableBossTierGeneration && (botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena"))) || botRole == "bosslegion" || botRole == "bosspunisher")
+        if (!this.raidInformation.isBotEnabled(botRole))
         {
-            equipmentPool = settings.rootEquipmentPool;
-            randomisationDetails = settings.randomisationDetails;
-            wornItemChances = settings.spawnChances;
-            modPool = settings.modPool;
-            apbsBot = false;
-        }
-        if (ModConfig.config.disableBossFollowerTierGeneration && botRole.includes("follower"))
-        {
-            equipmentPool = settings.rootEquipmentPool;
-            randomisationDetails = settings.randomisationDetails;
-            wornItemChances = settings.spawnChances;
-            modPool = settings.modPool;
-            apbsBot = false;
-        }
-        if (ModConfig.config.disableRaiderRogueTierGeneration && (botRole.includes("exusec") || botRole.includes("pmcbot")))
-        {
-            equipmentPool = settings.rootEquipmentPool;
-            randomisationDetails = settings.randomisationDetails;
-            wornItemChances = settings.spawnChances;
-            modPool = settings.modPool;
-            apbsBot = false;
-        }
-        if (ModConfig.config.disablePMCTierGeneration && (botRole.includes("pmcusec") || botRole.includes("pmcbear")))
-        {
-            equipmentPool = settings.rootEquipmentPool;
-            randomisationDetails = settings.randomisationDetails;
-            wornItemChances = settings.spawnChances;
-            modPool = settings.modPool;
-            apbsBot = false;
-        }
-        if (ModConfig.config.disableScavTierGeneration && (botRole.includes("assault") || botRole.includes("marksman")))
-        {
-            equipmentPool = settings.rootEquipmentPool;
-            randomisationDetails = settings.randomisationDetails;
-            wornItemChances = settings.spawnChances;
-            modPool = settings.modPool;
-            apbsBot = false;
-        }
-        if (botRole.includes("infected") || botRole.includes("spirit") || botRole.includes("skier") || botRole.includes("peacemaker") || botRole.includes("gifter"))
-        {
+            this.apbsLogger.log(Logging.DEBUG, `${botRole} is disabled - TRACE: generateEquipment`);
             equipmentPool = settings.rootEquipmentPool;
             randomisationDetails = settings.randomisationDetails;
             wornItemChances = settings.spawnChances;

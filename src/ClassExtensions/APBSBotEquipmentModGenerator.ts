@@ -40,6 +40,8 @@ import { RaidInformation } from "../Globals/RaidInformation";
 import { ModInformation } from "../Globals/ModInformation";
 import { APBSTester } from "../Utils/APBSTester";
 import { vanillaButtpads } from "../Globals/VanillaItemLists";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
 
 /** Handle profile related client events */
 @injectable()
@@ -70,7 +72,8 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
         @inject("ModInformation") protected modInformation: ModInformation,
-        @inject("APBSTester") protected apbsTester: APBSTester
+        @inject("APBSTester") protected apbsTester: APBSTester,
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
         super(logger, 
@@ -101,43 +104,14 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         const botRole = settings.botData.role;
         const tier = this.apbsTierGetter.getTierByLevel(settings.botData.level);
         const tieredModPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tier)
+        
+        let spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
         let compatibleModsPool = tieredModPool[parentTemplate._id]
         let actualModPool = tieredModPool;
-        let spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
 
-        // Roll weapon spawns (primary/secondary/holster) and generate a weapon for each roll that passed
-        if ((ModConfig.config.disableBossTierGeneration && (botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena"))) || botRole == "bosslegion" || botRole == "bosspunisher")
+        if (!this.raidInformation.isBotEnabled(botRole))
         {
-            spawnChances = settings.spawnChances;
-            compatibleModsPool = settings.modPool[parentTemplate._id];
-            actualModPool = settings.modPool;
-        }
-        if (ModConfig.config.disableBossFollowerTierGeneration && botRole.includes("follower"))
-        {
-            spawnChances = settings.spawnChances;
-            compatibleModsPool = settings.modPool[parentTemplate._id];
-            actualModPool = settings.modPool;
-        }
-        if (ModConfig.config.disableRaiderRogueTierGeneration && (botRole.includes("exusec") || botRole.includes("pmcbot")))
-        {
-            spawnChances = settings.spawnChances;
-            compatibleModsPool = settings.modPool[parentTemplate._id];
-            actualModPool = settings.modPool;
-        }
-        if (ModConfig.config.disablePMCTierGeneration && (botRole.includes("pmcusec") || botRole.includes("pmcbear")))
-        {
-            spawnChances = settings.spawnChances;
-            compatibleModsPool = settings.modPool[parentTemplate._id];
-            actualModPool = settings.modPool;
-        }
-        if (ModConfig.config.disableScavTierGeneration && (botRole.includes("assault") || botRole.includes("marksman")))
-        {
-            spawnChances = settings.spawnChances;
-            compatibleModsPool = settings.modPool[parentTemplate._id];
-            actualModPool = settings.modPool;
-        }
-        if (botRole.includes("infected") || botRole.includes("spirit") || botRole.includes("skier") || botRole.includes("peacemaker") || botRole.includes("gifter"))
-        {
+            this.apbsLogger.log(Logging.DEBUG, `${botRole} is disabled - TRACE: generateModsForEquipment`);
             spawnChances = settings.spawnChances;
             compatibleModsPool = settings.modPool[parentTemplate._id];
             actualModPool = settings.modPool;
