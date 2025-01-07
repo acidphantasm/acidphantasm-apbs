@@ -118,22 +118,16 @@ export class APBSBotLootGenerator extends BotLootGenerator
         let backpackLootCount = Number(
             this.weightedRandomHelper.getWeightedValue<number>(itemCounts.backpackLoot.weights)
         );
-        let pocketLootCount = Number(
-            this.weightedRandomHelper.getWeightedValue<number>(itemCounts.pocketLoot.weights)
-        );
+        let pocketLootCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.pocketLoot.weights));
         let vestLootCount = this.weightedRandomHelper.getWeightedValue<number>(itemCounts.vestLoot.weights);
-        const specialLootItemCount = Number(
-            this.weightedRandomHelper.getWeightedValue<number>(itemCounts.specialItems.weights)
-        );
+        const specialLootItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.specialItems.weights));
         const healingItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.healing.weights));
         const drugItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.drugs.weights));
 
         const foodItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.food.weights));
         const drinkItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.drink.weights));
 
-        let currencyItemCount = Number(
-            this.weightedRandomHelper.getWeightedValue<number>(itemCounts.currency.weights)
-        );
+        let currencyItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.currency.weights));
 
         const stimItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.stims.weights));
         const grenadeCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.grenades.weights));
