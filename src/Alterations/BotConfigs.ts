@@ -23,6 +23,33 @@ export class BotConfigs
     protected botConfig: IBotConfig;
     protected pmcConfig: IPmcConfig;
     
+    private pmcLimitedCategories = {
+        "5448e8d04bdc2ddf718b4569": 1,
+        "5448e8d64bdc2dce718b4568": 1,
+        "5448f39d4bdc2d0a728b4568": 1,
+        "5448f3a64bdc2d60728b456a": 2,
+        "5448f3ac4bdc2dce718b4569": 1,
+        "5448f3a14bdc2d27728b4569": 1,        
+        "5c99f98d86f7745c314214b3": 1,
+        "5c164d2286f774194c5e69fa": 1,
+        "550aa4cd4bdc2dd8348b456c": 2,
+        "55818add4bdc2d5b648b456f": 1,
+        "55818ad54bdc2ddc698b4569": 1,
+        "55818aeb4bdc2ddc698b456a": 1,
+        "55818ae44bdc2dde698b456c": 1,
+        "55818af64bdc2d5b648b4570": 1,
+        "5448e54d4bdc2dcc718b4568": 1,
+        "5447e1d04bdc2dff2f8b4567": 1,
+        "5a341c4686f77469e155819e": 1,
+        "55818b164bdc2ddc698b456c": 2,
+        "5448bc234bdc2d3c308b4569": 2,
+        "543be5dd4bdc2deb348b4569": 1,
+        "543be5cb4bdc2deb348b4568": 2,
+        "5485a8684bdc2da71d8b4567": 2,
+        "5d650c3e815116009f6201d2": 2,
+        "543be6564bdc2df4348b4568": 1
+    }
+
     constructor(
         @inject("IDatabaseTables") protected tables: IDatabaseTables,
         @inject("DatabaseService") protected database: DatabaseService,
@@ -327,15 +354,14 @@ export class BotConfigs
 
     private setPMCItemLimits(): void
     {
-        this.botConfig.itemSpawnLimits.pmc["60098ad7c2240c0fe85c570a"] = 1;
-        this.botConfig.itemSpawnLimits.pmc["590c678286f77426c9660122"] = 1;
-        this.botConfig.itemSpawnLimits.pmc["5e831507ea0a7c419c2f9bd9"] = 1;
-        this.botConfig.itemSpawnLimits.pmc["590c661e86f7741e566b646a"] = 1;
-        this.botConfig.itemSpawnLimits.pmc["544fb45d4bdc2dee738b4568"] = 1;
-        this.botConfig.itemSpawnLimits.pmc["5e8488fa988a8701445df1e4"] = 1;
-        this.botConfig.itemSpawnLimits.pmc["544fb37f4bdc2dee738b4567"] = 1;
-        this.botConfig.itemSpawnLimits.pmc["5448e8d04bdc2ddf718b4569"] = 1;
-        this.botConfig.itemSpawnLimits.pmc["5448e8d64bdc2dce718b4568"] = 1;
+        // Clear PMC item limits
+        this.botConfig.itemSpawnLimits.pmc = {}
+
+        // Go through custom limits and add them
+        for (const [item, count] of Object.entries(this.pmcLimitedCategories))
+        {
+            this.botConfig.itemSpawnLimits.pmc[item] = count;
+        }
     }
 
     private setPMCLoot(): void
