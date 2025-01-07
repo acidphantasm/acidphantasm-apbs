@@ -542,119 +542,160 @@
                 "items": {
                     "backpackLoot": {
                         "weights": {
-                            "0": 1
+                            "0": 1,
+                            "1": 1,
+                            "2": 2,
+                            "3": 1,
+                            "4": 0,
+                            "5": 0,
+                            "6": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
-                            "0": 8,
-                            "1": 1,
-                            "2": 0
+                            "0": 25,
+                            "1": 75
                         },
-                    "whitelist": [
-                        "5af0548586f7743a532b7e99",
-                        "544fb3f34bdc2d03748b456a",
-                        "5755383e24597772cb798966",
-                        "5751a89d24597722aa0e8db0"
-                    ]
+                        "whitelist": {
+                            "5755383e24597772cb798966": 3,
+                            "5751a89d24597722aa0e8db0": 3,
+                            "5af0548586f7743a532b7e99": 10
+                        }
                     },
                     "food": {
                         "weights": {
-                            "0": 10,
-                            "1": 1
+                            "0": 50,
+                            "1": 50
                         },
-                    "whitelist": []
+                        "whitelist": {
+                            "57347d692459774491567cf1": 10,
+                            "635a758bfefc88a93f021b8a": 5,
+                            "65815f0e647e3d7246384e14": 5,
+                            "590c5d4b86f774784e1b9c45": 5,
+                            "590c5f0d86f77413997acfab": 5,
+                            "5bc9c29cd4351e003562b8a3": 5,
+                            "5bc9b156d4351e00367fbce9": 1
+                        }
                     },
                     "drink": {
                         "weights": {
-                            "0": 10,
-                            "1": 1
+                            "0": 50,
+                            "1": 50
                         },
-                    "whitelist": []
+                        "whitelist": {
+                            "5448fee04bdc2dbc018b4567": 10,
+                            "5751496424597720a27126da": 5,
+                            "5751435d24597720a27126d1": 5,
+                            "60b0f93284c20f0feb453da7": 5,
+                            "57514643245977207f2c2d09": 5,
+                            "5c0fa877d174af02a012e1cf": 10,
+                            "5e8f3423fd7471236e6e3b64": 10,
+                            "60098b1705871270cd5352a1": 10
+                        }
                     },
                     "currency": {
                         "weights": {
-                            "0": 5,
-                            "1": 0
+                            "0": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
-                            "0": 2,
-                            "1": 3,
-                            "2": 3,
-                            "3": 1,
-                            "4": 0
+                            "0": 20,
+                            "1": 20,
+                            "2": 20,
+                            "3": 20,
+                            "4": 20
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb",
-                        "617fd91e5539a84ec44ce155",
-                        "618a431df1eb8e24b8741deb"
-                    ]
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 5,
+                            "5448be9a4bdc2dfd2f8b456a": 5,
+                            "58d3db5386f77426186285a0": 5,
+                            "5e32f56fcb6d5863cc5e5ee4": 3,
+                            "5e340dcdcb6d5863cc5e5efb": 3,
+                            "617fd91e5539a84ec44ce155": 3,
+                            "618a431df1eb8e24b8741deb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
                             "0": 0,
-                            "1": 3,
-                            "2": 6,
-                            "3": 3,
-                            "4": 0
+                            "1": 33,
+                            "2": 33,
+                            "3": 33
                         },
-                    "whitelist": [
-                        "544fb45d4bdc2dee738b4568",
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122",
-                        "5e8488fa988a8701445df1e4"
-                    ]
+                        "whitelist": {
+                            "60098ad7c2240c0fe85c570a": 10,
+                            "590c678286f77426c9660122": 3,
+                            "5e8488fa988a8701445df1e4": 7,
+                            "5af0454c86f7746bf20992e8": 7
+                        }
                     },
                     "magazines": {
                         "weights": {
                             "0": 0,
-                            "1": 1,
-                            "2": 3,
-                            "3": 6,
-                            "4": 5,
-                            "5": 1
+                            "1": 0,
+                            "2": 0,
+                            "3": 33,
+                            "4": 33,
+                            "5": 33
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
-                            "0": 1
+                            "0": 1,
+                            "1": 6,
+                            "2": 3,
+                            "3": 1,
+                            "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
                             "0": 10,
-                            "1": 4,
-                            "2": 1
+                            "1": 50,
+                            "2": 30,
+                            "3": 10
                         },
-                    "whitelist": [
-                        "544fb3f34bdc2d03748b456a",
-                        "5c0e530286f7747fa1419862",
-                        "5c0e534186f7747fa1419867",
-                        "5c0e531d86f7747fa23f4d42",
-                        "5ed51652f6c34d2cc26336a1"
-                    ]
+                        "whitelist": {
+                            "66507eabf5ddb0818b085b68": 1,
+                            "5ed515c8d380ab312177c0fa": 1,
+                            "5ed515f6915ec335206e4152": 1,
+                            "5ed5160a87bb8443d10680b5": 1,
+                            "5ed5166ad380ab312177c100": 1,
+                            "5ed515e03a40a50460332579": 1,
+                            "637b6251104668754b72f8f9": 1,
+                            "637b612fb7afa97bfc3d7005": 1,
+                            "5c0e530286f7747fa1419862": 20,
+                            "5c0e534186f7747fa1419867": 10,
+                            "5ed51652f6c34d2cc26336a1": 10,
+                            "637b60c3b7afa97bfc3d7001": 2,
+                            "5c0e531286f7747fa54205c2": 2,
+                            "5c0e531d86f7747fa23f4d42": 2,
+                            "637b620db7afa97bfc3d7009": 2,
+                            "5c0e533786f7747fa23f4d47": 2
+                        }
                     },
                     "vestLoot": {
                         "weights": {
-                            "0": 1
+                            "0": 1,
+                            "1": 1,
+                            "2": 2,
+                            "3": 1,
+                            "4": 0,
+                            "5": 0,
+                            "6": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -1203,119 +1244,160 @@
                 "items": {
                     "backpackLoot": {
                         "weights": {
-                            "0": 1
+                            "0": 1,
+                            "1": 1,
+                            "2": 2,
+                            "3": 1,
+                            "4": 0,
+                            "5": 0,
+                            "6": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
-                            "0": 8,
-                            "1": 1,
-                            "2": 0
+                            "0": 25,
+                            "1": 75
                         },
-                    "whitelist": [
-                        "5af0548586f7743a532b7e99",
-                        "544fb3f34bdc2d03748b456a",
-                        "5755383e24597772cb798966",
-                        "5751a89d24597722aa0e8db0"
-                    ]
+                        "whitelist": {
+                            "5755383e24597772cb798966": 3,
+                            "5751a89d24597722aa0e8db0": 3,
+                            "5af0548586f7743a532b7e99": 10
+                        }
                     },
                     "food": {
                         "weights": {
-                            "0": 10,
-                            "1": 1
+                            "0": 50,
+                            "1": 50
                         },
-                    "whitelist": []
+                        "whitelist": {
+                            "57347d692459774491567cf1": 10,
+                            "635a758bfefc88a93f021b8a": 5,
+                            "65815f0e647e3d7246384e14": 5,
+                            "590c5d4b86f774784e1b9c45": 5,
+                            "590c5f0d86f77413997acfab": 5,
+                            "5bc9c29cd4351e003562b8a3": 5,
+                            "5bc9b156d4351e00367fbce9": 1
+                        }
                     },
                     "drink": {
                         "weights": {
-                            "0": 10,
-                            "1": 1
+                            "0": 50,
+                            "1": 50
                         },
-                    "whitelist": []
+                        "whitelist": {
+                            "5448fee04bdc2dbc018b4567": 10,
+                            "5751496424597720a27126da": 5,
+                            "5751435d24597720a27126d1": 5,
+                            "60b0f93284c20f0feb453da7": 5,
+                            "57514643245977207f2c2d09": 5,
+                            "5c0fa877d174af02a012e1cf": 10,
+                            "5e8f3423fd7471236e6e3b64": 10,
+                            "60098b1705871270cd5352a1": 10
+                        }
                     },
                     "currency": {
                         "weights": {
-                            "0": 5,
-                            "1": 0
+                            "0": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
-                            "0": 2,
-                            "1": 3,
-                            "2": 3,
-                            "3": 1,
-                            "4": 0
+                            "0": 20,
+                            "1": 20,
+                            "2": 20,
+                            "3": 20,
+                            "4": 20
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb",
-                        "617fd91e5539a84ec44ce155",
-                        "618a431df1eb8e24b8741deb"
-                    ]
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 5,
+                            "5448be9a4bdc2dfd2f8b456a": 5,
+                            "58d3db5386f77426186285a0": 5,
+                            "5e32f56fcb6d5863cc5e5ee4": 3,
+                            "5e340dcdcb6d5863cc5e5efb": 3,
+                            "617fd91e5539a84ec44ce155": 3,
+                            "618a431df1eb8e24b8741deb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
                             "0": 0,
-                            "1": 3,
-                            "2": 6,
-                            "3": 3,
-                            "4": 0
+                            "1": 33,
+                            "2": 33,
+                            "3": 33
                         },
-                    "whitelist": [
-                        "544fb45d4bdc2dee738b4568",
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122",
-                        "5e8488fa988a8701445df1e4"
-                    ]
+                        "whitelist": {
+                            "60098ad7c2240c0fe85c570a": 10,
+                            "590c678286f77426c9660122": 3,
+                            "5e8488fa988a8701445df1e4": 7,
+                            "5af0454c86f7746bf20992e8": 7
+                        }
                     },
                     "magazines": {
                         "weights": {
                             "0": 0,
-                            "1": 1,
-                            "2": 3,
-                            "3": 6,
-                            "4": 5,
-                            "5": 1
+                            "1": 0,
+                            "2": 0,
+                            "3": 33,
+                            "4": 33,
+                            "5": 33
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
-                            "0": 1
+                            "0": 1,
+                            "1": 6,
+                            "2": 3,
+                            "3": 1,
+                            "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
                             "0": 10,
-                            "1": 4,
-                            "2": 1
+                            "1": 50,
+                            "2": 30,
+                            "3": 10
                         },
-                    "whitelist": [
-                        "544fb3f34bdc2d03748b456a",
-                        "5c0e530286f7747fa1419862",
-                        "5c0e534186f7747fa1419867",
-                        "5c0e531d86f7747fa23f4d42",
-                        "5ed51652f6c34d2cc26336a1"
-                    ]
+                        "whitelist": {
+                            "66507eabf5ddb0818b085b68": 1,
+                            "5ed515c8d380ab312177c0fa": 1,
+                            "5ed515f6915ec335206e4152": 1,
+                            "5ed5160a87bb8443d10680b5": 1,
+                            "5ed5166ad380ab312177c100": 1,
+                            "5ed515e03a40a50460332579": 1,
+                            "637b6251104668754b72f8f9": 1,
+                            "637b612fb7afa97bfc3d7005": 1,
+                            "5c0e530286f7747fa1419862": 20,
+                            "5c0e534186f7747fa1419867": 10,
+                            "5ed51652f6c34d2cc26336a1": 10,
+                            "637b60c3b7afa97bfc3d7001": 2,
+                            "5c0e531286f7747fa54205c2": 2,
+                            "5c0e531d86f7747fa23f4d42": 2,
+                            "637b620db7afa97bfc3d7009": 2,
+                            "5c0e533786f7747fa23f4d47": 2
+                        }
                     },
                     "vestLoot": {
                         "weights": {
-                            "0": 1
+                            "0": 1,
+                            "1": 1,
+                            "2": 2,
+                            "3": 1,
+                            "4": 0,
+                            "5": 0,
+                            "6": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -1865,12 +1947,14 @@
                     "backpackLoot": {
                         "weights": {
                             "0": 1,
-                            "1": 3,
-                            "2": 8,
-                            "3": 3,
-                            "4": 1
+                            "1": 6,
+                            "2": 6,
+                            "3": 1,
+                            "4": 1,
+                            "5": 1,
+                            "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -1878,7 +1962,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -1886,7 +1970,7 @@
                             "1": 5,
                             "2": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
@@ -1894,7 +1978,7 @@
                             "1": 9,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -1902,7 +1986,7 @@
                             "1": 5,
                             "2": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -1913,7 +1997,7 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "healing": {
                         "weights": {
@@ -1921,7 +2005,7 @@
                             "1": 6,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "magazines": {
                         "weights": {
@@ -1931,7 +2015,7 @@
                             "3": 2,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -1941,14 +2025,14 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 1,
                             "1": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -1956,7 +2040,7 @@
                             "1": 3,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -1968,7 +2052,7 @@
                             "5": 0,
                             "6": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -2516,7 +2600,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -2524,7 +2608,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -2532,14 +2616,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -2547,7 +2631,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -2558,23 +2642,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -2584,7 +2668,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -2594,13 +2678,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -2608,7 +2692,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -2620,7 +2704,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -3173,7 +3257,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -3181,7 +3265,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -3189,14 +3273,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -3204,7 +3288,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -3215,23 +3299,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -3241,7 +3325,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -3251,13 +3335,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -3265,7 +3349,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -3277,7 +3361,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -3825,7 +3909,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -3833,7 +3917,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -3841,14 +3925,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -3856,7 +3940,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -3867,23 +3951,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -3893,7 +3977,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -3903,13 +3987,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -3917,7 +4001,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -3929,7 +4013,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -4487,7 +4571,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -4495,7 +4579,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -4503,14 +4587,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -4518,7 +4602,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -4529,23 +4613,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -4555,7 +4639,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -4565,13 +4649,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -4579,7 +4663,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -4591,7 +4675,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -5148,7 +5232,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -5156,7 +5240,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -5164,14 +5248,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -5179,7 +5263,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -5190,23 +5274,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -5216,7 +5300,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -5226,13 +5310,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -5240,7 +5324,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -5252,7 +5336,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -5805,7 +5889,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -5813,7 +5897,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -5821,14 +5905,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -5836,7 +5920,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -5847,23 +5931,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -5873,7 +5957,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -5883,13 +5967,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -5897,7 +5981,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -5909,7 +5993,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -6457,7 +6541,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -6465,7 +6549,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -6473,14 +6557,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -6488,7 +6572,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -6499,23 +6583,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -6525,7 +6609,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -6535,13 +6619,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -6549,7 +6633,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -6561,7 +6645,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -7112,7 +7196,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -7120,7 +7204,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -7128,14 +7212,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -7143,7 +7227,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -7154,23 +7238,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -7180,7 +7264,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -7190,13 +7274,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -7204,7 +7288,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -7216,7 +7300,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -7764,7 +7848,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -7772,7 +7856,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -7780,14 +7864,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -7795,7 +7879,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -7806,23 +7890,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -7832,7 +7916,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -7842,13 +7926,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -7856,7 +7940,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -7868,7 +7952,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -8421,7 +8505,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -8429,7 +8513,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -8437,14 +8521,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -8452,7 +8536,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -8463,23 +8547,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -8489,7 +8573,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -8499,13 +8583,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -8513,7 +8597,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -8525,7 +8609,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -9083,7 +9167,7 @@
                             "6": 1,
                             "7": 0
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -9091,7 +9175,7 @@
                             "1": 5,
                             "2": 1
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -9099,7 +9183,7 @@
                             "1": 5,
                             "2": 2
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
@@ -9107,7 +9191,7 @@
                             "1": 2,
                             "2": 0
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -9115,7 +9199,7 @@
                             "1": 5,
                             "2": 2
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -9126,7 +9210,7 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "healing": {
                         "weights": {
@@ -9134,7 +9218,7 @@
                             "1": 2,
                             "2": 1
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "magazines": {
                         "weights": {
@@ -9144,7 +9228,7 @@
                             "3": 3,
                             "4": 1
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -9154,14 +9238,14 @@
                             "3": 1,
                             "4": 1
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 1,
                             "1": 0
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -9169,7 +9253,7 @@
                             "1": 1,
                             "2": 0
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -9181,7 +9265,7 @@
                             "5": 0,
                             "6": 0
                         },
-                        "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -9729,7 +9813,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -9737,7 +9821,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -9745,14 +9829,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -9760,7 +9844,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -9771,23 +9855,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -9797,7 +9881,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -9807,13 +9891,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -9821,7 +9905,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -9833,7 +9917,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -10384,7 +10468,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -10392,7 +10476,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -10400,14 +10484,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -10415,7 +10499,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -10426,23 +10510,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -10452,7 +10536,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -10462,13 +10546,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -10476,7 +10560,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -10488,7 +10572,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -11042,7 +11126,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -11050,7 +11134,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -11058,14 +11142,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -11073,7 +11157,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -11084,23 +11168,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -11110,7 +11194,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -11120,13 +11204,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -11134,7 +11218,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -11146,7 +11230,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -11696,7 +11780,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -11704,7 +11788,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -11712,14 +11796,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -11727,7 +11811,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -11738,23 +11822,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -11764,7 +11848,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -11774,13 +11858,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -11788,7 +11872,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -11800,7 +11884,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -12353,7 +12437,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -12361,7 +12445,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -12369,14 +12453,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -12384,7 +12468,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -12395,23 +12479,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -12421,7 +12505,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -12431,13 +12515,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -12445,7 +12529,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -12457,7 +12541,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -13015,7 +13099,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -13023,7 +13107,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -13031,14 +13115,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -13046,7 +13130,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -13057,23 +13141,23 @@
                             "4": 1,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -13083,7 +13167,7 @@
                             "3": 7,
                             "4": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -13093,13 +13177,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -13107,7 +13191,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -13119,7 +13203,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -13677,7 +13761,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -13685,7 +13769,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -13693,14 +13777,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -13708,7 +13792,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -13719,23 +13803,23 @@
                             "4": 1,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -13745,7 +13829,7 @@
                             "3": 7,
                             "4": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -13755,13 +13839,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -13769,7 +13853,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -13781,7 +13865,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
@@ -14339,7 +14423,7 @@
                             "6": 1,
                             "7": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "currency": {
                         "weights": {
@@ -14347,7 +14431,7 @@
                             "1": 5,
                             "2": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drink": {
                         "weights": {
@@ -14355,14 +14439,14 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "drugs": {
                         "weights": {
                             "0": 1,
                             "1": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "food": {
                         "weights": {
@@ -14370,7 +14454,7 @@
                             "1": 5,
                             "2": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "grenades": {
                         "weights": {
@@ -14381,23 +14465,23 @@
                             "4": 0,
                             "5": 0
                         },
-                    "whitelist": [
-                        "5710c24ad2720bc3458b45a3",
-                        "58d3db5386f77426186285a0",
-                        "5448be9a4bdc2dfd2f8b456a",
-                        "5e32f56fcb6d5863cc5e5ee4",
-                        "5e340dcdcb6d5863cc5e5efb"
-                    ]
+                        "whitelist": [
+                            "5710c24ad2720bc3458b45a3",
+                            "58d3db5386f77426186285a0",
+                            "5448be9a4bdc2dfd2f8b456a",
+                            "5e32f56fcb6d5863cc5e5ee4",
+                            "5e340dcdcb6d5863cc5e5efb"
+                        ]
                     },
                     "healing": {
                         "weights": {
                             "1": 1,
                             "2": 2
                         },
-                    "whitelist": [
-                        "60098ad7c2240c0fe85c570a",
-                        "590c678286f77426c9660122"
-                    ]
+                        "whitelist": [
+                            "60098ad7c2240c0fe85c570a",
+                            "590c678286f77426c9660122"
+                        ]
                     },
                     "magazines": {
                         "weights": {
@@ -14407,7 +14491,7 @@
                             "3": 3,
                             "4": 2
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "pocketLoot": {
                         "weights": {
@@ -14417,13 +14501,13 @@
                             "3": 1,
                             "4": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "specialItems": {
                         "weights": {
                             "0": 0
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "stims": {
                         "weights": {
@@ -14431,7 +14515,7 @@
                             "1": 5,
                             "2": 3
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     },
                     "vestLoot": {
                         "weights": {
@@ -14443,7 +14527,7 @@
                             "5": 1,
                             "6": 1
                         },
-                    "whitelist": []
+                        "whitelist": {}
                     }
                 }
             }
