@@ -363,5 +363,57 @@ export class APBSBotLootGenerator extends BotLootGenerator
                 containersIdFull
             );
         }
+    } 
+    
+    protected override itemHasReachedSpawnLimit(
+        itemTemplate: ITemplateItem,
+        botRole: string,
+        itemSpawnLimits: IItemSpawnLimitSettings
+    ): boolean 
+    {
+        // PMCs and scavs have different sections of bot config for spawn limits
+        if (!!itemSpawnLimits && Object.keys(itemSpawnLimits.globalLimits).length === 0) 
+        {
+            // No items found in spawn limit, drop out
+            return false;
+        }
+
+        // No spawn limits, skipping
+        if (!itemSpawnLimits) 
+        {
+            return false;
+        }
+
+        const idToCheckFor = this.getMatchingIdFromSpawnLimits(itemTemplate, itemSpawnLimits.globalLimits);
+        if (!idToCheckFor) 
+        {
+            // ParentId or tplid not found in spawnLimits, not a spawn limited item, skip
+            return false;
+        }
+
+        // Increment item count with this bot type
+        itemSpawnLimits.currentLimits[idToCheckFor]++;
+
+        // Check if over limit
+        if (itemSpawnLimits.currentLimits[idToCheckFor] > itemSpawnLimits.globalLimits[idToCheckFor]) 
+        {
+            // Prevent edge-case of small loot pools + code trying to add limited item over and over infinitely
+            if (itemSpawnLimits.currentLimits[idToCheckFor] > itemSpawnLimits.globalLimits[idToCheckFor] * 10) 
+            {
+                this.logger.debug(
+                    this.localisationService.getText("bot-item_spawn_limit_reached_skipping_item", {
+                        botRole: botRole,
+                        itemName: itemTemplate._name,
+                        attempts: itemSpawnLimits.currentLimits[idToCheckFor]
+                    })
+                );
+
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
