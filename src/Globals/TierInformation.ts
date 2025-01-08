@@ -60,54 +60,54 @@ export class TierInformation
             tier: 2,
             playerMinimumLevel: 11,
             playerMaximumLevel: 20,
-            botMinLevelVariance: 15,
+            botMinLevelVariance: 10,
             botMaxLevelVariance: 5,
-            scavMinLevelVariance: 15,
+            scavMinLevelVariance: 10,
             scavMaxLevelVariance: 5
         },
         {
             tier: 3,
             playerMinimumLevel: 21,
             playerMaximumLevel: 30,
-            botMinLevelVariance: 25,
+            botMinLevelVariance: 15,
             botMaxLevelVariance: 7,
-            scavMinLevelVariance: 25,
+            scavMinLevelVariance: 15,
             scavMaxLevelVariance: 7
         },
         {
             tier: 4,
             playerMinimumLevel: 31,
             playerMaximumLevel: 40,
-            botMinLevelVariance: 35,
+            botMinLevelVariance: 20,
             botMaxLevelVariance: 10,
-            scavMinLevelVariance: 35,
+            scavMinLevelVariance: 20,
             scavMaxLevelVariance: 10
         },
         {
             tier: 5,
             playerMinimumLevel: 41,
             playerMaximumLevel: 50,
-            botMinLevelVariance: 45,
+            botMinLevelVariance: 30,
             botMaxLevelVariance: 15,
-            scavMinLevelVariance: 45,
+            scavMinLevelVariance: 30,
             scavMaxLevelVariance: 15
         },
         {
             tier: 6,
             playerMinimumLevel: 51,
             playerMaximumLevel: 60,
-            botMinLevelVariance: 55,
+            botMinLevelVariance: 40,
             botMaxLevelVariance: 20,
-            scavMinLevelVariance: 55,
+            scavMinLevelVariance: 40,
             scavMaxLevelVariance: 20
         },
         {
             tier: 7,
             playerMinimumLevel: 61,
             playerMaximumLevel: 100,
-            botMinLevelVariance: 60,
+            botMinLevelVariance: 50,
             botMaxLevelVariance: 20,
-            scavMinLevelVariance: 60,
+            scavMinLevelVariance: 50,
             scavMaxLevelVariance: 20
         }
     ]
