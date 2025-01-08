@@ -175,10 +175,10 @@
 // Explanation: "pmcMedRates": [ Chance for full resource value available, Minimum percent of item randomized between min and max resource ]
 // Example.. "pmcMedRates": [ 65, 20 ] --- AFAK on a PMC has a 65% chance to be 400/400 and 35% chance to be between 0% and 80% used (it would spawn somewhere between 80/400 to 400/400).
         "enableConsumableResourceRandomization": true,
-        "scavFoodRates": [ 10, 50 ],
-        "scavMedRates": [ 10, 50 ],
-        "pmcFoodRates": [ 25, 50 ],
-        "pmcMedRates": [ 25, 50 ],
+        "scavFoodRates": [ 10, 25 ],
+        "scavMedRates": [ 10, 25 ],
+        "pmcFoodRates": [ 10, 25 ],
+        "pmcMedRates": [ 10, 25 ],
 
 // Blacklist specific ammo types from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
 // Configure per tier blacklists
