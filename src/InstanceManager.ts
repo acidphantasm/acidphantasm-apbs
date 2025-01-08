@@ -185,6 +185,9 @@ export class InstanceManager
         this.apbsAttachmentChecker = container.resolve<APBSAttachmentChecker>("APBSAttachmentChecker");
         this.container.register<APBSMethodHolder>("APBSMethodHolder", APBSMethodHolder, { lifecycle: Lifecycle.Singleton });
         this.apbsMethodHolder = container.resolve<APBSMethodHolder>("APBSMethodHolder");
+
+        
+        this.container.register<RealismHelper>("RealismHelper", { useClass: RealismHelper })
         
         this.container.register<APBSBotWeaponGenerator>("APBSBotWeaponGenerator", APBSBotWeaponGenerator);
         this.container.register<APBSBarrelInventoryMagGen>("APBSBarrelInventoryMagGen", { useClass: APBSBarrelInventoryMagGen })
