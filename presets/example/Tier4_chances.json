@@ -565,8 +565,8 @@
                     },
                     "food": {
                         "weights": {
-                            "0": 50,
-                            "1": 50
+                            "0": 75,
+                            "1": 25
                         },
                         "whitelist": {
                             "57347da92459774491567cf5": 5,
@@ -609,7 +609,7 @@
                     },
                     "grenades": {
                         "weights": {
-                            "0": 25,
+                            "0": 35,
                             "1": 25,
                             "2": 25,
                             "3": 10,
@@ -625,8 +625,7 @@
                             "618a431df1eb8e24b8741deb": 1,
                             "5a0c27731526d80618476ac4": 1,
                             "619256e5f8af2c1a4e1f5d92": 1,
-                            "617aa4dd8166f034d57de9c5": 1,
-                            "5a2a57cfc4a2826c6e06d44a": 1
+                            "617aa4dd8166f034d57de9c5": 1
                         }
                     },
                     "healing": {
@@ -1272,8 +1271,8 @@
                     },
                     "food": {
                         "weights": {
-                            "0": 50,
-                            "1": 50
+                            "0": 75,
+                            "1": 25
                         },
                         "whitelist": {
                             "57347da92459774491567cf5": 5,
@@ -1316,7 +1315,7 @@
                     },
                     "grenades": {
                         "weights": {
-                            "0": 25,
+                            "0": 35,
                             "1": 25,
                             "2": 25,
                             "3": 10,
@@ -1332,8 +1331,7 @@
                             "618a431df1eb8e24b8741deb": 1,
                             "5a0c27731526d80618476ac4": 1,
                             "619256e5f8af2c1a4e1f5d92": 1,
-                            "617aa4dd8166f034d57de9c5": 1,
-                            "5a2a57cfc4a2826c6e06d44a": 1
+                            "617aa4dd8166f034d57de9c5": 1
                         }
                     },
                     "healing": {
@@ -2000,14 +1998,20 @@
                     },
                     "grenades": {
                         "weights": {
-                            "0": 8,
-                            "1": 6,
-                            "2": 2,
-                            "3": 1,
-                            "4": 0,
-                            "5": 0
+                            "0": 50,
+                            "1": 40,
+                            "2": 7,
+                            "3": 3
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 3,
+                            "5448be9a4bdc2dfd2f8b456a": 3,
+                            "58d3db5386f77426186285a0": 3,
+                            "5a0c27731526d80618476ac4": 7,
+                            "619256e5f8af2c1a4e1f5d92": 1,
+                            "617aa4dd8166f034d57de9c5": 1,
+                            "5a2a57cfc4a2826c6e06d44a": 7
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -10294,7 +10298,7 @@
                 "mod_muzzle": 50,
                 "mod_muzzle_000": 100,
                 "mod_muzzle_001": 100,
-                "mod_pistol_grip": 0,
+                "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 0,
                 "mod_pistolgrip": 0,
                 "mod_pistolgrip_000": 0,
@@ -10588,7 +10592,7 @@
                 "mod_muzzle": 78,
                 "mod_muzzle_000": 0,
                 "mod_muzzle_001": 0,
-                "mod_pistol_grip": 0,
+                "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 0,
                 "mod_pistolgrip": 0,
                 "mod_pistolgrip_000": 0,
@@ -10641,7 +10645,7 @@
                 "mod_muzzle_001": 0,
                 "mod_pistol_grip": 0,
                 "mod_pistol_grip_akms": 0,
-                "mod_pistolgrip": 0,
+                "mod_pistolgrip": 100,
                 "mod_pistolgrip_000": 0,
                 "mod_reciever": 0,
                 "mod_scope": 100,
@@ -11834,7 +11838,7 @@
                 "mod_muzzle": 93,
                 "mod_muzzle_000": 0,
                 "mod_muzzle_001": 0,
-                "mod_pistol_grip": 0,
+                "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 0,
                 "mod_pistolgrip": 0,
                 "mod_pistolgrip_000": 0,
@@ -11987,7 +11991,7 @@
                 "mod_muzzle": 93,
                 "mod_muzzle_000": 0,
                 "mod_muzzle_001": 0,
-                "mod_pistol_grip": 0,
+                "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 0,
                 "mod_pistolgrip": 0,
                 "mod_pistolgrip_000": 0,
@@ -13747,7 +13751,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 50,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
@@ -13798,7 +13802,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 50,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
@@ -13849,7 +13853,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 50,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
@@ -13900,7 +13904,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 50,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
@@ -13951,7 +13955,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 50,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
@@ -14002,7 +14006,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 50,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
@@ -14053,7 +14057,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 50,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
@@ -14104,7 +14108,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 50,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
@@ -14155,7 +14159,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 50,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
@@ -14206,7 +14210,7 @@
                 "mod_pistol_grip": 100,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 50,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 100,
                 "mod_scope": 88,
                 "mod_scope_000": 100,
