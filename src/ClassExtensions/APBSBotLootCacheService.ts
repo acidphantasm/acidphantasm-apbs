@@ -160,7 +160,6 @@ export class APBSBotLootCacheService extends BotLootCacheService
         
         if (!this.raidInformation.isBotEnabled(botRole))
         {
-            this.apbsLogger.log(Logging.DEBUG, `${botRole} is disabled - TRACE: addLootToCache`);
             realWhitelist = botJsonTemplate.generation.items;
         }
         

@@ -118,7 +118,6 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         
         if (!this.raidInformation.isBotEnabled(botRole))
         {
-            this.apbsLogger.log(Logging.DEBUG, `${botRole} is disabled - TRACE: generateInventory`);
             this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
             this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
 
@@ -152,7 +151,6 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
 
         if (!this.raidInformation.isBotEnabled(botRole))
         {
-            this.apbsLogger.log(Logging.DEBUG, `${botRole} is disabled - TRACE: generateEquipment`);
             equipmentPool = settings.rootEquipmentPool;
             randomisationDetails = settings.randomisationDetails;
             wornItemChances = settings.spawnChances;

@@ -88,7 +88,6 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         // Check if bot disabled, if it is - use SPT code
         if (!this.raidInformation.isBotEnabled(botRole))
         {
-            this.apbsLogger.log(Logging.DEBUG, `${botRole} is disabled - TRACE: generateRandomWeapon`);
             const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
             return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
         }

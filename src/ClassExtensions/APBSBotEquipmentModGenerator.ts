@@ -111,7 +111,6 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
 
         if (!this.raidInformation.isBotEnabled(botRole))
         {
-            this.apbsLogger.log(Logging.DEBUG, `${botRole} is disabled - TRACE: generateModsForEquipment`);
             spawnChances = settings.spawnChances;
             compatibleModsPool = settings.modPool[parentTemplate._id];
             actualModPool = settings.modPool;

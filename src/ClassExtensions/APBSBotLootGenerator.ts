@@ -91,7 +91,6 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         if (!this.raidInformation.isBotEnabled(botRole))
         {
-            this.apbsLogger.log(Logging.DEBUG, `${botRole} is disabled - TRACE: generateLoot`);
             itemCounts = botJsonTemplate.generation.items;
             useOriginalLootCache = true;
         }
