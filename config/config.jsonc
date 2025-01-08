@@ -50,6 +50,12 @@
         "disableBossFollowerTierGeneration": false,
         "disableRaiderRogueTierGeneration": false,
 
+// Enable/Disable bots having the chance to roll ammo choice for rig magazines after selecting ammo choice for weapon
+// "enableBotsToRollAmmoAgain" If set to true, AI PMCs will roll their ammo choice for additional magazines based on the chance configured - if false all magazines will always have the same ammo selected for the weapon.
+// "chanceToRollAmmoAgain" chance out of 100 that bot will roll ammo again for each subsequent additional magazine they spawn with in their rig.
+        "enableBotsToRollAmmoAgain": true,
+        "chanceToRollAmmoAgain": 50,
+
 // Enable/Disable custom game version weights for AI PMCs
 // If set to true, AI PMCs will roll their weights from the values below - if false will use SPT defaults.
 // The values listed below ARE the SPT defaults (for reference)
@@ -169,10 +175,10 @@
 // Explanation: "pmcMedRates": [ Chance for full resource value available, Minimum percent of item randomized between min and max resource ]
 // Example.. "pmcMedRates": [ 65, 20 ] --- AFAK on a PMC has a 65% chance to be 400/400 and 35% chance to be between 0% and 80% used (it would spawn somewhere between 80/400 to 400/400).
         "enableConsumableResourceRandomization": true,
-        "scavFoodRates": [ 25, 60 ],
-        "scavMedRates": [ 25, 60 ],
-        "pmcFoodRates": [ 65, 60 ],
-        "pmcMedRates": [ 65, 60 ],
+        "scavFoodRates": [ 10, 25 ],
+        "scavMedRates": [ 10, 25 ],
+        "pmcFoodRates": [ 10, 25 ],
+        "pmcMedRates": [ 10, 25 ],
 
 // Blacklist specific ammo types from all AI -- USE "https://db.sp-tarkov.com/" to get the item _id
 // Configure per tier blacklists
@@ -231,12 +237,12 @@
 // IF YOU WANT EVERY TIER AT EVERY LEVEL, SET ALL OF THESE TO: [ 79, 79 ]
         "enableCustomLevelDeltas": false,
         "tier1LevelDelta": [ 10, 5 ],
-        "tier2LevelDelta": [ 15, 5 ],
-        "tier3LevelDelta": [ 25, 7 ],
-        "tier4LevelDelta": [ 35, 10 ],
-        "tier5LevelDelta": [ 45, 15 ],
-        "tier6LevelDelta": [ 55, 20 ],
-        "tier7LevelDelta": [ 60, 20 ],
+        "tier2LevelDelta": [ 10, 5 ],
+        "tier3LevelDelta": [ 15, 7 ],
+        "tier4LevelDelta": [ 20, 10 ],
+        "tier5LevelDelta": [ 30, 15 ],
+        "tier6LevelDelta": [ 40, 20 ],
+        "tier7LevelDelta": [ 50, 20 ],
 
 // LevelDelta's are the lowest and highest levels that AI can spawn relative to the player's level. 
 // Examples: 
@@ -246,12 +252,12 @@
 // Default values below will always spawn scavs that are at least 1 tier below you unless you are Tier1.
         "enableScavCustomLevelDeltas": false,
         "tier1ScavLevelDelta": [ 10, 0 ],
-        "tier2ScavLevelDelta": [ 20, -10 ],
-        "tier3ScavLevelDelta": [ 30, -10 ],
-        "tier4ScavLevelDelta": [ 40, -10 ],
-        "tier5ScavLevelDelta": [ 50, -10 ],
-        "tier6ScavLevelDelta": [ 60, -10 ],
-        "tier7ScavLevelDelta": [ 70, -10 ],
+        "tier2ScavLevelDelta": [ 10, -10 ],
+        "tier3ScavLevelDelta": [ 15, -10 ],
+        "tier4ScavLevelDelta": [ 20, -10 ],
+        "tier5ScavLevelDelta": [ 30, -10 ],
+        "tier6ScavLevelDelta": [ 40, -10 ],
+        "tier7ScavLevelDelta": [ 50, -10 ],
 
 // Enable/disable debug logging
         "enableDebugLog": true

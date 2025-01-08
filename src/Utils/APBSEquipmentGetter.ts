@@ -178,6 +178,27 @@ export class APBSEquipmentGetter
         const tierJson = this.getTierModsJson(tierInfo)
         switch (botRole)
         {
+            case "bossboar":
+            case "bossboarsniper":
+            case "bossbully":
+            case "bossgluhar":
+            case "bosskilla":
+            case "bosskojaniy":
+            case "bosskolontay":
+            case "bosssanitar":
+            case "bosstagilla":
+            case "bosspartisan":
+            case "bossknight":
+            case "followerbigpipe":
+            case "followerbirdeye":
+            case "sectantpriest":
+            case "sectantwarrior":
+            case "exusec":
+            case "arenafighterevent":
+            case "arenafighter":
+            case "pmcbot":
+                if (tierInfo < 4) return this.tierInformation.tier4mods;
+                else return tierJson;
             case "marksman":
             case "cursedassault":
             case "assault":

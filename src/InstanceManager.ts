@@ -27,6 +27,7 @@ import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
 import { BotWeaponModLimitService } from "@spt/services/BotWeaponModLimitService";
 import { RepairService } from "@spt/services/RepairService";
+import { SeasonalEventService } from "@spt/services/SeasonalEventService";
 import { VFS } from "@spt/utils/VFS";
 
 // Custom
@@ -52,7 +53,13 @@ import { BlacklistHelper } from "./Helpers/BlacklistHelper";
 import { RealismHelper } from "./Helpers/RealismHelper";
 import { APBSTester } from "./Utils/APBSTester";
 import { APBSAttachmentChecker } from "./Utils/APBSAttachmentChecker";
-import { SeasonalEventService } from "@spt/services/SeasonalEventService";
+import { APBSBotLootCacheService } from "./ClassExtensions/APBSBotLootCacheService";
+import { APBSPlayerScavGenerator } from "./ClassExtensions/APBSPlayerScavGenerator";
+import { APBSExternalInventoryMagGen } from "./InventoryMagGen/APBSExternalInventoryMagGen";
+import { APBSMethodHolder } from "./InventoryMagGen/APBSMethodHolder";
+import { APBSBarrelInventoryMagGen } from "./InventoryMagGen/APBSBarrelInventoryMagGen";
+import { APBSInternalMagazineInventoryMagGen } from "./InventoryMagGen/APBSInternalMagazineInventoryMagGen";
+import { APBSUbglExternalMagGen } from "./InventoryMagGen/APBSUbglExternalMagGen";
 
 export class InstanceManager 
 {
@@ -101,6 +108,8 @@ export class InstanceManager
     public jsonHelper: JSONHelper;
     public modConfig: ModConfig;
     public apbsTester: APBSTester;
+    public apbsExternalInventoryMagGen: APBSExternalInventoryMagGen;
+    public apbsMethodHolder: APBSMethodHolder;
     //#endregion
 
     //#region accessible in or after postDBLoad
@@ -174,6 +183,22 @@ export class InstanceManager
         this.jsonHelper = container.resolve<JSONHelper>("JSONHelper");
         this.container.register<APBSAttachmentChecker>("APBSAttachmentChecker", APBSAttachmentChecker, { lifecycle: Lifecycle.Singleton })
         this.apbsAttachmentChecker = container.resolve<APBSAttachmentChecker>("APBSAttachmentChecker");
+        this.container.register<APBSMethodHolder>("APBSMethodHolder", APBSMethodHolder, { lifecycle: Lifecycle.Singleton });
+        this.apbsMethodHolder = container.resolve<APBSMethodHolder>("APBSMethodHolder");
+
+        
+        this.container.register<RealismHelper>("RealismHelper", { useClass: RealismHelper })
+        
+        this.container.register<APBSBotWeaponGenerator>("APBSBotWeaponGenerator", APBSBotWeaponGenerator);
+        this.container.register<APBSBarrelInventoryMagGen>("APBSBarrelInventoryMagGen", { useClass: APBSBarrelInventoryMagGen })
+        this.container.register<APBSExternalInventoryMagGen>("APBSExternalInventoryMagGen", { useClass: APBSExternalInventoryMagGen })
+        this.container.register<APBSInternalMagazineInventoryMagGen>("APBSInternalMagazineInventoryMagGen", { useClass: APBSInternalMagazineInventoryMagGen })
+        this.container.register<APBSUbglExternalMagGen>("APBSUbglExternalMagGen", { useClass: APBSUbglExternalMagGen })
+        this.container.registerType("APBSInventoryMagGen", "APBSBarrelInventoryMagGen");
+        this.container.registerType("APBSInventoryMagGen", "APBSExternalInventoryMagGen");
+        this.container.registerType("APBSInventoryMagGen", "APBSInternalMagazineInventoryMagGen");
+        this.container.registerType("APBSInventoryMagGen", "APBSUbglExternalMagGen");
+
 
         // Class Extension Override
         this.container.register<APBSBotGenerator>("APBSBotGenerator", APBSBotGenerator);
@@ -182,10 +207,15 @@ export class InstanceManager
         this.container.register("BotInventoryGenerator", { useToken: "APBSBotInventoryGenerator" });
         this.container.register<APBSBotEquipmentModGenerator>("APBSBotEquipmentModGenerator", APBSBotEquipmentModGenerator);
         this.container.register("BotEquipmentModGenerator", { useToken: "APBSBotEquipmentModGenerator" });
+        this.container.register<APBSPlayerScavGenerator>("APBSPlayerScavGenerator", APBSPlayerScavGenerator);
+        this.container.register("PlayerScavGenerator", { useToken: "APBSPlayerScavGenerator" });
+        this.container.register<APBSBotLootCacheService>("APBSBotLootCacheService", APBSBotLootCacheService);
+        this.container.register("BotLootCacheService", { useToken: "APBSBotLootCacheService" });
         this.container.register<APBSBotLootGenerator>("APBSBotLootGenerator", APBSBotLootGenerator);
         this.container.register("BotLootGenerator", { useToken: "APBSBotLootGenerator" });
-        this.container.register<APBSBotWeaponGenerator>("APBSBotWeaponGenerator", APBSBotWeaponGenerator);
+
         this.container.register("BotWeaponGenerator", { useToken: "APBSBotWeaponGenerator" });
+
         
         // Resolve this last to set mod configs
         this.container.register<ModConfig>("ModConfig", ModConfig, { lifecycle: Lifecycle.Singleton })

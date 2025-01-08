@@ -38,20 +38,7 @@ export class APBSBotLevelGenerator
         container.afterResolution("BotLevelGenerator", (_t, result: BotLevelGenerator) => 
         {
             result.generateBotLevel = (levelDetails: MinMax, botGenerationDetails: IBotGenerationDetails, bot: APBSIBotBase): IRandomisedBotLevelResult => 
-            {
-
-                /* 
-                TESTING TIER DEVIATION - Since botGenerationDetails isn't passed to the relevant methods, this is more difficult that anticipated. This logic works for the tier, but since selection is based on level..oof.
-                -2 to +1 tier
-                
-                const lowerDeviation = (Math.floor(Math.random() * 2) - 2);
-                const upperDeviation = (Math.floor(Math.random() * 2));
-                const minTier = (tier + lowerDeviation) <= 0 ? 1 : tier + lowerDeviation
-                const maxTier = (tier + upperDeviation) >= 7 ? 7 : tier + upperDeviation
-                const newTier = this.randomUtil.getInt(minTier, maxTier)
-                console.log(`Original Tier: ${tier} - New Tier ${newTier}`)
-                */
-                
+            {                
                 if (this.modInformation.testMode && this.modInformation.testBotRole.includes(botGenerationDetails.role.toLowerCase()))
                 {
                     const level = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)?.Info?.Level;

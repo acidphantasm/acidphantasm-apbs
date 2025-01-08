@@ -15,6 +15,8 @@ export class RealismHelper
     )
     {}
 
+    public realismDetected: boolean = false;
+
     public gasMasks = [
         "5b432c305acfc40019478128",
         "60363c0c92ec1c31037959f5"
@@ -22,6 +24,7 @@ export class RealismHelper
 
     public initialize():void
     {
+        this.realismDetected = true;
         this.addGasMasksToBots();
     }
 

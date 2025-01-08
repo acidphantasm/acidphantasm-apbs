@@ -23,6 +23,12 @@ import { BotLootGenerator } from "@spt/generators/BotLootGenerator";
 
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
+import { APBSBotLootCacheService } from "./APBSBotLootCacheService";
+import { RaidInformation } from "../Globals/RaidInformation";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
+import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { IItemSpawnLimitSettings } from "@spt/models/spt/bots/IItemSpawnLimitSettings";
 
 /** Handle profile related client events */
 @injectable()
@@ -45,7 +51,10 @@ export class APBSBotLootGenerator extends BotLootGenerator
         @inject("ConfigServer") protected configServer: ConfigServer,
         @inject("PrimaryCloner") protected cloner: ICloner,
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
-        @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter
+        @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
+        @inject("RaidInformation") protected raidInformation: RaidInformation,
+        @inject("APBSBotLootCacheService") protected apbsBotLootCacheService: APBSBotLootCacheService,
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {
         super(logger, 
@@ -73,11 +82,18 @@ export class APBSBotLootGenerator extends BotLootGenerator
         botInventory: PmcInventory,
         botLevel: number
     ): void
-    {// Limits on item types to be added as loot
-        
+    {
+        // Limits on item types to be added as loot
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
         const chances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-        const itemCounts: IGenerationWeightingItems = chances.generation.items;
+        let itemCounts: IGenerationWeightingItems = chances.generation.items;
+        let useOriginalLootCache = false;
+
+        if (!this.raidInformation.isBotEnabled(botRole))
+        {
+            itemCounts = botJsonTemplate.generation.items;
+            useOriginalLootCache = true;
+        }
 
         if (
             !itemCounts.backpackLoot.weights
@@ -101,22 +117,16 @@ export class APBSBotLootGenerator extends BotLootGenerator
         let backpackLootCount = Number(
             this.weightedRandomHelper.getWeightedValue<number>(itemCounts.backpackLoot.weights)
         );
-        let pocketLootCount = Number(
-            this.weightedRandomHelper.getWeightedValue<number>(itemCounts.pocketLoot.weights)
-        );
+        let pocketLootCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.pocketLoot.weights));
         let vestLootCount = this.weightedRandomHelper.getWeightedValue<number>(itemCounts.vestLoot.weights);
-        const specialLootItemCount = Number(
-            this.weightedRandomHelper.getWeightedValue<number>(itemCounts.specialItems.weights)
-        );
+        const specialLootItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.specialItems.weights));
         const healingItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.healing.weights));
         const drugItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.drugs.weights));
 
         const foodItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.food.weights));
         const drinkItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.drink.weights));
 
-        let currencyItemCount = Number(
-            this.weightedRandomHelper.getWeightedValue<number>(itemCounts.currency.weights)
-        );
+        let currencyItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.currency.weights));
 
         const stimItemCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.stims.weights));
         const grenadeCount = Number(this.weightedRandomHelper.getWeightedValue<number>(itemCounts.grenades.weights));
@@ -146,7 +156,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Special items
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.SPECIAL, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.SPECIAL, botJsonTemplate) :
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.SPECIAL, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             specialLootItemCount,
             botInventory,
@@ -159,12 +171,14 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Healing items / Meds
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.HEALING_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.HEALING_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.HEALING_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             healingItemCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -172,12 +186,14 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Drugs
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.DRUG_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.DRUG_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.DRUG_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             drugItemCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -185,12 +201,14 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Food
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.FOOD_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.FOOD_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.FOOD_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             foodItemCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -198,12 +216,14 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Drink
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.DRINK_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.DRINK_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.DRINK_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             drinkItemCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -211,12 +231,14 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Currency
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.CURRENCY_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.CURRENCY_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.CURRENCY_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             currencyItemCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -224,7 +246,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Stims
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.STIM_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.STIM_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.STIM_ITEMS, botJsonTemplate, botLevel),
             containersBotHasAvailable,
             stimItemCount,
             botInventory,
@@ -237,12 +261,14 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Grenades
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.GRENADE_ITEMS, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.GRENADE_ITEMS, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.GRENADE_ITEMS, botJsonTemplate, botLevel),
             [EquipmentSlots.POCKETS, EquipmentSlots.TACTICAL_VEST], // Can't use containersBotHasEquipped as we dont want grenades added to backpack
             grenadeCount,
             botInventory,
             botRole,
-            undefined,
+            botItemLimits,
             0,
             isPmc,
             containersIdFull
@@ -269,7 +295,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
             const backpackLootRoubleTotal = this.getBackpackRoubleTotalByLevel(botLevel, isPmc);
             this.addLootFromPool(
-                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.BACKPACK, botJsonTemplate),
+                useOriginalLootCache ?
+                    this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.BACKPACK, botJsonTemplate) : 
+                    this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.BACKPACK, botJsonTemplate, botLevel),
                 [EquipmentSlots.BACKPACK],
                 backpackLootCount,
                 botInventory,
@@ -286,7 +314,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
         {
             // Vest
             this.addLootFromPool(
-                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.VEST, botJsonTemplate),
+                useOriginalLootCache ?
+                    this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.VEST, botJsonTemplate) : 
+                    this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.VEST, botJsonTemplate, botLevel),
                 [EquipmentSlots.TACTICAL_VEST],
                 vestLootCount,
                 botInventory,
@@ -300,7 +330,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
 
         // Pockets
         this.addLootFromPool(
-            this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.POCKET, botJsonTemplate),
+            useOriginalLootCache ?
+                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.POCKET, botJsonTemplate) : 
+                this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.POCKET, botJsonTemplate, botLevel),
             [EquipmentSlots.POCKETS],
             pocketLootCount,
             botInventory,
@@ -317,7 +349,9 @@ export class APBSBotLootGenerator extends BotLootGenerator
         if (!isPmc || (isPmc && this.pmcConfig.addSecureContainerLootFromBotConfig))
         {
             this.addLootFromPool(
-                this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.SECURE, botJsonTemplate),
+                useOriginalLootCache ?
+                    this.botLootCacheService.getLootFromCache(botRole, isPmc, LootCacheType.SECURE, botJsonTemplate) : 
+                    this.apbsBotLootCacheService.apbsGetLootFromCache(botRole, isPmc, LootCacheType.SECURE, botJsonTemplate, botLevel),
                 [EquipmentSlots.SECURED_CONTAINER],
                 50,
                 botInventory,
@@ -328,5 +362,57 @@ export class APBSBotLootGenerator extends BotLootGenerator
                 containersIdFull
             );
         }
+    } 
+    
+    protected override itemHasReachedSpawnLimit(
+        itemTemplate: ITemplateItem,
+        botRole: string,
+        itemSpawnLimits: IItemSpawnLimitSettings
+    ): boolean 
+    {
+        // PMCs and scavs have different sections of bot config for spawn limits
+        if (!!itemSpawnLimits && Object.keys(itemSpawnLimits.globalLimits).length === 0) 
+        {
+            // No items found in spawn limit, drop out
+            return false;
+        }
+
+        // No spawn limits, skipping
+        if (!itemSpawnLimits) 
+        {
+            return false;
+        }
+
+        const idToCheckFor = this.getMatchingIdFromSpawnLimits(itemTemplate, itemSpawnLimits.globalLimits);
+        if (!idToCheckFor) 
+        {
+            // ParentId or tplid not found in spawnLimits, not a spawn limited item, skip
+            return false;
+        }
+
+        // Increment item count with this bot type
+        itemSpawnLimits.currentLimits[idToCheckFor]++;
+
+        // Check if over limit
+        if (itemSpawnLimits.currentLimits[idToCheckFor] > itemSpawnLimits.globalLimits[idToCheckFor]) 
+        {
+            // Prevent edge-case of small loot pools + code trying to add limited item over and over infinitely
+            if (itemSpawnLimits.currentLimits[idToCheckFor] > itemSpawnLimits.globalLimits[idToCheckFor] * 10) 
+            {
+                this.logger.debug(
+                    this.localisationService.getText("bot-item_spawn_limit_reached_skipping_item", {
+                        botRole: botRole,
+                        itemName: itemTemplate._name,
+                        attempts: itemSpawnLimits.currentLimits[idToCheckFor]
+                    })
+                );
+
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

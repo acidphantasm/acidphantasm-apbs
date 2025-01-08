@@ -4,7 +4,8 @@ import { DatabaseService } from "@spt/services/DatabaseService";
 import { RandomUtil } from "@spt/utils/RandomUtil";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
-import { IInventory, IModsChances } from "@spt/models/eft/common/tables/IBotType";
+import { IInventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBase";
+import { IGenerationData, IInventory, IModsChances } from "@spt/models/eft/common/tables/IBotType";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
@@ -29,6 +30,9 @@ import { APBSTester } from "../Utils/APBSTester";
 import { ModInformation } from "../Globals/ModInformation";
 import { Money } from "@spt/models/enums/Money";
 import { APBSBotEquipmentModGenerator } from "./APBSBotEquipmentModGenerator";
+import { APBSInventoryMagGen } from "../InventoryMagGen/APBSInventoryMagGen";
+import { APBSIInventoryMagGen } from "../InventoryMagGen/APBSIInventoryMagGen";
+import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 
 /** Handle profile related client events */
 @injectable()
@@ -56,7 +60,8 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
         @inject("APBSTester") protected apbsTester: APBSTester,
         @inject("APBSBotEquipmentModGenerator") protected apbsBotEquipmentModGenerator: APBSBotEquipmentModGenerator,
-        @inject("ModInformation") protected modInformation: ModInformation
+        @inject("ModInformation") protected modInformation: ModInformation,
+        @injectAll("APBSInventoryMagGen") protected apbsInventoryMagGenComponents: APBSIInventoryMagGen[]
     )
     {
         super(logger, 
@@ -85,37 +90,12 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
         }
 
-        // Config disable checks to flip to default weapon gen
-        if ((ModConfig.config.disableBossTierGeneration && (botRole.includes("boss") || botRole.includes("sectant") || botRole.includes("arena"))) || botRole == "bosslegion" || botRole == "bosspunisher")
+        // Check if bot disabled, if it is - use SPT code
+        if (!this.raidInformation.isBotEnabled(botRole))
         {
             const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
             return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
         }
-        if (ModConfig.config.disableBossFollowerTierGeneration && botRole.includes("follower"))
-        {
-            const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
-            return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
-        }
-        if (ModConfig.config.disableRaiderRogueTierGeneration && (botRole.includes("exusec") || botRole.includes("pmcbot")))
-        {
-            const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
-            return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
-        }
-        if (ModConfig.config.disablePMCTierGeneration && (botRole.includes("pmcusec") || botRole.includes("pmcbear")))
-        {
-            const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
-            return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
-        }
-        if (ModConfig.config.disableScavTierGeneration && (botRole.includes("assault") || botRole.includes("marksman")))
-        {
-            const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
-            return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
-        }
-        if (botRole.includes("infected") || botRole.includes("spirit") || botRole.includes("skier") || botRole.includes("peacemaker") || botRole.includes("gifter"))
-        {
-            const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
-            return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);            
-        }        
 
         // If not disabled via config, all bots follow this custom generation
         const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
@@ -352,5 +332,63 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             weaponMods: modPool,
             weaponTemplate: weaponItemTemplate
         };
+    }
+
+    public apbsAddExtraMagazinesToInventory(
+        generatedWeaponResult: IGenerateWeaponResult,
+        magWeights: IGenerationData,
+        inventory: PmcInventory,
+        botRole: string,
+        botLevel: number
+    ): void 
+    {
+        const weaponAndMods = generatedWeaponResult.weapon;
+        const weaponTemplate = generatedWeaponResult.weaponTemplate;
+        const magazineTpl = this.getMagazineTplFromWeaponTemplate(weaponAndMods, weaponTemplate, botRole);
+
+        const magTemplate = this.itemHelper.getItem(magazineTpl)[1];
+        if (!magTemplate) 
+        {
+            this.logger.error(this.localisationService.getText("bot-unable_to_find_magazine_item", magazineTpl));
+
+            return;
+        }
+
+        const ammoTemplate = this.itemHelper.getItem(generatedWeaponResult.chosenAmmoTpl)[1];
+        if (!ammoTemplate) 
+        {
+            this.logger.error(
+                this.localisationService.getText("bot-unable_to_find_ammo_item", generatedWeaponResult.chosenAmmoTpl)
+            );
+
+            return;
+        }
+
+        // Has an UBGL
+        if (generatedWeaponResult.chosenUbglAmmoTpl) 
+        {
+            this.addUbglGrenadesToBotInventory(weaponAndMods, generatedWeaponResult, inventory);
+        }
+
+        const apbsInventoryMagGenModel = new APBSInventoryMagGen(
+            magWeights,
+            magTemplate,
+            weaponTemplate,
+            ammoTemplate,
+            inventory,
+            botRole,
+            botLevel
+        );
+        this.apbsInventoryMagGenComponents
+            .find((v) => v.canHandleInventoryMagGen(apbsInventoryMagGenModel))
+            .process(apbsInventoryMagGenModel);
+
+        // Add x stacks of bullets to SecuredContainer (bots use a magic mag packing skill to reload instantly)
+        this.addAmmoToSecureContainer(
+            this.botConfig.secureContainerAmmoStackCount,
+            generatedWeaponResult.chosenAmmoTpl,
+            ammoTemplate._props.StackMaxSize,
+            inventory
+        );
     }
 }
