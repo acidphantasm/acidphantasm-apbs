@@ -34,7 +34,7 @@ export class APBSInternalMagazineInventoryMagGen implements APBSIInventoryMagGen
 
     public process(inventoryMagGen: APBSInventoryMagGen): void 
     {
-        const bulletCount = this.botWeaponGeneratorHelper.getRandomizedBulletCount(
+        let bulletCount = this.botWeaponGeneratorHelper.getRandomizedBulletCount(
             inventoryMagGen.getMagCount(),
             inventoryMagGen.getMagazineTemplate()
         );
@@ -48,6 +48,11 @@ export class APBSInternalMagazineInventoryMagGen implements APBSIInventoryMagGen
             const ammoTable = this.apbsEquipmentGetter.getAmmoByBotRole(inventoryMagGen.getBotRole(), tierInfo)
 
             const rerolledAmmo = this.apbsMethodHolder.getWeightedCompatibleAmmo(ammoTable, weapon);
+
+            if (bulletCount > 20) 
+            {
+                bulletCount = this.randomUtil.getInt(10, bulletCount);
+            }
 
             this.botWeaponGeneratorHelper.addAmmoIntoEquipmentSlots(
                 rerolledAmmo,
