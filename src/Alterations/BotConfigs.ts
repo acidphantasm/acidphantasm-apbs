@@ -497,7 +497,7 @@ export class BotConfigs
 
     private removeScavLoot(): void
     {
-        this.botConfig.disableLootOnBotTypes.push("assault", "marksman");
+        this.botConfig.disableLootOnBotTypes.push("assault", "marksman", "cursedassault", "assaultgroup", "crazyassaultevent");
     }
 
     private setIdenticalScavWeights(): void
