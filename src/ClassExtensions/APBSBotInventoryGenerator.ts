@@ -353,7 +353,18 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         );
 
         botInventory.items.push(...generatedWeapon.weapon);
-
+        
+        if (this.raidInformation.isBotEnabled(botRole) && ModConfig.config.enableBotsToRollAmmoAgain)
+        {
+            this.apbsBotWeaponGenerator.apbsAddExtraMagazinesToInventory(
+                generatedWeapon,
+                itemGenerationWeights.items.magazines,
+                botInventory,
+                botRole,
+                botLevel
+            );
+            return;
+        }
         this.botWeaponGenerator.addExtraMagazinesToInventory(
             generatedWeapon,
             itemGenerationWeights.items.magazines,

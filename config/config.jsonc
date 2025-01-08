@@ -50,6 +50,12 @@
         "disableBossFollowerTierGeneration": false,
         "disableRaiderRogueTierGeneration": false,
 
+// Enable/Disable bots having the chance to roll ammo choice for rig magazines after selecting ammo choice for weapon
+// "enableBotsToRollAmmoAgain" If set to true, AI PMCs will roll their ammo choice for additional magazines based on the chance configured - if false all magazines will always have the same ammo selected for the weapon.
+// "chanceToRollAmmoAgain" chance out of 100 that bot will roll ammo again for each subsequent additional magazine they spawn with in their rig.
+        "enableBotsToRollAmmoAgain": true,
+        "chanceToRollAmmoAgain": 50,
+
 // Enable/Disable custom game version weights for AI PMCs
 // If set to true, AI PMCs will roll their weights from the values below - if false will use SPT defaults.
 // The values listed below ARE the SPT defaults (for reference)

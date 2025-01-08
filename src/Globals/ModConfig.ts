@@ -53,6 +53,8 @@ export interface Config
     disableBossTierGeneration: boolean,
     disableBossFollowerTierGeneration: boolean,
     disableRaiderRogueTierGeneration: boolean,
+    enableBotsToRollAmmoAgain: boolean,
+    chanceToRollAmmoAgain: number,
     gameVersionWeight: boolean, 
     standard: number, 
     left_behind: number, 
