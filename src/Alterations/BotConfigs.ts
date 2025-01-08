@@ -47,7 +47,7 @@ export class BotConfigs
         "543be5cb4bdc2deb348b4568": 2,
         "5485a8684bdc2da71d8b4567": 2,
         "5d650c3e815116009f6201d2": 2,
-        "543be6564bdc2df4348b4568": 1
+        "543be6564bdc2df4348b4568": 4
     }
 
     constructor(
