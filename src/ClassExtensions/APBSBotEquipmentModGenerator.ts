@@ -41,7 +41,7 @@ import { ModInformation } from "../Globals/ModInformation";
 import { APBSTester } from "../Utils/APBSTester";
 import { vanillaButtpads } from "../Globals/VanillaItemLists";
 import { APBSLogger } from "../Utils/APBSLogger";
-import { Logging } from "../Enums/Logging";
+import { RealismHelper } from "../Helpers/RealismHelper";
 
 /** Handle profile related client events */
 @injectable()
@@ -73,7 +73,8 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         @inject("RaidInformation") protected raidInformation: RaidInformation,
         @inject("ModInformation") protected modInformation: ModInformation,
         @inject("APBSTester") protected apbsTester: APBSTester,
-        @inject("APBSLogger") protected apbsLogger: APBSLogger
+        @inject("APBSLogger") protected apbsLogger: APBSLogger,
+        @inject("RealismHelper") protected realismHelper: RealismHelper
     )
     {
         super(logger, 
@@ -126,6 +127,11 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         for (const modSlotName in compatibleModsPool)
         {
             if (modSlotName === "mod_equipment_000" && this.raidInformation.nightTime) continue;
+
+            if (modSlotName === "mod_equipment" && this.realismHelper.gasMasks.includes(parentTemplate._id) && this.realismHelper.realismDetected == true)
+            {
+                forceSpawn = true;
+            }
 
             const itemSlotTemplate = this.getModItemSlotFromDb(modSlotName, parentTemplate);
             if (!itemSlotTemplate)
