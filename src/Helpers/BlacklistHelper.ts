@@ -16,6 +16,11 @@ export class BlacklistHelper
     )
     {}
 
+    private invalidAmmoIDs: string[] = [];
+    private invalidEquipmentIDs: string[] = [];
+    private invalidWeaponIDs: string[] = [];
+    private invalidAttachmentIDs: string[] = [];
+
     public initialize(): void
     {
         if (ModConfig.config.tier1AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier1AmmoBlacklist, 1);
@@ -46,6 +51,8 @@ export class BlacklistHelper
         if (ModConfig.config.tier5AttachmentBlacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.tier5AttachmentBlacklist, 5);
         if (ModConfig.config.tier6AttachmentBlacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.tier6AttachmentBlacklist, 6);
         if (ModConfig.config.tier7AttachmentBlacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.tier7AttachmentBlacklist, 7);
+
+        this.validateBlacklist();
     }
 
     private removeBlacklistedAmmo(ammoBlacklist: string[], tier: number): void
@@ -76,7 +83,7 @@ export class BlacklistHelper
             }
             if (itemDetails == undefined || itemDetails._parent != "5485a8684bdc2da71d8b4567")
             {
-                this.apbsLogger.log(Logging.WARN, `"${ammoBlacklist[item]}" in Ammo Blacklist is either an invalid ammunition or item ID.`)
+                if (!this.invalidAmmoIDs.includes(ammoBlacklist[item])) this.invalidAmmoIDs.push(ammoBlacklist[item])
             }
         }
     }
@@ -109,7 +116,7 @@ export class BlacklistHelper
             }
             if (itemDetails == undefined)
             {
-                this.apbsLogger.log(Logging.WARN, `"${equipmentBlacklist[item]}" in Equipment Blacklist is an invalid item ID.`)
+                if (!this.invalidEquipmentIDs.includes(equipmentBlacklist[item])) this.invalidEquipmentIDs.push(equipmentBlacklist[item])
             }
         }
     }
@@ -178,7 +185,7 @@ export class BlacklistHelper
             }
             if (itemDetails == undefined)
             {
-                this.apbsLogger.log(Logging.WARN, `"${weaponBlacklist[item]}" in Weapon Blacklist is an invalid item ID.`)
+                if (!this.invalidWeaponIDs.includes(weaponBlacklist[item])) this.invalidWeaponIDs.push(weaponBlacklist[item])
             }
         }
     }
@@ -219,7 +226,7 @@ export class BlacklistHelper
             }
             if (itemDetails == undefined)
             {
-                this.apbsLogger.log(Logging.WARN, `"${attachmentBlacklist[item]}" in Attachment Blacklist is either an invalid attachment or item ID.`)
+                if (!this.invalidAttachmentIDs.includes(attachmentBlacklist[item])) this.invalidAttachmentIDs.push(attachmentBlacklist[item])
             }
         }
     }
@@ -232,5 +239,37 @@ export class BlacklistHelper
         }
 
         return undefined;
+    }
+
+    private validateBlacklist(): void
+    {
+        if (this.invalidAmmoIDs.length > 0) 
+        {
+            for (const item in this.invalidAmmoIDs)
+            {
+                this.apbsLogger.log(Logging.WARN, `"${this.invalidAmmoIDs[item]}" in Ammo Blacklist is an invalid item ID.`)
+            }
+        }
+        if (this.invalidEquipmentIDs.length > 0) 
+        {
+            for (const item in this.invalidEquipmentIDs)
+            {
+                this.apbsLogger.log(Logging.WARN, `"${this.invalidEquipmentIDs[item]}" in Equipment Blacklist is an invalid item ID.`)
+            }
+        }
+        if (this.invalidWeaponIDs.length > 0) 
+        {
+            for (const item in this.invalidWeaponIDs)
+            {
+                this.apbsLogger.log(Logging.WARN, `"${this.invalidWeaponIDs[item]}" in Weapon Blacklist is an invalid item ID.`)
+            }
+        }
+        if (this.invalidAttachmentIDs.length > 0) 
+        {
+            for (const item in this.invalidAttachmentIDs)
+            {
+                this.apbsLogger.log(Logging.WARN, `"${this.invalidAttachmentIDs[item]}" in Attachment Blacklist is an invalid item ID.`)
+            }
+        }
     }
 }
