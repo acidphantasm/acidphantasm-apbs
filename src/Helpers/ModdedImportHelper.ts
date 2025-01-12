@@ -100,27 +100,8 @@ export class ModdedImportHelper
             "671d8b8c0959c721a50ca838"
         ]
 
-        this.clothingBlacklist = [
-            "668bc5cd834c88e06b08b645", // All of this is Artem hands, because they are being configured as Body instead...Crackboooonnneee!!
-            "668bc5cd834c88e06b08b64a",
-            "668bc5cd834c88e06b08b64d",
-            "668bc5cd834c88e06b08b650",
-            "668bc5cd834c88e06b08b652",
-            "668bc5cd834c88e06b08b655",
-            "668bc5cd834c88e06b08b658",
-            "668bc5cd834c88e06b08b65b",
-            "668bc5cd834c88e06b08b65e",
-            "668bc5cd834c88e06b08b662",
-            "668bc5cd834c88e06b08b665",
-            "668bc5cd834c88e06b08b668",
-            "668bc5cd834c88e06b08b66b",
-            "668bc5cd834c88e06b08b66e",
-            "668bc5cd834c88e06b08b671",
-            "668bc5cd834c88e06b08b674",
-            "668bc5cd834c88e06b08b677",
-            "668bc5cd834c88e06b08b67a",
-            "668bc5cd834c88e06b08b67d"
-        ]
+        // This is empty now because Crackbone fixed Artem - but I'm leaving this here for future use
+        this.clothingBlacklist = []
     }
 
     public tiersTable = [];
