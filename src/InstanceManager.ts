@@ -60,6 +60,7 @@ import { APBSMethodHolder } from "./InventoryMagGen/APBSMethodHolder";
 import { APBSBarrelInventoryMagGen } from "./InventoryMagGen/APBSBarrelInventoryMagGen";
 import { APBSInternalMagazineInventoryMagGen } from "./InventoryMagGen/APBSInternalMagazineInventoryMagGen";
 import { APBSUbglExternalMagGen } from "./InventoryMagGen/APBSUbglExternalMagGen";
+import { APBSBotGeneratorHelper } from "./ClassExtensions/APBSBotGeneratorHelper";
 
 export class InstanceManager 
 {
@@ -213,6 +214,8 @@ export class InstanceManager
         this.container.register("BotLootCacheService", { useToken: "APBSBotLootCacheService" });
         this.container.register<APBSBotLootGenerator>("APBSBotLootGenerator", APBSBotLootGenerator);
         this.container.register("BotLootGenerator", { useToken: "APBSBotLootGenerator" });
+        this.container.register<APBSBotGeneratorHelper>("APBSBotGeneratorHelper", APBSBotGeneratorHelper);
+        this.container.register("BotGeneratorHelper", { useToken: "APBSBotGeneratorHelper" });
 
         this.container.register("BotWeaponGenerator", { useToken: "APBSBotWeaponGenerator" });
 
