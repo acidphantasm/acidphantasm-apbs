@@ -33,18 +33,18 @@ export class RaidInformation
         },
         "laboratory":
         {
-            "LongRange": 5,
-            "ShortRange": 95
+            "LongRange": 10,
+            "ShortRange": 90
         },
         "factory4_night":
         {
-            "LongRange": 1,
-            "ShortRange": 99
+            "LongRange": 5,
+            "ShortRange": 95
         },
         "factory4_day":
         {
-            "LongRange": 1,
-            "ShortRange": 99
+            "LongRange": 5,
+            "ShortRange": 95
         },
         "Interchange":
         {

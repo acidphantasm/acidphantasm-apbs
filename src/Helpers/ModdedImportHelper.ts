@@ -100,27 +100,8 @@ export class ModdedImportHelper
             "671d8b8c0959c721a50ca838"
         ]
 
-        this.clothingBlacklist = [
-            "668bc5cd834c88e06b08b645", // All of this is Artem hands, because they are being configured as Body instead...Crackboooonnneee!!
-            "668bc5cd834c88e06b08b64a",
-            "668bc5cd834c88e06b08b64d",
-            "668bc5cd834c88e06b08b650",
-            "668bc5cd834c88e06b08b652",
-            "668bc5cd834c88e06b08b655",
-            "668bc5cd834c88e06b08b658",
-            "668bc5cd834c88e06b08b65b",
-            "668bc5cd834c88e06b08b65e",
-            "668bc5cd834c88e06b08b662",
-            "668bc5cd834c88e06b08b665",
-            "668bc5cd834c88e06b08b668",
-            "668bc5cd834c88e06b08b66b",
-            "668bc5cd834c88e06b08b66e",
-            "668bc5cd834c88e06b08b671",
-            "668bc5cd834c88e06b08b674",
-            "668bc5cd834c88e06b08b677",
-            "668bc5cd834c88e06b08b67a",
-            "668bc5cd834c88e06b08b67d"
-        ]
+        // This is empty now because Crackbone fixed Artem - but I'm leaving this here for future use
+        this.clothingBlacklist = []
     }
 
     public tiersTable = [];
@@ -142,14 +123,14 @@ export class ModdedImportHelper
         this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Weapons...Support not granted for this feature...")
         
         // Build the joined list for every weapon used in APBS
-        const weapons: ITemplateItem = {};
+        const weapons = {};
         vanillaItemList.equipment.LongRange.forEach(element => weapons[element] = this.getItem(element))        
         vanillaItemList.equipment.ShortRange.forEach(element => weapons[element] = this.getItem(element))
         vanillaItemList.equipment.Holster.forEach(element => weapons[element] = this.getItem(element))
         vanillaItemList.equipment.Scabbard.forEach(element => weapons[element] = this.getItem(element))
 
         // Push this list to the function to filter and import
-        this.getModdedItems(weapons, BaseClasses.WEAPON, "Weapons");
+        this.getModdedItems(weapons as ITemplateItem, BaseClasses.WEAPON, "Weapons");
     }
 
     private buildVanillaEquipmentList(): void
@@ -157,19 +138,19 @@ export class ModdedImportHelper
         this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Equipment...Support not granted for this feature...")
         
         // Build the joined list for every armour type used in APBS
-        const armours: ITemplateItem = {};
+        const armours = {};
         vanillaItemList.equipment.ArmorVest.forEach(element => armours[element] = this.getItem(element))
 
-        const headwear: ITemplateItem = {};
+        const headwear = {};
         vanillaItemList.equipment.Headwear.forEach(element => headwear[element] = this.getItem(element))
 
-        const tacticalVests: ITemplateItem = {};        
+        const tacticalVests = {};        
         vanillaItemList.equipment.TacticalVest.forEach(element => tacticalVests[element] = this.getItem(element))
         
         // Push these lists to the function to filter and import
-        this.getModdedItems(armours, BaseClasses.ARMOR, "Armours");
-        this.getModdedItems(headwear, BaseClasses.HEADWEAR, "Helmets");
-        this.getModdedItems(tacticalVests, BaseClasses.VEST, "Vests");
+        this.getModdedItems(armours as ITemplateItem, BaseClasses.ARMOR, "Armours");
+        this.getModdedItems(headwear as ITemplateItem, BaseClasses.HEADWEAR, "Helmets");
+        this.getModdedItems(tacticalVests as ITemplateItem, BaseClasses.VEST, "Vests");
     }
 
     private buildVanillaClothingList(): void
@@ -177,15 +158,15 @@ export class ModdedImportHelper
         this.apbsLogger.log(Logging.WARN, "Checking & importing Modded Clothing...Support not granted for this feature...")
 
         // Build the joined list for every body & feet type used in APBS
-        const body: ICustomizationItem = {};
+        const body = {};
         vanillaClothingList.appearance.body.forEach(element => body[element] = this.getCustomization(element))
 
-        const feet: ICustomizationItem = {};
+        const feet = {};
         vanillaClothingList.appearance.feet.forEach(element => feet[element] = this.getCustomization(element))
 
         // Push these lists to the function to filter and import
-        this.getModdedClothing(body, "Body");
-        this.getModdedClothing(feet, "Feet");
+        this.getModdedClothing(body as ICustomizationItem, "Body");
+        this.getModdedClothing(feet as ICustomizationItem, "Feet");
     }
 
     private getModdedClothing(clothingList: ICustomizationItem, className: string): void

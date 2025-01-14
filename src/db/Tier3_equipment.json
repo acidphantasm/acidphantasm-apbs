@@ -4,10 +4,12 @@
             "FirstPrimaryWeapon": {
                 "LongRange": {
                     "5c07c60e0db834002330051f": 25,
-                    "5d43021ca4b9362eab4b5e25": 25,
+                    "5d43021ca4b9362eab4b5e25": 20,
                     "5b0bbe4e5acfc40dc528a72d": 15,
-                    "5bfea6e90db834001b7347f3": 25,
-                    "5df8ce05b11454561e39243b": 10
+                    "5bfea6e90db834001b7347f3": 20,
+                    "5df8ce05b11454561e39243b": 15,
+                    "623063e994fc3f7b302a9696": 8,
+                    "5447a9cd4bdc2dbd208b4567": 8
                 },
                 "ShortRange": {
                     "5a7828548dc32e5a9c28b516": 5,
@@ -75,10 +77,12 @@
             "SecondPrimaryWeapon": {
                 "LongRange": {
                     "5c07c60e0db834002330051f": 25,
-                    "5d43021ca4b9362eab4b5e25": 25,
+                    "5d43021ca4b9362eab4b5e25": 20,
                     "5b0bbe4e5acfc40dc528a72d": 15,
-                    "5bfea6e90db834001b7347f3": 25,
-                    "5df8ce05b11454561e39243b": 10
+                    "5bfea6e90db834001b7347f3": 20,
+                    "5df8ce05b11454561e39243b": 15,
+                    "623063e994fc3f7b302a9696": 8,
+                    "5447a9cd4bdc2dbd208b4567": 8
                 },
                 "ShortRange": {
                     "5a7828548dc32e5a9c28b516": 5,
@@ -753,6 +757,7 @@
                 "56e335e4d2720b6c058b456d": 20,
                 "5ca20d5986f774331e7c9602": 10,
                 "5e9dcf5986f7746c417435b3": 10,
+                "59e763f286f7742ee57895da": 15,
                 "6038d614d10cbf667352dd44": 1,
                 "6034d103ca006d2dca39b3f0": 1,
                 "656ddcf0f02d7bcea90bf395": 1,
