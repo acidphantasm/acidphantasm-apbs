@@ -61,8 +61,11 @@ export class APBSBotGeneratorHelper extends BotGeneratorHelper
             return maxResource;
         }
 
-        return this.randomUtil.getInt(this.randomUtil.getPercentOfValue(randomizationValues.resourcePercent, maxResource, 2),
-            maxResource
-        )
+        // Never let % value fall below 1
+        const percentOfValue = Math.max(
+            1,
+            this.randomUtil.getPercentOfValue(randomizationValues.resourcePercent, maxResource, 0)
+        );
+        return this.randomUtil.getInt(percentOfValue, maxResource);
     }
 }
