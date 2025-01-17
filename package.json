@@ -1,6 +1,6 @@
 {
     "name": "Acids Progressive Bot System",
-    "version": "1.4.2",
+    "version": "1.4.3",
     "sptVersion": "~3.10",
     "loadBefore": [],
     "loadAfter": [

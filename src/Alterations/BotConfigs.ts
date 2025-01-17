@@ -376,7 +376,7 @@ export class BotConfigs
         {
             if (ModConfig.config.pmcLootBlacklistItems.length > 0)
             {
-                for (const item in ModConfig.config.pmcLootBlacklistItems)
+                for (const item of ModConfig.config.pmcLootBlacklistItems)
                 {
                     this.pmcConfig.backpackLoot.blacklist.push(item);
                     this.pmcConfig.vestLoot.blacklist.push(item);
