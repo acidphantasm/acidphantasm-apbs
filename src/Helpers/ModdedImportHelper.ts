@@ -511,10 +511,10 @@ export class ModdedImportHelper
             for (const item in slotFilter)
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
-                const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
 
                 // Check if the item is actually a valid item, or is on the blacklist
                 // WTT puts itemIDs in their mods that don't exist in the database for some reason (probably unreleased mods)
+                const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
                 if (this.attachmentBlacklist.includes(slotFilterItem) || !itemExistsCheck[0]) continue;
 
                 // Check if the parent mod & the child mod are vanilla or modded
