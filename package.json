@@ -24,7 +24,8 @@
         "ignore": "^5.2",
         "tsyringe": "4.8.0",
         "typescript": "5.4",
-        "winston": "3.12"
+        "winston": "3.12",
+        "jsonc": "2.0.0"
     },
     "author": "acidphantasm",
     "contributors": [],
