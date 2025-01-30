@@ -13,6 +13,7 @@
 // scavWeaponWeights - Weight of modded weapons being added to Scavs
 // followerWeaponWeights - Weight of modded weapons being added to boss followers (not Goons)
 // enableSafeGuard - Enables preventing weapon importing from bastardizing vanilla weapons. If you disable this, you will get cursed vanilla weapons.
+// enableAddingModdedAttachmentsToVanillaWeapons - This will check and add all the standalone modded attachments to vanilla weapons. (Like mods that add a bunch of custom attachments, but not weapons that can hold them)
 // Higher weights = more often. Lower weights = less often. If you add a LOT of mod weapons, I suggest using a lower value. 
 // REVIEW THE APBS LOGS TO TUNE YOUR CONFIG. (\user\mods\acidphantasm-progressivebotsystem\logs)
         "enableModdedWeapons": false,
@@ -23,11 +24,21 @@
         "scavWeaponWeights": 1,
         "followerWeaponWeights": 7,
         "enableSafeGuard": true,
+        "enableAddingModdedAttachmentsToVanillaWeapons": false,
 
-// Enable/Disable PMC Seasonal Clothing
-// If true, PMCs will wear seasonal appropriate clothing to blend into the environment better. If disabled, clothing will be tiered by level instead.
-// If true, modded clothing will not import, regardless of setting, to protect the appearance of appropriate clothing.
-        "seasonalPmcAppearance": true,
+// Enable/Disable specific bot generation
+// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation.
+// All EVENT bots are automatically disabled and will use vanilla values, including any custom bot types (Punisher/Legion)
+// Scavs = All Scav/Marksman/Cursed
+// PMC = All PMC/BEAR
+// Boss = All bosses + Knight/BirdEye/BigPipe
+// Follower = All boss guards/followers EXCEPT Birdeye/BigPipe
+// Special = Raiders, Rogues, Cultists, Bloodhounds
+        "disableScavTierGeneration": false,
+        "disablePMCTierGeneration": false,
+        "disableBossTierGeneration": false,
+        "disableBossFollowerTierGeneration": false,
+        "disableSpecialTierGeneration": false,
 
 // Enable/Disable Realism Gas Mask Compatibility
 // APBS automatically detects Realism and adds gas masks to bots due to Radiation Zones. If you dont want this to happen, set to true.
@@ -42,13 +53,10 @@
         "tarkovAndChill": false,
         "blickyMode": false,
 
-// Enable/Disable specific bot generation
-// If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation.
-        "disableScavTierGeneration": false,
-        "disablePMCTierGeneration": false,
-        "disableBossTierGeneration": false,
-        "disableBossFollowerTierGeneration": false,
-        "disableRaiderRogueTierGeneration": false,
+// Enable/Disable PMC Seasonal Clothing
+// If true, PMCs will wear seasonal appropriate clothing to blend into the environment better. If disabled, clothing will be tiered by level instead.
+// If true, modded clothing will not import, regardless of setting, to protect the appearance of appropriate clothing.
+        "seasonalPmcAppearance": true,
 
 // Enable/Disable bots having the chance to roll ammo choice for rig magazines after selecting ammo choice for weapon
 // "enableBotsToRollAmmoAgain" If set to true, AI PMCs will roll their ammo choice for additional magazines based on the chance configured - if false all magazines will always have the same ammo selected for the weapon.
