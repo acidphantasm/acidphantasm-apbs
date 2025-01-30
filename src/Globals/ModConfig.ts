@@ -44,6 +44,7 @@ export interface Config
     scavWeaponWeights: number,
     followerWeaponWeights: number,
     enableSafeGuard: boolean,
+    enableAddingModdedAttachmentsToVanillaWeapons: boolean,
     seasonalPmcAppearance: boolean,
     disableRealismGasMasks: boolean,
     onlyChads: boolean,
