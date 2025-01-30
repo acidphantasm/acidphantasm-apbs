@@ -31,7 +31,7 @@ export class BotEnablementHelper
         if (this.isPMC(botType)) return ModConfig.config.disablePMCTierGeneration;
         if (this.isScav(botType)) return ModConfig.config.disableScavTierGeneration;
         if (this.isSpecial(botType)) return ModConfig.config.disableSpecialTierGeneration;
-        if (this.isEvent(botType)) return false;
+        if (this.isEvent(botType)) return true;
         return false;
     }
 
