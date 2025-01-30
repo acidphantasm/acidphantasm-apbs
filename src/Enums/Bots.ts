@@ -1,4 +1,4 @@
-export enum Boss
+export enum BossBots
     {
     BOSSBOAR = "bossboar",
     BOSSBULLY = "bossbully",
@@ -15,7 +15,7 @@ export enum Boss
     FOLLOWERBIRDEYE = "followerbirdeye"
 }
 
-export enum Follower
+export enum FollowerBots
     {
     BOSSBOARSNIPER = "bossboarsniper",
     FOLLOWERBOAR = "followerboar",
@@ -25,6 +25,7 @@ export enum Follower
     FOLLOWERGLUHARASSAULT = "followergluharassault",
     FOLLOWERGLUHARSCOUT = "followergluharscout",
     FOLLOWERGLUHARSNIPE = "followergluharsnipe",
+    FOLLOWERGLUHARSECURITY = "followergluharsecurity",
     FOLLOWERKOJANIY = "followerkojaniy",
     FOLLOWERKOLONTAYASSAULT = "followerkolontayassault",
     FOLLOWERKOLONTAYSECURITY = "followerkolontaysecurity",
@@ -33,7 +34,7 @@ export enum Follower
     FOLLOWERZRYACHIY = "followerzryachiy"
 }
 
-export enum Special
+export enum SpecialBots
     {
     ARENAFIGHTER = "arenafighter",
     ARENAFIGHTEREVENT = "arenafighterevent",
@@ -43,7 +44,7 @@ export enum Special
     SECTANTWARRIOR = "sectantwarrior"
 }
 
-export enum PMC
+export enum PMCBots
     {
     PMCUSEC = "pmcusec",
     PMCBEAR = "pmcbear",
@@ -51,7 +52,7 @@ export enum PMC
     BEAR = "bear"
 }
 
-export enum Scav
+export enum ScavBots
     {
     ASSAULT = "assault",
     ASSAULTGROUP = "assaultgroup",
@@ -61,7 +62,7 @@ export enum Scav
     MARKSMAN = "marksman"
 }
 
-export enum Event 
+export enum EventBots
     {
     GIFTER = "gifter",
     INFECTEDASSAULT = "infectedassault",
@@ -72,7 +73,7 @@ export enum Event
     PEACEFULLZRYACHIYEVENT = "peacefullzryachiyevent",
     PEACEMAKER = "peacemaker",
     RAVANGEZRYACHIYEVENT = "ravangezryachiyevent",
-    SECTACTPRIESTEVENT = "sectantpriestevent",
+    SECTACTPRIESTEVENT = "sectactpriestevent",
     SECTANTONI = "sectantoni",
     SECTANTPREDVESTNIK = "sectantpredvestnik",
     SECTANTPRIZRAK = "sectantprizrak",
