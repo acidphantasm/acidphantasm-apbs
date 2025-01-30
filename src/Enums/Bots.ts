@@ -38,7 +38,9 @@ export enum Special
     ARENAFIGHTER = "arenafighter",
     ARENAFIGHTEREVENT = "arenafighterevent",
     EXUSEC = "exusec",
-    PMCBOT = "pmcbot"
+    PMCBOT = "pmcbot",
+    SECTANTPRIEST = "sectantpriest",
+    SECTANTWARRIOR = "sectantwarrior"
 }
 
 export enum PMC
