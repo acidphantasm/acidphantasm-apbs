@@ -2664,7 +2664,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -3314,7 +3320,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -3931,7 +3943,13 @@
                             "4": 1,
                             "5": 1
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -4555,7 +4573,13 @@
                             "4": 1,
                             "5": 1
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -5205,7 +5229,13 @@
                             "4": 1,
                             "5": 1
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -5851,7 +5881,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -6496,7 +6532,13 @@
                             "4": 1,
                             "5": 1
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -7146,7 +7188,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -7791,7 +7839,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -8442,7 +8496,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -9097,7 +9157,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -9742,7 +9808,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -10390,7 +10462,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -11041,7 +11119,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -11688,7 +11772,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -12338,7 +12428,13 @@
                             "4": 0,
                             "5": 0
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -12992,7 +13088,13 @@
                             "4": 2,
                             "5": 1
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -13644,7 +13746,13 @@
                             "4": 1,
                             "5": 1
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
@@ -14299,7 +14407,13 @@
                             "4": 1,
                             "5": 1
                         },
-                        "whitelist": {}
+                        "whitelist": {
+                            "5710c24ad2720bc3458b45a3": 10,
+                            "5448be9a4bdc2dfd2f8b456a": 10,
+                            "58d3db5386f77426186285a0": 10,
+                            "5e32f56fcb6d5863cc5e5ee4": 5,
+                            "5e340dcdcb6d5863cc5e5efb": 3
+                        }
                     },
                     "healing": {
                         "weights": {
