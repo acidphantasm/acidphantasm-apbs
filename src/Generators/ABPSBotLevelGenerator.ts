@@ -39,7 +39,7 @@ export class APBSBotLevelGenerator
         {
             result.generateBotLevel = (levelDetails: MinMax, botGenerationDetails: IBotGenerationDetails, bot: APBSIBotBase): IRandomisedBotLevelResult => 
             {                
-                if (this.modInformation.testMode && this.modInformation.testBotRole.includes(botGenerationDetails.role.toLowerCase()))
+                if (this.modInformation.testMode && this.modInformation.testLevelLock && this.modInformation.testBotRole.includes(botGenerationDetails.role.toLowerCase()))
                 {
                     const level = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)?.Info?.Level;
                     const exp = this.profileHelper.getExperience(level);
