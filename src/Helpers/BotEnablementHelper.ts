@@ -1,5 +1,5 @@
 import { injectable } from "tsyringe";
-import { Boss, Follower, PMC, Scav, Special } from "../Enums/Bots";
+import { BossBots, FollowerBots, PMCBots, ScavBots, SpecialBots, EventBots } from "../Enums/Bots";
 import { ModConfig } from "../Globals/ModConfig";
 
 @injectable()
@@ -10,12 +10,12 @@ export class BotEnablementHelper
 
     public doesBotExist(botType: string): boolean
     {
-        const boss: string[] = Object.values(Boss);
-        const follower: string[] = Object.values(Follower);
-        const pmc: string[] = Object.values(PMC);
-        const scav: string[] = Object.values(Scav);
-        const special: string[] = Object.values(Special);
-        const event: string[] = Object.values(Event);
+        const boss: string[] = Object.values(BossBots);
+        const follower: string[] = Object.values(FollowerBots);
+        const pmc: string[] = Object.values(PMCBots);
+        const scav: string[] = Object.values(ScavBots);
+        const special: string[] = Object.values(SpecialBots);
+        const event: string[] = Object.values(EventBots);
 
         if (!boss.includes(botType) && !follower.includes(botType) && !pmc.includes(botType) && !scav.includes(botType) && !special.includes(botType) && !event.includes(botType))
         {            
@@ -37,31 +37,31 @@ export class BotEnablementHelper
 
     private isBoss(botType: string): boolean
     {
-        return botType in Boss;
+        return Object.values(BossBots).includes(botType as BossBots);
     }
 
     private isFollower(botType: string): boolean
     {        
-        return botType in Follower;
+        return Object.values(FollowerBots).includes(botType as FollowerBots);
     }
 
     private isPMC(botType: string): boolean
     {
-        return botType in PMC;        
+        return Object.values(PMCBots).includes(botType as PMCBots);
     }
 
     private isScav(botType: string): boolean
     {
-        return botType in Scav;        
+        return Object.values(ScavBots).includes(botType as ScavBots);
     }
 
     private isEvent(botType: string): boolean
     {
-        return botType in Event;        
+        return Object.values(EventBots).includes(botType as EventBots);
     }
 
     private isSpecial(botType: string): boolean
     {
-        return botType in Special;        
+        return Object.values(SpecialBots).includes(botType as SpecialBots);
     }
 }
