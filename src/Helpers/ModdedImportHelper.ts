@@ -24,6 +24,9 @@ export class ModdedImportHelper
     private clothingBlacklist: any[];
     private modScope000Whitelist: string[] = [];
     private itemShouldNotGetModdedChildrenAttachments: string[] = [];
+    private invalidModAttachments: string[] = [];
+    private invalidModEquipment: string[] = [];
+    private tier4Optics: string[];
 
     constructor(
         @inject("IDatabaseTables") protected tables: IDatabaseTables,
@@ -73,7 +76,7 @@ export class ModdedImportHelper
             "5c066ef40db834001966a595",
             "59ef13ca86f77445fd0e2483",
             "6531119b9afebff7ff0a1769"
-        ]
+        ];
 
         this.attachmentBlacklist = [
             "5c110624d174af029e69734c", // NVG/Thermals
@@ -117,8 +120,12 @@ export class ModdedImportHelper
             "5a37cb10c4a282329a73b4e7",
             "5d0a29fed7ad1a002769ad08",
             "57dc334d245977597164366f",
-            "618a75c9a3884f56c957ca1b"
-        ]
+            "618a75c9a3884f56c957ca1b",
+            "59e5f5a486f7746c530b3ce2",
+            "55d481904bdc2d8c2f8b456a",
+            "5b1fb3e15acfc4001637f068",
+            "564ca9df4bdc2d35148b4569"
+        ];
 
         this.modScope000Whitelist = [
             "5b2388675acfc4771e1be0be",
@@ -129,14 +136,37 @@ export class ModdedImportHelper
             "6567e7681265c8a131069b0f",
             "67617ec9ea1e82ea5e103054",
             "672e37d19f3e60fb0cbbe568"
-        ]
+        ];
 
         this.itemShouldNotGetModdedChildrenAttachments = [
             "5a33a8ebc4a282000c5a950d",
             "57adff4f24597737f373b6e6"
-        ]
+        ];
+
+        // Tier4+ Vanilla Optics
+        this.tier4Optics = [            
+            "5c0517910db83400232ffee5",
+            "558022b54bdc2dac148b458d",
+            "58491f3324597764bc48fa02",
+            "584924ec24597768f12ae244",
+            "60a23797a37c940de7062d02",
+            "59f9d81586f7744c7506ee62",
+            "5b2389515acfc4771e1be0c0",
+            "5b3b99265acfc4704b4a1afb",
+            "5b31163c5acfc400153b71cb",
+            "64785e7c19d732620e045e15",
+            "655f13e0a246670fb0373245",
+            "6567e751a715f85433025998"
+        ];
+
+        // Empty array to hold invalid attachmentIDs for logging
+        this.invalidModAttachments = [];
+        
+        // Empty array to hold invalid attachmentIDs for logging
+        this.invalidModEquipment = [];
+
         // This is empty now because Crackbone fixed Artem - but I'm leaving this here for future use
-        this.clothingBlacklist = []
+        this.clothingBlacklist = [];
     }
 
     public tiersTable = [];
@@ -152,6 +182,9 @@ export class ModdedImportHelper
         if (ModConfig.config.enableModdedEquipment) this.buildVanillaEquipmentList();
         if (ModConfig.config.enableModdedClothing && !ModConfig.config.seasonalPmcAppearance) this.buildVanillaClothingList();
         if (ModConfig.config.enableAddingModdedAttachmentsToVanillaWeapons) this.buildModAttachments();
+        
+        if (this.invalidModAttachments.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModAttachments.length} Invalid Attachment ItemIDs found in mods: ${JSON.stringify(this.invalidModAttachments)}`)
+        if (this.invalidModEquipment.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModEquipment.length} Invalid Weapon/Equipment ItemIDs found in mods: ${JSON.stringify(this.invalidModEquipment)}`)
     }
 
     private buildVanillaWeaponList(): void
@@ -224,7 +257,7 @@ export class ModdedImportHelper
         // Push clothing to APBS database
         if (clothingToBeImported.length > 0)
         {
-            this.apbsLogger.log(Logging.WARN, `Imported ${clothingToBeImported.length} Modded ${className}...`)
+            this.apbsLogger.log(Logging.WARN, `     Imported ${clothingToBeImported.length} Modded ${className}...`)
             this.pushClothing(clothingToBeImported);
         }
     }
@@ -276,7 +309,7 @@ export class ModdedImportHelper
         // Push items to APBS database depending on if they are weapons or equipment
         if (itemsToBeImported.length > 0)
         {
-            this.apbsLogger.log(Logging.WARN, `Imported ${itemsToBeImported.length} Modded ${className}...`)
+            this.apbsLogger.log(Logging.WARN, `     Imported ${itemsToBeImported.length} Modded ${className}...`)
             if (baseClass == BaseClasses.WEAPON) this.getSetModdedWeaponDetails(itemsToBeImported);
             if (baseClass != BaseClasses.WEAPON) this.getSetModdedEquipmentDetails(itemsToBeImported);
         }
@@ -291,6 +324,9 @@ export class ModdedImportHelper
             const weaponId = weaponPool[weapon]._id;
             const weaponSlots = weaponPool[weapon]?._props?.Slots;
             const weaponType = weaponPool[weapon]?._props?.weapUseType;
+
+            // Check if item is actually valid and in the database, skip if it isn't
+            if (!this.doesItemExist(weaponId, true)) continue;
 
             // Push Weapon details to relevant pools
             this.pushCalibersToAmmoPools(weaponId)
@@ -311,11 +347,15 @@ export class ModdedImportHelper
             const gridLength = equipmentPool[equipment]?._props?.Grids.length;
             let equipmentSlot: string;
 
+            // Check if item is actually valid and in the database, skip if it isn't
+            if (!this.doesItemExist(equipmentId, true)) continue;
+
             // Set equipmentSlot string to the proper value - this is only done to separate TacticalVests & ArmouredRigs
             if (equipmentParent == "5448e5284bdc2dcb718b4567" && (equipmentSlots.length == 0 || equipmentSlots == undefined)) equipmentSlot = "TacticalVest"
             if (equipmentParent == "5448e5284bdc2dcb718b4567" && equipmentSlots.length >= 1) equipmentSlot = "ArmouredRig"
             if (equipmentParent == "5448e54d4bdc2dcc718b4568") equipmentSlot = "ArmorVest"
             if (equipmentParent == "5a341c4086f77401f2541505") equipmentSlot = "Headwear"
+
 
             // Push Equipment details to relevant pools
             this.pushEquipmentToTiers(equipmentId, equipmentSlot, gridLength, equipmentSlotsLength);
@@ -471,21 +511,35 @@ export class ModdedImportHelper
             const slotName = itemSlots[slot]?._name;
             let slotFilter = itemSlots[slot]?._props?.filters[0]?.Filter
 
+            // Default to adding the item, change this value during checks
+            let addItemBeforeTier4 = true;
+
             // If a slot's filters contain the canted sight mount, remove all other items from the filter - this ensures ONLY the canted sight is added            
-            if (slotFilter.includes("5649a2464bdc2d91118b45a8"))
-            {
-                slotFilter = [ "5649a2464bdc2d91118b45a8" ];
-            }
+            if (slotFilter.includes("5649a2464bdc2d91118b45a8")) slotFilter = [ "5649a2464bdc2d91118b45a8" ];
 
             // Loop over all items in the filter for the slot
             for (const item in slotFilter)
             {
                 const slotFilterItem = slotFilter[item];
-                
-                // Check if the item is actually a valid item, or is on the blacklist
-                // WTT puts itemIDs in their mods that don't exist in the database for some reason (probably unreleased mods)
-                const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
-                if (this.attachmentBlacklist.includes(slotFilterItem) || !itemExistsCheck[0]) continue;
+
+                // If item doesn't exist in the database, but some mod is adding it to filters, skip that shitty shit. STOP ADDING NON-EXISTENT ITEMS TO FILTERS.
+                if (!this.doesItemExist(slotFilterItem)) continue;
+
+                // Get Item Data)
+                const itemData = this.itemHelper.getItem(slotFilterItem)[1]
+
+                // Check if item is blacklisted, skip if so
+                if (this.attachmentBlacklist.includes(slotFilterItem)) continue;
+
+                // Check if Magazine being added and is larger than 30 capacity, if so - skip adding to T1-3
+                if (slotName == "mod_magazine") 
+                {
+                    const maxCount = itemData?._props?.Cartridges[0]?._max_count;
+                    if ((maxCount > 30 && maxCount < 100) || slotFilterItem == "66e71a7ffe3fc79ff68b582b")
+                    {
+                        addItemBeforeTier4 = false; 
+                    }
+                }
 
                 const isVanillaParent = this.apbsAttachmentChecker.isVanillaItem(itemID);
                 const isVanillaItem = this.apbsAttachmentChecker.isVanillaItem(slotFilterItem);
@@ -520,9 +574,9 @@ export class ModdedImportHelper
                     // Additionally, check if the parent mod & child mod are vanilla as well as checking the config safeguard
                     if (isVanillaParent && isVanillaItem && ModConfig.config.enableSafeGuard) continue;
 
-                    this.tierInformation.tier1mods[itemID][slotName].push(slotFilterItem);
-                    this.tierInformation.tier2mods[itemID][slotName].push(slotFilterItem);
-                    this.tierInformation.tier3mods[itemID][slotName].push(slotFilterItem);
+                    if (addItemBeforeTier4) this.tierInformation.tier1mods[itemID][slotName].push(slotFilterItem);
+                    if (addItemBeforeTier4) this.tierInformation.tier2mods[itemID][slotName].push(slotFilterItem);
+                    if (addItemBeforeTier4) this.tierInformation.tier3mods[itemID][slotName].push(slotFilterItem);
                     this.tierInformation.tier4mods[itemID][slotName].push(slotFilterItem);
                     this.tierInformation.tier5mods[itemID][slotName].push(slotFilterItem);
                     this.tierInformation.tier6mods[itemID][slotName].push(slotFilterItem);
@@ -544,6 +598,9 @@ export class ModdedImportHelper
         const parentSlotItemID = parentSlotItemData?._id;
         const parentSlotSlots = parentSlotItemData?._props?.Slots;
 
+        // Default to adding the item, change this value during checks
+        let addItemBeforeTier4 = true;
+
         // Exit if there are no children
         if (parentSlotSlots == undefined || parentSlotSlots.length == 0) return;
 
@@ -562,20 +619,25 @@ export class ModdedImportHelper
             // Loop over each item in the slot's filters
             for (const item in slotFilter)
             {
-                const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
+                const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];                
+                
+                // If item doesn't exist in the database, but some mod is adding it to filters, skip that shitty shit. STOP ADDING NON-EXISTENT ITEMS TO FILTERS.
+                if (!this.doesItemExist(slotFilterItem)) continue;
 
                 // If the mod_scope_000 slot is looping items, skip any items not on the whitelist because they're dumb as shit and ruin generation
                 if (slotName == "mod_scope_000" && !this.modScope000Whitelist.includes(slotFilterItem)) continue;
 
-                // Check if the item is actually a valid item, or is on the blacklist
-                // WTT puts itemIDs in their mods that don't exist in the database for some reason (probably unreleased mods)
-                const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
-                if (this.attachmentBlacklist.includes(slotFilterItem) || !itemExistsCheck[0]) continue;
+                // Check blacklist, skip if it is on it
+                if (this.attachmentBlacklist.includes(slotFilterItem)) continue;
 
                 // Check if the parent mod & the child mod are vanilla or modded
                 // This allows preventing mods adding vanilla mods to vanilla weapons
                 const isVanillaParent = this.apbsAttachmentChecker.isVanillaItem(parentSlotItemID);
                 const isVanillaItem = this.apbsAttachmentChecker.isVanillaItem(slotFilterItem);
+                if (isVanillaParent && isVanillaItem && ModConfig.config.enableSafeGuard) continue;
+
+                // Tier4+ checks
+                if (this.tier4Optics.includes(slotFilterItem)) addItemBeforeTier4 = false;
 
                 // Check if the PARENT itemID already exists in the tierJsons, if not - create it in all tierJSONs.
                 if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
@@ -605,12 +667,12 @@ export class ModdedImportHelper
                 if (!this.tierInformation.tier1mods[parentSlotItemID][slotName].includes(slotFilterItem))
                 {
                     // Additionally, check if the parent mod & child mod are vanilla as well as checking the config safeguard
-                    if (isVanillaParent && isVanillaItem && ModConfig.config.enableSafeGuard) continue;
+                    
 
                     // Finally push the child mod to the proper tierJSONs
-                    this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    if (addItemBeforeTier4) this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    if (addItemBeforeTier4) this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    if (addItemBeforeTier4) this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier4mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier5mods[parentSlotItemID][slotName].push(slotFilterItem)
                     this.tierInformation.tier6mods[parentSlotItemID][slotName].push(slotFilterItem)
@@ -707,12 +769,25 @@ export class ModdedImportHelper
     }
 
     private pushStandaloneAttachmentsToWeapons(itemID: string, slotName: string, slotItem: string): void
-    {
-        // Check if the item is actually a valid item, or is on the blacklist
-        // WTT puts itemIDs in their mods that don't exist in the database for some reason (probably unreleased mods)
-        const itemExistsCheck = this.itemHelper.getItem(slotItem)
-        if (this.attachmentBlacklist.includes(slotItem) || !itemExistsCheck[0] || !this.apbsAttachmentChecker.modAttachmentList.includes(slotItem)) return;
+    {        
+        // We already did all of our prechecks in buildModAttachments()
 
+        // Get Item Data for checks to add item before T4 or not (the "OP" tier starts at 4)
+        const itemData = this.itemHelper.getItem(slotItem)[1]
+
+        // Default to adding the item, change this value during checks
+        let addItemBeforeTier4 = true;
+
+        // Tier4 validity checks for the weapon filters
+        if (slotName == "mod_magazine") 
+        {
+            const maxCount = itemData?._props?.Cartridges[0]?._max_count;
+            if ((maxCount > 30 && maxCount < 100) || slotItem == "66e71a7ffe3fc79ff68b582b")
+            {
+                addItemBeforeTier4 = false; 
+            }
+        }      
+        
         // Check if the itemID's slot already exists in the tierJsons, if not - create it in them all.
         if (this.tierInformation.tier1mods[itemID][slotName] == undefined)
         {
@@ -728,9 +803,9 @@ export class ModdedImportHelper
         // Check if the itemID's slot doesn't already contain the item to import, if it doesn't - add it
         if (!this.tierInformation.tier1mods[itemID][slotName].includes(slotItem))
         {
-            this.tierInformation.tier1mods[itemID][slotName].push(slotItem);
-            this.tierInformation.tier2mods[itemID][slotName].push(slotItem);
-            this.tierInformation.tier3mods[itemID][slotName].push(slotItem);
+            if (addItemBeforeTier4) this.tierInformation.tier1mods[itemID][slotName].push(slotItem);
+            if (addItemBeforeTier4) this.tierInformation.tier2mods[itemID][slotName].push(slotItem);
+            if (addItemBeforeTier4) this.tierInformation.tier3mods[itemID][slotName].push(slotItem);
             this.tierInformation.tier4mods[itemID][slotName].push(slotItem);
             this.tierInformation.tier5mods[itemID][slotName].push(slotItem);
             this.tierInformation.tier6mods[itemID][slotName].push(slotItem);
@@ -743,12 +818,12 @@ export class ModdedImportHelper
 
     public buildModAttachments(): void
     {
-        this.apbsLogger.log(Logging.WARN, `Checking & importing Modded Attachments...Support not granted for this feature...`)
+        this.apbsLogger.log(Logging.WARN, `Checking & importing Modded Weapon Attachments...Support not granted for this feature...`)
 
         const items = this.databaseService.getTables().templates.items;
         const itemValues = Object.values(items);
-        const weapons = itemValues.filter(x => this.itemHelper.isOfBaseclass(x._id, BaseClasses.WEAPON))
-        const alreadyPushedIDs: string[] = []
+        const weapons = itemValues.filter(x => this.itemHelper.isOfBaseclass(x._id, BaseClasses.WEAPON));
+        const alreadyPushedIDs: string[] = [];
 
         for (const weapon in weapons)
         {
@@ -773,17 +848,22 @@ export class ModdedImportHelper
                     for (const item in slotFilter)
                     {
                         const slotFilterItem = slotFilter[item];
-                        const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
+                        
+                        // If item doesn't exist in the database, but some mod is adding it to filters, skip that shitty shit. STOP ADDING NON-EXISTENT ITEMS TO FILTERS.
+                        if (!this.doesItemExist(slotFilterItem)) continue;
 
-                        // Check is slot is a magazine, if it is, validate _max_count exists. If it doesn't - skip that incorrectly built magazine
-                        if (slotName == "mod_magazine" && itemExistsCheck[1]._props.Cartridges[0]._max_count == undefined)
+                        // Get Item Data now that we know it exists
+                        const itemData = this.itemHelper.getItem(slotFilterItem)[1]
+
+                        // Check is slot is a magazine, if it is, validate _max_count exists. If it doesn't - skip that incorrectly built attachment
+                        if (slotName == "mod_magazine" && itemData?._props?.Cartridges[0]?._max_count == undefined)
                         {
-                            this.apbsLogger.log(Logging.DEBUG, `Invalid mod magazine. Skipping. Weapon: ${weaponID} | Slot: ${slotName} | Attachment: ${slotFilterItem}`)
+                            this.apbsLogger.log(Logging.DEBUG, `Invalid mod magazine, missing _max_count. Skipping. MagazineID: ${slotFilterItem}`);
                             continue;
                         }
 
                         // Skip item if it is blacklisted, doesn't exist, isn't in the mod list, is already pushed, is or vanilla
-                        if (this.attachmentBlacklist.includes(slotFilterItem) || !itemExistsCheck[0] || !this.apbsAttachmentChecker.modAttachmentList.includes(slotFilterItem) || alreadyPushedIDs.includes(slotFilterItem) || this.apbsAttachmentChecker.isVanillaItem(slotFilterItem)) continue;
+                        if (this.attachmentBlacklist.includes(slotFilterItem) || !this.apbsAttachmentChecker.modAttachmentList.includes(slotFilterItem) || alreadyPushedIDs.includes(slotFilterItem) || this.apbsAttachmentChecker.isVanillaItem(slotFilterItem)) continue;
                         
                         // Weapon is missing, skip it
                         if (this.tierInformation.tier4mods[weaponID] == undefined) continue;
@@ -797,15 +877,29 @@ export class ModdedImportHelper
                         // Push modded attachments that are missing
                         if (!this.tierInformation.tier4mods[weaponID][slotName].includes(slotFilterItem))
                         {
-                            this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. Weapon: ${weaponID} | Slot: ${slotName} | Attachment: ${slotFilterItem}`)
-                            alreadyPushedIDs.push(slotFilterItem)
-                            this.pushStandaloneAttachmentsToWeapons(weaponID, slotName, slotFilterItem)
+                            this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. Weapon: ${weaponID} | Slot: ${slotName} | Attachment: ${slotFilterItem}`);
+                            alreadyPushedIDs.push(slotFilterItem);
+                            this.pushStandaloneAttachmentsToWeapons(weaponID, slotName, slotFilterItem);
                         }
                     }
                 }
             }
         }
 
-        this.apbsLogger.log(Logging.WARN, `Imported ${alreadyPushedIDs.length} Modded Attachments`)
+        this.apbsLogger.log(Logging.WARN, `     Imported ${alreadyPushedIDs.length} Modded Attachments`)
+    }
+
+    private doesItemExist(itemID: string, isEquipmentOrWeapon: boolean = false): boolean
+    {
+        const itemExists = this.itemHelper.getItem(itemID)[0];
+        if (!itemExists && !isEquipmentOrWeapon)
+        {
+            if (!this.invalidModAttachments.includes(itemID)) this.invalidModAttachments.push(itemID);
+        }
+        if (!itemExists && isEquipmentOrWeapon)
+        {
+            if (!this.invalidModEquipment.includes(itemID)) this.invalidModEquipment.push(itemID);
+        }
+        return itemExists;
     }
 }
