@@ -538,7 +538,7 @@ export class ModdedImportHelper
         }
     }
 
-    public recursivePushChildrenMods(parentSlotFilterItem: string): void
+    public recursivePushChildrenMods(parentSlotFilterItem: string, standaloneAttachment: boolean = false): void
     {
         const parentSlotItemData = this.getItem(parentSlotFilterItem);
         const parentSlotItemID = parentSlotItemData?._id;
@@ -554,20 +554,19 @@ export class ModdedImportHelper
             let slotFilter = parentSlotSlots[slot]?._props?.filters[0]?.Filter;
 
             // If a slot's filters contain the canted sight mount, remove all other items from the filter - this ensures ONLY the canted sight is added            
-            if (slotFilter.includes("5649a2464bdc2d91118b45a8"))
-            {
-                slotFilter = [ "5649a2464bdc2d91118b45a8" ];
-            }
+            if (slotFilter.includes("5649a2464bdc2d91118b45a8")) slotFilter = [ "5649a2464bdc2d91118b45a8" ];
+
+            // If the source of this method call is the Standalone Attachment importer, and the slot is for front or rear sights. Skip that shit.
+            if (standaloneAttachment && slotName.includes("mod_sight")) continue;
 
             // Loop over each item in the slot's filters
             for (const item in slotFilter)
             {
                 const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];
 
-                if (slotName == "mod_scope_000")
-                {
-                    if (!this.modScope000Whitelist.includes(slotFilterItem)) continue;
-                }
+                // If the mod_scope_000 slot is looping items, skip any items not on the whitelist because they're dumb as shit and ruin generation
+                if (slotName == "mod_scope_000" && !this.modScope000Whitelist.includes(slotFilterItem)) continue;
+
                 // Check if the item is actually a valid item, or is on the blacklist
                 // WTT puts itemIDs in their mods that don't exist in the database for some reason (probably unreleased mods)
                 const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
@@ -738,7 +737,7 @@ export class ModdedImportHelper
             this.tierInformation.tier7mods[itemID][slotName].push(slotItem);
 
             // Push any children mods
-            this.recursivePushChildrenMods(slotItem);
+            this.recursivePushChildrenMods(slotItem, true);
         }
     }
 
@@ -755,6 +754,10 @@ export class ModdedImportHelper
         {
             const weaponID = weapons[weapon]._id;
             const weaponSlots = weapons[weapon]?._props?.Slots;
+
+            // Exit early if the weaponID is blacklisted
+            if (this.blacklist.includes(weaponID)) continue;
+
             for (const slot in weaponSlots)
             {
                 const slotName = weaponSlots[slot]?._name;
@@ -771,7 +774,16 @@ export class ModdedImportHelper
                     {
                         const slotFilterItem = slotFilter[item];
                         const itemExistsCheck = this.itemHelper.getItem(slotFilterItem)
-                        if (this.blacklist.includes(weaponID) || this.attachmentBlacklist.includes(slotFilterItem) || !itemExistsCheck[0] || !this.apbsAttachmentChecker.modAttachmentList.includes(slotFilterItem) || alreadyPushedIDs.includes(slotFilterItem) || this.apbsAttachmentChecker.isVanillaItem(slotFilterItem)) continue;
+
+                        // Check is slot is a magazine, if it is, validate _max_count exists. If it doesn't - skip that incorrectly built magazine
+                        if (slotName == "mod_magazine" && itemExistsCheck[1]._props.Cartridges[0]._max_count == undefined)
+                        {
+                            this.apbsLogger.log(Logging.DEBUG, `Invalid mod magazine. Skipping. Weapon: ${weaponID} | Slot: ${slotName} | Attachment: ${slotFilterItem}`)
+                            continue;
+                        }
+
+                        // Skip item if it is blacklisted, doesn't exist, isn't in the mod list, is already pushed, is or vanilla
+                        if (this.attachmentBlacklist.includes(slotFilterItem) || !itemExistsCheck[0] || !this.apbsAttachmentChecker.modAttachmentList.includes(slotFilterItem) || alreadyPushedIDs.includes(slotFilterItem) || this.apbsAttachmentChecker.isVanillaItem(slotFilterItem)) continue;
                         
                         // Weapon is missing, skip it
                         if (this.tierInformation.tier4mods[weaponID] == undefined) continue;
@@ -786,13 +798,6 @@ export class ModdedImportHelper
                         if (!this.tierInformation.tier4mods[weaponID][slotName].includes(slotFilterItem))
                         {
                             this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. Weapon: ${weaponID} | Slot: ${slotName} | Attachment: ${slotFilterItem}`)
-
-                            // Check is slot is a magazine, if it is, validate _max_count exists. 
-                            if (slotName == "mod_magazine" && itemExistsCheck[1]._props.Cartridges[0]._max_count == undefined)
-                            {
-                                this.apbsLogger.log(Logging.DEBUG, `Invalid mod magazine. Skipping. Weapon: ${weaponID} | Slot: ${slotName} | Attachment: ${slotFilterItem}`)
-                                continue;
-                            }
                             alreadyPushedIDs.push(slotFilterItem)
                             this.pushStandaloneAttachmentsToWeapons(weaponID, slotName, slotFilterItem)
                         }
