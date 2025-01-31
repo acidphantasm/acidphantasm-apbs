@@ -23796,5 +23796,26 @@
     "mod_equipment_000": [
       "65719f9ef392ad76c50a2ec8"
     ]
+  },
+  "5abccb7dd8ce87001773e277": {
+    "mod_magazine": [
+      "5a17fb03fcdbcbcae668728f"
+    ],
+    "mod_stock": [
+      "5a17fb9dfcdbcbcae6687291"
+    ],
+    "mod_pistol_grip": [
+      "5a17fc70fcdbcb0176308b3d"
+    ],
+    "mod_sight_front": [
+      "5aba62f8d8ce87001943946b"
+    ],
+    "mod_sight_rear": [
+      "5aba639ed8ce8700182ece67",
+      "5aba637ad8ce87001773e17f"
+    ],
+    "mod_muzzle": [
+      "5abcc328d8ce8700194394f3"
+    ]
   }
 }
