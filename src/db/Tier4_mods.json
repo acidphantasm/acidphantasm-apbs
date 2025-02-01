@@ -1794,6 +1794,9 @@
     ],
     "mod_pistol_grip": [
       "5bffcf7a0db83400232fea79"
+    ],
+    "mod_tactical": [
+      "5c079ed60db834001a66b372"
     ]
   },
   "5b3b713c5acfc4330140bd8d": {
@@ -10994,6 +10997,8 @@
       "5bcf0213d4351e0085327c17",
       "5bd704e7209c4d00d7167c31"
     ],
+    "mod_tactical_000": [],
+    "mod_tactical_001": [],
     "mod_tactical_002": [
       "5a800961159bd4315e3a1657",
       "544909bb4bdc2d6f028b4577",
@@ -11559,6 +11564,8 @@
       "5bcf0213d4351e0085327c17",
       "5bd704e7209c4d00d7167c31"
     ],
+    "mod_tactical_000": [],
+    "mod_tactical_001": [],
     "mod_tactical_002": [
       "5a800961159bd4315e3a1657",
       "544909bb4bdc2d6f028b4577",
