@@ -20,9 +20,9 @@
         "enableModdedEquipment": false,
         "enableModdedClothing": false,
         "initalTierAppearance": 3,
-        "pmcWeaponWeights": 10,
+        "pmcWeaponWeights": 8,
         "scavWeaponWeights": 1,
-        "followerWeaponWeights": 7,
+        "followerWeaponWeights": 6,
         "enableSafeGuard": true,
         "enableAddingModdedAttachmentsToVanillaWeapons": false,
 
