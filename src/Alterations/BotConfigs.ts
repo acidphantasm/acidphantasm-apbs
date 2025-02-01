@@ -106,29 +106,31 @@ export class BotConfigs
         const botTable = this.tables.bots.types;
         for (const bot in botTable)
         {
+            if (ModConfig.config.excludedBots.includes(bot)) continue;
+
             const bodyParts = botTable[bot].health.BodyParts;
             for (const array in bodyParts)
             {
-                bodyParts[array].Head.min = 35;
-                bodyParts[array].Head.max = 35;
+                bodyParts[array].Head.min = ModConfig.config.healthHead > 0 ? ModConfig.config.healthHead : 35;
+                bodyParts[array].Head.max = ModConfig.config.healthHead > 0 ? ModConfig.config.healthHead : 35;
 
-                bodyParts[array].Chest.min = 85;
-                bodyParts[array].Chest.max = 85;
+                bodyParts[array].Chest.min = ModConfig.config.healthChest > 0 ? ModConfig.config.healthChest : 85;
+                bodyParts[array].Chest.max = ModConfig.config.healthChest > 0 ? ModConfig.config.healthChest : 85;
 
-                bodyParts[array].Stomach.min = 70;
-                bodyParts[array].Stomach.max = 70;
+                bodyParts[array].Stomach.min = ModConfig.config.healthStomach > 0 ? ModConfig.config.healthStomach : 70;
+                bodyParts[array].Stomach.max = ModConfig.config.healthStomach > 0 ? ModConfig.config.healthStomach : 70;
 
-                bodyParts[array].LeftArm.min = 60;
-                bodyParts[array].LeftArm.max = 60;
+                bodyParts[array].LeftArm.min = ModConfig.config.healthLeftArm > 0 ? ModConfig.config.healthLeftArm : 60;
+                bodyParts[array].LeftArm.max = ModConfig.config.healthLeftArm > 0 ? ModConfig.config.healthLeftArm : 60;
 
-                bodyParts[array].RightArm.min = 60;
-                bodyParts[array].RightArm.max = 60;
+                bodyParts[array].RightArm.min = ModConfig.config.healthRightArm > 0 ? ModConfig.config.healthRightArm : 60;
+                bodyParts[array].RightArm.max = ModConfig.config.healthRightArm > 0 ? ModConfig.config.healthRightArm : 60;
 
-                bodyParts[array].LeftLeg.min = 65;
-                bodyParts[array].LeftLeg.max = 65;
+                bodyParts[array].LeftLeg.min = ModConfig.config.healthLeftLeg > 0 ? ModConfig.config.healthLeftLeg : 65;
+                bodyParts[array].LeftLeg.max = ModConfig.config.healthLeftLeg > 0 ? ModConfig.config.healthLeftLeg : 65;
 
-                bodyParts[array].RightLeg.min = 65;
-                bodyParts[array].RightLeg.max = 65;
+                bodyParts[array].RightLeg.min = ModConfig.config.healthRightLeg > 0 ? ModConfig.config.healthRightLeg : 65;
+                bodyParts[array].RightLeg.max = ModConfig.config.healthRightLeg > 0 ? ModConfig.config.healthRightLeg : 65;
             }
         }
     }
