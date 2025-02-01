@@ -411,7 +411,6 @@ export class APBSBotLootCacheService extends BotLootCacheService
         {
             useInitialFilter = false;
 
-            console.log(`${botRole} has tiny backpack pool`)
             const pmcType = Math.round(Math.random()) == 1 ? "pmcBEAR" : "pmcUSEC";
             const newItemPool = this.cloner.clone(this.pmcLootGenerator.generatePMCBackpackLootPool(pmcType));
 
