@@ -42,7 +42,7 @@
 
 // Enable/Disable Normalized Bot Health
 // If set to true, all bots will have the health values that you specify (below are default PMC values) - if false, will use vanilla values.
-// excludedBots - Add bot types here that you don't want normalization to apply to (like bosses, if you want to keep them spongey)
+// excludedBots - Add bot types here that you don't want normalization to apply to (like bosses, if you want to keep them bullet spongey)
 // Example: excludedBots: [ "assault", "bossgluhar", "bossknight" ]
         "normalizedHealthPoolValues": false,
         "healthHead": 35,
