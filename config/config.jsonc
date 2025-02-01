@@ -40,6 +40,10 @@
         "disableBossFollowerTierGeneration": false,
         "disableSpecialTierGeneration": false,
 
+// Enable/Disable Normalized Bot Health
+// If set to true, all bots will have the same health values (default PMC values) - if false, will use vanilla values.
+        "normalizedHealthPoolValues": false,
+
 // Enable/Disable Realism Gas Mask Compatibility
 // APBS automatically detects Realism and adds gas masks to bots due to Radiation Zones. If you dont want this to happen, set to true.
         "disableRealismGasMasks": false,

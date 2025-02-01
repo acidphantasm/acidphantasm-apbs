@@ -98,6 +98,39 @@ export class BotConfigs
         if (ModConfig.config.enableCustomLevelDeltas) this.setLevelDeltas();
         if (ModConfig.config.enableScavCustomLevelDeltas) this.setScavLevelDeltas();
         if (ModConfig.config.forceMuzzle) this.setMuzzleChances();
+        if (ModConfig.config.normalizedHealthPoolValues) this.normalizeHealthPools();
+    }
+
+    private normalizeHealthPools(): void
+    {
+        const botTable = this.tables.bots.types;
+        for (const bot in botTable)
+        {
+            const bodyParts = botTable[bot].health.BodyParts;
+            for (const array in bodyParts)
+            {
+                bodyParts[array].Head.min = 35;
+                bodyParts[array].Head.max = 35;
+
+                bodyParts[array].Chest.min = 85;
+                bodyParts[array].Chest.max = 85;
+
+                bodyParts[array].Stomach.min = 70;
+                bodyParts[array].Stomach.max = 70;
+
+                bodyParts[array].LeftArm.min = 60;
+                bodyParts[array].LeftArm.max = 60;
+
+                bodyParts[array].RightArm.min = 60;
+                bodyParts[array].RightArm.max = 60;
+
+                bodyParts[array].LeftLeg.min = 65;
+                bodyParts[array].LeftLeg.max = 65;
+
+                bodyParts[array].RightLeg.min = 65;
+                bodyParts[array].RightLeg.max = 65;
+            }
+        }
     }
 
     private configureBotExperienceLevels(): void

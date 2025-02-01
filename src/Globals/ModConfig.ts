@@ -46,6 +46,7 @@ export interface Config
     enableSafeGuard: boolean,
     enableAddingModdedAttachmentsToVanillaWeapons: boolean,
     seasonalPmcAppearance: boolean,
+    normalizedHealthPoolValues: boolean,
     disableRealismGasMasks: boolean,
     onlyChads: boolean,
     tarkovAndChill: boolean,
