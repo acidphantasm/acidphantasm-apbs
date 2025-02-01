@@ -444,7 +444,8 @@ export class APBSBotLootCacheService extends BotLootCacheService
                     this.isAmmoBox(itemTemplate._id) ||
                     this.isArmour(itemTemplate._id) ||
                     this.isCurrency(itemTemplate._id) ||
-                    itemTemplate._id == "6711039f9e648049e50b3307"
+                    itemTemplate._id == "6711039f9e648049e50b3307" ||
+                    itemTemplate._id == "593962ca86f774068014d9af"
                 ) 
                 {
                     // Is type we dont want as backpack loot, skip
