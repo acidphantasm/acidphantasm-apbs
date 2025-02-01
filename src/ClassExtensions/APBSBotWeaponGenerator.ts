@@ -33,6 +33,7 @@ import { APBSBotEquipmentModGenerator } from "./APBSBotEquipmentModGenerator";
 import { APBSInventoryMagGen } from "../InventoryMagGen/APBSInventoryMagGen";
 import { APBSIInventoryMagGen } from "../InventoryMagGen/APBSIInventoryMagGen";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
 
 /** Handle profile related client events */
 @injectable()
@@ -390,5 +391,42 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             ammoTemplate._props.StackMaxSize,
             inventory
         );
+    }
+
+    // I'm only overriding this so I can get the ID and not the name because most custom item mods don't change this.
+    protected override isWeaponValid(weaponItemArray: IItem[], botRole: string): boolean 
+    {
+        for (const mod of weaponItemArray) 
+        {
+            const modTemplate = this.itemHelper.getItem(mod._tpl)[1];
+            if (!modTemplate._props.Slots?.length) 
+            {
+                continue;
+            }
+
+            // Iterate over required slots in db item, check mod exists for that slot
+            for (const modSlotTemplate of modTemplate._props.Slots.filter((slot) => slot._required)) 
+            {
+                const slotName = modSlotTemplate._name;
+                const hasWeaponSlotItem = weaponItemArray.some(
+                    (weaponItem) => weaponItem.parentId === mod._id && weaponItem.slotId === slotName
+                );
+                if (!hasWeaponSlotItem) 
+                {
+                    this.logger.warning(
+                        this.localisationService.getText("bot-weapons_required_slot_missing_item", {
+                            modSlot: modSlotTemplate._name,
+                            modName: modTemplate._id,
+                            slotId: mod.slotId,
+                            botRole: botRole
+                        })
+                    );
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
