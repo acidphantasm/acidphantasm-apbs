@@ -9,10 +9,10 @@ export class ModInformation
     public versionNumber: string = modPackage.version;
 
     // Don't mess with this shit unless you are making a preset and know what you are doing
-    public testMode: boolean = false;
+    public testMode: boolean = true;
     public testBotRole: (string)[] = [ "pmcusec", "pmcbear" ]
     public testTrader: string = "6741449944c5b44c53741ccc"
-    public testLevelLock: boolean = false;
+    public testLevelLock: boolean = true;
     public clearAssortPreRaid: boolean = true;
 }
 
