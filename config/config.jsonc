@@ -41,10 +41,10 @@
         "disableSpecialTierGeneration": false,
 
 // Enable/Disable Normalized Bot Health
-// If set to true, all bots will have the same health values that you specify - if false, will use vanilla values.
-// excludedBots - Add bot types here that you don't want normalization to apply to
+// If set to true, all bots will have the health values that you specify (below are default PMC values) - if false, will use vanilla values.
+// excludedBots - Add bot types here that you don't want normalization to apply to (like bosses, if you want to keep them spongey)
 // Example: excludedBots: [ "assault", "bossgluhar", "bossknight" ]
-        "normalizedHealthPoolValues": true,
+        "normalizedHealthPoolValues": false,
         "healthHead": 35,
         "healthChest": 85,
         "healthStomach": 70,
@@ -52,7 +52,7 @@
         "healthRightArm": 60,
         "healthLeftLeg": 65,
         "healthRightLeg": 65,
-        "excludedBots": [ "bossgluhar" ],
+        "excludedBots": [],
 
 // Enable/Disable Realism Gas Mask Compatibility
 // APBS automatically detects Realism and adds gas masks to bots due to Radiation Zones. If you dont want this to happen, set to true.
