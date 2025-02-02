@@ -6,7 +6,7 @@ import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { Logging } from "../Enums/Logging";
 import { APBSLogger } from "./APBSLogger";
-import { vanillaAttachments } from "../Globals/VanillaItemLists";
+import { vanillaAttachments, vanillaItemsList } from "../Globals/VanillaItemLists";
 
 @injectable()
 export class APBSAttachmentChecker
@@ -48,10 +48,9 @@ export class APBSAttachmentChecker
 
     public isVanillaItem(itemID: string): boolean
     {
-        if (vanillaAttachments.includes(itemID)) 
-        {
-            return true;
-        }
+        if (vanillaAttachments.includes(itemID)) return true;
+        if (vanillaItemsList.includes(itemID)) return true;
+
         return false;
     }
 }
