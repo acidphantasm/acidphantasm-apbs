@@ -27,6 +27,9 @@ export class ModdedImportHelper
     private invalidModAttachments: string[] = [];
     private invalidModEquipment: string[] = [];
     private tier4Optics: string[];
+    private foldingModSights: string[];
+    private allImportedAttachments: string[];
+    private numberOfAttachments: number;
 
     constructor(
         @inject("IDatabaseTables") protected tables: IDatabaseTables,
@@ -78,7 +81,15 @@ export class ModdedImportHelper
             "6531119b9afebff7ff0a1769"
         ];
 
-        this.attachmentBlacklist = [
+        this.attachmentBlacklist = [ 
+            "b098f4d751ddc6246acdf160", // B-22 Attachment from EpicRangeTime-Weapons
+            "b2d57758abe9bb9345c58e4a", // 34mm gieselle mount from EpicRangeTime-Weapons
+            "67ea8b32e0d7701fc6bfc5bf", // 34mm gieselle mount from EpicRangeTime-Weapons
+            "6cec33dd595d9c2d4e531eb7", // Weird split handguard from EpicRangeTime-Weapons
+            "7422ca92107da0fc0e26f7d9", // Weird split handguard from EpicRangeTime-Weapons
+            "cbba369e0fbb09a1eda36c83", // Weird split handguard from EpicRangeTime-Weapons
+            "672e2e75c7c7c5232e513062", // Transparent dust cover from MoxoPixel-TGC
+            "672e37d178e24689d6ff50ce", // Range finder from Black-Core
             "5c110624d174af029e69734c", // NVG/Thermals
             "5d1b5e94d7ad1a2b865a96b0",
             "6478641c19d732620e045e17",
@@ -92,16 +103,16 @@ export class ModdedImportHelper
             "5a7c74b3e899ef0014332c29",
             "544a3f024bdc2d1d388b4568", // Bugged optics
             "544a3d0a4bdc2d1b388b4567",
+            "5dfe6104585a0c3e995c7b82",
+            "618b9643526131765025ab35",
+            "618bab21526131765025ab3f",
+            "6171407e50224f204c1da3c5",
             "5aa66a9be5b5b0214e506e89", // 34mm optic mounts
             "5aa66be6e5b5b0214e506e97",
             "5aa66c72e5b5b00016327c93",
             "5c86592b2e2216000e69e77c",
             "61713cc4d8e3106d9806c109",
             "62811f461d5df4475f46a332",
-            "b098f4d751ddc6246acdf160", // B-22 Attachment from EpicRangeTime-Weapons
-            "6cec33dd595d9c2d4e531eb7", // Weird split handguard from EpicRangeTime-Weapons
-            "7422ca92107da0fc0e26f7d9", // Weird split handguard from EpicRangeTime-Weapons
-            "cbba369e0fbb09a1eda36c83", // Weird split handguard from EpicRangeTime-Weapons
             "5648b62b4bdc2d9d488b4585", // General Attachments
             "5c0e2ff6d174af02a1659d4a",
             "5c0e2f5cd174af02a012cfc9",
@@ -156,7 +167,32 @@ export class ModdedImportHelper
             "5b31163c5acfc400153b71cb",
             "64785e7c19d732620e045e15",
             "655f13e0a246670fb0373245",
-            "6567e751a715f85433025998"
+            "6567e751a715f85433025998",
+            "67617ec9ea1e82ea5e103054",
+            "672e37d19f3e60fb0cbbe568"
+        ];
+
+        this.foldingModSights = [
+            "5caf16a2ae92152ac412efbc",
+            "61816fcad92c473c770215cc",
+            "61817865d3a39d50044c13a4",
+            "5bb20e49d4351e3bac1212de",
+            "5ba26b01d4351e0085325a51",
+            "5ba26b17d4351e00367f9bdd",
+            "5c1780312e221602b66cc189",
+            "5c17804b2e2216152006c02f",
+            "5dfa3d7ac41b2312ea33362a",
+            "5dfa3d950dee1b22f862eae0",
+            "5fb6564947ce63734e3fa1da",
+            "5fb6567747ce63734e3fa1dc",
+            "5bc09a18d4351e003562b68e",
+            "5bc09a30d4351e00367fb7c8",
+            "5c18b90d2e2216152142466b",
+            "5c18b9192e2216398b5a8104",
+            "5fc0fa362770a0045c59c677",
+            "5fc0fa957283c4046c58147e",
+            "5894a73486f77426d259076c",
+            "5894a81786f77427140b8347"
         ];
 
         // Empty array to hold invalid attachmentIDs for logging
@@ -164,6 +200,12 @@ export class ModdedImportHelper
         
         // Empty array to hold invalid attachmentIDs for logging
         this.invalidModEquipment = [];
+
+        // Empty array to hold all attachments that get imported
+        this.allImportedAttachments = [];
+
+        // Counter for number of imported attachments
+        this.numberOfAttachments = 0;
 
         // This is empty now because Crackbone fixed Artem - but I'm leaving this here for future use
         this.clothingBlacklist = [];
@@ -185,6 +227,8 @@ export class ModdedImportHelper
         
         if (this.invalidModAttachments.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModAttachments.length} Invalid Attachment ItemIDs found in mods: ${JSON.stringify(this.invalidModAttachments)}`)
         if (this.invalidModEquipment.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModEquipment.length} Invalid Weapon/Equipment ItemIDs found in mods: ${JSON.stringify(this.invalidModEquipment)}`)
+            
+        if (ModConfig.config.enableAddingModdedAttachmentsToVanillaWeapons) this.apbsLogger.log(Logging.WARN, `     Added ${this.allImportedAttachments.length} Attachments to ${this.numberOfAttachments} attachment points on vanilla weapons`)
     }
 
     private buildVanillaWeaponList(): void
@@ -511,9 +555,6 @@ export class ModdedImportHelper
             const slotName = itemSlots[slot]?._name;
             let slotFilter = itemSlots[slot]?._props?.filters[0]?.Filter
 
-            // Default to adding the item, change this value during checks
-            let addItemBeforeTier4 = true;
-
             // If a slot's filters contain the canted sight mount, remove all other items from the filter - this ensures ONLY the canted sight is added            
             if (slotFilter.includes("5649a2464bdc2d91118b45a8")) slotFilter = [ "5649a2464bdc2d91118b45a8" ];
 
@@ -522,27 +563,10 @@ export class ModdedImportHelper
             {
                 const slotFilterItem = slotFilter[item];
 
-                // If item doesn't exist in the database, but some mod is adding it to filters, skip that shitty shit. STOP ADDING NON-EXISTENT ITEMS TO FILTERS.
-                if (!this.doesItemExist(slotFilterItem)) continue;
+                if (this.shouldItemBeSkipped(itemID, slotFilterItem, slotName)) continue;
 
-                // Get Item Data)
-                const itemData = this.itemHelper.getItem(slotFilterItem)[1]
-
-                // Check if item is blacklisted, skip if so
-                if (this.attachmentBlacklist.includes(slotFilterItem)) continue;
-
-                // Check if Magazine being added and is larger than 30 capacity, if so - skip adding to T1-3
-                if (slotName == "mod_magazine") 
-                {
-                    const maxCount = itemData?._props?.Cartridges[0]?._max_count;
-                    if ((maxCount > 30 && maxCount < 100) || slotFilterItem == "66e71a7ffe3fc79ff68b582b")
-                    {
-                        addItemBeforeTier4 = false; 
-                    }
-                }
-
-                const isVanillaParent = this.apbsAttachmentChecker.isVanillaItem(itemID);
-                const isVanillaItem = this.apbsAttachmentChecker.isVanillaItem(slotFilterItem);
+                const highTierItem = this.tier4PlusOnly(itemID, slotName, slotFilterItem);
+                const lowTierItem = this.tier4MinusOnly(itemID, slotName, slotFilterItem);
 
                 // Check if the itemID already exists in the tierJsons, if not - create it in them all.
                 if (this.tierInformation.tier1mods[itemID] == undefined)
@@ -571,16 +595,25 @@ export class ModdedImportHelper
                 // Check if the itemID's slot doesn't already contain the item to import, if it doesn't - add it
                 if (!this.tierInformation.tier1mods[itemID][slotName].includes(slotFilterItem))
                 {
-                    // Additionally, check if the parent mod & child mod are vanilla as well as checking the config safeguard
-                    if (isVanillaParent && isVanillaItem && ModConfig.config.enableSafeGuard) continue;
+                    if (!highTierItem) this.tierInformation.tier1mods[itemID][slotName].push(slotFilterItem);
+                    if (!highTierItem) this.tierInformation.tier2mods[itemID][slotName].push(slotFilterItem);
+                    if (!highTierItem) this.tierInformation.tier3mods[itemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem) this.tierInformation.tier4mods[itemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem) this.tierInformation.tier5mods[itemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem) this.tierInformation.tier6mods[itemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem) this.tierInformation.tier7mods[itemID][slotName].push(slotFilterItem);
 
-                    if (addItemBeforeTier4) this.tierInformation.tier1mods[itemID][slotName].push(slotFilterItem);
-                    if (addItemBeforeTier4) this.tierInformation.tier2mods[itemID][slotName].push(slotFilterItem);
-                    if (addItemBeforeTier4) this.tierInformation.tier3mods[itemID][slotName].push(slotFilterItem);
-                    this.tierInformation.tier4mods[itemID][slotName].push(slotFilterItem);
-                    this.tierInformation.tier5mods[itemID][slotName].push(slotFilterItem);
-                    this.tierInformation.tier6mods[itemID][slotName].push(slotFilterItem);
-                    this.tierInformation.tier7mods[itemID][slotName].push(slotFilterItem);
+                    /*
+                    Uncomment this to check a specific items slot
+
+                    if (itemID == "93bcdfda236122e67c098847" && slotName == "mod_reciever")
+                    {
+                        console.log(`attempting to add ${slotFilterItem}`)
+                        console.log(`high: ${highTierItem} | low: ${lowTierItem}`)
+                        console.log(`SVD T3: ${JSON.stringify(this.tierInformation.tier3mods[itemID][slotName])}`)
+                        console.log(`SVD T4: ${JSON.stringify(this.tierInformation.tier4mods[itemID][slotName])}`)
+                    }
+                    */
 
                     // If the item should not receive additional attachments, skip to the next item
                     if (this.itemShouldNotGetModdedChildrenAttachments.includes(slotFilterItem)) continue;
@@ -598,9 +631,6 @@ export class ModdedImportHelper
         const parentSlotItemID = parentSlotItemData?._id;
         const parentSlotSlots = parentSlotItemData?._props?.Slots;
 
-        // Default to adding the item, change this value during checks
-        let addItemBeforeTier4 = true;
-
         // Exit if there are no children
         if (parentSlotSlots == undefined || parentSlotSlots.length == 0) return;
 
@@ -613,31 +643,15 @@ export class ModdedImportHelper
             // If a slot's filters contain the canted sight mount, remove all other items from the filter - this ensures ONLY the canted sight is added            
             if (slotFilter.includes("5649a2464bdc2d91118b45a8")) slotFilter = [ "5649a2464bdc2d91118b45a8" ];
 
-            // If the source of this method call is the Standalone Attachment importer, and the slot is for front or rear sights. Skip that shit.
-            if (standaloneAttachment && slotName.includes("mod_sight")) continue;
-
             // Loop over each item in the slot's filters
             for (const item in slotFilter)
             {
-                const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item];                
-                
-                // If item doesn't exist in the database, but some mod is adding it to filters, skip that shitty shit. STOP ADDING NON-EXISTENT ITEMS TO FILTERS.
-                if (!this.doesItemExist(slotFilterItem)) continue;
+                const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item]; 
 
-                // If the mod_scope_000 slot is looping items, skip any items not on the whitelist because they're dumb as shit and ruin generation
-                if (slotName == "mod_scope_000" && !this.modScope000Whitelist.includes(slotFilterItem)) continue;
+                if (this.shouldItemBeSkipped(parentSlotFilterItem, slotFilterItem, slotName, standaloneAttachment)) continue;
 
-                // Check blacklist, skip if it is on it
-                if (this.attachmentBlacklist.includes(slotFilterItem)) continue;
-
-                // Check if the parent mod & the child mod are vanilla or modded
-                // This allows preventing mods adding vanilla mods to vanilla weapons
-                const isVanillaParent = this.apbsAttachmentChecker.isVanillaItem(parentSlotItemID);
-                const isVanillaItem = this.apbsAttachmentChecker.isVanillaItem(slotFilterItem);
-                if (isVanillaParent && isVanillaItem && ModConfig.config.enableSafeGuard) continue;
-
-                // Tier4+ checks
-                if (this.tier4Optics.includes(slotFilterItem)) addItemBeforeTier4 = false;
+                const highTierItem = this.tier4PlusOnly(parentSlotItemID, slotName, slotFilterItem);
+                const lowTierItem = this.tier4MinusOnly(parentSlotItemID, slotName, slotFilterItem);
 
                 // Check if the PARENT itemID already exists in the tierJsons, if not - create it in all tierJSONs.
                 if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
@@ -666,20 +680,24 @@ export class ModdedImportHelper
                 // Check if the PARENT itemID's slot doesn't already contain the item to import
                 if (!this.tierInformation.tier1mods[parentSlotItemID][slotName].includes(slotFilterItem))
                 {
-                    // Additionally, check if the parent mod & child mod are vanilla as well as checking the config safeguard
-                    
-
                     // Finally push the child mod to the proper tierJSONs
-                    if (addItemBeforeTier4) this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    if (addItemBeforeTier4) this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    if (addItemBeforeTier4) this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier4mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier5mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier6mods[parentSlotItemID][slotName].push(slotFilterItem)
-                    this.tierInformation.tier7mods[parentSlotItemID][slotName].push(slotFilterItem)
+                    if (!highTierItem) this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!highTierItem) this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!highTierItem) this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem) this.tierInformation.tier4mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem) this.tierInformation.tier5mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem) this.tierInformation.tier6mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem) this.tierInformation.tier7mods[parentSlotItemID][slotName].push(slotFilterItem);
 
+                    if (ModConfig.config.enableAddingModdedAttachmentsToVanillaWeapons && standaloneAttachment)
+                    {
+                        this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. ParentSlotItem: ${parentSlotFilterItem} | Slot: ${slotName} | Attachment: ${slotFilterItem}`);
+                        if (!this.allImportedAttachments.includes(slotFilterItem)) this.allImportedAttachments.push(slotFilterItem);
+                        this.numberOfAttachments++
+                    } 
+                    
                     // Push any children mods
-                    this.recursivePushChildrenMods(slotFilterItem);
+                    if (this.allowedToBeRecursive(slotFilterItem)) this.recursivePushChildrenMods(slotFilterItem, standaloneAttachment);
                 }
             }
         }
@@ -768,48 +786,22 @@ export class ModdedImportHelper
         return false;
     }
 
-    private pushStandaloneAttachmentsToWeapons(itemID: string, slotName: string, slotItem: string): void
-    {        
-        // We already did all of our prechecks in buildModAttachments()
-
-        // Get Item Data for checks to add item before T4 or not (the "OP" tier starts at 4)
-        const itemData = this.itemHelper.getItem(slotItem)[1]
-
+    private pushStandaloneAttachmentsToWeapons(weaponID: string, slotName: string, slotItem: string): void
+    {
         // Default to adding the item, change this value during checks
-        let addItemBeforeTier4 = true;
-
-        // Tier4 validity checks for the weapon filters
-        if (slotName == "mod_magazine") 
-        {
-            const maxCount = itemData?._props?.Cartridges[0]?._max_count;
-            if ((maxCount > 30 && maxCount < 100) || slotItem == "66e71a7ffe3fc79ff68b582b")
-            {
-                addItemBeforeTier4 = false; 
-            }
-        }      
-        
-        // Check if the itemID's slot already exists in the tierJsons, if not - create it in them all.
-        if (this.tierInformation.tier1mods[itemID][slotName] == undefined)
-        {
-            this.tierInformation.tier1mods[itemID][slotName] = [];
-            this.tierInformation.tier2mods[itemID][slotName] = [];
-            this.tierInformation.tier3mods[itemID][slotName] = [];
-            this.tierInformation.tier4mods[itemID][slotName] = [];
-            this.tierInformation.tier5mods[itemID][slotName] = [];
-            this.tierInformation.tier6mods[itemID][slotName] = [];
-            this.tierInformation.tier7mods[itemID][slotName] = [];
-        }
+        const highTierItem = this.tier4PlusOnly(weaponID, slotName, slotItem, true);
+        const lowTierItem = this.tier4MinusOnly(weaponID, slotName, slotItem, true);
 
         // Check if the itemID's slot doesn't already contain the item to import, if it doesn't - add it
-        if (!this.tierInformation.tier1mods[itemID][slotName].includes(slotItem))
+        if (!this.tierInformation.tier4mods[weaponID][slotName].includes(slotItem))
         {
-            if (addItemBeforeTier4) this.tierInformation.tier1mods[itemID][slotName].push(slotItem);
-            if (addItemBeforeTier4) this.tierInformation.tier2mods[itemID][slotName].push(slotItem);
-            if (addItemBeforeTier4) this.tierInformation.tier3mods[itemID][slotName].push(slotItem);
-            this.tierInformation.tier4mods[itemID][slotName].push(slotItem);
-            this.tierInformation.tier5mods[itemID][slotName].push(slotItem);
-            this.tierInformation.tier6mods[itemID][slotName].push(slotItem);
-            this.tierInformation.tier7mods[itemID][slotName].push(slotItem);
+            if (!highTierItem) this.tierInformation.tier1mods[weaponID][slotName].push(slotItem);
+            if (!highTierItem) this.tierInformation.tier2mods[weaponID][slotName].push(slotItem);
+            if (!highTierItem) this.tierInformation.tier3mods[weaponID][slotName].push(slotItem);
+            if (!lowTierItem) this.tierInformation.tier4mods[weaponID][slotName].push(slotItem);
+            if (!lowTierItem) this.tierInformation.tier5mods[weaponID][slotName].push(slotItem);
+            if (!lowTierItem) this.tierInformation.tier6mods[weaponID][slotName].push(slotItem);
+            if (!lowTierItem) this.tierInformation.tier7mods[weaponID][slotName].push(slotItem);
 
             // Push any children mods
             this.recursivePushChildrenMods(slotItem, true);
@@ -823,23 +815,22 @@ export class ModdedImportHelper
         const items = this.databaseService.getTables().templates.items;
         const itemValues = Object.values(items);
         const weapons = itemValues.filter(x => this.itemHelper.isOfBaseclass(x._id, BaseClasses.WEAPON));
-        const alreadyPushedIDs: string[] = [];
 
         for (const weapon in weapons)
         {
             const weaponID = weapons[weapon]._id;
             const weaponSlots = weapons[weapon]?._props?.Slots;
 
-            // Exit early if the weaponID is blacklisted
-            if (this.blacklist.includes(weaponID)) continue;
+            // Exit early if the weaponID is blacklisted or is modded - if it's modded, let the other import code handle it
+            if (this.shouldWeaponBeSkipped(weaponID, true)) continue;
 
             for (const slot in weaponSlots)
             {
                 const slotName = weaponSlots[slot]?._name;
                 const slotFilter = weaponSlots[slot]?._props?.filters[0]?.Filter
-
-                // Skip any front/rear sights cause it'll create shitty generation
-                if (slotName.includes("mod_sight")) continue;
+                
+                // Check if we should skip slot
+                if (this.shouldSlotBeSkipped(slotName, true)) continue;
 
                 // If filter has items
                 if (slotFilter.length > 0)
@@ -848,45 +839,39 @@ export class ModdedImportHelper
                     for (const item in slotFilter)
                     {
                         const slotFilterItem = slotFilter[item];
-                        
-                        // If item doesn't exist in the database, but some mod is adding it to filters, skip that shitty shit. STOP ADDING NON-EXISTENT ITEMS TO FILTERS.
-                        if (!this.doesItemExist(slotFilterItem)) continue;
 
-                        // Get Item Data now that we know it exists
-                        const itemData = this.itemHelper.getItem(slotFilterItem)[1]
+                        // Check if we should skip item
+                        if (this.shouldItemBeSkipped(weaponID, slotFilterItem, slotName, true)) continue;
 
-                        // Check is slot is a magazine, if it is, validate _max_count exists. If it doesn't - skip that incorrectly built attachment
-                        if (slotName == "mod_magazine" && itemData?._props?.Cartridges[0]?._max_count == undefined)
-                        {
-                            this.apbsLogger.log(Logging.DEBUG, `Invalid mod magazine, missing _max_count. Skipping. MagazineID: ${slotFilterItem}`);
-                            continue;
-                        }
-
-                        // Skip item if it is blacklisted, doesn't exist, isn't in the mod list, is already pushed, is or vanilla
-                        if (this.attachmentBlacklist.includes(slotFilterItem) || !this.apbsAttachmentChecker.modAttachmentList.includes(slotFilterItem) || alreadyPushedIDs.includes(slotFilterItem) || this.apbsAttachmentChecker.isVanillaItem(slotFilterItem)) continue;
-                        
-                        // Weapon is missing, skip it
-                        if (this.tierInformation.tier4mods[weaponID] == undefined) continue;
+                        if (this.tierInformation.tier4mods[weaponID] == undefined) console.log(`weapon missing ${weaponID} - REPORT THIS TO ACIDPHANTASM PLEASE`)
+                        if (this.tierInformation.tier4mods[weaponID][slotName] == undefined) console.log(`slot missing ${weaponID} - ${slotName} - REPORT THIS TO ACIDPHANTASM PLEASE`)
 
                         // Slot is missing from weapon, add it
-                        if (this.tierInformation.tier4mods[weaponID][slotName] == undefined) 
+                        if (this.tierInformation.tier1mods[weaponID][slotName] == undefined)
                         {
+                            console.log(`New Slot Found! Weapon: ${weaponID} | Slot: ${slotName} | Item: ${slotFilterItem} - REPORT THIS TO ACIDPHANTASM PLEASE`)
+                            this.tierInformation.tier1mods[weaponID][slotName] = [];
+                            this.tierInformation.tier2mods[weaponID][slotName] = [];
+                            this.tierInformation.tier3mods[weaponID][slotName] = [];
                             this.tierInformation.tier4mods[weaponID][slotName] = [];
+                            this.tierInformation.tier5mods[weaponID][slotName] = [];
+                            this.tierInformation.tier6mods[weaponID][slotName] = [];
+                            this.tierInformation.tier7mods[weaponID][slotName] = [];
                         }
 
-                        // Push modded attachments that are missing
-                        if (!this.tierInformation.tier4mods[weaponID][slotName].includes(slotFilterItem))
+                        // Push modded attachments that aren't already in the
+                        if (!this.tierInformation.tier1mods[weaponID][slotName].includes(slotFilterItem))
                         {
-                            this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. Weapon: ${weaponID} | Slot: ${slotName} | Attachment: ${slotFilterItem}`);
-                            alreadyPushedIDs.push(slotFilterItem);
+                            this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. WeaponID: ${weaponID} | Slot: ${slotName} | Attachment: ${slotFilterItem}`);
+                            if (!this.allImportedAttachments.includes(slotFilterItem)) this.allImportedAttachments.push(slotFilterItem);
+                            this.numberOfAttachments++
+
                             this.pushStandaloneAttachmentsToWeapons(weaponID, slotName, slotFilterItem);
                         }
                     }
                 }
             }
         }
-
-        this.apbsLogger.log(Logging.WARN, `     Imported ${alreadyPushedIDs.length} Modded Attachments`)
     }
 
     private doesItemExist(itemID: string, isEquipmentOrWeapon: boolean = false): boolean
@@ -901,5 +886,194 @@ export class ModdedImportHelper
             if (!this.invalidModEquipment.includes(itemID)) this.invalidModEquipment.push(itemID);
         }
         return itemExists;
+    }
+
+    private tier4PlusOnly(parentID: string, slotName: string, itemID: string, standaloneAttachment: boolean = false): boolean
+    {
+        // Get Item Data for checks
+        const itemData = this.itemHelper.getItem(itemID)[1]
+
+        // Mod_Magazine check
+        if (slotName == "mod_magazine") 
+        {
+            if (!this.hasLowerAndUpperOptionsAvailable(parentID, slotName, 30)) return false;
+            if (itemData?._props?.Cartridges[0]?._max_count >= 30) return true;
+        }
+
+        if (slotName.includes("mod_stock") || slotName.includes("mod_handguard") || slotName.includes("mod_reciever"))
+        {
+            if (!this.hasLowerAndUpperOptionsAvailable(parentID, slotName, 9)) return false;
+            if (itemData?._props?.Ergonomics >= 9) return true;
+        }
+
+        if (slotName.includes("mod_scope") && this.tier4Optics.includes(itemID)) return true;
+
+        return false;
+    }
+
+    private tier4MinusOnly(parentID: string, slotName: string, itemID: string, standaloneAttachment: boolean = false): boolean
+    {
+        // Get Item Data for checks
+        const itemData = this.itemHelper.getItem(itemID)[1]
+
+        // Mod_Magazine check
+        if (slotName == "mod_magazine") 
+        {
+            if (!this.hasLowerAndUpperOptionsAvailable(parentID, slotName, 30)) return false;
+            if (itemData?._props?.Cartridges[0]?._max_count <= 30) return true;
+        }
+
+        if (slotName.includes("mod_stock") || slotName.includes("mod_handguard") || slotName.includes("mod_reciever"))
+        {
+            if (!this.hasLowerAndUpperOptionsAvailable(parentID, slotName, 9)) return false;
+            if (itemData?._props?.Ergonomics < 9) return true;
+        }
+
+        if (slotName.includes("mod_scope") && !this.tier4Optics.includes(itemID)) return true;
+
+        return false;
+    }
+
+    private shouldWeaponBeSkipped(itemID: string, standaloneAttachment: boolean = false): boolean
+    {
+        // Weapon is blacklisted, skip
+        if (this.blacklist.includes(itemID)) return true;
+
+        if (!this.apbsAttachmentChecker.isVanillaItem(itemID)) return true;
+
+        return false;
+    }
+
+    private shouldSlotBeSkipped(slotName: string, standaloneAttachment: boolean = false): boolean
+    {
+        if (slotName == "mod_sight_front" || slotName == "mod_sight_rear") return true;
+
+        return false;
+    }
+
+    private shouldItemBeSkipped(parentID:string, itemID: string, slotName: string, standaloneAttachment: boolean = false): boolean
+    {
+        // If item doesn't exist in the database, skip
+        if (!this.doesItemExist(itemID)) return true;
+
+        // Attachment blacklist contains item
+        if (this.attachmentBlacklist.includes(itemID)) return true; 
+
+        // Get Item Data now that we know it exists
+        const itemData = this.itemHelper.getItem(itemID)[1]
+        const isVanillaParent = this.apbsAttachmentChecker.isVanillaItem(parentID);
+        const isVanillaItem = this.apbsAttachmentChecker.isVanillaItem(itemID);
+
+        // Are both items vanilla?
+        if (isVanillaParent && isVanillaItem && ModConfig.config.enableSafeGuard) return true;
+
+        slotName = slotName.toLowerCase();
+
+        // is MP7 and slot block optics
+        if (parentID == "5ba26383d4351e00334c93d9" || parentID == "5bd70322209c4d00d7167b8f")
+        {
+            if (slotName == "mod_tactical_000" || slotName == "mod_tactical_001") return true;
+        }
+        
+        // is VSS/VAL and slot block optics
+        if (parentID == "57838ad32459774a17445cd2" || parentID == "57c44b372459772d2b39b8ce")
+        {
+            if (slotName == "mod_mount_000") return true;
+        }
+
+        // Handguard with mod_scope slot for tacticals..lol
+        if (parentID == "647de824196bf69818044c93")
+        {
+            if (slotName == "mod_scope") return true;
+        }
+
+        // Check is slot is a magazine
+        if (slotName == "mod_magazine")
+        {
+            // Validate _max_count exists. If it doesn't - skip
+            if (itemData?._props?.Cartridges[0]?._max_count == undefined) return true;
+        }
+        
+        if (slotName == "mod_scope_000")
+        {
+            if (!this.modScope000Whitelist.includes(itemID)) return true;
+        }        
+
+        // Last checks only if it's standalone
+        if (standaloneAttachment) return this.standaloneAttachmentShouldBeSkipped(isVanillaParent, isVanillaItem, itemID, slotName);
+
+        return false;
+    }
+
+    private standaloneAttachmentShouldBeSkipped(isVanillaParent: boolean, isVanillaItem: boolean, itemID: string, slotName: string): boolean
+    {
+        slotName = slotName.toLowerCase();
+
+        if (slotName == "mod_sight_front" || slotName == "mod_sight_rear")
+        {
+            if (!this.foldingModSights.includes(itemID)) return true;
+            return false;
+        }
+
+        return false;
+    }
+
+    private allowedToBeRecursive(itemID: string): boolean
+    {
+        return !this.itemShouldNotGetModdedChildrenAttachments.includes(itemID)
+    }
+
+    private hasLowerAndUpperOptionsAvailable(parentID: string, slotName: string, threshholdValue: number): boolean
+    {
+        // Check related items for this slot, to ensure it does have one that meets high threshhold requirements
+        const parentSlot = this.itemHelper.getItem(parentID)[1]._props.Slots?.find(
+            (slot: { _name: string }) => slot._name.toLowerCase() === slotName
+        );
+
+        const itemFilters = parentSlot?._props?.filters[0]?.Filter;
+
+        let hasHighRequirements = false;
+        let hasLowRequirements = false;
+        let checkedValue = 0;
+
+        for (const item in itemFilters)
+        {
+            switch (slotName)
+            {
+                case "mod_magazine":
+                    checkedValue = this.itemHelper.getItem(itemFilters[item])[1]?._props?.Cartridges[0]?._max_count;
+                    break;
+                case "mod_handguard":
+                case "mod_reciever":
+                case "mod_stock":
+                case "mod_stock_000":
+                case "mod_stock_001":
+                case "mod_stock_002":
+                case "mod_stock_akms":
+                case "mod_stock_axis":
+                    checkedValue = this.itemHelper.getItem(itemFilters[item])[1]?._props?.Ergonomics;
+                    break;
+                default:
+                    break;
+            }
+
+            if (checkedValue)
+            {
+                if (checkedValue >= threshholdValue && !this.attachmentBlacklist.includes(itemFilters[item]))
+                {
+                    hasHighRequirements = true;
+                    continue;
+                }
+                if (checkedValue < threshholdValue && !this.attachmentBlacklist.includes(itemFilters[item]))
+                {
+                    hasLowRequirements = true;
+                    continue;
+                } 
+            }
+        }
+
+        if (hasHighRequirements && hasLowRequirements) return true;
+
+        return false;
     }
 }
