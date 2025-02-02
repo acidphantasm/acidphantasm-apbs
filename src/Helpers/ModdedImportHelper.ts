@@ -605,13 +605,12 @@ export class ModdedImportHelper
 
                     /*
                     Uncomment this to check a specific items slot
-
                     if (itemID == "93bcdfda236122e67c098847" && slotName == "mod_reciever")
                     {
-                        console.log(`attempting to add ${slotFilterItem}`)
-                        console.log(`high: ${highTierItem} | low: ${lowTierItem}`)
-                        console.log(`SVD T3: ${JSON.stringify(this.tierInformation.tier3mods[itemID][slotName])}`)
-                        console.log(`SVD T4: ${JSON.stringify(this.tierInformation.tier4mods[itemID][slotName])}`)
+                        this.apbsLogger.log(Logging.WARN, `attempting to add ${slotFilterItem}`)
+                        this.apbsLogger.log(Logging.WARN, `high: ${highTierItem} | low: ${lowTierItem}`)
+                        this.apbsLogger.log(Logging.WARN, `SVD T3: ${JSON.stringify(this.tierInformation.tier3mods[itemID][slotName])}`)
+                        this.apbsLogger.log(Logging.WARN, `SVD T4: ${JSON.stringify(this.tierInformation.tier4mods[itemID][slotName])}`)
                     }
                     */
 
@@ -789,8 +788,8 @@ export class ModdedImportHelper
     private pushStandaloneAttachmentsToWeapons(weaponID: string, slotName: string, slotItem: string): void
     {
         // Default to adding the item, change this value during checks
-        const highTierItem = this.tier4PlusOnly(weaponID, slotName, slotItem, true);
-        const lowTierItem = this.tier4MinusOnly(weaponID, slotName, slotItem, true);
+        const highTierItem = this.tier4PlusOnly(weaponID, slotName, slotItem);
+        const lowTierItem = this.tier4MinusOnly(weaponID, slotName, slotItem);
 
         // Check if the itemID's slot doesn't already contain the item to import, if it doesn't - add it
         if (!this.tierInformation.tier4mods[weaponID][slotName].includes(slotItem))
@@ -822,7 +821,7 @@ export class ModdedImportHelper
             const weaponSlots = weapons[weapon]?._props?.Slots;
 
             // Exit early if the weaponID is blacklisted or is modded - if it's modded, let the other import code handle it
-            if (this.shouldWeaponBeSkipped(weaponID, true)) continue;
+            if (this.shouldWeaponBeSkipped(weaponID)) continue;
 
             for (const slot in weaponSlots)
             {
@@ -830,7 +829,7 @@ export class ModdedImportHelper
                 const slotFilter = weaponSlots[slot]?._props?.filters[0]?.Filter
                 
                 // Check if we should skip slot
-                if (this.shouldSlotBeSkipped(slotName, true)) continue;
+                if (this.shouldSlotBeSkipped(slotName)) continue;
 
                 // If filter has items
                 if (slotFilter.length > 0)
@@ -843,13 +842,10 @@ export class ModdedImportHelper
                         // Check if we should skip item
                         if (this.shouldItemBeSkipped(weaponID, slotFilterItem, slotName, true)) continue;
 
-                        if (this.tierInformation.tier4mods[weaponID] == undefined) console.log(`weapon missing ${weaponID} - REPORT THIS TO ACIDPHANTASM PLEASE`)
-                        if (this.tierInformation.tier4mods[weaponID][slotName] == undefined) console.log(`slot missing ${weaponID} - ${slotName} - REPORT THIS TO ACIDPHANTASM PLEASE`)
-
                         // Slot is missing from weapon, add it
                         if (this.tierInformation.tier1mods[weaponID][slotName] == undefined)
                         {
-                            console.log(`New Slot Found! Weapon: ${weaponID} | Slot: ${slotName} | Item: ${slotFilterItem} - REPORT THIS TO ACIDPHANTASM PLEASE`)
+                            this.apbsLogger.log(Logging.WARN, `New Slot Found! Weapon: ${weaponID} | Slot: ${slotName} | Item: ${slotFilterItem} - REPORT THIS TO ACIDPHANTASM PLEASE`)
                             this.tierInformation.tier1mods[weaponID][slotName] = [];
                             this.tierInformation.tier2mods[weaponID][slotName] = [];
                             this.tierInformation.tier3mods[weaponID][slotName] = [];
@@ -888,7 +884,7 @@ export class ModdedImportHelper
         return itemExists;
     }
 
-    private tier4PlusOnly(parentID: string, slotName: string, itemID: string, standaloneAttachment: boolean = false): boolean
+    private tier4PlusOnly(parentID: string, slotName: string, itemID: string): boolean
     {
         // Get Item Data for checks
         const itemData = this.itemHelper.getItem(itemID)[1]
@@ -911,7 +907,7 @@ export class ModdedImportHelper
         return false;
     }
 
-    private tier4MinusOnly(parentID: string, slotName: string, itemID: string, standaloneAttachment: boolean = false): boolean
+    private tier4MinusOnly(parentID: string, slotName: string, itemID: string): boolean
     {
         // Get Item Data for checks
         const itemData = this.itemHelper.getItem(itemID)[1]
@@ -934,7 +930,7 @@ export class ModdedImportHelper
         return false;
     }
 
-    private shouldWeaponBeSkipped(itemID: string, standaloneAttachment: boolean = false): boolean
+    private shouldWeaponBeSkipped(itemID: string): boolean
     {
         // Weapon is blacklisted, skip
         if (this.blacklist.includes(itemID)) return true;
@@ -944,7 +940,7 @@ export class ModdedImportHelper
         return false;
     }
 
-    private shouldSlotBeSkipped(slotName: string, standaloneAttachment: boolean = false): boolean
+    private shouldSlotBeSkipped(slotName: string): boolean
     {
         if (slotName == "mod_sight_front" || slotName == "mod_sight_rear") return true;
 
