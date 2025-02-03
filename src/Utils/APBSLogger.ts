@@ -9,11 +9,15 @@ import { ModConfig } from "../Globals/ModConfig";
 @injectable()
 export class APBSLogger
 {
+    private hasNotLoggedDebugDisabledYet: boolean;
+
     constructor(
         @inject("WinstonLogger") protected logger: ILogger,
         @inject("ModInformation") protected modInformation: ModInformation
     )
-    {}
+    {
+        this.hasNotLoggedDebugDisabledYet = false;
+    }
 
     public createLogFiles(): void
     {
@@ -25,7 +29,18 @@ export class APBSLogger
 
     public log(logcation: Logging, message: string, message2?: string, message3?: string, message4?: string, message5?: string, message6?: string, message7?: string, message8?: string): void
     {
-        if (!ModConfig.config.enableDebugLog && logcation == Logging.DEBUG) return;
+        if (!ModConfig.config.enableDebugLog && logcation == Logging.DEBUG)
+        {
+            if (!this.hasNotLoggedDebugDisabledYet)
+            {
+                this.hasNotLoggedDebugDisabledYet = true;
+                message = "================================================================================"
+                message2 = "enableDebugLog is disabled. If you want debug logging, enable it in the config."
+                message3 = "This log will only show WARNINGs and ERRORs while enableDebugLog is disabled."
+                message4 = "================================================================================"
+            }
+            else return;
+        }
         const messagesArray = {
             message,
             message2,
