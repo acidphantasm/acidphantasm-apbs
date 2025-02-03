@@ -6,12 +6,13 @@ import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { Logging } from "../Enums/Logging";
 import { APBSLogger } from "./APBSLogger";
-import { vanillaAttachments } from "../Globals/VanillaItemLists";
+import { vanillaAttachments, vanillaItemsList } from "../Globals/VanillaItemLists";
 
 @injectable()
 export class APBSAttachmentChecker
 {
     public vanillaAttachmentList: string[] = [];
+    public modAttachmentList: string[] = [];
     constructor(
         @inject("DatabaseService") protected database: DatabaseService,
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
@@ -19,7 +20,7 @@ export class APBSAttachmentChecker
     )
     {}
     
-    public buildAttachmentList(): void
+    public buildVanillaAttachmentList(): void
     {
         const items = this.database.getTables().templates.items;
         const itemValues = Object.values(items);
@@ -31,13 +32,25 @@ export class APBSAttachmentChecker
         }
         this.apbsLogger.log(Logging.DEBUG, `${JSON.stringify(this.vanillaAttachmentList)}`)
     }
+    
+    public buildModAttachmentList(): void
+    {
+        const items = this.database.getTables().templates.items;
+        const itemValues = Object.values(items);
+        const attachments = itemValues.filter(x => this.itemHelper.isOfBaseclass(x._id, BaseClasses.MOD))
+
+        for (const item in attachments)
+        {
+            const attachmentID = attachments[item]._id;
+            if (!this.isVanillaItem(attachmentID)) this.modAttachmentList.push(attachmentID)
+        }
+    }
 
     public isVanillaItem(itemID: string): boolean
     {
-        if (vanillaAttachments.includes(itemID)) 
-        {
-            return true;
-        }
+        if (vanillaAttachments.includes(itemID)) return true;
+        if (vanillaItemsList.includes(itemID)) return true;
+
         return false;
     }
 }

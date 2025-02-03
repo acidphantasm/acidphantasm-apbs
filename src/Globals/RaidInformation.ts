@@ -1,11 +1,16 @@
-import { injectable } from "tsyringe";
-import { ModConfig } from "./ModConfig";
+import { inject, injectable } from "tsyringe";
+import { BotEnablementHelper } from "../Helpers/BotEnablementHelper";
+import { APBSLogger } from "../Utils/APBSLogger";
+import { Logging } from "../Enums/Logging";
+import { DatabaseService } from "@spt/services/DatabaseService";
 
 @injectable()
 export class RaidInformation
 {
     constructor(
-
+        @inject("DatabaseService") protected databaseService: DatabaseService,
+        @inject("BotEnablementHelper") protected botEnablementHelper: BotEnablementHelper,
+        @inject("APBSLogger") protected apbsLogger: APBSLogger
     )
     {}
 
@@ -83,87 +88,35 @@ export class RaidInformation
         }
     }
 
-    public alwaysDisabledBots = [
-        "shooterbtr",
-        "skier",
-        "peacemaker",
-        "gifter",
-        "infectedassault",
-        "infectedcivil",
-        "infectedlaborant",
-        "infectedpmc",
-        "infectedtagilla",
-        "bosslegion",
-        "bosspunisher"
-    ]
+    public checkAllBotsInDB(): void
+    {
+        const botTable = this.databaseService.getTables().bots.types;
+        for (const botType in botTable)
+        {
+            if (this.botEnablementHelper.doesBotExist(botType.toLowerCase()))
+            {
+                if (this.botEnablementHelper.botDisabled(botType.toLowerCase()))
+                {
+                    this.apbsLogger.log(Logging.DEBUG, `Bot: ${botType.toLowerCase()} is disabled.`);
+                    continue;
+                }
+                continue;
+            }
+            this.apbsLogger.log(Logging.ERR, `Bot: ${botType.toLowerCase()} configuration is missing. Bot is defaulting to vanilla. Report this to acidphantasm.`);
+        }
+    }
     public isBotEnabled(botType: string): boolean
     {
         botType = botType.toLowerCase();
-        switch (botType) 
+        
+        if (this.botEnablementHelper.doesBotExist(botType))
         {
-            case "pmcbear":
-            case "pmcusec":
-                if (ModConfig.config.disablePMCTierGeneration) return false;
-                return true;
-            case "cursedassault":
-            case "marksman":
-            case "assault":
-                if (ModConfig.config.disableScavTierGeneration) return false;
-                return true;
-            case "arenafighterevent":
-            case "exusec":
-                if (ModConfig.config.disableRaiderRogueTierGeneration) return false;
-                return true;
-            case "bossbully":
-            case "bosstagilla":
-            case "bosspartisan":
-            case "bossgluhar":
-            case "bosskilla":
-            case "bosskojaniy":
-            case "bosssanitar":
-            case "bossknight":
-            case "bosszryachiy":
-            case "bosstest":
-            case "bosskolontay":
-            case "bossboar":
-            case "bossboarSniper":
-            case "sectantpriest":
-                if (ModConfig.config.disableBossTierGeneration) return false;
-                return true;
-            case "sectantwarrior":
-            case "followerboarblose1":
-            case "followerboarclose2":
-            case "followerkolontayassault":
-            case "followerkolontaysecurity":
-            case "followerbully":
-            case "followergluharassault":
-            case "followergluharscout":
-            case "followergluharsecurity":
-            case "followergluharsnipe":
-            case "followerkojaniy":
-            case "followersanitar":
-            case "followertagilla":
-            case "followerbirdeye":
-            case "followerbigpipe":
-            case "followerzryachiy":
-            case "followertest":
-            case "followerboar":
-                if (ModConfig.config.disableBossFollowerTierGeneration) return false;
-                return true;
-            case "shooterbtr":
-            case "skier":
-            case "peacemaker":
-            case "gifter":
-            case "infectedassault":
-            case "infectedcivil":
-            case "infectedlaborant":
-            case "infectedpmc":
-            case "infectedtagilla":
-            case "bosslegion":
-            case "bosspunisher":
-                return false;
-            default:
-                return false;
+            if (this.botEnablementHelper.botDisabled(botType))
+            {
+                return false
+            }
+            return true;
         }
-    }
+        return false;
+    }    
 }

@@ -55,7 +55,11 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
         const start = performance.now()
         this.instance.postDBLoad(container);
         
+        // Build list of all modded attachments
+        this.instance.apbsAttachmentChecker.buildModAttachmentList();
+
         //Do postDBLoad stuff
+        this.instance.raidInformation.checkAllBotsInDB();
         this.instance.botConfigs.initialize();
         this.instance.moddedImportHelper.initialize();
 
@@ -68,7 +72,7 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
         }
         
         // Only do this if you need to build a new attachment list
-        // this.instance.apbsAttachmentChecker.buildAttachmentList();
+        // this.instance.apbsAttachmentChecker.buildVanillaAttachmentList();
 
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postDBLoad`);

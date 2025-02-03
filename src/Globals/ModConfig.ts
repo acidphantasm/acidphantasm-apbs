@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { VFS } from "@spt/utils/VFS";
 import { inject, injectable } from "tsyringe";
-import jsonc from "jsonc";
+import { jsonc } from "jsonc";
 import path from "path";
 import { TierInformation } from "./TierInformation";
 import { APBSLogger } from "../Utils/APBSLogger";
@@ -25,9 +25,10 @@ export class ModConfig
     public serverLogDetails(): void
     {
         this.logger.debug("[APBS] Mod Config - FOR SUPPORT FOLKS ❤❤")
-        this.logger.debug(`[APBS] Import Mod Weapons: ${ModConfig.config.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Import Mod Equipment: ${ModConfig.config.enableModdedEquipment} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Import Mod Clothing: ${ModConfig.config.enableModdedClothing} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Mod Weapons: ${ModConfig.config.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Mod Equipment: ${ModConfig.config.enableModdedEquipment} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Mod Clothing: ${ModConfig.config.enableModdedClothing} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Seasonal PMC Clothing: ${ModConfig.config.seasonalPmcAppearance} <- IF TRUE, Mod Clothing not used`)
     }
 }
 
@@ -43,7 +44,17 @@ export interface Config
     scavWeaponWeights: number,
     followerWeaponWeights: number,
     enableSafeGuard: boolean,
+    enableAddingModdedAttachmentsToVanillaWeapons: boolean,
     seasonalPmcAppearance: boolean,
+    normalizedHealthPoolValues: boolean,
+    healthHead: number,
+    healthChest: number,
+    healthStomach: number,
+    healthLeftArm: number,
+    healthRightArm: number,
+    healthLeftLeg: number,
+    healthRightLeg: number,
+    excludedBots: string[],
     disableRealismGasMasks: boolean,
     onlyChads: boolean,
     tarkovAndChill: boolean,
@@ -52,7 +63,7 @@ export interface Config
     disablePMCTierGeneration: boolean,
     disableBossTierGeneration: boolean,
     disableBossFollowerTierGeneration: boolean,
-    disableRaiderRogueTierGeneration: boolean,
+    disableSpecialTierGeneration: boolean,
     enableBotsToRollAmmoAgain: boolean,
     chanceToRollAmmoAgain: number,
     gameVersionWeight: boolean, 
