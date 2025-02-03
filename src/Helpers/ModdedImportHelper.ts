@@ -1034,6 +1034,9 @@ export class ModdedImportHelper
 
         for (const item in itemFilters)
         {
+            const itemExists = this.itemHelper.getItem(itemFilters[item])[0];
+            if (!itemExists) continue;
+            
             switch (slotName)
             {
                 case "mod_magazine":
