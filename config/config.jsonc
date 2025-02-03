@@ -282,5 +282,5 @@
         "tier7ScavLevelDelta": [ 50, -10 ],
 
 // Enable/disable debug logging
-        "enableDebugLog": true
+        "enableDebugLog": false
 }
