@@ -223,12 +223,14 @@ export class ModdedImportHelper
         if (ModConfig.config.enableModdedWeapons) this.buildVanillaWeaponList();
         if (ModConfig.config.enableModdedEquipment) this.buildVanillaEquipmentList();
         if (ModConfig.config.enableModdedClothing && !ModConfig.config.seasonalPmcAppearance) this.buildVanillaClothingList();
-        if (ModConfig.config.enableAddingModdedAttachmentsToVanillaWeapons) this.buildModAttachments();
         
-        if (this.invalidModAttachments.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModAttachments.length} Invalid Attachment ItemIDs found in mods: ${JSON.stringify(this.invalidModAttachments)}`)
-        if (this.invalidModEquipment.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModEquipment.length} Invalid Weapon/Equipment ItemIDs found in mods: ${JSON.stringify(this.invalidModEquipment)}`)
-            
-        if (ModConfig.config.enableAddingModdedAttachmentsToVanillaWeapons) this.apbsLogger.log(Logging.WARN, `     Imported ${this.allImportedAttachments.length} Modded Attachments to ${this.numberOfAttachments} mount points on vanilla weapons...`)
+        if (ModConfig.config.enableAddingModdedAttachmentsToVanillaWeapons) 
+        {
+            this.buildModAttachments();
+            if (this.invalidModAttachments.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModAttachments.length} Invalid Attachment ItemIDs found in mods: ${JSON.stringify(this.invalidModAttachments)}`)
+            if (this.invalidModEquipment.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModEquipment.length} Invalid Weapon/Equipment ItemIDs found in mods: ${JSON.stringify(this.invalidModEquipment)}`)
+            if (this.allImportedAttachments.length > 0) this.apbsLogger.log(Logging.WARN, `     Imported ${this.allImportedAttachments.length} Modded Attachments to ${this.numberOfAttachments} mount points on vanilla weapons...`)
+        }
     }
 
     private buildVanillaWeaponList(): void
