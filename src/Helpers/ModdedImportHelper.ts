@@ -262,10 +262,14 @@ export class ModdedImportHelper
         const tacticalVests = {};        
         vanillaItemList.equipment.TacticalVest.forEach(element => tacticalVests[element] = this.getItem(element))
         
+        const armbands = {};        
+        vanillaItemList.equipment.ArmBand.forEach(element => armbands[element] = this.getItem(element))
+        
         // Push these lists to the function to filter and import
         this.getModdedItems(armours as ITemplateItem, BaseClasses.ARMOR, "Armours");
         this.getModdedItems(headwear as ITemplateItem, BaseClasses.HEADWEAR, "Helmets");
         this.getModdedItems(tacticalVests as ITemplateItem, BaseClasses.VEST, "Vests");
+        this.getModdedItems(armbands as ITemplateItem, BaseClasses.ARMBAND, "ArmBands");
     }
 
     private buildVanillaClothingList(): void
@@ -386,21 +390,44 @@ export class ModdedImportHelper
         // Loop each equipment in the pool of equipment to be imported - push them individually
         for (const equipment in equipmentPool)
         {
-            const equipmentParent = equipmentPool[equipment]._parent;
-            const equipmentId = equipmentPool[equipment]._id;
-            const equipmentSlots = equipmentPool[equipment]?._props?.Slots;
-            const equipmentSlotsLength = equipmentPool[equipment]?._props?.Slots.length;
-            const gridLength = equipmentPool[equipment]?._props?.Grids.length;
+            const equipmentInfo = equipmentPool[equipment];
+            const equipmentParent = equipmentInfo._parent;
+            const equipmentId = equipmentInfo._id;
+            const equipmentSlots = equipmentInfo?._props?.Slots;
+            const equipmentSlotsLength = equipmentInfo?._props?.Slots.length;
+            const gridLength = equipmentInfo?._props?.Grids.length;
             let equipmentSlot: string;
 
             // Check if item is actually valid and in the database, skip if it isn't
             if (!this.doesItemExist(equipmentId, true)) continue;
 
             // Set equipmentSlot string to the proper value - this is only done to separate TacticalVests & ArmouredRigs
-            if (equipmentParent == "5448e5284bdc2dcb718b4567" && (equipmentSlots.length == 0 || equipmentSlots == undefined)) equipmentSlot = "TacticalVest"
-            if (equipmentParent == "5448e5284bdc2dcb718b4567" && equipmentSlots.length >= 1) equipmentSlot = "ArmouredRig"
             if (equipmentParent == "5448e54d4bdc2dcc718b4568") equipmentSlot = "ArmorVest"
             if (equipmentParent == "5a341c4086f77401f2541505") equipmentSlot = "Headwear"
+            if (equipmentParent == "5448e5284bdc2dcb718b4567")
+            {
+                // No additional slots, probably tactical vest
+                if ((equipmentSlots.length == 0 || equipmentSlots == undefined)) equipmentSlot = "TacticalVest";
+                // Additional slots, likely armoured rig
+                if (equipmentSlots.length >= 1) equipmentSlot = "ArmouredRig";
+
+                // Might be a Pack N Strap belt, check that.
+                const defaultInventorySlots = this.databaseService.getTables().templates.items["55d7217a4bdc2d86028b456d"]?._props?.Slots;
+                for (const slot in defaultInventorySlots)
+                {
+                    const slotName = defaultInventorySlots[slot]?._name;
+                    const slotFilter = defaultInventorySlots[slot]?._props?.filters[0]?.Filter;
+                    if (slotName != "ArmBand") continue;
+
+                    if (slotFilter.includes(equipmentId)) equipmentSlot = "ArmBand"
+                    if (ModConfig.config.PackNStrap_UnlootablePMCArmbandBelts)
+                    {
+                        equipmentInfo._props.Unlootable = true;
+                        equipmentInfo._props.UnlootableFromSide.push("Bear", "Usec", "Savage");
+                        equipmentInfo._props.UnlootableFromSlot = "ArmBand";
+                    }
+                }
+            }
 
 
             // Push Equipment details to relevant pools
@@ -535,6 +562,7 @@ export class ModdedImportHelper
             let weight;
             if (equipmentSlot == "TacticalVest" && gridLength > 10) weight = 10;
             if (equipmentSlot == "TacticalVest" && gridLength <= 10) weight = 1;
+            if (equipmentSlot == "ArmBand") weight = 1;
             if (equipmentSlot == "ArmouredRig") weight = 7;
             if (equipmentSlot == "ArmorVest") weight = 10;
             if (equipmentSlot == "Headwear" && equipmentSlotsLength > 0) weight = 6;
