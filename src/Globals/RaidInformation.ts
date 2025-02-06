@@ -109,12 +109,8 @@ export class RaidInformation
     {
         botType = botType.toLowerCase();
         
-        if (this.botEnablementHelper.doesBotExist(botType))
+        if (this.botEnablementHelper.doesBotExist(botType) && !this.botEnablementHelper.botDisabled(botType))
         {
-            if (this.botEnablementHelper.botDisabled(botType))
-            {
-                return false
-            }
             return true;
         }
         return false;
