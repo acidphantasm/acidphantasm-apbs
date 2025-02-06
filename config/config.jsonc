@@ -26,6 +26,12 @@
         "enableSafeGuard": true,
         "enableAddingModdedAttachmentsToVanillaWeapons": false,
 
+// Special Mod Compatibility Configs
+// PackNStrap_UnlootablePMCArmbandBelts -  If true, belts will be unlootable in armband slots - if false, you can loot them.
+// Realism_AddGasMasksToBots - If true, and Realism is installed, adds gas masks to bots - if false, they'll almost never have them.
+        "PackNStrap_UnlootablePMCArmbandBelts": true,
+        "Realism_AddGasMasksToBots": false,
+
 // Enable/Disable specific bot generation
 // If set to true, it will disable APBS generation for that bot type, if false - will use APBS generation.
 // All EVENT bots are automatically disabled and will use vanilla values, including any custom bot types (Punisher/Legion)
@@ -53,10 +59,6 @@
         "healthLeftLeg": 65,
         "healthRightLeg": 65,
         "excludedBots": [],
-
-// Enable/Disable Realism Gas Mask Compatibility
-// APBS automatically detects Realism and adds gas masks to bots due to Radiation Zones. If you dont want this to happen, set to true.
-        "disableRealismGasMasks": false,
 
 // Looking for a challenge, or maybe just want to chill and wreck some bots?
 // Enable "onlyChads" to force all bots to be Tier7, or enable "tarkovAndChill" to force all bots to be Tier1
