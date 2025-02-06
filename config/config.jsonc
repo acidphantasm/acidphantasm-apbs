@@ -12,9 +12,9 @@
 // pmcWeaponWeights - Weight of modded weapons being added to PMCs
 // scavWeaponWeights - Weight of modded weapons being added to Scavs
 // followerWeaponWeights - Weight of modded weapons being added to boss followers (not Goons)
+// Higher weights = more often. Lower weights = less often. If you add a LOT of mod weapons, I suggest using a lower value. 
 // enableSafeGuard - Enables preventing weapon importing from bastardizing vanilla weapons. If you disable this, you will get cursed vanilla weapons.
 // enableAddingModdedAttachmentsToVanillaWeapons - This will check and add all the standalone modded attachments to vanilla weapons. (Like mods that add a bunch of custom attachments, but not weapons that can hold them)
-// Higher weights = more often. Lower weights = less often. If you add a LOT of mod weapons, I suggest using a lower value. 
 // REVIEW THE APBS LOGS TO TUNE YOUR CONFIG. (\user\mods\acidphantasm-progressivebotsystem\logs)
         "enableModdedWeapons": false,
         "enableModdedEquipment": false,
