@@ -12,7 +12,9 @@ export enum BossBots
     BOSSZRYACHIY = "bosszryachiy",
     BOSSKNIGHT = "bossknight",
     FOLLOWERBIGPIPE = "followerbigpipe",
-    FOLLOWERBIRDEYE = "followerbirdeye"
+    FOLLOWERBIRDEYE = "followerbirdeye",
+    BOSSLEGION = "bosslegion",
+    BOSSPUNISHER = "bosspunisher"
 }
 
 export enum FollowerBots
@@ -83,7 +85,5 @@ export enum EventBots
     SPIRITWINTER = "spiritwinter",
     TEST = "test",
     FOLLOWERTEST = "followertest",
-    BOSSTEST = "bosstest",
-    BOSSLEGION = "bosslegion",
-    BOSSPUNISHER = "bosspunisher"
+    BOSSTEST = "bosstest"
 }
