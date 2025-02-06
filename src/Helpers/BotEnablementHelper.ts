@@ -26,6 +26,10 @@ export class BotEnablementHelper
     
     public botDisabled(botType: string): boolean
     {
+        // Special handling for punisher & legion
+        if (botType.toLowerCase() == "bosspunisher" || botType.toLowerCase() == "bosslegion") return true;
+
+        // Normal bot types
         if (this.isBoss(botType)) return ModConfig.config.disableBossTierGeneration;
         if (this.isFollower(botType)) return ModConfig.config.disableBossFollowerTierGeneration;
         if (this.isPMC(botType)) return ModConfig.config.disablePMCTierGeneration;
