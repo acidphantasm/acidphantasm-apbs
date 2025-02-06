@@ -27,7 +27,7 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
         this.instance.apbsLogger.createLogFiles();
         if (questingBots)
         {
-            this.instance.apbsLogger.log(Logging.WARN, "Questing Bots Detected. Updated bot logging.")
+            this.instance.apbsLogger.log(Logging.WARN, "Questing Bots Detected. Hooking into QB Router...")
             this.instance.apbsDynamicRouterHooks.registerQBRouterHooks(); 
         }
 
@@ -54,9 +54,6 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
     {
         const start = performance.now()
         this.instance.postDBLoad(container);
-        
-        // Build list of all modded attachments
-        this.instance.apbsAttachmentChecker.buildModAttachmentList();
 
         //Do postDBLoad stuff
         this.instance.raidInformation.checkAllBotsInDB();
@@ -88,9 +85,9 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
 
         if (this.instance.modInformation.versionNumber.includes("alpha"))
         {
-            this.instance.apbsLogger.log(Logging.WARN, "!!! THIS IS AN EARLY RELEASE BUILD !!!")
-            this.instance.apbsLogger.log(Logging.WARN, "Do not report problems with this anywhere except #acidphantasm-mods in the SPT Discord.")
-            this.instance.apbsLogger.log(Logging.WARN, "Thank you for testing!")
+            this.instance.apbsLogger.log(Logging.ERR, "!!! THIS IS AN EARLY RELEASE BUILD !!!")
+            this.instance.apbsLogger.log(Logging.ERR, "Do not report problems with this anywhere except #acidphantasm-mods in the SPT Discord.")
+            this.instance.apbsLogger.log(Logging.ERR, "Thank you for testing!")
         }
 
         const timeTaken = performance.now() - start;
