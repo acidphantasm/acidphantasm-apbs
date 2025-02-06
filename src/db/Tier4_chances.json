@@ -1414,7 +1414,7 @@
     "scav": {
         "chances": {
             "equipment": {
-                "ArmBand": 0,
+                "ArmBand": 10,
                 "ArmorVest": 40,
                 "Backpack": 50,
                 "Earpiece": 25,
