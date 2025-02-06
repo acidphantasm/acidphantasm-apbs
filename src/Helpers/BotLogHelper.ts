@@ -94,7 +94,7 @@ export class BotLogHelper
 
         const botDetails = this.getBotDetails(outputJSON);
         const logMessages = this.getLogMessage(botDetails);
-        const botRole = outputJSON.data[0].Info.Settings.Role;
+        const botRole = outputJSON.data[0].Info.Settings.Role.toLowerCase();
         const enabledStringText = this.raidInformation.isBotEnabled(botRole) ? "ENABLED" : "DISABLED";
         let logged = false;
 
@@ -103,7 +103,7 @@ export class BotLogHelper
             logged = true;
             this.apbsLogger.log( 
                 Logging.BOSS,
-                `----------------------------------------------[${enabledStringText}]Bot spawned from cache-----------------------------------------------------`,
+                `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
                 `| ${logMessages[0]}`,
                 `| ${logMessages[1]}`,
                 `| ${logMessages[2]} ${logMessages[3]}`
@@ -115,7 +115,7 @@ export class BotLogHelper
             logged = true;
             this.apbsLogger.log( 
                 Logging.PMC,
-                `----------------------------------------------[${enabledStringText}]Bot spawned from cache-----------------------------------------------------`,
+                `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
                 `| ${logMessages[0]}`,
                 `| ${logMessages[1]}`,
                 `| ${logMessages[2]} ${logMessages[3]}`
@@ -127,7 +127,7 @@ export class BotLogHelper
             logged = true;
             this.apbsLogger.log(
                 Logging.SCAV,
-                `----------------------------------------------[${enabledStringText}]Bot spawned from cache-----------------------------------------------------`,
+                `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
                 `| ${logMessages[0]}`,
                 `| ${logMessages[1]}`,
                 `| ${logMessages[2]} ${logMessages[3]}`
@@ -139,7 +139,7 @@ export class BotLogHelper
             logged = true;
             this.apbsLogger.log(
                 Logging.SPECIAL,
-                `----------------------------------------------[${enabledStringText}]Bot spawned from cache-----------------------------------------------------`,
+                `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
                 `| ${logMessages[0]}`,
                 `| ${logMessages[1]}`,
                 `| ${logMessages[2]} ${logMessages[3]}`
@@ -151,7 +151,7 @@ export class BotLogHelper
             logged = true;
             this.apbsLogger.log( 
                 Logging.EVENT,
-                `----------------------------------------------[${enabledStringText}]Bot spawned from cache-----------------------------------------------------`,
+                `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
                 `| ${logMessages[0]}`,
                 `| ${logMessages[1]}`,
                 `| ${logMessages[2]} ${logMessages[3]}`
