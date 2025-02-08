@@ -6,3 +6,9 @@
 .eslintrc.json
 build.mjs
 package-lock.json
+APBSConfig.exe
+APBSConfig.pdb
+/Core
+/wwwroot
+/ConfigApp/obj
+/ConfigApp/bin
