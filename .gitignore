@@ -12,3 +12,6 @@ APBSConfig.pdb
 /wwwroot
 /ConfigApp/obj
 /ConfigApp/bin
+ConfigApp/APBSConfig.csproj.user
+ConfigApp/.vs
+ConfigApp/Properties/PublishProfiles/FolderProfile.pubxml.user
