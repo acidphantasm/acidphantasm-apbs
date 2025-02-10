@@ -1,0 +1,86 @@
+﻿@inherits LayoutComponentBase
+@inject ISnackbar Snackbar
+@inject NavigationManager _navigationManager
+@using APBSConfig.Core;
+
+<MudThemeProvider IsDarkMode="true"/>
+<MudPopoverProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <MudAppBar Dense Elevation="1">
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.MenuOpen" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())">Menu</MudButton>
+        <MudSpacer />
+        @if (_unsavedChanges) 
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Error">Unsaved changes</MudButton>;
+        }
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Refresh" Color="Color.Inherit" OnClick="@((e) => RefreshData())">Reload config</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Inherit" OnClick="@((e) => SaveData())">Save config</MudButton>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2" ClipMode="DrawerClipMode.Always" Variant="@DrawerVariant.Temporary" Breakpoint="Breakpoint.None">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Class="mt-1">SETTINGS</MudText>
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent Class="pt-3">
+        <CascadingValue Value="this">
+            @Body
+        </CascadingValue>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    bool _drawerOpen = false;
+    static bool _unsavedChanges = false;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    void SaveData()
+    {
+        if (DataLoader.SaveJson())
+        {
+            Snackbar.Add("Config saved!", Severity.Success, config => { config.ShowCloseIcon = false; });
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Config failed to save!", Severity.Error, config => { config.ShowCloseIcon = false; });
+        }
+    }
+
+    void RefreshData()
+    {
+        if (DataLoader.LoadJson())
+        {
+            Snackbar.Add("Config reloaded!", Severity.Info, config => { config.ShowCloseIcon = false; });
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Config failed to reload!", Severity.Error, config => { config.ShowCloseIcon = false; });
+        }
+    }
+
+    public static void EnableUnsavedChanges()
+    {
+        _unsavedChanges = !_unsavedChanges;
+    }
+
+    protected override void OnInitialized()
+    {
+        if (!DataLoader.initialLoad && DataLoader.LoadJson())
+        {
+            Snackbar.Add("Config loaded!", Severity.Info, config => { config.ShowCloseIcon = false; });
+            DataLoader.initialLoad = true;
+        }
+        else
+        {
+            Snackbar.Add("Config failed to load!", Severity.Error, config => { config.ShowCloseIcon = false; });
+        }
+    }
+}

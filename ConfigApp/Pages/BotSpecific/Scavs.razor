@@ -1,0 +1,190 @@
+﻿@page "/scav"
+@inherits LayoutComponentBase
+@using static Core.DataLoader;
+
+<MudMainContent>
+    <MudContainer>
+        <MudExpansionPanels MultiExpansion="true">
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Scav Specific Configuration" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Grants APBS control over Scavs. You will have vanilla Scavs if disabled." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable Scav Generation</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableScavTierGeneration" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableScavTierGeneration</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetScavTierGeneration" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+            @if (Data.enableScavTierGeneration)
+            {
+                <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Scav Specific Options" Expanded=true>
+                    <MudGrid>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Scavs to spawn with additional loot." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Enable Scav Loot</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="Data.scavLoot" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.scavLoot</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetScavLoot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudTooltip Text="Adjust Scav Weapon Durability." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Weapon Durability</MudText>
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-start mud-width-full" Elevation="0">
+                                <MudTooltip Text="Lowest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" @bind-Value="scavWeaponDurability[0]" Label="Min Durability" Variant="Variant.Filled" Min="0" Max="100" />
+                                </MudTooltip>
+                                <MudTooltip Text="Highest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" @bind-Value="scavWeaponDurability[1]" Label="Max Durability" Variant="Variant.Filled" Min="0" Max="100" />
+                                </MudTooltip>
+                                <MudTooltip Text="Lowest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" @bind-Value="scavWeaponDurability[2]" Label="Min Delta" Variant="Variant.Filled" Min="0" Max="100" />
+                                </MudTooltip>
+                                <MudTooltip Text="Highest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" @bind-Value="scavWeaponDurability[3]" Label="Min Delta" Variant="Variant.Filled" Min="0" Max="100" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetScavWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Adds all keys to existing scav loot pool." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Add All Keys</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" Disabled="(Data.addOnlyKeyCardsToScavs || Data.addOnlyMechanicalKeysToScavs) ? true : false" @bind-Value="Data.addAllKeysToScavs" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.addAllKeysToScavs</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetScavAllKeys" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Adds all mechanical keys to existing scav loot pool." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Add Only Mechanical Keys</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" Disabled="(Data.addOnlyKeyCardsToScavs || Data.addAllKeysToScavs) ? true : false" @bind-Value="Data.addOnlyMechanicalKeysToScavs" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.addOnlyMechanicalKeysToScavs</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetScavMechanicalKeys" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Adds all keycards to existing scav loot pool." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Add Only Keycards</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" Disabled="(Data.addOnlyMechanicalKeysToScavs || Data.addAllKeysToScavs) ? true : false" @bind-Value="Data.addOnlyKeyCardsToScavs" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.addOnlyKeyCardsToScavs</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetScavKeyCards" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Scavs to use tiered attachments instead of always Tier 1." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Enable Scav Attachment Tiering</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="Data.enableScavAttachmentTiering" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableScavAttachmentTiering</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetScavAttachmentTiering" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="By default scavs have a much lower chance to use good stuff. Enabling this means they have equal chance for every item available to them." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Force Equal Equipment Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="Data.enableScavEqualEquipmentTiering" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableScavEqualEquipmentTiering</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetScavEquipmentTiering" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                    </MudGrid>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+    </MudContainer>
+</MudMainContent>
+
+@code {
+    private void resetScavTierGeneration() => Data.enableScavTierGeneration = true;
+
+    private void resetScavLoot() => Data.scavLoot = true;
+    private void resetScavAllKeys() => Data.addAllKeysToScavs = false;
+    private void resetScavMechanicalKeys() => Data.addOnlyMechanicalKeysToScavs = false;
+    private void resetScavKeyCards() => Data.addOnlyKeyCardsToScavs = false;
+
+    private void resetScavAttachmentTiering() => Data.enableScavAttachmentTiering = false;
+    private void resetScavEquipmentTiering() => Data.enableScavEqualEquipmentTiering = false;
+
+    private List<int> scavWeaponDurability
+    {
+        get { return Data.scavWeaponDurability ?? [50, 90, 0, 20]; }
+        set { Data.scavWeaponDurability = value; }
+    }
+
+    private void resetScavWeaponDurability() => Data.scavWeaponDurability = [50, 90, 0, 20];
+
+    [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+}

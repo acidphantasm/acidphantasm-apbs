@@ -1,0 +1,251 @@
+﻿@page "/modcompatibility"
+@inherits LayoutComponentBase
+@using static Core.DataLoader;
+
+<MudMainContent>
+    <MudContainer>
+        <MudExpansionPanels MultiExpansion="true">
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Custom Item Importing" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Allows bots to use custom modded weapons. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                 <MudText>Enable Modded Weapons</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableModdedWeapons" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableModdedWeapons</MudSwitch>
+                        </MudPaper>                        
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetModWeapons" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Higher number is more common. If you import a lot of custom weapons, and see them often - try a lower number." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>PMC Weapon Weights</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">@Data.pmcWeaponWeights</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.pmcWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enableModdedWeapons" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetPMCWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Higher number is more common. If you import a lot of custom weapons, and see them often - try a lower number." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Scav Weapon Weights</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">@Data.scavWeaponWeights</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.scavWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enableModdedWeapons" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetScavWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Higher number is more common. If you import a lot of custom weapons, and see them often - try a lower number." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Guard Weapon Weights</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">@Data.followerWeaponWeights</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.followerWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enableModdedWeapons"/>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetFollowerWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Allows bots to use custom modded weapons. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable Modded Equipment</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableModdedEquipment" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableModdedEquipment</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetModEquipment" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Automatically disabled if PMC Seasonal Appearance is enabled." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Allows bots to use custom modded weapons. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable Modded Clothing</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableModdedClothing" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End" Disabled="Data.seasonalPmcAppearance">@Data.enableModdedClothing</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetModClothing" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="Data.seasonalPmcAppearance">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Allows bots to use custom modded weapons. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable Modded Attachments</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableAddingModdedAttachmentsToVanillaWeapons" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableAddingModdedAttachmentsToVanillaWeapons</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetModAttachments" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Tier that custom weapons & equipment will start appearing on bots." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Tier Appearance Level</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons && !Data.enableModdedEquipment">@Data.initalTierAppearance</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.initalTierAppearance" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enableModdedWeapons && !Data.enableModdedEquipment" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetTierAppearance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons && !Data.enableModdedEquipment">Reset</MudButton>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Compatibility Options" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Prevents vanilla mods being added to vanilla attachments due to custom item filters." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable Safeguard</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableSafeGuard" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableSafeGuard</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetSafeguard" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Pack'N'Strap Only" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
+                            <MudText>
+                                <MudTooltip Text="Makes belts on PMCs unlootable, you can still view contents but not loot the belt." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    Enable Unlootable Belts on PMCs
+                                </MudTooltip>
+                            </MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.PackNStrap_UnlootablePMCArmbandBelts" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.PackNStrap_UnlootablePMCArmbandBelts</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetPackNStrap" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+                    
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Realism Only" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
+                            <MudText>
+                                <MudTooltip Text="Allows bots to use gas masks - if you don't use Hazard Zones then you don't need this." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                        Enable Adding Gas Masks to Bots
+                                </MudTooltip>
+                            </MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.Realism_AddGasMasksToBots" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.Realism_AddGasMasksToBots</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetRealism" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudContainer>
+</MudMainContent>
+
+@code {
+    private void resetModWeapons() => Data.enableModdedWeapons = false;
+    private void resetModEquipment() => Data.enableModdedEquipment = false;
+    private void resetModClothing() => Data.enableModdedClothing = false;
+    private void resetModAttachments() => Data.enableAddingModdedAttachmentsToVanillaWeapons = false;
+
+    private void resetPMCWeight() => Data.pmcWeaponWeights = 8;
+    private void resetScavWeight() => Data.scavWeaponWeights = 1;
+    private void resetFollowerWeight() => Data.followerWeaponWeights = 6;
+
+    private void resetSafeguard() => Data.enableSafeGuard = true;
+    private void resetTierAppearance() => Data.initalTierAppearance = 3;
+    private void resetPackNStrap() => Data.PackNStrap_UnlootablePMCArmbandBelts = true;
+    private void resetRealism() => Data.Realism_AddGasMasksToBots = false;
+
+    [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+}

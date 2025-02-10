@@ -1,0 +1,344 @@
+﻿@page "/pmc"
+@inherits LayoutComponentBase
+@inject ISnackbar Snackbar
+@using static Core.DataLoader;
+@using static Core.Utils;
+
+<style>
+    .mud-divider {
+        border-width: 2.5px;
+    }
+</style>
+
+<MudMainContent>
+    <MudContainer>
+        <MudExpansionPanels MultiExpansion="true">
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="PMC Specific Configuration" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Grants APBS control over PMCs. You will have vanilla PMCs if disabled." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable PMC Generation</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enablePMCTierGeneration" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enablePMCTierGeneration</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetPMCTierGeneration" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+            @if (Data.enablePMCTierGeneration)
+            {
+                <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="PMC Specific Options" Expanded=true>
+                    <MudGrid>
+
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows PMCs to spawn with additional loot." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Enable PMC Loot</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="Data.pmcLoot" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.pmcLoot</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetPMCLoot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="1">
+                            <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                                <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the item you want blacklisted, then click the arrow to add it to the blacklist. Remember to save!" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="4" Class="align-center">
+                            <MudTextField T="string" @bind-Value="pmcLootBlacklistItemsEntry"
+                                          Label="Loot Blacklist"
+                                          HelperText="Enter valid MongoID"
+                                          Variant="Variant.Text"
+                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                          Immediate="true"
+                                          Adornment="Adornment.End"
+                                          AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                          OnAdornmentClick="@(() => AddItemToList(pmcLootBlacklistItemsEntry, Data.pmcLootBlacklistItems ?? []))" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            @if (Data.pmcLootBlacklistItems != null)
+                            {
+                                foreach (var item in Data.pmcLootBlacklistItems)
+                                {
+                                    <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.pmcLootBlacklistItems))" Color="Color.Default">@item</MudChip>
+                                }
+                            }
+                        </MudItem>
+
+                        <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+                        
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudTooltip Text="Adjust PMC Weapon Durability." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Weapon Durability</MudText>
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-start mud-width-full" Elevation="0">
+                                <MudTooltip Text="Lowest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="pmcWeaponDurability[0]" Label="Min Durability" Variant="Variant.Filled" Min="0" Max="100" />
+                                </MudTooltip>
+                                <MudTooltip Text="Highest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="pmcWeaponDurability[1]" Label="Max Durability" Variant="Variant.Filled" Min="0" Max="100" />
+                                </MudTooltip>
+                                <MudTooltip Text="Lowest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="pmcWeaponDurability[2]" Label="Min Delta" Variant="Variant.Filled" Min="0" Max="100" />
+                                </MudTooltip>
+                                <MudTooltip Text="Highest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="pmcWeaponDurability[3]" Label="Min Delta" Variant="Variant.Filled" Min="0" Max="100" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetPMCWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="PMCs will wear clothing that more closely resembles the active season." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Seasonal PMC Appearance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="Data.seasonalPmcAppearance" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.seasonalPmcAppearance</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetPMCSeasonalAppearance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows PMCs to slide down to a lower ammo pool tier when they are generated." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Ammo Tier Sliding</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="Data.enablePMCAmmoTierSliding" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enablePMCAmmoTierSliding</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetPMCAmmoTierSliding" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="How many tiers they can slide downward." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Slide Amount</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enablePMCAmmoTierSliding">@Data.slideAmount</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="Data.slideAmount" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enablePMCAmmoTierSliding"/>
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Chance they slide down tiers." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Slide Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enablePMCAmmoTierSliding">@Data.slideChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="Data.slideChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enablePMCAmmoTierSliding"/>
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Adjust how often you see specific game versions." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Custom Game Version Weighting</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="Data.gameVersionWeight" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.gameVersionWeight</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetPMCGameVersion" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Higher number is more common. Lower number is more rare. Compare this to the weights of other game versions." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Standard</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.gameVersionWeight">@Data.standard</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="Data.standard" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!Data.gameVersionWeight" />
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Higher number is more common. Lower number is more rare. Compare this to the weights of other game versions." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Left Behind</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.gameVersionWeight">@Data.left_behind</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="Data.left_behind" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!Data.gameVersionWeight" />
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Higher number is more common. Lower number is more rare. Compare this to the weights of other game versions." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Prepare for Escape</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.gameVersionWeight">@Data.prepare_for_escape</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="Data.prepare_for_escape" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!Data.gameVersionWeight" />
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Higher number is more common. Lower number is more rare. Compare this to the weights of other game versions." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Edge of Darkness</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.gameVersionWeight">@Data.edge_of_darkness</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="Data.edge_of_darkness" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!Data.gameVersionWeight" />
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Higher number is more common. Lower number is more rare. Compare this to the weights of other game versions." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Unheard Edition</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.gameVersionWeight">@Data.unheard_edition</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="Data.unheard_edition" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!Data.gameVersionWeight" />
+                        </MudItem>
+
+                    </MudGrid>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+    </MudContainer>
+</MudMainContent>
+
+@code {
+    private void resetPMCTierGeneration() => Data.enablePMCTierGeneration = true;
+
+    private void resetPMCAmmoTierSliding()
+    {
+        Data.enablePMCAmmoTierSliding = false;
+        Data.slideAmount = 1;
+        Data.slideChance = 33;
+    }
+
+    private void resetPMCSeasonalAppearance() => Data.seasonalPmcAppearance = true;
+
+    private void resetPMCGameVersion()
+    {
+        Data.gameVersionWeight = false;
+        Data.standard = 20;
+        Data.left_behind = 10;
+        Data.prepare_for_escape = 10;
+        Data.edge_of_darkness = 40;
+        Data.unheard_edition = 20;
+    }
+
+    private void resetPMCLoot()
+    {
+        Data.pmcLoot = false;
+        Data.pmcLootBlacklistItems = ["6711039f9e648049e50b3307"];
+    }
+    private string pmcLootBlacklistItemsEntry { get; set; } = "";
+
+    private void AddItemToList(string value, List<string> list)
+    {
+        if (value != null)
+        {
+            bool containsAlready = list.FirstOrDefault(s => s.Contains(value)) == value ? true : false;
+            if (!containsAlready && Utils.IsHexAndValidLength(value))
+            {
+                list.Add(value);
+            }
+            else if (containsAlready)
+            {
+                Snackbar.Add("Already blacklisted.", Severity.Error, config => { config.ShowCloseIcon = false; });
+            }
+            else
+            {
+                Snackbar.Add("Invalid MongoID.", Severity.Error, config => { config.ShowCloseIcon = false; });
+            }
+        }
+    }
+
+    private void OnChipClosed(string item, List<string> list)
+    {
+        if (item != null) list.Remove(item);
+    }
+
+
+    private List<int> pmcWeaponDurability
+    {
+        get { return Data.pmcWeaponDurability ?? [95, 100, 0, 5]; }
+        set { Data.pmcWeaponDurability = value; }
+    }
+
+    private void resetPMCWeaponDurability() => Data.pmcWeaponDurability = [95, 100, 0, 5];
+
+    [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+}

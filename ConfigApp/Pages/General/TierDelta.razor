@@ -1,0 +1,390 @@
+﻿@page "/tierdelta"
+@inherits LayoutComponentBase
+@using static Core.DataLoader;
+
+<MudMainContent>
+    <MudContainer>
+        <MudExpansionPanels MultiExpansion="true">
+
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="AI Level Deltas" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <ChildContent>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.body2">Applies to all AI.</MudText>
+                                    <MudText Typo="Typo.body2">Hint: Hover over numeric field, shift + scroll wheel to change value.</MudText>
+                                </TooltipContent>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Configure your own level deltas. These are the levels that bots can spawn while YOU are in the specific tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable Custom Level Deltas</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableCustomLevelDeltas" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableCustomLevelDeltas</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetCustomLevelDeltas" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 1-10, AI will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 1 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier1LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier1LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 11-20, AI will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 2 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier2LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier2LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 21-30, AI will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 3 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier3LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier3LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 31-40, AI will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 4 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier4LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier4LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 41-50, AI will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 5 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier5LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier5LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 51-60, AI will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 6 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier6LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier6LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 61-79, AI will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 7 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier7LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier7LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Scav Level Deltas" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <ChildContent>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.body2">Overrides overall level deltas, for scavs. Can use negative numbers in "Levels Above" value to force them to always be leveled below you.</MudText>
+                                    <MudText Typo="Typo.body2">Hint: Hover over numeric field, shift + scroll wheel to change value.</MudText>
+                                </TooltipContent>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Configure your own level deltas. These are the levels that Scavs can spawn while YOU are in the specific tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable Custom Scav Level Deltas</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableScavCustomLevelDeltas" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableScavCustomLevelDeltas</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetScavLevelDeltas" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 1-10, Scavs will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 1 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier1ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier1ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 11-20, Scavs will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 2 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier2ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier2ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 21-30, Scavs will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 3 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier3ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier3ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 31-40, Scavs will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 4 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier4ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier4ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 41-50, Scavs will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 5 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier5ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier5ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 51-60, Scavs will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 6 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier6ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier6ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="While your PMC is level 61-79, Scavs will spawn within the levels you configure here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Tier 7 Deltas</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="tier7ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudSpacer />
+                            <MudNumericField @bind-Value="tier7ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        </MudPaper>
+                    </MudItem>
+
+
+                </MudGrid>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudContainer>
+</MudMainContent>
+
+@code
+{
+    private void resetCustomLevelDeltas()
+    {
+        Data.enableCustomLevelDeltas = false;
+        Data.tier1LevelDelta = [10, 5];
+        Data.tier2LevelDelta = [10, 5];
+        Data.tier3LevelDelta = [15, 7];
+        Data.tier4LevelDelta = [20, 10];
+        Data.tier5LevelDelta = [30, 15];
+        Data.tier6LevelDelta = [40, 20];
+        Data.tier7LevelDelta = [50, 20];
+    }
+
+    private List<int> tier1LevelDeltaHolder
+    {
+        get { return Data.tier1LevelDelta ?? [10, 5]; }
+        set { Data.tier1LevelDelta = value; }
+    }
+
+    private List<int> tier2LevelDeltaHolder
+    {
+        get { return Data.tier2LevelDelta ?? [10, 5]; }
+        set { Data.tier2LevelDelta = value; }
+    }
+
+    private List<int> tier3LevelDeltaHolder
+    {
+        get { return Data.tier3LevelDelta ?? [15, 7]; }
+        set { Data.tier3LevelDelta = value; }
+    }
+
+    private List<int> tier4LevelDeltaHolder
+    {
+        get { return Data.tier4LevelDelta ?? [20, 10]; }
+        set { Data.tier4LevelDelta = value; }
+    }
+
+    private List<int> tier5LevelDeltaHolder
+    {
+        get { return Data.tier5LevelDelta ?? [30, 15]; }
+        set { Data.tier5LevelDelta = value; }
+    }
+
+    private List<int> tier6LevelDeltaHolder
+    {
+        get { return Data.tier6LevelDelta ?? [40, 20]; }
+        set { Data.tier6LevelDelta = value; }
+    }
+
+    private List<int> tier7LevelDeltaHolder
+    {
+        get { return Data.tier7LevelDelta ?? [50, 20]; }
+        set { Data.tier7LevelDelta = value; }
+    }
+
+    private void resetScavLevelDeltas()
+    {
+        Data.enableScavCustomLevelDeltas = false;
+        Data.tier1ScavLevelDelta = [10, 0];
+        Data.tier2ScavLevelDelta = [10, -10];
+        Data.tier3ScavLevelDelta = [15, -10];
+        Data.tier4ScavLevelDelta = [20, -10];
+        Data.tier5ScavLevelDelta = [30, -10];
+        Data.tier6ScavLevelDelta = [40, -10];
+        Data.tier7ScavLevelDelta = [50, -10];
+    }
+
+    private List<int> tier1ScavDeltaHolder
+    {
+        get { return Data.tier1ScavLevelDelta ?? [10, 0]; }
+        set { Data.tier1ScavLevelDelta = value; }
+    }
+
+    private List<int> tier2ScavDeltaHolder
+    {
+        get { return Data.tier2ScavLevelDelta ?? [10, -10]; }
+        set { Data.tier2ScavLevelDelta = value; }
+    }
+
+    private List<int> tier3ScavDeltaHolder
+    {
+        get { return Data.tier3ScavLevelDelta ?? [15, -10]; }
+        set { Data.tier3ScavLevelDelta = value; }
+    }
+
+    private List<int> tier4ScavDeltaHolder
+    {
+        get { return Data.tier4ScavLevelDelta ?? [20, -10]; }
+        set { Data.tier4ScavLevelDelta = value; }
+    }
+
+    private List<int> tier5ScavDeltaHolder
+    {
+        get { return Data.tier5ScavLevelDelta ?? [30, -10]; }
+        set { Data.tier5ScavLevelDelta = value; }
+    }
+
+    private List<int> tier6ScavDeltaHolder
+    {
+        get { return Data.tier6ScavLevelDelta ?? [40, -10]; }
+        set { Data.tier6ScavLevelDelta = value; }
+    }
+
+    private List<int> tier7ScavDeltaHolder
+    {
+        get { return Data.tier7ScavLevelDelta ?? [50, -10]; }
+        set { Data.tier7ScavLevelDelta = value; }
+    }
+
+
+    [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+}

@@ -1,0 +1,78 @@
+﻿@page "/presets"
+@inherits LayoutComponentBase
+@using static Core.DataLoader;
+
+
+<MudMainContent>
+    <MudContainer>
+        <MudCard>
+            <MudCardContent>
+                <MudText Typo="Typo.h5" Align="Align.Center">Coming Soon.</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudContainer>
+</MudMainContent>
+
+
+<MudMainContent>
+    <MudContainer>
+        <MudExpansionPanels MultiExpansion="true">
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Preset" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Allows you to load a preset specified by name." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable Preset</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.usePreset" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.usePreset</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetPreset" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+            @if (Data.usePreset)
+            {
+                <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Preset Options" Expanded=true>
+                    <MudGrid>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudTooltip Text="Specify folder name of your preset here." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Preset Name</MudText>
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField @bind-Value="presetName" Label="Folder Name" Variant="Variant.Text"></MudTextField>
+                        </MudItem>
+
+                    </MudGrid>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+    </MudContainer>
+</MudMainContent>
+
+@code {
+    private void resetPreset()
+    {
+        Data.usePreset = false;
+        Data.presetName = "example";
+    }
+
+    private string presetName
+    {
+        get { return Data.presetName ?? ""; }
+        set { Data.presetName = value; }
+    }
+
+    [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+}

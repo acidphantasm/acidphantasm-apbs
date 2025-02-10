@@ -1,0 +1,944 @@
+﻿@page "/botsettings"
+@inherits LayoutComponentBase
+@using static Core.DataLoader;
+
+<MudMainContent>
+    <MudContainer>
+        <MudExpansionPanels MultiExpansion="true">
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Weapon & Armour Configurations" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Allows bots to roll their selected round from their weapons caliber, max one time per each magazine." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Reroll Selected Ammunition</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableBotsToRollAmmoAgain" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableBotsToRollAmmoAgain</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetRollAmmoAgain" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="This is the chance that bots will roll for a different round from the same caliber, max one time per each magazine." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Chance to Reroll for Each Magazine</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableBotsToRollAmmoAgain">@Data.chanceToRollAmmoAgain</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.chanceToRollAmmoAgain" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enableBotsToRollAmmoAgain" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetRollAmmoChance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableBotsToRollAmmoAgain">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Allows PMCs & Scavs to have random usage on Food/Drink/Medical Items." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable Resource Randomization</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableConsumableResourceRandomization" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableConsumableResourceRandomization</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetResourceRandomization" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="PMC Medical & Food rates." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>PMC Medical & Food</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="pmcMedRates[0]" Label="Med Full Chance" Variant="Variant.Filled" Min="1" Max="100" Disabled="!Data.enableConsumableResourceRandomization" />
+                            <MudNumericField @bind-Value="pmcMedRates[1]" Label="Med Usage" Variant="Variant.Filled" Min="1" Max="100" Disabled="!Data.enableConsumableResourceRandomization" />
+                            <MudNumericField @bind-Value="pmcFoodRates[0]" Label="Food Full Chance" Variant="Variant.Filled" Min="1" Max="100" Disabled="!Data.enableConsumableResourceRandomization" />
+                            <MudNumericField @bind-Value="pmcFoodRates[1]" Label="Food Usage" Variant="Variant.Filled" Min="1" Max="100" Disabled="!Data.enableConsumableResourceRandomization" />
+                            <MudSpacer />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Scav Medical & Food rates." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Scav Medical & Food</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="scavMedRates[0]" Label="Med Full Chance" Variant="Variant.Filled" Min="1" Max="100" Disabled="!Data.enableConsumableResourceRandomization" />
+                            <MudNumericField @bind-Value="scavMedRates[1]" Label="Med Usage" Variant="Variant.Filled" Min="1" Max="100" Disabled="!Data.enableConsumableResourceRandomization" />
+                            <MudNumericField @bind-Value="scavFoodRates[0]" Label="Food Full Chance" Variant="Variant.Filled" Min="1" Max="100" Disabled="!Data.enableConsumableResourceRandomization" />
+                            <MudNumericField @bind-Value="scavFoodRates[1]" Label="Food Usage" Variant="Variant.Filled" Min="1" Max="100" Disabled="!Data.enableConsumableResourceRandomization" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Allows bots to use different chances for each slot, depending on the category of weapon they have selected." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Per Weapon Category Attachment Chances</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enablePerWeaponTypeAttachmentChances" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enablePerWeaponTypeAttachmentChances</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetPerWeaponAttachments" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Forces bots to use a stock if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Forced Stock</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.forceStock" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.forceStock</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetForceStock" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="This is the chance that bot weapons, that have a stock with an available buttpad have one." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Chance for Buttpad to Spawn on Stock</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">@Data.stockButtpadChance</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.stockButtpadChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetButtpadChance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Forces bots to use a dust cover if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Forced Dust Cover</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.forceDustCover" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.forceDustCover</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetForceDustcover" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Due to BSG - this may also caused unwanted tactical attachments" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Forces bots to use an optic if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Forced Optic</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.forceScopeSlot" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.forceScopeSlot</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetForceScopeSlot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1"/>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Override default database and preset chances of having a muzzle, if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Override Muzzle Chances</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.forceMuzzle" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.forceMuzzle</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetForceMuzzle" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                            <MudTooltip Text="Forces bots to use a muzzle if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Muzzle Chance</MudText>
+                            </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">                        
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="muzzleChanceHolder[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.forceMuzzle" />
+                            <MudNumericField @bind-Value="muzzleChanceHolder[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.forceMuzzle" />
+                            <MudNumericField @bind-Value="muzzleChanceHolder[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.forceMuzzle" />
+                            <MudNumericField @bind-Value="muzzleChanceHolder[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.forceMuzzle" />
+                            <MudNumericField @bind-Value="muzzleChanceHolder[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.forceMuzzle" />
+                            <MudNumericField @bind-Value="muzzleChanceHolder[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.forceMuzzle" />
+                            <MudNumericField @bind-Value="muzzleChanceHolder[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.forceMuzzle" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="1"/>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="If a muzzle is selected for their weapon, this will force it to have it's children attachments (muzzle device -> suppressor)." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Forced Muzzle Child Attachments</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.forceChildrenMuzzle" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.forceChildrenMuzzle</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetForceChildMuzzle" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1"/>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Limits weapons to specified number of optics & tactical devices listed below." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enforce Weapon Attachment Limits</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.forceWeaponModLimits" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.forceWeaponModLimits</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetForceWeaponModLimits" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+                    
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Limit to number of optics on weapons." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Optic Device Limit</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.forceWeaponModLimits">@Data.scopeLimit</MudButton>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudSlider @bind-Value="Data.scopeLimit" ValueLabel="true" Min="1" Max="3" Color="Color.Info" Size="Size.Medium" Disabled="!Data.forceWeaponModLimits" />
+                    </MudItem>
+                    
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Limit to number of tactical devices on weapons." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Tactical Device Limit</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.forceWeaponModLimits">@Data.tacticalLimit</MudButton>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudSlider @bind-Value="Data.tacticalLimit" ValueLabel="true" Min="1" Max="3" Color="Color.Info" Size="Size.Medium" Disabled="!Data.forceWeaponModLimits"/>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Override default database and preset chances of having a plates, if their armour allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Override Plate Chances</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableCustomPlateChances" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableCustomPlateChances</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetCustomPlateChances" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Sets PMC front/back plate chances per tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>PMC Main Plate Chances</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="pmcMainPlateChance[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcMainPlateChance[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcMainPlateChance[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcMainPlateChance[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcMainPlateChance[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcMainPlateChance[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcMainPlateChance[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Sets PMC left/right plate chances per tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>PMC Side Plate Chances</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="pmcSidePlateChance[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcSidePlateChance[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcSidePlateChance[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcSidePlateChance[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcSidePlateChance[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcSidePlateChance[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="pmcSidePlateChance[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Sets Scav front/back plate chances per tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Scav Main Plate Chances</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="scavMainPlateChance[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavMainPlateChance[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavMainPlateChance[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavMainPlateChance[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavMainPlateChance[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavMainPlateChance[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavMainPlateChance[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Sets Scav left/right plate chances per tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Scav Side Plate Chances</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="scavSidePlateChance[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavSidePlateChance[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavSidePlateChance[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavSidePlateChance[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavSidePlateChance[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavSidePlateChance[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="scavSidePlateChance[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Sets Boss front/back plate chances per tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Boss Main Plate Chances</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="bossMainPlateChance[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossMainPlateChance[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossMainPlateChance[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossMainPlateChance[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossMainPlateChance[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossMainPlateChance[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossMainPlateChance[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Sets Boss left/right plate chances per tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Boss Side Plate Chances</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="bossSidePlateChance[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossSidePlateChance[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossSidePlateChance[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossSidePlateChance[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossSidePlateChance[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossSidePlateChance[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="bossSidePlateChance[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Sets Guard front/back plate chances per tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Guard Main Plate Chances</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="guardMainPlateChance[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardMainPlateChance[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardMainPlateChance[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardMainPlateChance[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardMainPlateChance[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardMainPlateChance[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardMainPlateChance[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Sets Guard left/right plate chances per tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Guard Side Plate Chances</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="guardSidePlateChance[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardSidePlateChance[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardSidePlateChance[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardSidePlateChance[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardSidePlateChance[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardSidePlateChance[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="guardSidePlateChance[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Sets Raider, Rogue, Bloodhound, and Cultists front/back plate chances per tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Special Main Plate Chances</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="raiderMainPlateChance[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderMainPlateChance[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderMainPlateChance[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderMainPlateChance[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderMainPlateChance[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderMainPlateChance[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderMainPlateChance[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudTooltip Text="Sets Raider, Rogue, Bloodhound, and Cultists left/right plate chances per tier." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Special Side Plate Chances</MudText>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem xs="7">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudNumericField @bind-Value="raiderSidePlateChance[0]" Label="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderSidePlateChance[1]" Label="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderSidePlateChance[2]" Label="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderSidePlateChance[3]" Label="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderSidePlateChance[4]" Label="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderSidePlateChance[5]" Label="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                            <MudNumericField @bind-Value="raiderSidePlateChance[6]" Label="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!Data.enableCustomPlateChances" />
+                        </MudPaper>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="AI Health" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Normalizes bot health. Applies to all bots unless excluded below." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Normalize Bot Health</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.normalizedHealthPoolValues" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.normalizedHealthPoolValues</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetNormalizeHealth" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Health of Head." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Chest Head</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">@Data.healthHead</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.healthHead" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!Data.normalizedHealthPoolValues" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetHealthHead" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Health of Chest." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Chest Health</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">@Data.healthChest</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.healthChest" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!Data.normalizedHealthPoolValues" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetHealthChest" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Health of Stomach." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Stomach Health</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">@Data.healthStomach</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.healthStomach" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!Data.normalizedHealthPoolValues" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetHealthStomach" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Health of Left Arm." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Left Arm Health</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">@Data.healthLeftArm</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.healthLeftArm" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!Data.normalizedHealthPoolValues" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetHealthLeftArm" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Health of Right Arm." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Right Arm Health</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">@Data.healthRightArm</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.healthRightArm" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!Data.normalizedHealthPoolValues" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetHealthRightArm" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Health of Left Leg." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Left Leg Health</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">@Data.healthLeftLeg</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.healthLeftLeg" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!Data.normalizedHealthPoolValues" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetHealthLeftLeg" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Health of Right Leg." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Right Leg Health</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">@Data.healthRightLeg</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="Data.healthRightLeg" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!Data.normalizedHealthPoolValues" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetHealthRightLeg" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="10">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudSelect T="string" Label="Excluded Bots" 
+                                MultiSelection="true"
+                                SelectedValues="selectedExcludedBotsHolder"
+                                SelectedValuesChanged="OnExcludedBotsValueChanged"
+                                Variant="Variant.Filled"
+                                AnchorOrigin="Origin.CenterLeft"
+                                Dense Clearable
+                                Disabled="!Data.normalizedHealthPoolValues">
+                                @foreach (var name in BotNames)
+                                {
+                                    <MudSelectItem T="string" Value="@name">@name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetExcludedBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.normalizedHealthPoolValues">Reset</MudButton>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Additional Options" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="If both Only Chads and Tarkov & Chill are enabled, bots will randomly choose anything from Tier1 to 7." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="All bots are chads." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Only Chads</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.onlyChads" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.onlyChads</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetOnlyChads" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="If both Only Chads and Tarkov & Chill are enabled, bots will randomly choose anything from Tier1 to 7." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="All bots are broke and use low end weapons and equipment. (Bosses & Guards are still dangerzone)" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Tarkov & Chill</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.tarkovAndChill" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.tarkovAndChill</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetTarkovAndChill" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="If either Only Chads and Tarkov & Chill are enabled, this does nothing." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="All bots use Blicky's a wear specified faction specific gear. Blicky Gang Wars." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Blicky Mode</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" Disabled="(Data.tarkovAndChill || Data.onlyChads) ? true : false" @bind-Value="Data.blickyMode" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.blickyMode</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetBlickyMode" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                    <MudItem xs="1"/>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Allows bots to spawn with T-7 Thermal Goggles" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Allow T-7 Thermal Goggles</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="Data.enableT7Thermals" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableT7Thermals</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetT7Thermal" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+                    
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Tier that T7 Thermal Googles may start appearing on bots." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Tier Appearance Level</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                    <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableT7Thermals">@Data.startTier</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                    <MudSlider @bind-Value="Data.startTier" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enableT7Thermals" />
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudContainer>
+</MudMainContent>
+
+@code {
+    #region WEAPONS
+    private void resetRollAmmoAgain() => Data.enableBotsToRollAmmoAgain = true;
+    private void resetRollAmmoChance() => Data.chanceToRollAmmoAgain = 50;
+
+    private void resetResourceRandomization()
+    {
+        Data.enableConsumableResourceRandomization = true;
+        Data.pmcFoodRates = [10, 25];
+        Data.pmcMedRates = [10, 25];
+        Data.scavFoodRates = [10, 25];
+        Data.scavMedRates = [10, 25];
+    }
+    private List<int> pmcFoodRates
+    {
+        get { return Data.pmcFoodRates ?? [10, 25]; }
+        set { Data.pmcFoodRates = value; }
+    }
+    private List<int> pmcMedRates
+    {
+        get { return Data.pmcMedRates ?? [10, 25]; }
+        set { Data.pmcMedRates = value; }
+    }
+    private List<int> scavFoodRates
+    {
+        get { return Data.scavFoodRates ?? [10, 25]; }
+        set { Data.scavFoodRates = value; }
+    }
+    private List<int> scavMedRates
+    {
+        get { return Data.scavMedRates ?? [10, 25]; }
+        set { Data.scavMedRates = value; }
+    }
+
+    private void resetPerWeaponAttachments() => Data.enablePerWeaponTypeAttachmentChances = true;
+    private void resetForceStock() => Data.forceStock = false;
+    private void resetButtpadChance() => Data.stockButtpadChance = 50;
+    private void resetForceDustcover() => Data.forceDustCover = false;
+    private void resetForceScopeSlot() => Data.forceScopeSlot = false;
+    private void resetForceMuzzle()
+    {
+        Data.forceMuzzle = false;
+        Data.muzzleChance = [10, 25, 40, 55, 65, 75, 75];
+    }
+
+    private List<int> muzzleChanceHolder
+    {
+        get { return Data.muzzleChance ?? [10, 25, 40, 55, 65, 75, 75]; }
+        set { Data.muzzleChance = value; }
+    }
+
+    private void resetForceChildMuzzle() => Data.forceChildrenMuzzle = false;
+
+    private void resetForceWeaponModLimits()
+    {
+        Data.forceWeaponModLimits = true;
+        Data.scopeLimit = 2;
+        Data.tacticalLimit = 1;
+    }
+    private void resetScopeLimit() => Data.scopeLimit = 2;
+    private void resetTacticalLimit() => Data.tacticalLimit = 1;
+    #endregion
+
+    #region HEALTH
+    private void resetNormalizeHealth() => Data.normalizedHealthPoolValues = false;
+    private void resetHealthHead() => Data.healthHead = 35;
+    private void resetHealthChest() => Data.healthChest = 85;
+    private void resetHealthStomach() => Data.healthStomach = 70;
+    private void resetHealthLeftArm() => Data.healthLeftArm = 60;
+    private void resetHealthRightArm() => Data.healthRightArm = 60;
+    private void resetHealthLeftLeg() => Data.healthLeftLeg = 65;
+    private void resetHealthRightLeg() => Data.healthRightLeg = 65;
+
+    private List<string> selectedExcludedBotsHolder
+    {
+        get { return Data.excludedBots ?? [""]; }
+        set { Data.excludedBots = value; }
+    }
+    private string[] BotNames =
+    {
+        "arenafighter", "arenafighterevent", "assault", 
+        "bossboar", "bossboarsniper", "bossbully", "bossgluhar",
+        "bosskilla", "bossknight", "bosskojaniy",
+        "bosskolontay", "bosspartisan", "bosssanitar", "bosstagilla", "bosszryachiy",
+        "exusec", "followerbigpipe", "followerbirdeye", "followerboar", "followerboarclose1",
+        "followerboarclose2", "followerbully", "followergluharassault", "followergluharscout",
+        "followergluharsecurity", "followergluharsnipe", "followerkojaniy", "followerkolontayassault",
+        "followerkolontaysecurity", "followersanitar", "followertagilla", "followerzryachiy",
+        "marksman", "pmcbear", "pmcusec",
+        "pmcbot", "sectantpriest", "sectantwarrior", "peacemaker",
+        "skier",
+    };
+
+    private void OnExcludedBotsValueChanged(IEnumerable<string> selected)
+    {
+        Data.excludedBots = selected.ToList();
+    }
+
+    private void resetExcludedBots() => Data.excludedBots = [];
+
+
+    private List<int> pmcMainPlateChance
+    {
+        get { return Data.pmcMainPlateChance ?? [65, 75, 90, 90, 95, 100, 100]; }
+        set { Data.pmcMainPlateChance = value; }
+    }
+    private List<int> pmcSidePlateChance
+    {
+        get { return Data.pmcSidePlateChance ?? [15, 25, 50, 75, 90, 95, 100]; }
+        set { Data.pmcSidePlateChance = value; }
+    }
+    private List<int> scavMainPlateChance
+    {
+        get { return Data.scavMainPlateChance ?? [25, 25, 25, 25, 25, 25, 25]; }
+        set { Data.scavMainPlateChance = value; }
+    }
+    private List<int> scavSidePlateChance
+    {
+        get { return Data.scavSidePlateChance ?? [25, 25, 25, 25, 25, 25, 25]; }
+        set { Data.scavSidePlateChance = value; }
+    }
+    private List<int> bossMainPlateChance
+    {
+        get { return Data.bossMainPlateChance ?? [75, 75, 75, 75, 75, 75, 75]; }
+        set { Data.bossMainPlateChance = value; }
+    }
+    private List<int> bossSidePlateChance
+    {
+        get { return Data.bossSidePlateChance ?? [50, 50, 50, 50, 50, 50, 50]; }
+        set { Data.bossSidePlateChance = value; }
+    }
+    private List<int> guardMainPlateChance
+    {
+        get { return Data.guardMainPlateChance ?? [75, 75, 75, 75, 75, 75, 75]; }
+        set { Data.guardMainPlateChance = value; }
+    }
+    private List<int> guardSidePlateChance
+    {
+        get { return Data.guardSidePlateChance ?? [75, 75, 75, 75, 75, 75, 75]; }
+        set { Data.guardSidePlateChance = value; }
+    }
+    private List<int> raiderMainPlateChance
+    {
+        get { return Data.raiderMainPlateChance ?? [75, 75, 75, 75, 75, 75, 75]; }
+        set { Data.raiderMainPlateChance = value; }
+    }
+    private List<int> raiderSidePlateChance
+    {
+        get { return Data.raiderSidePlateChance ?? [75, 75, 75, 75, 75, 75, 75]; }
+        set { Data.raiderSidePlateChance = value; }
+    }
+    private void resetCustomPlateChances()
+    {
+        Data.enableCustomPlateChances = false;
+        Data.pmcMainPlateChance = [65, 75, 90, 90, 95, 100, 100];
+        Data.pmcSidePlateChance = [15, 25, 50, 75, 90, 95, 100];
+        Data.scavMainPlateChance = [25, 25, 25, 25, 25, 25, 25];
+        Data.scavSidePlateChance = [25, 25, 25, 25, 25, 25, 25];
+        Data.bossMainPlateChance = [75, 75, 75, 75, 75, 75, 75];
+        Data.bossSidePlateChance = [50, 50, 50, 50, 50, 50, 50];
+        Data.guardMainPlateChance = [75, 75, 75, 75, 75, 75, 75];
+        Data.guardSidePlateChance = [75, 75, 75, 75, 75, 75, 75];
+        Data.raiderMainPlateChance = [75, 75, 75, 75, 75, 75, 75];
+        Data.raiderSidePlateChance = [75, 75, 75, 75, 75, 75, 75];
+    }
+    #endregion
+
+    #region GENERAL
+    private void resetOnlyChads() => Data.onlyChads = false;
+    private void resetTarkovAndChill() => Data.tarkovAndChill = false;
+    private void resetBlickyMode() => Data.blickyMode = false;
+    private void resetT7Thermal()
+    {
+        Data.enableT7Thermals = false;
+        Data.startTier = 6;
+    }
+    #endregion
+
+    [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+}

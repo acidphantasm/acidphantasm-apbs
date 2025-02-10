@@ -1,0 +1,863 @@
+﻿@page "/blacklisting"
+@inherits LayoutComponentBase
+@inject ISnackbar Snackbar
+@using static Core.DataLoader;
+@using static Core.Utils;
+@using APBSConfig.Shared;
+
+<style>
+    .mud-divider {
+        border-width: 2.5px;
+    }
+</style>
+
+<MudMainContent>
+    <MudContainer>
+        <MudTabs Centered="true" Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6 ma-2">
+            <MudTabPanel Text="Weapon Blacklists">
+                <MudGrid>
+                    
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">                            
+                            <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the weapon you want blacklisted, then click the arrow to add it to the blacklist. Remember to save!" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                            <MudText Align="Align.Center">Tier 1</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                            <MudTextField T="string" @bind-Value="tier1WeaponBlacklistEntry" 
+                                HelperText="Enter valid MongoID" 
+                                Variant="Variant.Text" 
+                                Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))" 
+                                Immediate="true" 
+                                Adornment="Adornment.End" 
+                                AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier1WeaponBlacklistEntry, Data.tier1WeaponBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="5">
+                        @if (Data.tier1WeaponBlacklist != null)
+                        {
+                            foreach (var item in Data.tier1WeaponBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier1WeaponBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3"/>
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 2</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier2WeaponBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier2WeaponBlacklistEntry, Data.tier2WeaponBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier2WeaponBlacklist != null)
+                        {
+                            foreach (var item in Data.tier2WeaponBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier2WeaponBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 3</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier3WeaponBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier3WeaponBlacklistEntry, Data.tier3WeaponBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier3WeaponBlacklist != null)
+                        {
+                            foreach (var item in Data.tier3WeaponBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier3WeaponBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 4</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier4WeaponBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier4WeaponBlacklistEntry, Data.tier4WeaponBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier4WeaponBlacklist != null)
+                        {
+                            foreach (var item in Data.tier4WeaponBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier4WeaponBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 5</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier5WeaponBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier5WeaponBlacklistEntry, Data.tier5WeaponBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier5WeaponBlacklist != null)
+                        {
+                            foreach (var item in Data.tier5WeaponBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier5WeaponBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 6</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier6WeaponBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier6WeaponBlacklistEntry, Data.tier6WeaponBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier6WeaponBlacklist != null)
+                        {
+                            foreach (var item in Data.tier6WeaponBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier6WeaponBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3"/>
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 7</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier7WeaponBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier7WeaponBlacklistEntry, Data.tier7WeaponBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier7WeaponBlacklist != null)
+                        {
+                            foreach (var item in Data.tier7WeaponBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier7WeaponBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                </MudGrid>
+
+            </MudTabPanel>
+            <MudTabPanel Text="Equipment Blacklists">
+
+                <MudGrid>
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                            <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the weapon you want blacklisted, then click the arrow to add it to the blacklist. Remember to save!" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                            <MudText Align="Align.Center">Tier 1</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier1EquipmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier1EquipmentBlacklistEntry, Data.tier1EquipmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="5">
+                        @if (Data.tier1EquipmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier1EquipmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier1EquipmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 2</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier2EquipmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier2EquipmentBlacklistEntry, Data.tier2EquipmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier2EquipmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier2EquipmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier2EquipmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 3</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier3EquipmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier3EquipmentBlacklistEntry, Data.tier3EquipmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier3EquipmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier3EquipmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier3EquipmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 4</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier4EquipmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier4EquipmentBlacklistEntry, Data.tier4EquipmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier4EquipmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier4EquipmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier4EquipmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 5</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier5EquipmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier5EquipmentBlacklistEntry, Data.tier5EquipmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier5EquipmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier5EquipmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier5EquipmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 6</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier6EquipmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier6EquipmentBlacklistEntry, Data.tier6EquipmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier6EquipmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier6EquipmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier6EquipmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 7</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier7EquipmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier7EquipmentBlacklistEntry, Data.tier7EquipmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier7EquipmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier7EquipmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier7EquipmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+                </MudGrid>
+
+            </MudTabPanel>
+            <MudTabPanel Text="Ammo Blacklists">
+
+                <MudGrid>
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                            <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the weapon you want blacklisted, then click the arrow to add it to the blacklist. Remember to save!" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                            <MudText Align="Align.Center">Tier 1</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier1AmmoBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier1AmmoBlacklistEntry, Data.tier1AmmoBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="5">
+                        @if (Data.tier1AmmoBlacklist != null)
+                        {
+                            foreach (var item in Data.tier1AmmoBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier1AmmoBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 2</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier2AmmoBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier2AmmoBlacklistEntry, Data.tier2AmmoBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier2AmmoBlacklist != null)
+                        {
+                            foreach (var item in Data.tier2AmmoBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier2AmmoBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 3</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier3AmmoBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier3AmmoBlacklistEntry, Data.tier3AmmoBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier3AmmoBlacklist != null)
+                        {
+                            foreach (var item in Data.tier3AmmoBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier3AmmoBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 4</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier4AmmoBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier4AmmoBlacklistEntry, Data.tier4AmmoBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier4AmmoBlacklist != null)
+                        {
+                            foreach (var item in Data.tier4AmmoBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier4AmmoBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 5</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier5AmmoBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier5AmmoBlacklistEntry, Data.tier5AmmoBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier5AmmoBlacklist != null)
+                        {
+                            foreach (var item in Data.tier5AmmoBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier5AmmoBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 6</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier6AmmoBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier6AmmoBlacklistEntry, Data.tier6AmmoBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier6AmmoBlacklist != null)
+                        {
+                            foreach (var item in Data.tier6AmmoBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier6AmmoBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 7</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier7AmmoBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier7AmmoBlacklistEntry, Data.tier7AmmoBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier7AmmoBlacklist != null)
+                        {
+                            foreach (var item in Data.tier7AmmoBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier7AmmoBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+                </MudGrid>
+
+            </MudTabPanel>
+            <MudTabPanel Text="Attachment Blacklists">
+
+                <MudGrid>
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                            <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the weapon you want blacklisted, then click the arrow to add it to the blacklist. Remember to save!" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                            <MudText Align="Align.Center">Tier 1</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier1AttachmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier1AttachmentBlacklistEntry, Data.tier1AttachmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="5">
+                        @if (Data.tier1AttachmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier1AttachmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier1AttachmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 2</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier2AttachmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier2AttachmentBlacklistEntry, Data.tier2AttachmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier2AttachmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier2AttachmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier2AttachmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 3</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier3AttachmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier3AttachmentBlacklistEntry, Data.tier3AttachmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier3AttachmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier3AttachmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier3AttachmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 4</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier4AttachmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier4AttachmentBlacklistEntry, Data.tier4AttachmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier4AttachmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier4AttachmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier4AttachmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 5</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier5AttachmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier5AttachmentBlacklistEntry, Data.tier5AttachmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier5AttachmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier5AttachmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier5AttachmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 6</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier6AttachmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier6AttachmentBlacklistEntry, Data.tier6AttachmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier6AttachmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier6AttachmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier6AttachmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 7</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="tier7AttachmentBlacklistEntry"
+                                      HelperText="Enter valid MongoID"
+                                      Variant="Variant.Text"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => AddItemToList(tier7AttachmentBlacklistEntry, Data.tier7AttachmentBlacklist ?? []))" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @if (Data.tier7AttachmentBlacklist != null)
+                        {
+                            foreach (var item in Data.tier7AttachmentBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.tier7AttachmentBlacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        }
+                    </MudItem>
+                </MudGrid>
+
+            </MudTabPanel>
+        </MudTabs>
+    </MudContainer>
+</MudMainContent>
+
+@code
+{
+    private string tier1WeaponBlacklistEntry { get; set; } = "";
+    private string tier2WeaponBlacklistEntry { get; set; } = "";
+    private string tier3WeaponBlacklistEntry { get; set; } = "";
+    private string tier4WeaponBlacklistEntry { get; set; } = "";
+    private string tier5WeaponBlacklistEntry { get; set; } = "";
+    private string tier6WeaponBlacklistEntry { get; set; } = "";
+    private string tier7WeaponBlacklistEntry { get; set; } = "";
+
+    private string tier1EquipmentBlacklistEntry { get; set; } = "";
+    private string tier2EquipmentBlacklistEntry { get; set; } = "";
+    private string tier3EquipmentBlacklistEntry { get; set; } = "";
+    private string tier4EquipmentBlacklistEntry { get; set; } = "";
+    private string tier5EquipmentBlacklistEntry { get; set; } = "";
+    private string tier6EquipmentBlacklistEntry { get; set; } = "";
+    private string tier7EquipmentBlacklistEntry { get; set; } = "";
+
+    private string tier1AmmoBlacklistEntry { get; set; } = "";
+    private string tier2AmmoBlacklistEntry { get; set; } = "";
+    private string tier3AmmoBlacklistEntry { get; set; } = "";
+    private string tier4AmmoBlacklistEntry { get; set; } = "";
+    private string tier5AmmoBlacklistEntry { get; set; } = "";
+    private string tier6AmmoBlacklistEntry { get; set; } = "";
+    private string tier7AmmoBlacklistEntry { get; set; } = "";
+
+    private string tier1AttachmentBlacklistEntry { get; set; } = "";
+    private string tier2AttachmentBlacklistEntry { get; set; } = "";
+    private string tier3AttachmentBlacklistEntry { get; set; } = "";
+    private string tier4AttachmentBlacklistEntry { get; set; } = "";
+    private string tier5AttachmentBlacklistEntry { get; set; } = "";
+    private string tier6AttachmentBlacklistEntry { get; set; } = "";
+    private string tier7AttachmentBlacklistEntry { get; set; } = "";
+
+    private void AddItemToList(string value, List<string> list)
+    {
+        if (value != null)
+        {
+            bool containsAlready = list.FirstOrDefault(s => s.Contains(value)) == value ? true : false;
+            if (!containsAlready && Utils.IsHexAndValidLength(value))
+            {
+                list.Add(value);
+                MainLayout.EnableUnsavedChanges();
+            }
+            else if (containsAlready)
+            {
+                Snackbar.Add("Already blacklisted.", Severity.Error, config => { config.ShowCloseIcon = false; });
+            }
+            else
+            {
+                Snackbar.Add("Invalid MongoID.", Severity.Error, config => { config.ShowCloseIcon = false; });
+            }
+        }
+    }
+
+    private void OnChipClosed(string item, List<string> list)
+    {
+        if (item != null) list.Remove(item);
+    }
+    
+    [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+}
