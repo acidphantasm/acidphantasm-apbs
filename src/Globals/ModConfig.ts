@@ -19,7 +19,7 @@ export class ModConfig
         @inject("VFS") protected vfs: VFS
     )
     {
-        ModConfig.config = jsonc.parse(this.vfs.readFile(path.resolve(__dirname, "../../config/config.jsonc")));
+        ModConfig.config = jsonc.parse(this.vfs.readFile(path.resolve(__dirname, "../../config/config.json")));
     }
 
     public serverLogDetails(): void
@@ -60,11 +60,11 @@ export interface Config
     onlyChads: boolean,
     tarkovAndChill: boolean,
     blickyMode: boolean,
-    disableScavTierGeneration: boolean,
-    disablePMCTierGeneration: boolean,
-    disableBossTierGeneration: boolean,
-    disableBossFollowerTierGeneration: boolean,
-    disableSpecialTierGeneration: boolean,
+    enableScavTierGeneration: boolean,
+    enablePMCTierGeneration: boolean,
+    enableBossTierGeneration: boolean,
+    enableBossFollowerTierGeneration: boolean,
+    enableSpecialTierGeneration: boolean,
     enableBotsToRollAmmoAgain: boolean,
     chanceToRollAmmoAgain: number,
     gameVersionWeight: boolean, 

@@ -67,7 +67,7 @@ export class BotConfigs
 
     public initialize(): void
     {
-        if (!ModConfig.config.disablePMCTierGeneration)
+        if (ModConfig.config.enablePMCTierGeneration)
         {
             this.setPMCItemLimits();
             this.setPMCLoot();
@@ -75,7 +75,7 @@ export class BotConfigs
             this.setPMCSlotIDsToMakeRequired();
             if (ModConfig.config.gameVersionWeight) this.setPMCGameVersionWeights();
         }
-        if (!ModConfig.config.disableScavTierGeneration)
+        if (ModConfig.config.enableScavTierGeneration)
         {
             if (ModConfig.config.addAllKeysToScavs || ModConfig.config.addOnlyKeyCardsToScavs || ModConfig.config.addOnlyMechanicalKeysToScavs) this.pushScavKeys();
             if (!ModConfig.config.scavLoot) this.removeScavLoot();
