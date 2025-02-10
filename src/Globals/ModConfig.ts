@@ -87,6 +87,7 @@ export interface Config
     pmcLoot: boolean,
     pmcLootBlacklistItems: string[],
     scavLoot: boolean,
+    scavLootBlacklistItems: string[],
     enableScavAttachmentTiering: boolean,
     enableScavEqualEquipmentTiering: boolean,
     forceWeaponModLimits: boolean,

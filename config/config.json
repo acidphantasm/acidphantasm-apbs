@@ -67,6 +67,7 @@
                 "6711039f9e648049e50b3307"
         ],
         "scavLoot": true,
+        "scavLootBlacklistItems": [],
         "enableScavAttachmentTiering": false,
         "enableScavEqualEquipmentTiering": false,
         "addAllKeysToScavs": false,
