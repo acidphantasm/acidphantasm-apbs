@@ -109,6 +109,8 @@ export class RaidInformation
     {
         botType = botType.toLowerCase();
         
+        if (["usec", "bear", "pmc"].includes(botType)) botType = "pmcusec";
+
         if (this.botEnablementHelper.doesBotExist(botType) && !this.botEnablementHelper.botDisabled(botType))
         {
             return true;

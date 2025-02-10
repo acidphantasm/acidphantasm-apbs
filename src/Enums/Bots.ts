@@ -51,7 +51,8 @@ export enum PMCBots
     PMCUSEC = "pmcusec",
     PMCBEAR = "pmcbear",
     USEC = "usec",
-    BEAR = "bear"
+    BEAR = "bear",
+    PMC = "pmc"
 }
 
 export enum ScavBots
