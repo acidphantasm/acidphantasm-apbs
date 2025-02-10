@@ -33,11 +33,11 @@
         "enableBotsToRollAmmoAgain": true,
         "chanceToRollAmmoAgain": 50,
         "gameVersionWeight": false,
-        "standard": 2,
-        "left_behind": 1,
-        "prepare_for_escape": 1,
-        "edge_of_darkness": 4,
-        "unheard_edition": 2,
+        "standard": 20,
+        "left_behind": 10,
+        "prepare_for_escape": 10,
+        "edge_of_darkness": 40,
+        "unheard_edition": 20,
         "enablePMCAmmoTierSliding": false,
         "slideAmount": 1,
         "slideChance": 33,
@@ -193,21 +193,49 @@
                 75,
                 75
         ],
-        "enableConsumableResourceRandomization": true,
-        "scavFoodRates": [
-                10,
-                25
-        ],
-        "scavMedRates": [
-                10,
-                25
-        ],
+        "enablePMCResourceRandomization": true,
         "pmcFoodRates": [
                 10,
-                25
+                33
         ],
         "pmcMedRates": [
                 10,
+                33
+        ],
+        "enableScavResourceRandomization": true,
+        "scavFoodRates": [
+                10,
+                10
+        ],
+        "scavMedRates": [
+                10,
+                10
+        ],
+        "enableBossResourceRandomization": true,
+        "bossFoodRates": [
+                50,
+                50
+        ],
+        "bossMedRates": [
+                50,
+                50
+        ],
+        "enableGuardResourceRandomization": true,
+        "guardFoodRates": [
+                25,
+                25
+        ],
+        "guardMedRates": [
+                25,
+                25
+        ],
+        "enableSpecialResourceRandomization": true,
+        "specialFoodRates": [
+                15,
+                25
+        ],
+        "specialMedRates": [
+                15,
                 25
         ],
         "tier1AmmoBlacklist": [],

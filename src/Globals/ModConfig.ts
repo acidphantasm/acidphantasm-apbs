@@ -113,11 +113,21 @@ export interface Config
     addAllKeysToScavs: boolean,
     addOnlyMechanicalKeysToScavs: boolean,
     addOnlyKeyCardsToScavs: boolean,
-    enableConsumableResourceRandomization: boolean,
-    scavFoodRates: [ number, number ]
-    scavMedRates: [ number, number ]
-    pmcFoodRates: [ number, number ]
-    pmcMedRates: [ number, number ]
+    enablePMCResourceRandomization: boolean,
+    pmcFoodRates: [ number, number ],
+    pmcMedRates: [ number, number ],
+    enableScavResourceRandomization: boolean,
+    scavFoodRates: [ number, number ],
+    scavMedRates: [ number, number ],
+    enableBossResourceRandomization: boolean,
+    bossFoodRates: [ number, number ],
+    bossMedRates: [ number, number ],
+    enableGuardResourceRandomization: boolean,
+    guardFoodRates: [ number, number ],
+    guardMedRates: [ number, number ],
+    enableSpecialResourceRandomization: boolean,
+    specialFoodRates: [ number, number ],
+    specialMedRates: [ number, number ],
     tier1AmmoBlacklist: string[],
     tier2AmmoBlacklist: string[],
     tier3AmmoBlacklist: string[],
