@@ -10,8 +10,10 @@ APBSConfig.exe
 APBSConfig.pdb
 /Core
 /wwwroot
-/ConfigApp/obj
-/ConfigApp/bin
+ConfigApp/obj
+ConfigApp/bin
 ConfigApp/APBSConfig.csproj.user
 ConfigApp/.vs
 ConfigApp/Properties/PublishProfiles/FolderProfile.pubxml.user
+APBSConfig.pdb
+ConfigApp/Core/config.json
