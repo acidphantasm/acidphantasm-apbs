@@ -15,6 +15,7 @@ import { RaidInformation } from "../Globals/RaidInformation";
 import { ModConfig } from "../Globals/ModConfig";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
+import { BossBots, FollowerBots, PMCBots, ScavBots, SpecialBots } from "../Enums/Bots";
 
 
 @injectable()
@@ -67,42 +68,45 @@ export class BotConfigs
 
     public initialize(): void
     {
-        if (ModConfig.config.enablePMCTierGeneration)
-        {
-            this.setPMCItemLimits();
-            this.setPMCLoot();
-            this.setPMCScopeWhitelist();
-            this.setPMCSlotIDsToMakeRequired();
-            if (ModConfig.config.gameVersionWeight) this.setPMCGameVersionWeights();
-        }
-        if (ModConfig.config.enableScavTierGeneration)
-        {
-            if (ModConfig.config.addAllKeysToScavs || ModConfig.config.addOnlyKeyCardsToScavs || ModConfig.config.addOnlyMechanicalKeysToScavs) this.pushScavKeys();
-            if (!ModConfig.config.scavLoot) this.removeScavLoot();
-        }
+        // PMC Specific
+        this.setPMCItemLimits();
+        this.setPMCLoot();
+        this.setPMCScopeWhitelist();
+        this.setPMCSlotIDsToMakeRequired();
+        this.setPMCGameVersionWeights();
 
+        // Scav Specific
+        this.pushScavKeys();
+        this.setScavLoot();
+        this.setIdenticalScavWeights();
+        this.setScavLevelDeltas();
+
+        // All bots
+        this.setLevelDeltas();
         this.clearNoLongerNeededBotDetails();
         this.configureBotExperienceLevels();
         this.configurePlateWeightings();
         this.configureWeaponDurability();
         this.adjustNVG();
         this.setLootItemResourceRandomization();
+        this.setWeaponModLimits();
+
+        // All Bots - Bypasses bot enablement
+        this.normalizeHealthPools();
+
+        // Special Handling Needed
         this.removeThermalGoggles(ModConfig.config.enableT7Thermals);
-        
-        if (ModConfig.config.enableCustomPlateChances) this.setPlateChances();
-        if (ModConfig.config.forceStock) this.setForceStock();
-        if (ModConfig.config.forceDustCover) this.setForceDustCover();
-        if (ModConfig.config.forceScopeSlot) this.setForceScopes();
-        if (ModConfig.config.forceWeaponModLimits) this.setWeaponModLimits();
-        if (ModConfig.config.enableScavEqualEquipmentTiering) this.setIdenticalScavWeights();
-        if (ModConfig.config.enableCustomLevelDeltas) this.setLevelDeltas();
-        if (ModConfig.config.enableScavCustomLevelDeltas) this.setScavLevelDeltas();
-        if (ModConfig.config.forceMuzzle) this.setMuzzleChances();
-        if (ModConfig.config.normalizedHealthPoolValues) this.normalizeHealthPools();
+        this.setPlateChances();
+        this.setForceStock();
+        this.setForceDustCover();
+        this.setForceScopes();
+        this.setMuzzleChances();
     }
 
     private normalizeHealthPools(): void
     {
+        if (!ModConfig.config.normalizedHealthPoolValues) return;
+
         const botTable = this.tables.bots.types;
         for (const bot in botTable)
         {
@@ -151,6 +155,8 @@ export class BotConfigs
         const botConfigEquipment = this.botConfig.equipment
         for (const botType in botConfigEquipment)
         {
+            if (!this.raidInformation.isBotEnabled(botType)) continue;
+
             if (botType.includes("assault") || botType.includes("marksman"))
             {
                 botConfigEquipment[botType].filterPlatesByLevel = true;
@@ -167,6 +173,8 @@ export class BotConfigs
         const botConfigEquipment = this.botConfig.equipment
         for (const botType in botConfigEquipment)
         {
+            if (!this.raidInformation.isBotEnabled(botType)) continue;
+
             botConfigEquipment[botType].randomisation = [];
             botConfigEquipment[botType].weightingAdjustmentsByBotLevel = [];
         }
@@ -179,6 +187,8 @@ export class BotConfigs
 
         for (const botType in botConfigDurability)
         {
+            if (!this.raidInformation.isBotEnabled(botType)) continue;
+
             if (botType == "pmc")
             {
                 botConfigDurability[botType].weapon.lowestMax = ModConfig.config.pmcWeaponDurability[0]
@@ -228,6 +238,8 @@ export class BotConfigs
 
         for (const botType in botConfigEquipment)
         {
+            if (!this.raidInformation.isBotEnabled(botType)) continue;
+
             botConfigEquipment[botType].faceShieldIsActiveChancePercent = 90;
             botConfigEquipment[botType].lightIsActiveDayChancePercent = 7;
             botConfigEquipment[botType].lightIsActiveNightChancePercent = 25;
@@ -239,6 +251,8 @@ export class BotConfigs
 
     private setForceStock(): void
     {
+        if (!ModConfig.config.forceStock) return;
+
         for (const tierObject in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[tierObject].tier
@@ -261,6 +275,8 @@ export class BotConfigs
 
     private setForceDustCover(): void
     {
+        if (!ModConfig.config.forceDustCover) return;
+
         for (const tierObject in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[tierObject].tier
@@ -279,6 +295,8 @@ export class BotConfigs
 
     private setForceScopes(): void
     {
+        if (!ModConfig.config.forceScopeSlot) return;
+
         for (const tierObject in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[tierObject].tier
@@ -297,6 +315,8 @@ export class BotConfigs
 
     private setPlateChances() 
     {
+        if (!ModConfig.config.enableCustomPlateChances) return;
+
         for (const tierObject in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[tierObject].tier
@@ -335,9 +355,13 @@ export class BotConfigs
 
     private setWeaponModLimits(): void
     {
+        if (!ModConfig.config.forceWeaponModLimits) return;
+
         const botConfigEquipment = this.botConfig.equipment
         for (const botType in botConfigEquipment)
         {
+            if (!this.raidInformation.isBotEnabled(botType)) continue;
+
             if (botConfigEquipment[botType].weaponModLimits == undefined) 
             {
                 botConfigEquipment[botType].weaponModLimits = 
@@ -353,42 +377,81 @@ export class BotConfigs
 
     private setLootItemResourceRandomization(): void
     {
-        // Chance it is 100% full
-        let scavFoodMaxChance = 100;
-        let scavMedMaxChance = 100;
-        let pmcFoodMaxChance = 100;
-        let pmcMedMaxChance = 100;
+        const botTable = this.tables.bots.types
+        const botConfig = this.botConfig;
 
-        // Minimum resource amount
-        let scavFoodResourcePercent = 60;
-        let scavMedResourcePercent = 60;
-        let pmcFoodResourcePercent = 60;
-        let pmcMedResourcePercent = 60;
-
-        // Check if enabled, if so - change to values in config
-        if (ModConfig.config.enableConsumableResourceRandomization)
+        for (const botType in botTable)
         {
-            scavFoodMaxChance = ModConfig.config.scavFoodRates[0];
-            scavMedMaxChance = ModConfig.config.scavMedRates[0];
-            pmcFoodMaxChance = ModConfig.config.pmcFoodRates[0];
-            pmcMedMaxChance = ModConfig.config.pmcMedRates[0];
+            if (!this.raidInformation.isBotEnabled(botType)) continue;
+            
+            let setValues = false;
+            let foodMaxChance = 100;
+            let medMaxChance = 100;
+            let foodResourcePercent = 60;
+            let medResourcePercent = 60;
 
-            scavFoodResourcePercent = ModConfig.config.scavFoodRates[1];
-            scavMedResourcePercent = ModConfig.config.scavMedRates[1];
-            pmcFoodResourcePercent = ModConfig.config.pmcFoodRates[1];
-            pmcMedResourcePercent = ModConfig.config.pmcMedRates[1];
+            if (Object.values(PMCBots).includes(botType as PMCBots) && ModConfig.config.enablePMCResourceRandomization)
+            {
+                setValues = true;
+                foodMaxChance = ModConfig.config.pmcFoodRates[0];
+                foodResourcePercent = ModConfig.config.pmcFoodRates[1];
+                medMaxChance = ModConfig.config.pmcMedRates[0];
+                medResourcePercent = ModConfig.config.pmcMedRates[1];
+            }
+            if (Object.values(ScavBots).includes(botType as ScavBots) && ModConfig.config.enableScavResourceRandomization)
+            {
+                setValues = true;
+                foodMaxChance = ModConfig.config.scavFoodRates[0];
+                foodResourcePercent = ModConfig.config.scavFoodRates[1];
+                medMaxChance = ModConfig.config.scavMedRates[0];
+                medResourcePercent = ModConfig.config.scavMedRates[1];
+            }
+            if (Object.values(BossBots).includes(botType as BossBots) && ModConfig.config.enableBossResourceRandomization)
+            {
+                setValues = true;
+                foodMaxChance = ModConfig.config.bossFoodRates[0];
+                foodResourcePercent = ModConfig.config.bossFoodRates[1];
+                medMaxChance = ModConfig.config.bossMedRates[0];
+                medResourcePercent = ModConfig.config.bossMedRates[1];
+            }
+            if (Object.values(FollowerBots).includes(botType as FollowerBots) && ModConfig.config.enableGuardResourceRandomization)
+            {
+                setValues = true;
+                foodMaxChance = ModConfig.config.guardFoodRates[0];
+                foodResourcePercent = ModConfig.config.guardFoodRates[1];
+                medMaxChance = ModConfig.config.guardMedRates[0];
+                medResourcePercent = ModConfig.config.guardMedRates[1];
+            }
+            if (Object.values(SpecialBots).includes(botType as SpecialBots) && ModConfig.config.enableSpecialResourceRandomization)
+            {
+                setValues = true;
+                foodMaxChance = ModConfig.config.specialFoodRates[0];
+                foodResourcePercent = ModConfig.config.specialFoodRates[1];
+                medMaxChance = ModConfig.config.specialMedRates[0];
+                medResourcePercent = ModConfig.config.specialMedRates[1];
+            }
+            if (!setValues) continue;
+
+            botConfig.lootItemResourceRandomization[botType] = 
+            {
+                "food": 
+                { 
+                    "chanceMaxResourcePercent": foodMaxChance, 
+                    "resourcePercent": foodResourcePercent 
+                }, 
+                "meds": 
+                { 
+                    "chanceMaxResourcePercent": medMaxChance, 
+                    "resourcePercent": medResourcePercent 
+                } 
+            }
         }
-
-        // Set values in botConfig
-        this.botConfig.lootItemResourceRandomization.assault = {"food": { "chanceMaxResourcePercent": scavFoodMaxChance, "resourcePercent": scavFoodResourcePercent }, "meds": { "chanceMaxResourcePercent": scavMedMaxChance, "resourcePercent": scavMedResourcePercent } }
-        this.botConfig.lootItemResourceRandomization.marksman = {"food": { "chanceMaxResourcePercent": scavFoodMaxChance, "resourcePercent": scavFoodResourcePercent }, "meds": { "chanceMaxResourcePercent": scavMedMaxChance, "resourcePercent": scavMedResourcePercent } }
-        this.botConfig.lootItemResourceRandomization.pmcusec = {"food": { "chanceMaxResourcePercent": pmcFoodMaxChance, "resourcePercent": pmcFoodResourcePercent }, "meds": { "chanceMaxResourcePercent": pmcMedMaxChance, "resourcePercent": pmcMedResourcePercent } }
-        this.botConfig.lootItemResourceRandomization.pmcbear = {"food": { "chanceMaxResourcePercent": pmcFoodMaxChance, "resourcePercent": pmcFoodResourcePercent }, "meds": { "chanceMaxResourcePercent": pmcMedMaxChance, "resourcePercent": pmcMedResourcePercent } }
-        this.botConfig.lootItemResourceRandomization.pmc = {"food": { "chanceMaxResourcePercent": pmcFoodMaxChance, "resourcePercent": pmcFoodResourcePercent }, "meds": { "chanceMaxResourcePercent": pmcMedMaxChance, "resourcePercent": pmcMedResourcePercent } }
     }
 
     private setPMCItemLimits(): void
     {
+        if (!ModConfig.config.enablePMCTierGeneration) return;
+
         // Clear PMC item limits
         this.botConfig.itemSpawnLimits.pmc = {}
 
@@ -401,6 +464,8 @@ export class BotConfigs
 
     private setPMCLoot(): void
     {
+        if (!ModConfig.config.enablePMCTierGeneration) return;
+
         const allBots = this.database.getTables().bots.types;
 
         this.pmcConfig.looseWeaponInBackpackLootMinMax.min = 0;
@@ -438,6 +503,8 @@ export class BotConfigs
 
     private setPMCScopeWhitelist(): void
     {
+        if (!ModConfig.config.enablePMCTierGeneration) return;
+
         this.botConfig.equipment.pmc.weaponSightWhitelist = {
             "5447b5fc4bdc2d87278b4567": [
                 "55818ad54bdc2ddc698b4569",
@@ -506,6 +573,9 @@ export class BotConfigs
 
     private pushScavKeys(): void
     {
+        if (!ModConfig.config.enableScavTierGeneration) return;
+        if (!ModConfig.config.addAllKeysToScavs && !ModConfig.config.addOnlyMechanicalKeysToScavs && !ModConfig.config.addOnlyKeyCardsToScavs) return;
+
         const scavBackpack = this.tables.bots.types.assault.inventory.items.Backpack
         const items = Object.values(this.tables.templates.items);
         const baseClass = this.getKeyConfig();
@@ -530,13 +600,63 @@ export class BotConfigs
         if (ModConfig.config.addOnlyKeyCardsToScavs) return BaseClasses.KEYCARD
     }
 
-    private removeScavLoot(): void
+    private setScavLoot(): void
     {
-        this.botConfig.disableLootOnBotTypes.push("assault", "marksman", "cursedassault", "assaultgroup", "crazyassaultevent");
+        if (!ModConfig.config.enableScavTierGeneration) return;
+        if (!ModConfig.config.scavLoot)
+        {
+            this.botConfig.disableLootOnBotTypes.push("assault", "marksman", "cursedassault", "assaultgroup", "crazyassaultevent");
+            return;
+        }
+
+        const botTable = this.database.getTables().bots.types;
+
+        if (ModConfig.config.scavLootBlacklistItems.length > 0)
+        {
+            for (const botType in botTable)
+            {
+                if (Object.values(ScavBots).includes(botType as ScavBots))
+                {
+                    for (const item of ModConfig.config.scavLootBlacklistItems)
+                    {
+                        if (Object.keys(botTable[botType].inventory.items.TacticalVest).includes(item))
+                        {
+                            const tacticalVestLootTable = Object.keys(botTable[botType].inventory.items.TacticalVest);
+                            const index = tacticalVestLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                tacticalVestLootTable.splice(index, 1)
+                            }
+                        }
+                        if (Object.keys(botTable[botType].inventory.items.Pockets).includes(item))
+                        {
+                            const pocketsLootTable = Object.keys(botTable[botType].inventory.items.Pockets);
+                            const index = pocketsLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                pocketsLootTable.splice(index, 1)
+                            }
+                        }
+                        if (Object.keys(botTable[botType].inventory.items.Backpack).includes(item))
+                        {
+                            const backpackLootTable = Object.keys(botTable[botType].inventory.items.Backpack);
+                            const index = backpackLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                backpackLootTable.splice(index, 1)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private setIdenticalScavWeights(): void
     {
+        if (!ModConfig.config.enableScavEqualEquipmentTiering) return;
+        if (!ModConfig.config.enableScavTierGeneration) return;
+        
         for (const tierObject in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[tierObject].tier
@@ -583,6 +703,8 @@ export class BotConfigs
 
     private setPMCGameVersionWeights(): void
     {
+        if (!ModConfig.config.enablePMCTierGeneration || !ModConfig.config.gameVersionWeight) return;
+
         this.pmcConfig.gameVersionWeight.standard = ModConfig.config.standard;
         this.pmcConfig.gameVersionWeight.left_behind = ModConfig.config.left_behind;
         this.pmcConfig.gameVersionWeight.prepare_for_escape = ModConfig.config.prepare_for_escape;
@@ -592,6 +714,8 @@ export class BotConfigs
 
     private setLevelDeltas(): void
     {
+        if (!ModConfig.config.enableCustomLevelDeltas) return;
+
         this.tierInformation.tiers[0].botMinLevelVariance = ModConfig.config.tier1LevelDelta[0]
         this.tierInformation.tiers[0].botMaxLevelVariance = ModConfig.config.tier1LevelDelta[1]
 
@@ -616,6 +740,8 @@ export class BotConfigs
 
     private setScavLevelDeltas(): void
     {
+        if (!ModConfig.config.enableScavCustomLevelDeltas) return;
+
         this.tierInformation.tiers[0].scavMinLevelVariance = ModConfig.config.tier1ScavLevelDelta[0]
         this.tierInformation.tiers[0].scavMaxLevelVariance = ModConfig.config.tier1ScavLevelDelta[1]
 
@@ -640,30 +766,32 @@ export class BotConfigs
 
     private setPMCSlotIDsToMakeRequired(): void
     {
+        if (!ModConfig.config.enablePMCTierGeneration) return;
+
         this.botConfig.equipment.pmc.weaponSlotIdsToMakeRequired = [ "mod_reciever", "mod_stock" ]
     }    
 
     private setMuzzleChances(): void
     {
+        if (!ModConfig.config.forceMuzzle) return;
+
         for (const tierObject in this.tierInformation.tiers)
         {
             const tierNumber = this.tierInformation.tiers[tierObject].tier
             const tierJson = this.apbsEquipmentGetter.getTierChancesJson(tierNumber);
-            const usec = tierJson.pmcUSEC.chances
-            const bear = tierJson.pmcBEAR.chances
-            for (const type in usec)
+
+            for (const botType in tierJson)
             {
-                if (type == "equipment" || type == "equipmentMods" || type == "generation") continue;
+                const botChanceJson = tierJson[botType].chances;
+                for (const chanceType in botChanceJson)
+                {
+                    if (chanceType == "equipment" || chanceType == "equipmentMods" || chanceType == "generation") continue;
 
-                const arrayPosition = tierNumber - 1;
-
-                usec[type].mod_muzzle = ModConfig.config.muzzleChance[arrayPosition]
-                usec[type].mod_muzzle_000 = ModConfig.config.muzzleChance[arrayPosition]
-                usec[type].mod_muzzle_000 = ModConfig.config.muzzleChance[arrayPosition]
-
-                bear[type].mod_muzzle = ModConfig.config.muzzleChance[arrayPosition]
-                bear[type].mod_muzzle_000 = ModConfig.config.muzzleChance[arrayPosition]
-                bear[type].mod_muzzle_000 = ModConfig.config.muzzleChance[arrayPosition]
+                    const arrayPosition = tierNumber - 1;
+                    tierJson[botType].chances[chanceType].mod_muzzle = ModConfig.config.muzzleChance[arrayPosition];
+                    tierJson[botType].chances[chanceType].mod_muzzle_000 = ModConfig.config.muzzleChance[arrayPosition];
+                    tierJson[botType].chances[chanceType].mod_muzzle_001 = ModConfig.config.muzzleChance[arrayPosition];
+                }
             }
         }
     }
