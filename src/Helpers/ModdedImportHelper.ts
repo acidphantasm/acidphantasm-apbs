@@ -320,9 +320,6 @@ export class ModdedImportHelper
             const tierNumber = this.tierInformation.tiers[object].tier
             const tierJson = this.apbsEquipmentGetter.getAppearanceJson(tierNumber, true);
 
-            // Skip tiers based on configuration
-            if (tierNumber < ModConfig.config.initalTierAppearance) continue;
-
             // Add each item from the clothing list to each tier JSON - this completes the import
             for (const item in clothingList)
             {
@@ -875,7 +872,7 @@ export class ModdedImportHelper
                         // Slot is missing from weapon, add it
                         if (this.tierInformation.tier1mods[weaponID][slotName] == undefined)
                         {
-                            this.apbsLogger.log(Logging.WARN, `New Slot Found! Weapon: ${weaponID} | Slot: ${slotName} | Item: ${slotFilterItem} - REPORT THIS TO ACIDPHANTASM PLEASE`)
+                            this.apbsLogger.log(Logging.DEBUG, `New Slot Found! Weapon: ${weaponID} | Slot: ${slotName} | Item: ${slotFilterItem}`)
                             this.tierInformation.tier1mods[weaponID][slotName] = [];
                             this.tierInformation.tier2mods[weaponID][slotName] = [];
                             this.tierInformation.tier3mods[weaponID][slotName] = [];
