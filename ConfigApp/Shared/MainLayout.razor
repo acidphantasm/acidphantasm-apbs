@@ -1,11 +1,13 @@
 ﻿@inherits LayoutComponentBase
 @inject ISnackbar Snackbar
+@inject IDialogService DialogService
 @inject NavigationManager _navigationManager
 @using APBSConfig.Core;
 
 <MudThemeProvider IsDarkMode="true"/>
 <MudPopoverProvider/>
-<MudSnackbarProvider/>
+<MudSnackbarProvider />
+<MudDialogProvider />
 
 <MudLayout>
     <MudAppBar Dense Elevation="1">
@@ -35,6 +37,19 @@
     bool _drawerOpen = false;
     static bool _unsavedChanges = false;
 
+    private static MainLayout? _app;
+
+    public MainLayout()
+    {
+        _app = this;
+    }
+
+    public static void EnableUnsavedChangesButton()
+    {
+        _unsavedChanges = true;
+        _app?.StateHasChanged();
+    }
+
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
@@ -45,6 +60,7 @@
         if (DataLoader.SaveJson())
         {
             Snackbar.Add("Config saved!", Severity.Success, config => { config.ShowCloseIcon = false; });
+            _unsavedChanges = false;
             StateHasChanged();
         }
         else
@@ -52,23 +68,55 @@
             Snackbar.Add("Config failed to save!", Severity.Error, config => { config.ShowCloseIcon = false; });
         }
     }
+    private async Task RefreshData()
+    {
+        if (!_unsavedChanges)
+        {
+            if (DataLoader.LoadJson())
+            {
+                Snackbar.Add("Config reloaded!", Severity.Info, config => { config.ShowCloseIcon = false; });
+                _unsavedChanges = false;
+                StateHasChanged();
+                return;
+            }
+            else
+            {
+                Snackbar.Add("Config failed to reload!", Severity.Error, config => { config.ShowCloseIcon = false; });
+            }
+        }
+        else
+        {
+            var parameters = new DialogParameters<RefreshWarningDialog>
+            {
+                { x => x.ContentText, "You have unsaved changes, are you sure that you want to reload the config?" },
+                { x => x.ButtonText, "Reload" },
+                { x => x.Color, Color.Error }
+            };
 
-    void RefreshData()
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+            var dialog = await DialogService.ShowAsync<RefreshWarningDialog>("Unsaved Changes!", parameters, options);
+            var result = await dialog.Result;
+
+            if (result != null)
+            {
+                if (!result.Canceled) TriggerRefresh();
+            }            
+        }
+    }
+
+    void TriggerRefresh()
     {
         if (DataLoader.LoadJson())
         {
-            Snackbar.Add("Config reloaded!", Severity.Info, config => { config.ShowCloseIcon = false; });
+            Snackbar.Add("Changes discarded!", Severity.Warning, config => { config.ShowCloseIcon = false; });
+            _unsavedChanges = false;
             StateHasChanged();
         }
         else
         {
             Snackbar.Add("Config failed to reload!", Severity.Error, config => { config.ShowCloseIcon = false; });
         }
-    }
-
-    public static void EnableUnsavedChanges()
-    {
-        _unsavedChanges = !_unsavedChanges;
     }
 
     protected override void OnInitialized()

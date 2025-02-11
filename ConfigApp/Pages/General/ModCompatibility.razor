@@ -18,7 +18,7 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="Data.enableModdedWeapons" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableModdedWeapons</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_enableModdedWeapons" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableModdedWeapons</MudSwitch>
                         </MudPaper>                        
                     </MudItem>
                     <MudItem xs="1">
@@ -34,13 +34,13 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">@Data.pmcWeaponWeights</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">@_pmcWeaponWeights</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="Data.pmcWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enableModdedWeapons" />
+                        <MudSlider @bind-Value="_pmcWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!_enableModdedWeapons" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetPMCWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">Reset</MudButton>
+                        <MudButton @onclick="resetPMCWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">Reset</MudButton>
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -52,13 +52,13 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">@Data.scavWeaponWeights</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">@_scavWeaponWeights</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="Data.scavWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enableModdedWeapons" />
+                        <MudSlider @bind-Value="_scavWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!_enableModdedWeapons" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetScavWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">Reset</MudButton>
+                        <MudButton @onclick="resetScavWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">Reset</MudButton>
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -70,26 +70,26 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">@Data.followerWeaponWeights</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">@_followerWeaponWeights</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="Data.followerWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enableModdedWeapons"/>
+                        <MudSlider @bind-Value="_followerWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!_enableModdedWeapons"/>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetFollowerWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons">Reset</MudButton>
+                        <MudButton @onclick="resetFollowerWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">Reset</MudButton>
                     </MudItem>
 
                     <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="Allows bots to use custom modded weapons. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudTooltip Text="Allows bots to use custom modded equipment. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
                                 <MudText>Enable Modded Equipment</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="Data.enableModdedEquipment" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableModdedEquipment</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_enableModdedEquipment" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableModdedEquipment</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
@@ -105,31 +105,31 @@
                     </MudItem>
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="Allows bots to use custom modded weapons. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudTooltip Text="Allows bots to use custom modded clothing. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
                                 <MudText>Enable Modded Clothing</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="Data.enableModdedClothing" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End" Disabled="Data.seasonalPmcAppearance">@Data.enableModdedClothing</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_enableModdedClothing" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End" Disabled="_enableSeasonalPmcAppearance">@_enableModdedClothing</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetModClothing" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="Data.seasonalPmcAppearance">Reset</MudButton>
+                        <MudButton @onclick="resetModClothing" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="_enableSeasonalPmcAppearance">Reset</MudButton>
                     </MudItem>
 
                     <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="Allows bots to use custom modded weapons. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudTooltip Text="Allows bots to use custom modded attachments. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
                                 <MudText>Enable Modded Attachments</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="Data.enableAddingModdedAttachmentsToVanillaWeapons" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableAddingModdedAttachmentsToVanillaWeapons</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_enableModdedAttachments" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableModdedAttachments</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
@@ -145,13 +145,13 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons && !Data.enableModdedEquipment">@Data.initalTierAppearance</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons && !_enableModdedEquipment">@_initialTierAppearance</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="Data.initalTierAppearance" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!Data.enableModdedWeapons && !Data.enableModdedEquipment" />
+                        <MudSlider @bind-Value="_initialTierAppearance" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!_enableModdedWeapons && !_enableModdedEquipment" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetTierAppearance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!Data.enableModdedWeapons && !Data.enableModdedEquipment">Reset</MudButton>
+                        <MudButton @onclick="resetTierAppearance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons && !_enableModdedEquipment">Reset</MudButton>
                     </MudItem>
 
                 </MudGrid>
@@ -169,7 +169,7 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="Data.enableSafeGuard" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableSafeGuard</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_enableSafeGuard" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableSafeGuard</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
@@ -186,7 +186,7 @@
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
                             <MudText>
-                                <MudTooltip Text="Makes belts on PMCs unlootable, you can still view contents but not loot the belt." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudTooltip Text="Makes belts on PMCs in ArmBand slot unlootable, you can still view contents." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
                                     Enable Unlootable Belts on PMCs
                                 </MudTooltip>
                             </MudText>
@@ -194,7 +194,7 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="Data.PackNStrap_UnlootablePMCArmbandBelts" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.PackNStrap_UnlootablePMCArmbandBelts</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_packNStrap" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_packNStrap</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
@@ -219,11 +219,41 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="Data.Realism_AddGasMasksToBots" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.Realism_AddGasMasksToBots</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_realism" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_realism</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
                         <MudButton @onclick="resetRealism" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Debug" Expanded=false>
+                <MudGrid>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Enables debug logs in \user\mods\acidphantasm-progressivebotsystem\logs\debug.log" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
+                            <MudText>
+                                <MudTooltip Text="Do you really need this? Maybe...you're an early release tester?" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    Enable Debug Logging
+                                </MudTooltip>
+                            </MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="_debugLogging" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_debugLogging</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetDebug" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
                     </MudItem>
 
                 </MudGrid>
@@ -233,19 +263,143 @@
 </MudMainContent>
 
 @code {
-    private void resetModWeapons() => Data.enableModdedWeapons = false;
-    private void resetModEquipment() => Data.enableModdedEquipment = false;
-    private void resetModClothing() => Data.enableModdedClothing = false;
-    private void resetModAttachments() => Data.enableAddingModdedAttachmentsToVanillaWeapons = false;
+    #region ENABLE/DISABLE TYPES
+    private bool _enableModdedWeapons
+    {
+        get => Data.compatibilityConfig.enableModdedWeapons;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.compatibilityConfig.enableModdedWeapons);
+            Data.compatibilityConfig.enableModdedWeapons = value;
+        }
+    }
+    private void resetModWeapons() => Data.compatibilityConfig.enableModdedWeapons = false;
+    private bool _enableModdedEquipment
+    {
+        get => Data.compatibilityConfig.enableModdedEquipment;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.compatibilityConfig.enableModdedEquipment);
+            Data.compatibilityConfig.enableModdedEquipment = value;
+        }
+    }
+    private void resetModEquipment() => Data.compatibilityConfig.enableModdedEquipment = false;
+    private bool _enableModdedClothing
+    {
+        get => Data.compatibilityConfig.enableModdedClothing;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.compatibilityConfig.enableModdedClothing);
+            Data.compatibilityConfig.enableModdedClothing = value;
+        }
+    }
+    private void resetModClothing() => Data.compatibilityConfig.enableModdedClothing = false;
+    private bool _enableModdedAttachments
+    {
+        get => Data.compatibilityConfig.enableModdedAttachments;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.compatibilityConfig.enableModdedAttachments);
+            Data.compatibilityConfig.enableModdedAttachments = value;
+        }
+    }
+    private void resetModAttachments() => Data.compatibilityConfig.enableModdedAttachments = false;
+    #endregion
+    #region WEIGHTS / APPEARANCE
+    private int _pmcWeaponWeights
+    {
+        get => Data.compatibilityConfig.pmcWeaponWeights;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.compatibilityConfig.pmcWeaponWeights);
+            Data.compatibilityConfig.pmcWeaponWeights = value;
+        }
+    }
+    private void resetPMCWeight() => Data.compatibilityConfig.pmcWeaponWeights = 8;
+    private int _scavWeaponWeights
+    {
+        get => Data.compatibilityConfig.scavWeaponWeights;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.compatibilityConfig.scavWeaponWeights);
+            Data.compatibilityConfig.scavWeaponWeights = value;
+        }
+    }
+    private void resetScavWeight() => Data.compatibilityConfig.scavWeaponWeights = 1;
+    private int _followerWeaponWeights
+    {
+        get => Data.compatibilityConfig.followerWeaponWeights;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.compatibilityConfig.followerWeaponWeights);
+            Data.compatibilityConfig.followerWeaponWeights = value;
+        }
+    }
+    private void resetFollowerWeight() => Data.compatibilityConfig.followerWeaponWeights = 6;
+    private int _initialTierAppearance
+    {
+        get => Data.compatibilityConfig.initalTierAppearance;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.compatibilityConfig.initalTierAppearance);
+            Data.compatibilityConfig.initalTierAppearance = value;
+        }
+    }
+    private void resetTierAppearance() => Data.compatibilityConfig.initalTierAppearance = 3;
+    #endregion
+    #region OPTIONS
+    private bool _enableSafeGuard
+    {
+        get => Data.compatibilityConfig.enableSafeGuard;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.compatibilityConfig.enableSafeGuard);
+            Data.compatibilityConfig.enableSafeGuard = value;
+        }
+    }
+    private void resetSafeguard() => Data.compatibilityConfig.enableSafeGuard = true;
+    private bool _packNStrap
+    {
+        get => Data.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts);
+            Data.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts = value;
+        }
+    }
+    private void resetPackNStrap() => Data.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts = true;
+    private bool _realism
+    {
+        get => Data.compatibilityConfig.Realism_AddGasMasksToBots;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.compatibilityConfig.Realism_AddGasMasksToBots);
+            Data.compatibilityConfig.Realism_AddGasMasksToBots = value;
+        }
+    }
+    private void resetRealism() => Data.compatibilityConfig.Realism_AddGasMasksToBots = false;
+    #endregion
+    #region DEBUG
+    private bool _debugLogging
+    {
+        get => Data.enableDebugLog;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.enableDebugLog);
+            Data.enableDebugLog = value;
+        }
+    }
+    private void resetDebug() => Data.enableDebugLog = false;
+    #endregion
 
-    private void resetPMCWeight() => Data.pmcWeaponWeights = 8;
-    private void resetScavWeight() => Data.scavWeaponWeights = 1;
-    private void resetFollowerWeight() => Data.followerWeaponWeights = 6;
+    #region GETTER FOR DELEGATES NOT HERE
+    private bool _enableSeasonalPmcAppearance
+    {
+        get => Data.pmcBots.additionalOptions.seasonalPmcAppearance;
+    }
+    #endregion
 
-    private void resetSafeguard() => Data.enableSafeGuard = true;
-    private void resetTierAppearance() => Data.initalTierAppearance = 3;
-    private void resetPackNStrap() => Data.PackNStrap_UnlootablePMCArmbandBelts = true;
-    private void resetRealism() => Data.Realism_AddGasMasksToBots = false;
-
+    #region CASCADING PARAMETERS
     [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+    #endregion
 }

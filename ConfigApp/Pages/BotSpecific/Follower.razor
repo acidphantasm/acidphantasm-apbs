@@ -1,0 +1,404 @@
+﻿@page "/follower"
+@inherits LayoutComponentBase
+@inject ISnackbar Snackbar
+@using static Core.DataLoader;
+
+<style>
+    .mud-divider {
+        border-width: 2.5px;
+    }
+</style>
+
+<MudMainContent>
+    <MudContainer>
+        <MudExpansionPanels MultiExpansion="true">
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Follower Specific Configuration" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <ChildContent>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.body2">All settings on this page, and any other setting that may impact these bots are controlled by this toggle.</MudText>
+                                    <MudText Typo="Typo.body2">EXCEPTION: Normalize Health is always applied if enabled but not excluded.</MudText>
+                                </TooltipContent>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Grants APBS control over Boss Followers (excluding Big Pipe & Bird Eye). You will have vanilla versions of these bots if disabled." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Enable Follower Bot Generation</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="_enableFollowerBots" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableFollowerBots</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton @onclick="resetFollowerBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+            @if (_enableFollowerBots)
+            {
+                <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Follower Specific Options" Expanded=true>
+                    <MudGrid>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Follower Bots to spawn with additional loot." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Enable Loot</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="@_enableLoot" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableLoot</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetLoot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="1">
+                            <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                                <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the weapon you want blacklisted, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="4" Class="align-center">
+                            <MudTextField T="string" @bind-Value="@_lootBlacklistEntryHolder"
+                                          Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                          Placeholder="ItemID"
+                                          Variant="Variant.Text"
+                                          OnKeyDown="@((e) => HandleKeyDown(e, _lootBlacklistEntryHolder, Data.followerBots.lootConfig.blacklist))"
+                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                          Immediate="true"
+                                          Adornment="Adornment.End"
+                                          AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                          OnAdornmentClick="@(() => AddItemToList(_lootBlacklistEntryHolder, Data.followerBots.lootConfig.blacklist))" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            @foreach (var item in Data.followerBots.lootConfig.blacklist)
+                            {
+                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.followerBots.lootConfig.blacklist))" Color="Color.Default">@item</MudChip>
+                            }
+                        </MudItem>
+
+                        <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows random resource consumption on Food/Drink/Medical Items." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Enable Resource Randomization</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_enableFollowerResourceRandomization" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableFollowerResourceRandomization</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetResourceRandomization" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudTooltip Text="Medical & Food full chances and minimum usage percent." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Medical & Food Values</MudText>
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                                <MudTooltip Text="Chance for medical items to be full resource usage." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerMedRateMaxChance" Label="Full Chance" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enableFollowerResourceRandomization" />
+                                </MudTooltip>
+                                <MudTooltip Text="Lowest percent possible for a medical item's usage to be." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerMedRateUsagePercent" Label="Minimum %" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enableFollowerResourceRandomization" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                                <MudTooltip Text="Chance for food/drink items to be full resource usage." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerFoodRateMaxChance" Label="Full Chance" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enableFollowerResourceRandomization" />
+                                </MudTooltip>
+                                <MudTooltip Text="Lowest percent possible for a food/drink item's usage to be." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerFoodRateUsagePercent" Label="Minimum %" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enableFollowerResourceRandomization" />
+                                </MudTooltip>
+                                <MudSpacer />
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudTooltip Text="Adjust Boss Follower Weapon Durability." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Weapon Durability</MudText>
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                                <MudTooltip Text="Lowest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerWeaponDurabilityMin" Label="Min" HelperText="Durability" Variant="Variant.Filled"
+                                                     Min="0"
+                                                     Max="_followerWeaponDurabilityMax" />
+                                </MudTooltip>
+                                <MudTooltip Text="Highest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerWeaponDurabilityMax" Label="Max" HelperText="Durability" Variant="Variant.Filled"
+                                                     Min="_followerWeaponDurabilityMin"
+                                                     Max="100" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                                <MudTooltip Text="Lowest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerWeaponDurabilityMinDelta" Label="Min" HelperText="Delta" Variant="Variant.Filled"
+                                                     Min="0"
+                                                     Max="100"
+                                                     Validation="@(new Func<int, bool>(ValidateDelta))" />
+                                </MudTooltip>
+                                <MudTooltip Text="Highest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerWeaponDurabilityMaxDelta" Label="Max" HelperText="Delta" Variant="Variant.Filled"
+                                                     Min="0"
+                                                     Max="100"
+                                                     Validation="@(new Func<int, bool>(ValidateDelta))" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                                <MudTooltip Text="Lowest Possible Current Durability Roll." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Disabled Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerWeaponDurabilityMinLimitPercent" Label="Min" HelperText="Actual" Variant="Variant.Filled"
+                                                     Min="0"
+                                                     Max="100" />
+                                </MudTooltip>
+                                <MudTooltip Text="Highest Possible Current Durability Roll." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Disabled Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerWeaponDurabilityMaxLimitPercent" Label="Max" HelperText="Actual" Variant="Variant.Filled"
+                                                     Min="0"
+                                                     Max="100" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton @onclick="resetWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        </MudItem>
+
+                    </MudGrid>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+    </MudContainer>
+</MudMainContent>
+
+@code {
+
+    #region ENABLE / DISABLE
+    private bool _enableFollowerBots
+    {
+        get => Data.followerBots.enable;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.followerBots.enable);
+            Data.followerBots.enable = value;
+        }
+    }
+    private void resetFollowerBots() => Data.followerBots.enable = true;
+    #endregion
+    #region DURABILITY
+    private int _followerWeaponDurabilityMin
+    {
+        get => Data.followerBots.weaponDurability.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.followerBots.weaponDurability.min);
+            Data.followerBots.weaponDurability.minLimitPercent = value - Data.followerBots.weaponDurability.maxDelta;
+            Data.followerBots.weaponDurability.min = value;
+        }
+    }
+    private int _followerWeaponDurabilityMax
+    {
+        get => Data.followerBots.weaponDurability.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.followerBots.weaponDurability.max);
+            Data.followerBots.weaponDurability.max = value;
+        }
+    }
+    private int _followerWeaponDurabilityMinDelta
+    {
+        get => Data.followerBots.weaponDurability.minDelta;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.followerBots.weaponDurability.minDelta);
+            Data.followerBots.weaponDurability.minDelta = value;
+        }
+    }
+    private int _followerWeaponDurabilityMaxDelta
+    {
+        get => Data.followerBots.weaponDurability.maxDelta;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.followerBots.weaponDurability.maxDelta);
+            Data.followerBots.weaponDurability.minLimitPercent = Data.followerBots.weaponDurability.min - value;
+            Data.followerBots.weaponDurability.maxDelta = value;
+        }
+    }
+    private int _followerWeaponDurabilityMinLimitPercent
+    {
+        get => Data.followerBots.weaponDurability.minLimitPercent;
+        set { }
+    }
+    private int _followerWeaponDurabilityMaxLimitPercent
+    {
+        get => Data.followerBots.weaponDurability.max - Data.followerBots.weaponDurability.minDelta;
+        set { }
+    }
+
+    private void resetWeaponDurability()
+    {
+        Data.followerBots.weaponDurability.min = 90;
+        Data.followerBots.weaponDurability.max = 100;
+        Data.followerBots.weaponDurability.minDelta = 0;
+        Data.followerBots.weaponDurability.maxDelta = 15;
+        Data.followerBots.weaponDurability.minLimitPercent = Data.followerBots.weaponDurability.min - Data.followerBots.weaponDurability.maxDelta;
+    }
+    #endregion
+    #region RESOURCE RANDOMIZATION
+    private bool _enableFollowerResourceRandomization
+    {
+        get => Data.followerBots.resourceRandomization.enable;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.followerBots.resourceRandomization.enable);
+            Data.followerBots.resourceRandomization.enable = value;
+        }
+    }
+    private int _followerFoodRateMaxChance
+    {
+        get => Data.followerBots.resourceRandomization.foodRateMaxChance;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.followerBots.resourceRandomization.foodRateMaxChance);
+            Data.followerBots.resourceRandomization.foodRateMaxChance = value;
+        }
+    }
+    private int _followerFoodRateUsagePercent
+    {
+        get => Data.followerBots.resourceRandomization.foodRateUsagePercent;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.followerBots.resourceRandomization.foodRateUsagePercent);
+            Data.followerBots.resourceRandomization.foodRateUsagePercent = value;
+        }
+    }
+    private int _followerMedRateMaxChance
+    {
+        get => Data.followerBots.resourceRandomization.medRateMaxChance;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.followerBots.resourceRandomization.medRateMaxChance);
+            Data.followerBots.resourceRandomization.medRateMaxChance = value;
+        }
+    }
+    private int _followerMedRateUsagePercent
+    {
+        get => Data.followerBots.resourceRandomization.medRateUsagePercent;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.followerBots.resourceRandomization.medRateUsagePercent);
+            Data.followerBots.resourceRandomization.medRateUsagePercent = value;
+        }
+    }
+    private void resetResourceRandomization()
+    {
+        Data.followerBots.resourceRandomization.enable = true;
+        Data.followerBots.resourceRandomization.foodRateMaxChance = 25;
+        Data.followerBots.resourceRandomization.foodRateUsagePercent = 25;
+        Data.followerBots.resourceRandomization.medRateMaxChance = 25;
+        Data.followerBots.resourceRandomization.medRateUsagePercent = 25;
+    }
+    #endregion
+    #region LOOT
+    private bool _enableLoot
+    {
+        get => Data.followerBots.lootConfig.enable;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.followerBots.lootConfig.enable);
+            Data.followerBots.lootConfig.enable = value;
+        }
+    }
+    private string _lootBlacklistEntryHolder { get; set; } = "";
+
+    private void resetLoot()
+    {
+        Data.followerBots.lootConfig.enable = true;
+        Data.followerBots.lootConfig.blacklist = [];
+    }
+    #endregion
+
+    #region INPUT HANDLING
+    private void HandleKeyDown(KeyboardEventArgs e, string value, List<string> list)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey)
+        {
+            AddItemToList(value, list);
+        }
+    }
+
+    private void AddItemToList(string value, List<string> list)
+    {
+        if (value != null)
+        {
+            bool containsAlready = list.FirstOrDefault(s => s.Contains(value)) == value ? true : false;
+            if (!containsAlready && Utils.IsHexAndValidLength(value))
+            {
+                list.Add(value);
+                MainLayout.EnableUnsavedChangesButton();
+            }
+            else if (containsAlready)
+            {
+                Snackbar.Add("Already blacklisted.", Severity.Error, config => { config.ShowCloseIcon = false; });
+            }
+            else
+            {
+                Snackbar.Add("Invalid MongoID.", Severity.Error, config => { config.ShowCloseIcon = false; });
+            }
+        }
+    }
+
+    private void OnChipClosed(string item, List<string> list)
+    {
+        if (item != null)
+        {
+            list.Remove(item);
+            MainLayout.EnableUnsavedChangesButton();
+        }
+    }
+
+    public bool ValidateDelta(int value)
+    {
+        if (_followerWeaponDurabilityMinLimitPercent < _followerWeaponDurabilityMaxLimitPercent)
+        {
+            return true;
+        }
+        return false;
+    }
+    #endregion
+    #region CASCADING PARAMETERS
+    [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+    #endregion
+}

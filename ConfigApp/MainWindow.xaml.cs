@@ -30,9 +30,9 @@ namespace APBSConfig
             {
                 config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopRight;
                 config.SnackbarConfiguration.PreventDuplicates = false;
-                config.SnackbarConfiguration.VisibleStateDuration = 1250;
-                config.SnackbarConfiguration.ShowTransitionDuration = 200;
-                config.SnackbarConfiguration.HideTransitionDuration = 200;
+                config.SnackbarConfiguration.VisibleStateDuration = 2000;
+                config.SnackbarConfiguration.ShowTransitionDuration = 100;
+                config.SnackbarConfiguration.HideTransitionDuration = 100;
             });
 
             Resources.Add("services", serviceCollection.BuildServiceProvider());

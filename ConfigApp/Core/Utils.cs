@@ -1,4 +1,5 @@
-﻿using System;
+﻿using APBSConfig.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,40 @@ namespace APBSConfig.Core
         {
             if (value.Length == 24 && IsHex(value)) return true;
             else return false;
+        }
+
+        public static void UpdateViewBool(bool holder, bool actual)
+        {
+            if (holder != actual)
+            {
+                MainLayout.EnableUnsavedChangesButton();
+            }
+        }
+
+        public static void UpdateViewInt(int holder, int actual)
+        {
+            if (holder != actual)
+            {
+                MainLayout.EnableUnsavedChangesButton();
+            }
+        }
+
+        public static void UpdateViewListInt(List<int> holder, List<int> actual)
+        {
+            bool isListSame = Enumerable.SequenceEqual(holder, actual);
+            if (!isListSame)
+            {
+                MainLayout.EnableUnsavedChangesButton();
+            }
+        }
+
+        public static void UpdateViewListString(List<string> holder, List<string> actual)
+        {
+            bool isListSame = Enumerable.SequenceEqual(holder, actual);
+            if (!isListSame)
+            {
+                MainLayout.EnableUnsavedChangesButton();
+            }
         }
     }
 }

@@ -31,7 +31,7 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="Data.enableCustomLevelDeltas" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableCustomLevelDeltas</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_enableCustomLevelDeltas" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableCustomLevelDeltas</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
@@ -45,10 +45,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier1LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier1MinMain" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier1LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier1MaxMain" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -59,10 +59,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier2LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier2MinMain" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier2LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier2MaxMain" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -73,10 +73,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier3LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier3MinMain" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier3LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier3MaxMain" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -87,10 +87,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier4LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier4MinMain" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier4LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier4MaxMain" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -101,10 +101,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier5LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier5MinMain" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier5LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier5MaxMain" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -115,10 +115,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier6LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier6MinMain" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier6LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier6MaxMain" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -129,10 +129,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier7LevelDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier7MinMain" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier7LevelDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier7MaxMain" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -163,11 +163,11 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="Data.enableScavCustomLevelDeltas" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@Data.enableScavCustomLevelDeltas</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_enableCustomScavLevelDeltas" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableCustomScavLevelDeltas</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetScavLevelDeltas" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        <MudButton @onclick="resetCustomScavLevelDeltas" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -177,10 +177,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier1ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier1MinScav" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier1ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier1MaxScav" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -191,10 +191,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier2ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier2MinScav" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier2ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier2MaxScav" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -205,10 +205,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier3ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier3MinScav" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier3ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier3MaxScav" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -219,10 +219,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier4ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier4MinScav" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier4ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier4MaxScav" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -233,10 +233,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier5ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier5MinScav" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier5ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier5MaxScav" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -247,10 +247,10 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier6ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier6MinScav" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier6ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier6MaxScav" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                         </MudPaper>
                     </MudItem>
 
@@ -261,13 +261,12 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudNumericField @bind-Value="tier7ScavDeltaHolder[0]" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier7MinScav" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                             <MudSpacer />
-                            <MudNumericField @bind-Value="tier7ScavDeltaHolder[1]" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!Data.enableScavCustomLevelDeltas" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tier7MaxScav" Label="Levels Above You" Variant="Variant.Filled" Min="-79" Max="79" Disabled="!_enableCustomScavLevelDeltas" />
                         </MudPaper>
                     </MudItem>
-
 
                 </MudGrid>
             </MudExpansionPanel>
@@ -277,114 +276,330 @@
 
 @code
 {
+    #region CUSTOM LEVEL DELTA
+    private bool _enableCustomLevelDeltas
+    {
+        get => Data.customLevelDeltas.enable;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.customLevelDeltas.enable);
+            Data.customLevelDeltas.enable = value;
+        }
+    }
+    private int _tier1MinMain
+    {
+        get => Data.customLevelDeltas.tier1.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier1.min);
+            Data.customLevelDeltas.tier1.min = value;
+        }
+    }
+    private int _tier1MaxMain
+    {
+        get => Data.customLevelDeltas.tier1.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier1.max);
+            Data.customLevelDeltas.tier1.max = value;
+        }
+    }
+    private int _tier2MinMain
+    {
+        get => Data.customLevelDeltas.tier2.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier2.min);
+            Data.customLevelDeltas.tier2.min = value;
+        }
+    }
+    private int _tier2MaxMain
+    {
+        get => Data.customLevelDeltas.tier2.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier2.max);
+            Data.customLevelDeltas.tier2.max = value;
+        }
+    }
+    private int _tier3MinMain
+    {
+        get => Data.customLevelDeltas.tier3.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier3.min);
+            Data.customLevelDeltas.tier3.min = value;
+        }
+    }
+    private int _tier3MaxMain
+    {
+        get => Data.customLevelDeltas.tier3.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier3.max);
+            Data.customLevelDeltas.tier3.max = value;
+        }
+    }
+    private int _tier4MinMain
+    {
+        get => Data.customLevelDeltas.tier4.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier4.min);
+            Data.customLevelDeltas.tier4.min = value;
+        }
+    }
+    private int _tier4MaxMain
+    {
+        get => Data.customLevelDeltas.tier4.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier4.max);
+            Data.customLevelDeltas.tier4.max = value;
+        }
+    }
+    private int _tier5MinMain
+    {
+        get => Data.customLevelDeltas.tier5.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier5.min);
+            Data.customLevelDeltas.tier5.min = value;
+        }
+    }
+    private int _tier5MaxMain
+    {
+        get => Data.customLevelDeltas.tier5.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier5.max);
+            Data.customLevelDeltas.tier5.max = value;
+        }
+    }
+    private int _tier6MinMain
+    {
+        get => Data.customLevelDeltas.tier6.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier6.min);
+            Data.customLevelDeltas.tier6.min = value;
+        }
+    }
+    private int _tier6MaxMain
+    {
+        get => Data.customLevelDeltas.tier6.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier6.max);
+            Data.customLevelDeltas.tier6.max = value;
+        }
+    }
+    private int _tier7MinMain
+    {
+        get => Data.customLevelDeltas.tier7.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier7.min);
+            Data.customLevelDeltas.tier7.min = value;
+        }
+    }
+    private int _tier7MaxMain
+    {
+        get => Data.customLevelDeltas.tier7.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customLevelDeltas.tier7.max);
+            Data.customLevelDeltas.tier7.max = value;
+        }
+    }
     private void resetCustomLevelDeltas()
     {
-        Data.enableCustomLevelDeltas = false;
-        Data.tier1LevelDelta = [10, 5];
-        Data.tier2LevelDelta = [10, 5];
-        Data.tier3LevelDelta = [15, 7];
-        Data.tier4LevelDelta = [20, 10];
-        Data.tier5LevelDelta = [30, 15];
-        Data.tier6LevelDelta = [40, 20];
-        Data.tier7LevelDelta = [50, 20];
-    }
+        Data.customLevelDeltas.enable = false;
+        Data.customLevelDeltas.tier1.min = 10;
+        Data.customLevelDeltas.tier1.max = 5;
 
-    private List<int> tier1LevelDeltaHolder
+        Data.customLevelDeltas.tier2.min = 10;
+        Data.customLevelDeltas.tier2.max = 5;
+
+        Data.customLevelDeltas.tier3.min = 15;
+        Data.customLevelDeltas.tier3.max = 7;
+
+        Data.customLevelDeltas.tier4.min = 20;
+        Data.customLevelDeltas.tier4.max = 10;
+
+        Data.customLevelDeltas.tier5.min = 30;
+        Data.customLevelDeltas.tier5.max = 15;
+
+        Data.customLevelDeltas.tier6.min = 40;
+        Data.customLevelDeltas.tier6.max = 20;
+
+        Data.customLevelDeltas.tier7.min = 50;
+        Data.customLevelDeltas.tier7.max = 20;
+    }
+    #endregion
+    #region CUSTOM SCAV LEVEL DELTA
+    private bool _enableCustomScavLevelDeltas
     {
-        get { return Data.tier1LevelDelta ?? [10, 5]; }
-        set { Data.tier1LevelDelta = value; }
+        get => Data.customScavLevelDeltas.enable;
+        set
+        {
+            Utils.UpdateViewBool(value, Data.customScavLevelDeltas.enable);
+            Data.customScavLevelDeltas.enable = value;
+        }
     }
-
-    private List<int> tier2LevelDeltaHolder
+    private int _tier1MinScav
     {
-        get { return Data.tier2LevelDelta ?? [10, 5]; }
-        set { Data.tier2LevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier1.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier1.min);
+            Data.customScavLevelDeltas.tier1.min = value;
+        }
     }
-
-    private List<int> tier3LevelDeltaHolder
+    private int _tier1MaxScav
     {
-        get { return Data.tier3LevelDelta ?? [15, 7]; }
-        set { Data.tier3LevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier1.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier1.max);
+            Data.customScavLevelDeltas.tier1.max = value;
+        }
     }
-
-    private List<int> tier4LevelDeltaHolder
+    private int _tier2MinScav
     {
-        get { return Data.tier4LevelDelta ?? [20, 10]; }
-        set { Data.tier4LevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier2.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier2.min);
+            Data.customScavLevelDeltas.tier2.min = value;
+        }
     }
-
-    private List<int> tier5LevelDeltaHolder
+    private int _tier2MaxScav
     {
-        get { return Data.tier5LevelDelta ?? [30, 15]; }
-        set { Data.tier5LevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier2.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier2.max);
+            Data.customScavLevelDeltas.tier2.max = value;
+        }
     }
-
-    private List<int> tier6LevelDeltaHolder
+    private int _tier3MinScav
     {
-        get { return Data.tier6LevelDelta ?? [40, 20]; }
-        set { Data.tier6LevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier3.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier3.min);
+            Data.customScavLevelDeltas.tier3.min = value;
+        }
     }
-
-    private List<int> tier7LevelDeltaHolder
+    private int _tier3MaxScav
     {
-        get { return Data.tier7LevelDelta ?? [50, 20]; }
-        set { Data.tier7LevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier3.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier3.max);
+            Data.customScavLevelDeltas.tier3.max = value;
+        }
     }
-
-    private void resetScavLevelDeltas()
+    private int _tier4MinScav
     {
-        Data.enableScavCustomLevelDeltas = false;
-        Data.tier1ScavLevelDelta = [10, 0];
-        Data.tier2ScavLevelDelta = [10, -10];
-        Data.tier3ScavLevelDelta = [15, -10];
-        Data.tier4ScavLevelDelta = [20, -10];
-        Data.tier5ScavLevelDelta = [30, -10];
-        Data.tier6ScavLevelDelta = [40, -10];
-        Data.tier7ScavLevelDelta = [50, -10];
+        get => Data.customScavLevelDeltas.tier4.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier4.min);
+            Data.customScavLevelDeltas.tier4.min = value;
+        }
     }
-
-    private List<int> tier1ScavDeltaHolder
+    private int _tier4MaxScav
     {
-        get { return Data.tier1ScavLevelDelta ?? [10, 0]; }
-        set { Data.tier1ScavLevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier4.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier4.max);
+            Data.customScavLevelDeltas.tier4.max = value;
+        }
     }
-
-    private List<int> tier2ScavDeltaHolder
+    private int _tier5MinScav
     {
-        get { return Data.tier2ScavLevelDelta ?? [10, -10]; }
-        set { Data.tier2ScavLevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier5.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier5.min);
+            Data.customScavLevelDeltas.tier5.min = value;
+        }
     }
-
-    private List<int> tier3ScavDeltaHolder
+    private int _tier5MaxScav
     {
-        get { return Data.tier3ScavLevelDelta ?? [15, -10]; }
-        set { Data.tier3ScavLevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier5.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier5.max);
+            Data.customScavLevelDeltas.tier5.max = value;
+        }
     }
-
-    private List<int> tier4ScavDeltaHolder
+    private int _tier6MinScav
     {
-        get { return Data.tier4ScavLevelDelta ?? [20, -10]; }
-        set { Data.tier4ScavLevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier6.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier6.min);
+            Data.customScavLevelDeltas.tier6.min = value;
+        }
     }
-
-    private List<int> tier5ScavDeltaHolder
+    private int _tier6MaxScav
     {
-        get { return Data.tier5ScavLevelDelta ?? [30, -10]; }
-        set { Data.tier5ScavLevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier6.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier6.max);
+            Data.customScavLevelDeltas.tier6.max = value;
+        }
     }
-
-    private List<int> tier6ScavDeltaHolder
+    private int _tier7MinScav
     {
-        get { return Data.tier6ScavLevelDelta ?? [40, -10]; }
-        set { Data.tier6ScavLevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier7.min;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier7.min);
+            Data.customScavLevelDeltas.tier7.min = value;
+        }
     }
-
-    private List<int> tier7ScavDeltaHolder
+    private int _tier7MaxScav
     {
-        get { return Data.tier7ScavLevelDelta ?? [50, -10]; }
-        set { Data.tier7ScavLevelDelta = value; }
+        get => Data.customScavLevelDeltas.tier7.max;
+        set
+        {
+            Utils.UpdateViewInt(value, Data.customScavLevelDeltas.tier7.max);
+            Data.customScavLevelDeltas.tier7.max = value;
+        }
     }
+    private void resetCustomScavLevelDeltas()
+    {
+        Data.customScavLevelDeltas.enable = false;
+        Data.customScavLevelDeltas.tier1.min = 10;
+        Data.customScavLevelDeltas.tier1.max = 0;
 
+        Data.customScavLevelDeltas.tier2.min = 10;
+        Data.customScavLevelDeltas.tier2.max = -10;
 
+        Data.customScavLevelDeltas.tier3.min = 15;
+        Data.customScavLevelDeltas.tier3.max = -10;
+
+        Data.customScavLevelDeltas.tier4.min = 20;
+        Data.customScavLevelDeltas.tier4.max = -10;
+
+        Data.customScavLevelDeltas.tier5.min = 30;
+        Data.customScavLevelDeltas.tier5.max = -10;
+
+        Data.customScavLevelDeltas.tier6.min = 40;
+        Data.customScavLevelDeltas.tier6.max = -10;
+
+        Data.customScavLevelDeltas.tier7.min = 50;
+        Data.customScavLevelDeltas.tier7.max = -10;
+    }
+    #endregion
+
+    #region CASCADING PARAMETERS
     [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+    #endregion
 }
