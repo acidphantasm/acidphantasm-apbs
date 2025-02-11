@@ -354,7 +354,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
 
         botInventory.items.push(...generatedWeapon.weapon);
         
-        if (this.raidInformation.isBotEnabled(botRole) && ModConfig.config.enableBotsToRollAmmoAgain)
+        if (this.raidInformation.isBotEnabled(botRole) && ModConfig.config.generalConfig.enableBotsToRollAmmoAgain)
         {
             this.apbsBotWeaponGenerator.apbsAddExtraMagazinesToInventory(
                 generatedWeapon,

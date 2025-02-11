@@ -23,34 +23,34 @@ export class BlacklistHelper
 
     public initialize(): void
     {
-        if (ModConfig.config.tier1AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier1AmmoBlacklist, 1);
-        if (ModConfig.config.tier2AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier2AmmoBlacklist, 2);
-        if (ModConfig.config.tier3AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier3AmmoBlacklist, 3);
-        if (ModConfig.config.tier4AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier4AmmoBlacklist, 4);
-        if (ModConfig.config.tier5AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier5AmmoBlacklist, 5);
-        if (ModConfig.config.tier6AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier6AmmoBlacklist, 6);
-        if (ModConfig.config.tier7AmmoBlacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.tier7AmmoBlacklist, 7);
-        if (ModConfig.config.tier1EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier1EquipmentBlacklist, 1);
-        if (ModConfig.config.tier2EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier2EquipmentBlacklist, 2);
-        if (ModConfig.config.tier3EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier3EquipmentBlacklist, 3);
-        if (ModConfig.config.tier4EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier4EquipmentBlacklist, 4);
-        if (ModConfig.config.tier5EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier5EquipmentBlacklist, 5);
-        if (ModConfig.config.tier6EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier6EquipmentBlacklist, 6);
-        if (ModConfig.config.tier7EquipmentBlacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.tier7EquipmentBlacklist, 7);
-        if (ModConfig.config.tier1WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier1WeaponBlacklist, 1);
-        if (ModConfig.config.tier2WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier2WeaponBlacklist, 2);
-        if (ModConfig.config.tier3WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier3WeaponBlacklist, 3);
-        if (ModConfig.config.tier4WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier4WeaponBlacklist, 4);
-        if (ModConfig.config.tier5WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier5WeaponBlacklist, 5);
-        if (ModConfig.config.tier6WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier6WeaponBlacklist, 6);
-        if (ModConfig.config.tier7WeaponBlacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.tier7WeaponBlacklist, 7);
-        if (ModConfig.config.tier1AttachmentBlacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.tier1AttachmentBlacklist, 1);
-        if (ModConfig.config.tier2AttachmentBlacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.tier2AttachmentBlacklist, 2);
-        if (ModConfig.config.tier3AttachmentBlacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.tier3AttachmentBlacklist, 3);
-        if (ModConfig.config.tier4AttachmentBlacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.tier4AttachmentBlacklist, 4);
-        if (ModConfig.config.tier5AttachmentBlacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.tier5AttachmentBlacklist, 5);
-        if (ModConfig.config.tier6AttachmentBlacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.tier6AttachmentBlacklist, 6);
-        if (ModConfig.config.tier7AttachmentBlacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.tier7AttachmentBlacklist, 7);
+        if (ModConfig.config.weaponBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier1Blacklist, 1);
+        if (ModConfig.config.weaponBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier2Blacklist, 2);
+        if (ModConfig.config.weaponBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier3Blacklist, 3);
+        if (ModConfig.config.weaponBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier4Blacklist, 4);
+        if (ModConfig.config.weaponBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier5Blacklist, 5);
+        if (ModConfig.config.weaponBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier6Blacklist, 6);
+        if (ModConfig.config.weaponBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier7Blacklist, 7);
+        if (ModConfig.config.equipmentBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier1Blacklist, 1);
+        if (ModConfig.config.equipmentBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier2Blacklist, 2);
+        if (ModConfig.config.equipmentBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier3Blacklist, 3);
+        if (ModConfig.config.equipmentBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier4Blacklist, 4);
+        if (ModConfig.config.equipmentBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier5Blacklist, 5);
+        if (ModConfig.config.equipmentBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier6Blacklist, 6);
+        if (ModConfig.config.equipmentBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier7Blacklist, 7);
+        if (ModConfig.config.ammoBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier1Blacklist, 1);
+        if (ModConfig.config.ammoBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier2Blacklist, 2);
+        if (ModConfig.config.ammoBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier3Blacklist, 3);
+        if (ModConfig.config.ammoBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier4Blacklist, 4);
+        if (ModConfig.config.ammoBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier5Blacklist, 5);
+        if (ModConfig.config.ammoBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier6Blacklist, 6);
+        if (ModConfig.config.ammoBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier7Blacklist, 7);
+        if (ModConfig.config.attachmentBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier1Blacklist, 1);
+        if (ModConfig.config.attachmentBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier2Blacklist, 2);
+        if (ModConfig.config.attachmentBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier3Blacklist, 3);
+        if (ModConfig.config.attachmentBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier4Blacklist, 4);
+        if (ModConfig.config.attachmentBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier5Blacklist, 5);
+        if (ModConfig.config.attachmentBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier6Blacklist, 6);
+        if (ModConfig.config.attachmentBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier7Blacklist, 7);
 
         this.validateBlacklist();
     }

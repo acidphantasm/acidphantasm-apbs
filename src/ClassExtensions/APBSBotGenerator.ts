@@ -79,7 +79,7 @@ export class APBSBotGenerator extends BotGenerator
         {
             const tier = this.apbsTierGetter.getTierByLevel(bot.Info.Level)
             const role = bot.Info.Settings.Role
-            const getSeasonalAppearance = ModConfig.config.seasonalPmcAppearance ? true : false;
+            const getSeasonalAppearance = ModConfig.config.pmcBots.additionalOptions.seasonalPmcAppearance ? true : false;
             const appearanceJson = this.apbsEquipmentGetter.getPmcAppearance(role, tier, getSeasonalAppearance);
 
             bot.Customization.Head = this.weightedRandomHelper.getWeightedValue<string>(appearanceJson.head);

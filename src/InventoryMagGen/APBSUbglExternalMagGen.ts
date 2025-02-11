@@ -42,7 +42,7 @@ export class APBSUbglExternalMagGen implements APBSIInventoryMagGen
         );
 
         
-        if (ModConfig.config.enableBotsToRollAmmoAgain && this.randomUtil.getChance100(ModConfig.config.chanceToRollAmmoAgain))
+        if (ModConfig.config.generalConfig.enableBotsToRollAmmoAgain && this.randomUtil.getChance100(ModConfig.config.generalConfig.chanceToRollAmmoAgain))
         {
             const weapon = inventoryMagGen.getWeaponTemplate();
             

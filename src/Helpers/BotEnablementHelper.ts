@@ -30,11 +30,11 @@ export class BotEnablementHelper
         if (botType.toLowerCase() == "bosspunisher" || botType.toLowerCase() == "bosslegion") return true;
 
         // Normal bot types
-        if (this.isBoss(botType)) return !ModConfig.config.enableBossTierGeneration;
-        if (this.isFollower(botType)) return !ModConfig.config.enableBossFollowerTierGeneration;
-        if (this.isPMC(botType)) return !ModConfig.config.enablePMCTierGeneration;
-        if (this.isScav(botType)) return !ModConfig.config.enableScavTierGeneration;
-        if (this.isSpecial(botType)) return !ModConfig.config.enableSpecialTierGeneration;
+        if (this.isPMC(botType)) return !ModConfig.config.pmcBots.enable;
+        if (this.isScav(botType)) return !ModConfig.config.scavBots.enable;
+        if (this.isBoss(botType)) return !ModConfig.config.bossBots.enable;
+        if (this.isFollower(botType)) return !ModConfig.config.followerBots.enable;
+        if (this.isSpecial(botType)) return !ModConfig.config.specialBots.enable;
         if (this.isEvent(botType)) return true;
         return false;
     }

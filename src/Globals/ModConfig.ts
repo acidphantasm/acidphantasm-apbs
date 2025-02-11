@@ -25,30 +25,151 @@ export class ModConfig
     public serverLogDetails(): void
     {
         this.logger.debug("[APBS] Mod Config - FOR SUPPORT FOLKS ❤❤")
-        this.logger.debug(`[APBS] Mod Weapons: ${ModConfig.config.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Mod Equipment: ${ModConfig.config.enableModdedEquipment} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Mod Clothing: ${ModConfig.config.enableModdedClothing} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Seasonal PMC Clothing: ${ModConfig.config.seasonalPmcAppearance} <- IF TRUE, Mod Clothing not used`)
+        this.logger.debug(`[APBS] Using a Preset? ${ModConfig.config.usePreset} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Mod Weapons: ${ModConfig.config.compatibilityConfig.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Mod Equipment: ${ModConfig.config.compatibilityConfig.enableModdedEquipment} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Mod Clothing: ${ModConfig.config.compatibilityConfig.enableModdedClothing} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Mod Attachments: ${ModConfig.config.compatibilityConfig.enableModdedAttachments} <- MUST BE FALSE FOR SUPPORT`)
+        this.logger.debug(`[APBS] Seasonal PMC Clothing: ${ModConfig.config.pmcBots.additionalOptions.seasonalPmcAppearance} <- IF TRUE, Mod Clothing not used`)
     }
 }
-
 export interface Config
 {
     usePreset: boolean,
     presetName: string,
-    enableModdedWeapons: boolean,
-    enableModdedEquipment: boolean,
-    enableModdedClothing: boolean,
-    initalTierAppearance: number,
-    pmcWeaponWeights: number,
-    scavWeaponWeights: number,
-    followerWeaponWeights: number,
-    enableSafeGuard: boolean,
-    enableAddingModdedAttachmentsToVanillaWeapons: boolean,
-    PackNStrap_UnlootablePMCArmbandBelts: boolean,
-    Realism_AddGasMasksToBots: boolean,
+    compatibilityConfig: {
+        enableModdedWeapons: boolean,
+        enableModdedEquipment: boolean,
+        enableModdedClothing: boolean,
+        enableModdedAttachments: boolean,
+        initalTierAppearance: number,
+        pmcWeaponWeights: number,
+        scavWeaponWeights: number,
+        followerWeaponWeights: number,
+        enableSafeGuard: boolean,
+        PackNStrap_UnlootablePMCArmbandBelts: boolean,
+        Realism_AddGasMasksToBots: boolean,
+    },
+    normalizedHealthPool: NormalizeHealthConfig,
+    generalConfig: {
+        enableBotsToRollAmmoAgain: boolean,
+        chanceToRollAmmoAgain: number,
+        onlyChads: boolean,
+        tarkovAndChill: boolean,
+        blickyMode: boolean,
+        enablePerWeaponTypeAttachmentChances: boolean,
+        forceStock: boolean,
+        stockButtpadChance: number,
+        forceDustCover: boolean,
+        forceScopeSlot: boolean,
+        forceMuzzle: boolean,
+        muzzleChance: [ number, number, number, number, number, number, number ],
+        forceChildrenMuzzle: boolean,
+        forceWeaponModLimits: boolean,
+        scopeLimit: number,
+        tacticalLimit: number,
+        enableT7Thermals: boolean,
+        startTier: number,
+        plateChances: PlateWeightConfig,
+    }
+    pmcBots: {
+        enable: boolean,
+        resourceRandomization: ResourceRandomizationConfig,
+        weaponDurability: WeaponDurabilityConfig,
+        lootConfig: LootConfig,
+        additionalOptions: PMCSpecificConfig,
+    }
+    scavBots: {
+        enable: boolean,
+        resourceRandomization: ResourceRandomizationConfig,
+        weaponDurability: WeaponDurabilityConfig,
+        lootConfig: LootConfig,
+        keyConfig: KeyConfig,
+        additionalOptions: ScavSpecificConfig,
+    },
+    bossBots: {
+        enable: boolean,
+        resourceRandomization: ResourceRandomizationConfig,
+        weaponDurability: WeaponDurabilityConfig,
+        lootConfig: LootConfig
+    },
+    followerBots: {
+        enable: boolean,
+        resourceRandomization: ResourceRandomizationConfig,
+        weaponDurability: WeaponDurabilityConfig,
+        lootConfig: LootConfig
+    },
+    specialBots: {
+        enable: boolean,
+        resourceRandomization: ResourceRandomizationConfig,
+        weaponDurability: WeaponDurabilityConfig,
+        lootConfig: LootConfig
+    },
+    weaponBlacklist: TierBlacklistConfig,
+    equipmentBlacklist: TierBlacklistConfig,
+    ammoBlacklist: TierBlacklistConfig,
+    attachmentBlacklist: TierBlacklistConfig,
+    customLevelDeltas: CustomLevelDeltas,
+    customScavLevelDeltas: CustomLevelDeltas,
+    enableDebugLog: boolean,
+}
+export interface PMCSpecificConfig
+{
     seasonalPmcAppearance: boolean,
-    normalizedHealthPoolValues: boolean,
+    ammoTierSliding: AmmoTierSlideConfig,
+    gameVersionWeighting: GameVersionWeightConfig, 
+}
+export interface ScavSpecificConfig
+{
+    enableScavAttachmentTiering: boolean,
+    enableScavEqualEquipmentTiering: boolean
+}
+export interface ResourceRandomizationConfig
+{
+    enable: boolean,
+    foodRateMaxChance: number,
+    foodRateUsagePercent: number,
+    medRateMaxChance: number,
+    medRateUsagePercent: number,
+}
+export interface WeaponDurabilityConfig
+{
+    min: number,
+    max: number,
+    minDelta: number,
+    maxDelta: number,
+    minLimitPercent: number,
+}
+export interface LootConfig
+{
+    enable: boolean,
+    blacklist: string[],
+}
+export interface KeyConfig
+{
+    addAllKeysToScavs: boolean,
+    addOnlyMechanicalKeysToScavs: boolean,
+    addOnlyKeyCardsToScavs: boolean
+}
+
+export interface GameVersionWeightConfig
+{
+    enable: boolean,
+    standard: number, 
+    leftBehind: number, 
+    prepareForEscape: number, 
+    edgeOfDarkness: number, 
+    unheardEdition: number,
+}
+export interface AmmoTierSlideConfig
+{
+    enable: boolean,
+    slideAmount: number,
+    slideChance: number,
+}
+export interface NormalizeHealthConfig
+{
+    enable: boolean,
     healthHead: number,
     healthChest: number,
     healthStomach: number,
@@ -57,121 +178,61 @@ export interface Config
     healthLeftLeg: number,
     healthRightLeg: number,
     excludedBots: string[],
-    onlyChads: boolean,
-    tarkovAndChill: boolean,
-    blickyMode: boolean,
-    enableScavTierGeneration: boolean,
-    enablePMCTierGeneration: boolean,
-    enableBossTierGeneration: boolean,
-    enableBossFollowerTierGeneration: boolean,
-    enableSpecialTierGeneration: boolean,
-    enableBotsToRollAmmoAgain: boolean,
-    chanceToRollAmmoAgain: number,
-    gameVersionWeight: boolean, 
-    standard: number, 
-    left_behind: number, 
-    prepare_for_escape: number, 
-    edge_of_darkness: number, 
-    unheard_edition: number,
-    enablePMCAmmoTierSliding: boolean,
-    slideAmount: number,
-    slideChance: number,
-    enablePerWeaponTypeAttachmentChances: boolean,
-    forceStock: boolean,
-    stockButtpadChance: number,
-    forceDustCover: boolean,
-    forceScopeSlot: boolean,
-    forceMuzzle: boolean,
-    muzzleChance: [ number, number, number, number, number, number, number ],
-    forceChildrenMuzzle: boolean,
-    pmcLoot: boolean,
-    pmcLootBlacklistItems: string[],
-    scavLoot: boolean,
-    scavLootBlacklistItems: string[],
-    enableScavAttachmentTiering: boolean,
-    enableScavEqualEquipmentTiering: boolean,
-    forceWeaponModLimits: boolean,
-    scopeLimit: number,
-    tacticalLimit: number,
-    enableT7Thermals: boolean,
-    startTier: number,
-    scavWeaponDurability: [ number, number, number, number ],
-    pmcWeaponDurability: [ number, number, number, number ],
-    bossWeaponDurability: [ number, number, number, number ],
-    guardWeaponDurability: [ number, number, number, number ],
-    raiderWeaponDurability: [ number, number, number, number ],
-    enableCustomPlateChances: boolean,
-    scavMainPlateChance: [ number, number, number, number, number, number, number ],
-    scavSidePlateChance: [ number, number, number, number, number, number, number ],
-    pmcMainPlateChance: [ number, number, number, number, number, number, number ],
-    pmcSidePlateChance: [ number, number, number, number, number, number, number ],
-    bossMainPlateChance: [ number, number, number, number, number, number, number ],
-    bossSidePlateChance: [ number, number, number, number, number, number, number ],
-    guardMainPlateChance: [ number, number, number, number, number, number, number ],
-    guardSidePlateChance: [ number, number, number, number, number, number, number ],
-    raiderMainPlateChance: [ number, number, number, number, number, number, number ],
-    raiderSidePlateChance: [ number, number, number, number, number, number, number ],
-    addAllKeysToScavs: boolean,
-    addOnlyMechanicalKeysToScavs: boolean,
-    addOnlyKeyCardsToScavs: boolean,
-    enablePMCResourceRandomization: boolean,
-    pmcFoodRates: [ number, number ],
-    pmcMedRates: [ number, number ],
-    enableScavResourceRandomization: boolean,
-    scavFoodRates: [ number, number ],
-    scavMedRates: [ number, number ],
-    enableBossResourceRandomization: boolean,
-    bossFoodRates: [ number, number ],
-    bossMedRates: [ number, number ],
-    enableGuardResourceRandomization: boolean,
-    guardFoodRates: [ number, number ],
-    guardMedRates: [ number, number ],
-    enableSpecialResourceRandomization: boolean,
-    specialFoodRates: [ number, number ],
-    specialMedRates: [ number, number ],
-    tier1AmmoBlacklist: string[],
-    tier2AmmoBlacklist: string[],
-    tier3AmmoBlacklist: string[],
-    tier4AmmoBlacklist: string[],
-    tier5AmmoBlacklist: string[],
-    tier6AmmoBlacklist: string[],
-    tier7AmmoBlacklist: string[],
-    tier1EquipmentBlacklist: string[],
-    tier2EquipmentBlacklist: string[],
-    tier3EquipmentBlacklist: string[],
-    tier4EquipmentBlacklist: string[],
-    tier5EquipmentBlacklist: string[],
-    tier6EquipmentBlacklist: string[],
-    tier7EquipmentBlacklist: string[],
-    tier1WeaponBlacklist: string[],
-    tier2WeaponBlacklist: string[],
-    tier3WeaponBlacklist: string[],
-    tier4WeaponBlacklist: string[],
-    tier5WeaponBlacklist: string[],
-    tier6WeaponBlacklist: string[],
-    tier7WeaponBlacklist: string[],
-    tier1AttachmentBlacklist: string[],
-    tier2AttachmentBlacklist: string[],
-    tier3AttachmentBlacklist: string[],
-    tier4AttachmentBlacklist: string[],
-    tier5AttachmentBlacklist: string[],
-    tier6AttachmentBlacklist: string[],
-    tier7AttachmentBlacklist: string[],
-    enableCustomLevelDeltas: boolean,
-    tier1LevelDelta: [ number, number ],
-    tier2LevelDelta: [ number, number ],
-    tier3LevelDelta: [ number, number ],
-    tier4LevelDelta: [ number, number ],
-    tier5LevelDelta: [ number, number ],
-    tier6LevelDelta: [ number, number ],
-    tier7LevelDelta: [ number, number ],
-    enableScavCustomLevelDeltas: boolean,
-    tier1ScavLevelDelta: [ number, number ],
-    tier2ScavLevelDelta: [ number, number ],
-    tier3ScavLevelDelta: [ number, number ],
-    tier4ScavLevelDelta: [ number, number ],
-    tier5ScavLevelDelta: [ number, number ],
-    tier6ScavLevelDelta: [ number, number ],
-    tier7ScavLevelDelta: [ number, number ],
-    enableDebugLog: boolean,
+}
+
+export interface TierBlacklistConfig
+{
+    tier1Blacklist: string[]
+    tier2Blacklist: string[]
+    tier3Blacklist: string[]
+    tier4Blacklist: string[]
+    tier5Blacklist: string[]
+    tier6Blacklist: string[]
+    tier7Blacklist: string[]
+}
+export interface CustomLevelDeltas
+{
+    enable: boolean,
+    tier1: {
+        min: number,
+        max: number,
+    }
+    tier2: {
+        min: number,
+        max: number,
+    }
+    tier3: {
+        min: number,
+        max: number,
+    }
+    tier4: {
+        min: number,
+        max: number,
+    }
+    tier5: {
+        min: number,
+        max: number,
+    }
+    tier6: {
+        min: number,
+        max: number,
+    }
+    tier7: {
+        min: number,
+        max: number,
+    }
+}
+export interface PlateWeightConfig
+{
+    enable: boolean,
+    pmcMainPlateChance: [number, number, number, number, number, number, number]
+    pmcSidePlateChance: [number, number, number, number, number, number, number]
+    scavMainPlateChance: [number, number, number, number, number, number, number]
+    scavSidePlateChance: [number, number, number, number, number, number, number]
+    bossMainPlateChance: [number, number, number, number, number, number, number]
+    bossSidePlateChance: [number, number, number, number, number, number, number]
+    followerMainPlateChance: [number, number, number, number, number, number, number]
+    followerSidePlateChance: [number, number, number, number, number, number, number]
+    specialMainPlateChance: [number, number, number, number, number, number, number]
+    specialSidePlateChance: [number, number, number, number, number, number, number]
 }

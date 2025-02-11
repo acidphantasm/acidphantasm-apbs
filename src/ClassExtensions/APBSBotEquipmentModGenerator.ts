@@ -673,7 +673,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
 
             if (vanillaButtpads.includes(modToAddTemplate._id))
             {
-                if (!this.randomUtil.getChance100(ModConfig.config.stockButtpadChance))
+                if (!this.randomUtil.getChance100(ModConfig.config.generalConfig.stockButtpadChance))
                 {
                     continue;
                 }
@@ -702,7 +702,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             }
 
             
-            if (ModConfig.config.forceChildrenMuzzle)
+            if (ModConfig.config.generalConfig.forceChildrenMuzzle)
             {
                 // If picked item is muzzle adapter that can hold a child, adjust spawn chance
                 if (this.modSlotCanHoldMuzzleDevices(modSlot, modToAddTemplate._parent)) 
