@@ -81,6 +81,15 @@ export class BotConfigs
         this.setIdenticalScavWeights();
         this.setScavLevelDeltas();
 
+        // Boss Specific
+        this.setBossLoot();
+
+        // Follower Specific
+        this.setFollowerLoot();
+
+        // Special Specific
+        this.setSpecialLoot();
+
         // All bots
         this.setLevelDeltas();
         this.clearNoLongerNeededBotDetails();
@@ -605,7 +614,10 @@ export class BotConfigs
         if (!ModConfig.config.scavBots.enable) return;
         if (!ModConfig.config.scavBots.lootConfig.enable)
         {
-            this.botConfig.disableLootOnBotTypes.push("assault", "marksman", "cursedassault", "assaultgroup", "crazyassaultevent");
+            Object.values(ScavBots).forEach((bot) => 
+            {
+                this.botConfig.disableLootOnBotTypes.push(bot);
+            })
             return;
         }
 
@@ -618,6 +630,171 @@ export class BotConfigs
                 if (Object.values(ScavBots).includes(botType as ScavBots))
                 {
                     for (const item of ModConfig.config.scavBots.lootConfig.blacklist)
+                    {
+                        if (Object.keys(botTable[botType].inventory.items.TacticalVest).includes(item))
+                        {
+                            const tacticalVestLootTable = Object.keys(botTable[botType].inventory.items.TacticalVest);
+                            const index = tacticalVestLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                tacticalVestLootTable.splice(index, 1)
+                            }
+                        }
+                        if (Object.keys(botTable[botType].inventory.items.Pockets).includes(item))
+                        {
+                            const pocketsLootTable = Object.keys(botTable[botType].inventory.items.Pockets);
+                            const index = pocketsLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                pocketsLootTable.splice(index, 1)
+                            }
+                        }
+                        if (Object.keys(botTable[botType].inventory.items.Backpack).includes(item))
+                        {
+                            const backpackLootTable = Object.keys(botTable[botType].inventory.items.Backpack);
+                            const index = backpackLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                backpackLootTable.splice(index, 1)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private setBossLoot(): void
+    {
+        if (!ModConfig.config.bossBots.enable) return;
+        if (!ModConfig.config.bossBots.lootConfig.enable)
+        {
+            Object.values(BossBots).forEach((bot) => 
+            {
+                this.botConfig.disableLootOnBotTypes.push(bot);
+            })
+            return;
+        }
+
+        const botTable = this.database.getTables().bots.types;
+
+        if (ModConfig.config.bossBots.lootConfig.blacklist.length > 0)
+        {
+            for (const botType in botTable)
+            {
+                if (Object.values(BossBots).includes(botType as BossBots))
+                {
+                    for (const item of ModConfig.config.bossBots.lootConfig.blacklist)
+                    {
+                        if (Object.keys(botTable[botType].inventory.items.TacticalVest).includes(item))
+                        {
+                            const tacticalVestLootTable = Object.keys(botTable[botType].inventory.items.TacticalVest);
+                            const index = tacticalVestLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                tacticalVestLootTable.splice(index, 1)
+                            }
+                        }
+                        if (Object.keys(botTable[botType].inventory.items.Pockets).includes(item))
+                        {
+                            const pocketsLootTable = Object.keys(botTable[botType].inventory.items.Pockets);
+                            const index = pocketsLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                pocketsLootTable.splice(index, 1)
+                            }
+                        }
+                        if (Object.keys(botTable[botType].inventory.items.Backpack).includes(item))
+                        {
+                            const backpackLootTable = Object.keys(botTable[botType].inventory.items.Backpack);
+                            const index = backpackLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                backpackLootTable.splice(index, 1)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private setFollowerLoot(): void
+    {
+        if (!ModConfig.config.followerBots.enable) return;
+        if (!ModConfig.config.followerBots.lootConfig.enable)
+        {
+            Object.values(FollowerBots).forEach((bot) => 
+            {
+                this.botConfig.disableLootOnBotTypes.push(bot);
+            })
+            return;
+        }
+
+        const botTable = this.database.getTables().bots.types;
+
+        if (ModConfig.config.followerBots.lootConfig.blacklist.length > 0)
+        {
+            for (const botType in botTable)
+            {
+                if (Object.values(FollowerBots).includes(botType as FollowerBots))
+                {
+                    for (const item of ModConfig.config.followerBots.lootConfig.blacklist)
+                    {
+                        if (Object.keys(botTable[botType].inventory.items.TacticalVest).includes(item))
+                        {
+                            const tacticalVestLootTable = Object.keys(botTable[botType].inventory.items.TacticalVest);
+                            const index = tacticalVestLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                tacticalVestLootTable.splice(index, 1)
+                            }
+                        }
+                        if (Object.keys(botTable[botType].inventory.items.Pockets).includes(item))
+                        {
+                            const pocketsLootTable = Object.keys(botTable[botType].inventory.items.Pockets);
+                            const index = pocketsLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                pocketsLootTable.splice(index, 1)
+                            }
+                        }
+                        if (Object.keys(botTable[botType].inventory.items.Backpack).includes(item))
+                        {
+                            const backpackLootTable = Object.keys(botTable[botType].inventory.items.Backpack);
+                            const index = backpackLootTable.indexOf(item);
+                            if (index > -1)
+                            {
+                                backpackLootTable.splice(index, 1)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private setSpecialLoot(): void
+    {
+        if (!ModConfig.config.specialBots.enable) return;
+        if (!ModConfig.config.specialBots.lootConfig.enable)
+        {
+            Object.values(SpecialBots).forEach((bot) => 
+            {
+                this.botConfig.disableLootOnBotTypes.push(bot);
+            })
+            return;
+        }
+
+        const botTable = this.database.getTables().bots.types;
+
+        if (ModConfig.config.specialBots.lootConfig.blacklist.length > 0)
+        {
+            for (const botType in botTable)
+            {
+                if (Object.values(SpecialBots).includes(botType as SpecialBots))
+                {
+                    for (const item of ModConfig.config.specialBots.lootConfig.blacklist)
                     {
                         if (Object.keys(botTable[botType].inventory.items.TacticalVest).includes(item))
                         {
