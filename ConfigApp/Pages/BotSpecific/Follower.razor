@@ -68,34 +68,6 @@
                             <MudButton @onclick="resetLoot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
                         </MudItem>
 
-                        <MudItem xs="1">
-                            <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
-                                <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the weapon you want blacklisted, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
-                                </MudTooltip>
-                            </MudPaper>
-                        </MudItem>
-                        <MudItem xs="4" Class="align-center">
-                            <MudTextField T="string" @bind-Value="@_lootBlacklistEntryHolder"
-                                          Typo="Typo.body2" HelperText="Enter valid MongoID"
-                                          Placeholder="ItemID"
-                                          Variant="Variant.Text"
-                                          OnKeyDown="@((e) => HandleKeyDown(e, _lootBlacklistEntryHolder, Data.followerBots.lootConfig.blacklist))"
-                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
-                                          Immediate="true"
-                                          Adornment="Adornment.End"
-                                          AdornmentIcon="@Icons.Material.Filled.ArrowRight"
-                                          OnAdornmentClick="@(() => AddItemToList(_lootBlacklistEntryHolder, Data.followerBots.lootConfig.blacklist))" />
-                        </MudItem>
-                        <MudItem xs="6">
-                            @foreach (var item in Data.followerBots.lootConfig.blacklist)
-                            {
-                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.followerBots.lootConfig.blacklist))" Color="Color.Default">@item</MudChip>
-                            }
-                        </MudItem>
-
-                        <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
-
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
