@@ -270,8 +270,8 @@
                         "min": 95,
                         "max": 100,
                         "minDelta": 0,
-                        "maxDelta": 5,
-                        "minLimitPercent": 90
+                        "maxDelta": 10,
+                        "minLimitPercent": 85
                 },
                 "lootConfig": {
                         "enable": true,
