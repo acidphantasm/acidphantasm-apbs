@@ -119,8 +119,7 @@ export class BotConfigs
         const botTable = this.tables.bots.types;
         for (const bot in botTable)
         {
-            if (ModConfig.config.normalizedHealthPool.excludedBots.includes(bot)) continue;
-
+            if (ModConfig.config.normalizedHealthPool.excludedBots.includes(bot.toLowerCase())) continue;
             const bodyParts = botTable[bot].health.BodyParts;
             for (const array in bodyParts)
             {
