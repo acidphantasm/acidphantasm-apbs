@@ -247,7 +247,7 @@ namespace APBSConfig.Core
 
     public class DataLoader
     {
-        private static readonly string? directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private static readonly string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
 
         public static APBSServerConfig Data { get; set; } = default!;
         public static APBSServerConfig OriginalConfig { get; set; } = default!;
