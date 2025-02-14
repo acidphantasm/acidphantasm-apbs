@@ -16,4 +16,4 @@ ConfigApp/APBSConfig.csproj.user
 ConfigApp/.vs
 ConfigApp/Properties/PublishProfiles/FolderProfile.pubxml.user
 APBSConfig.pdb
-ConfigApp/Core/config.json
+ConfigApp/config
