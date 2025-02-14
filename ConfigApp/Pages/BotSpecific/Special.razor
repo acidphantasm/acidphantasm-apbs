@@ -10,7 +10,7 @@
 </style>
 
 <MudMainContent>
-    <MudContainer>
+    <MudContainer Class="mb-20">
         <MudExpansionPanels MultiExpansion="true">
             <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Special Specific Configuration" Expanded=true>
                 <MudGrid>
@@ -22,50 +22,65 @@
                                     <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
                                 </ChildContent>
                                 <TooltipContent>
-                                    <MudText Typo="Typo.body2">All settings on this page, and any other setting that may impact these bots are controlled by this toggle.</MudText>
-                                    <MudText Typo="Typo.body2">EXCEPTION: Normalize Health is always applied if enabled but not excluded.</MudText>
+                                    <MudText Typo="Typo.caption">All settings on this page, and any other setting that may impact these bots are controlled by this toggle.</MudText><MudSpacer />
+                                    <MudSpacer />
+                                    <MudText Typo="Typo.caption">EXCEPTION: Normalize Health is always applied if enabled but not excluded.</MudText>
                                 </TooltipContent>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="Grants APBS control over Raiders, Rogues, Cultists, and Bloodhounds. You will have vanilla versions of these bots if disabled." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Enable Special Bot Generation</MudText>
+                            <MudTooltip Text="Grants APBS control over Special Bots (Raiders, Rogues, Cultists, and Bloodhounds). You will have vanilla versions of these bots if disabled." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Special Bot Generation</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enableSpecialBots" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableSpecialBots</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_specialEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_specialEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetSpecialBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_specialEnabled") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoSpecialBots" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_specialEnabled != true && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultSpecialBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                 </MudGrid>
             </MudExpansionPanel>
-            @if (_enableSpecialBots)
+            @if (_specialEnabled)
             {
-                <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Special Specific Options" Expanded=true>
+                <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Style="padding-bottom:25px" Text="Special Specific Options" Expanded=true>
                     <MudGrid>
 
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                                 <MudTooltip Text="Allows Special Bots to spawn with additional loot." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    <MudText>Enable Loot</MudText>
+                                    <MudText>Loot</MudText>
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="6">
                             <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                                <MudSwitch T="bool" @bind-Value="@_enableLoot" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableLoot</MudSwitch>
+                                <MudSwitch T="bool" @bind-Value="@_specialLootEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_specialLootEnabled</MudSwitch>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton @onclick="resetLoot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                            @if (MainLayout.pendingChanges.Contains("_specialLootEnabled") && MainLayout._appUndoButtonToggle || MainLayout.pendingChanges.Contains("_specialLootBlacklist") && MainLayout._appUndoButtonToggle)
+                            {
+                                <MudButton @onclick="undoLoot" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (_specialLootEnabled != true && MainLayout._appDefaultButtonToggle || _specialLootBlacklist.Count > 0 && MainLayout._appDefaultButtonToggle)
+                            {
+                                <MudButton @onclick="defaultLoot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
                         </MudItem>
 
                         <MudItem xs="1">
@@ -80,17 +95,40 @@
                                           Typo="Typo.body2" HelperText="Enter valid MongoID"
                                           Placeholder="ItemID"
                                           Variant="Variant.Text"
-                                          OnKeyDown="@((e) => HandleKeyDown(e, _lootBlacklistEntryHolder, Data.specialBots.lootConfig.blacklist))"
+                                          OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_lootBlacklistEntryHolder, _specialLootBlacklist))
+                                                        {
+                                                            _specialLootBlacklist.Add(_lootBlacklistEntryHolder);
+                                                            Utils.UpdateView(_specialLootBlacklist, OriginalConfig.specialBots.lootConfig.blacklist, "_specialLootBlacklist");
+                                                        } else {
+                                                            Utils.UpdateView(_specialLootBlacklist, OriginalConfig.specialBots.lootConfig.blacklist, "_specialLootBlacklist");
+                                                        }
+                                                    }
+                                                } )"
                                           Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
                                           Immediate="true"
                                           Adornment="Adornment.End"
                                           AdornmentIcon="@Icons.Material.Filled.ArrowRight"
-                                          OnAdornmentClick="@(() => AddItemToList(_lootBlacklistEntryHolder, Data.specialBots.lootConfig.blacklist))" />
+                                          OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_lootBlacklistEntryHolder, _specialLootBlacklist))
+                                                    {
+                                                        _specialLootBlacklist.Add(_lootBlacklistEntryHolder);
+                                                        Utils.UpdateView(_specialLootBlacklist, OriginalConfig.specialBots.lootConfig.blacklist, "_specialLootBlacklist");
+                                                    } else {
+                                                        Utils.UpdateView(_specialLootBlacklist, OriginalConfig.specialBots.lootConfig.blacklist, "_specialLootBlacklist");
+                                                    }
+                                                } )" />
+
                         </MudItem>
                         <MudItem xs="6">
-                            @foreach (var item in Data.specialBots.lootConfig.blacklist)
+                            @foreach (var item in _specialLootBlacklist)
                             {
-                                <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.specialBots.lootConfig.blacklist))" Color="Color.Default">@item</MudChip>
+                                <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _specialLootBlacklist.Remove(item);
+                                        Utils.UpdateView(_specialLootBlacklist, OriginalConfig.specialBots.lootConfig.blacklist, "_specialLootBlacklist");
+                                    })">@item</MudChip>
                             }
                         </MudItem>
 
@@ -100,17 +138,34 @@
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                                 <MudTooltip Text="Allows random resource consumption on Food/Drink/Medical Items." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    <MudText>Enable Resource Randomization</MudText>
+                                    <MudText>Resource Randomization</MudText>
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="6">
                             <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                                <MudSwitch T="bool" @bind-Value="_enableSpecialResourceRandomization" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableSpecialResourceRandomization</MudSwitch>
+                                <MudSwitch T="bool" @bind-Value="_specialResourceRandomizationEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_specialResourceRandomizationEnabled</MudSwitch>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton @onclick="resetResourceRandomization" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                            @if (
+                           MainLayout.pendingChanges.Contains("_specialResourceRandomizationEnabled") && MainLayout._appUndoButtonToggle ||
+                           MainLayout.pendingChanges.Contains("_specialMedRateMaxChance") && MainLayout._appUndoButtonToggle ||
+                           MainLayout.pendingChanges.Contains("_specialMedRateUsagePercent") && MainLayout._appUndoButtonToggle ||
+                           MainLayout.pendingChanges.Contains("_specialFoodRateMaxChance") && MainLayout._appUndoButtonToggle ||
+                           MainLayout.pendingChanges.Contains("_specialFoodRateUsagePercent") && MainLayout._appUndoButtonToggle)
+                            {
+                                <MudButton @onclick="undoResourceRandomization" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (
+                            _specialResourceRandomizationEnabled != true && MainLayout._appDefaultButtonToggle ||
+                            _specialMedRateMaxChance != 15 && MainLayout._appDefaultButtonToggle ||
+                            _specialMedRateUsagePercent != 25 && MainLayout._appDefaultButtonToggle ||
+                            _specialFoodRateMaxChance != 15 && MainLayout._appDefaultButtonToggle ||
+                            _specialFoodRateUsagePercent != 25 && MainLayout._appDefaultButtonToggle)
+                            {
+                                <MudButton @onclick="defaultResourceRandomization" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
                         </MudItem>
 
                         <MudItem xs="2" />
@@ -120,22 +175,22 @@
                             </MudTooltip>
                         </MudItem>
                         <MudItem xs="3">
-                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Chance for medical items to be full resource usage." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialMedRateMaxChance" Label="Full Chance" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enableSpecialResourceRandomization" />
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialMedRateMaxChance" Label="Full Chance" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_specialResourceRandomizationEnabled" />
                                 </MudTooltip>
                                 <MudTooltip Text="Lowest percent possible for a medical item's usage to be." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialMedRateUsagePercent" Label="Minimum %" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enableSpecialResourceRandomization" />
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialMedRateUsagePercent" Label="Minimum %" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_specialResourceRandomizationEnabled" />
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="3">
-                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Chance for food/drink items to be full resource usage." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialFoodRateMaxChance" Label="Full Chance" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enableSpecialResourceRandomization" />
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialFoodRateMaxChance" Label="Full Chance" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_specialResourceRandomizationEnabled" />
                                 </MudTooltip>
                                 <MudTooltip Text="Lowest percent possible for a food/drink item's usage to be." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialFoodRateUsagePercent" Label="Minimum %" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enableSpecialResourceRandomization" />
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialFoodRateUsagePercent" Label="Minimum %" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_specialResourceRandomizationEnabled" />
                                 </MudTooltip>
                                 <MudSpacer />
                             </MudPaper>
@@ -144,42 +199,95 @@
 
                         <MudItem xs="1" />
                         <MudItem xs="4">
-                            <MudTooltip Text="Adjust Special bot Weapon Durability." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Weapon Durability</MudText>
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows configurable weapon durability." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Weapon Durability Changes</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_specialWeaponDurabilityEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_specialWeaponDurabilityEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_specialWeaponDurabilityEnabled") ||
+                           MainLayout.pendingChanges.Contains("_specialWeaponDurabilityMin") ||
+                           MainLayout.pendingChanges.Contains("_specialWeaponDurabilityMax") ||
+                           MainLayout.pendingChanges.Contains("_specialWeaponDurabilityMinDelta") ||
+                           MainLayout.pendingChanges.Contains("_specialWeaponDurabilityMaxDelta")))
+                            {
+                                <MudButton @onclick="undoWeaponDurability" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _specialWeaponDurabilityEnabled != true ||
+                            _specialWeaponDurabilityMin != 90 ||
+                            _specialWeaponDurabilityMax != 100 ||
+                            _specialWeaponDurabilityMinDelta != 0 ||
+                            _specialWeaponDurabilityMaxDelta != 10))
+                            {
+                                <MudButton @onclick="defaultWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudTooltip Text="Adjust weapon durability values." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Weapon Durability Values</MudText>
                             </MudTooltip>
                         </MudItem>
                         <MudItem xs="2">
-                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Lowest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialWeaponDurabilityMin" Label="Min" HelperText="Durability" Variant="Variant.Filled"
                                                      Min="0"
-                                                     Max="_specialWeaponDurabilityMax" />
+                                                     Max="_specialWeaponDurabilityMax"
+                                                     Disabled="!_specialWeaponDurabilityEnabled" />
                                 </MudTooltip>
                                 <MudTooltip Text="Highest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialWeaponDurabilityMax" Label="Max" HelperText="Durability" Variant="Variant.Filled"
+                                    <MudNumericField Margin="Margin.Dense"
+                                                     HideSpinButtons="true"
+                                                     @bind-Value="_specialWeaponDurabilityMax"
+                                                     Label="Max"
+                                                     HelperText="Durability"
+                                                     Variant="Variant.Filled"
                                                      Min="_specialWeaponDurabilityMin"
-                                                     Max="100" />
+                                                     Max="100"
+                                                     Disabled="!_specialWeaponDurabilityEnabled" />
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="2">
-                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Lowest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialWeaponDurabilityMinDelta" Label="Min" HelperText="Delta" Variant="Variant.Filled"
+                                    <MudNumericField Margin="Margin.Dense"
+                                                     HideSpinButtons="true"
+                                                     @bind-Value="_specialWeaponDurabilityMinDelta"
+                                                     Label="Min"
+                                                     HelperText="Delta"
+                                                     Variant="Variant.Filled"
                                                      Min="0"
                                                      Max="100"
-                                                     Validation="@(new Func<int, bool>(ValidateDelta))" />
+                                                     Validation="@(new Func<int, bool>(ValidateDelta))"
+                                                     Disabled="!_specialWeaponDurabilityEnabled" />
                                 </MudTooltip>
                                 <MudTooltip Text="Highest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialWeaponDurabilityMaxDelta" Label="Max" HelperText="Delta" Variant="Variant.Filled"
+                                    <MudNumericField Margin="Margin.Dense"
+                                                     HideSpinButtons="true"
+                                                     @bind-Value="_specialWeaponDurabilityMaxDelta"
+                                                     Label="Max"
+                                                     HelperText="Delta"
+                                                     Variant="Variant.Filled"
                                                      Min="0"
                                                      Max="100"
-                                                     Validation="@(new Func<int, bool>(ValidateDelta))" />
+                                                     Validation="@(new Func<int, bool>(ValidateDelta))"
+                                                     Disabled="!_specialWeaponDurabilityEnabled" />
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="2">
-                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Lowest Possible Current Durability Roll." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Disabled Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialWeaponDurabilityMinLimitPercent" Label="Min" HelperText="Actual" Variant="Variant.Filled"
                                                      Min="0"
@@ -192,9 +300,7 @@
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
-                        <MudItem xs="1">
-                            <MudButton @onclick="resetWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
-                        </MudItem>
+                        <MudItem xs="1" />
 
                     </MudGrid>
                 </MudExpansionPanel>
@@ -205,84 +311,66 @@
 
 @code {
     #region ENABLE / DISABLE
-    private bool _enableSpecialBots
+    private bool _specialEnabled
     {
         get => Data.specialBots.enable;
         set
         {
-            Utils.UpdateViewBool(value, Data.specialBots.enable);
+            Utils.UpdateView(value, OriginalConfig.specialBots.enable);
             Data.specialBots.enable = value;
         }
     }
-    private void resetSpecialBots() => Data.specialBots.enable = true;
+    private void undoSpecialBots() => _specialEnabled = OriginalConfig.specialBots.enable;
+    private void defaultSpecialBots() => _specialEnabled = true;
     #endregion
-    #region DURABILITY
-    private int _specialWeaponDurabilityMin
+    #region LOOT
+    private bool _specialLootEnabled
     {
-        get => Data.specialBots.weaponDurability.min;
+        get => Data.specialBots.lootConfig.enable;
         set
         {
-            Utils.UpdateViewInt(value, Data.specialBots.weaponDurability.min);
-            Data.specialBots.weaponDurability.minLimitPercent = value - Data.specialBots.weaponDurability.maxDelta;
-            Data.specialBots.weaponDurability.min = value;
+            Data.specialBots.lootConfig.enable = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.lootConfig.enable);
         }
     }
-    private int _specialWeaponDurabilityMax
+    private string _lootBlacklistEntryHolder { get; set; } = "";
+
+    private List<string> _specialLootBlacklist
     {
-        get => Data.specialBots.weaponDurability.max;
+        get => Data.specialBots.lootConfig.blacklist;
         set
         {
-            Utils.UpdateViewInt(value, Data.specialBots.weaponDurability.max);
-            Data.specialBots.weaponDurability.max = value;
+            Data.specialBots.lootConfig.blacklist = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.lootConfig.blacklist);
         }
-    }
-    private int _specialWeaponDurabilityMinDelta
-    {
-        get => Data.specialBots.weaponDurability.minDelta;
-        set
-        {
-            Utils.UpdateViewInt(value, Data.specialBots.weaponDurability.minDelta);
-            Data.specialBots.weaponDurability.minDelta = value;
-        }
-    }
-    private int _specialWeaponDurabilityMaxDelta
-    {
-        get => Data.specialBots.weaponDurability.maxDelta;
-        set
-        {
-            Utils.UpdateViewInt(value, Data.specialBots.weaponDurability.maxDelta);
-            Data.specialBots.weaponDurability.minLimitPercent = Data.specialBots.weaponDurability.min - value;
-            Data.specialBots.weaponDurability.maxDelta = value;
-        }
-    }
-    private int _specialWeaponDurabilityMinLimitPercent
-    {
-        get => Data.specialBots.weaponDurability.minLimitPercent;
-        set {}
-    }
-    private int _specialWeaponDurabilityMaxLimitPercent
-    {
-        get => Data.specialBots.weaponDurability.max - Data.specialBots.weaponDurability.minDelta;
-        set {}
     }
 
-    private void resetWeaponDurability()
+    private void undoLoot()
     {
-        Data.specialBots.weaponDurability.min = 95;
-        Data.specialBots.weaponDurability.max = 100;
-        Data.specialBots.weaponDurability.minDelta = 0;
-        Data.specialBots.weaponDurability.maxDelta = 10;
-        Data.specialBots.weaponDurability.minLimitPercent = Data.specialBots.weaponDurability.min - Data.specialBots.weaponDurability.maxDelta;
+        _specialLootEnabled = OriginalConfig.specialBots.lootConfig.enable;
+        _specialLootBlacklist.Clear();
+        foreach (var item in OriginalConfig.specialBots.lootConfig.blacklist)
+        {
+            _specialLootBlacklist.Add(item);
+        }
+        MainLayout.pendingChanges.Remove("_specialLootBlacklist");
+    }
+
+    private void defaultLoot()
+    {
+        _specialLootEnabled = true;
+        _specialLootBlacklist.Clear();
+        MainLayout.pendingChanges.Add("_specialLootBlacklist");
     }
     #endregion
     #region RESOURCE RANDOMIZATION
-    private bool _enableSpecialResourceRandomization
+    private bool _specialResourceRandomizationEnabled
     {
         get => Data.specialBots.resourceRandomization.enable;
         set
         {
-            Utils.UpdateViewBool(value, Data.specialBots.resourceRandomization.enable);
             Data.specialBots.resourceRandomization.enable = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.resourceRandomization.enable);
         }
     }
     private int _specialFoodRateMaxChance
@@ -290,8 +378,8 @@
         get => Data.specialBots.resourceRandomization.foodRateMaxChance;
         set
         {
-            Utils.UpdateViewInt(value, Data.specialBots.resourceRandomization.foodRateMaxChance);
             Data.specialBots.resourceRandomization.foodRateMaxChance = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.resourceRandomization.foodRateMaxChance);
         }
     }
     private int _specialFoodRateUsagePercent
@@ -299,8 +387,8 @@
         get => Data.specialBots.resourceRandomization.foodRateUsagePercent;
         set
         {
-            Utils.UpdateViewInt(value, Data.specialBots.resourceRandomization.foodRateUsagePercent);
             Data.specialBots.resourceRandomization.foodRateUsagePercent = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.resourceRandomization.foodRateUsagePercent);
         }
     }
     private int _specialMedRateMaxChance
@@ -308,8 +396,8 @@
         get => Data.specialBots.resourceRandomization.medRateMaxChance;
         set
         {
-            Utils.UpdateViewInt(value, Data.specialBots.resourceRandomization.medRateMaxChance);
             Data.specialBots.resourceRandomization.medRateMaxChance = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.resourceRandomization.medRateMaxChance);
         }
     }
     private int _specialMedRateUsagePercent
@@ -317,66 +405,137 @@
         get => Data.specialBots.resourceRandomization.medRateUsagePercent;
         set
         {
-            Utils.UpdateViewInt(value, Data.specialBots.resourceRandomization.medRateUsagePercent);
             Data.specialBots.resourceRandomization.medRateUsagePercent = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.resourceRandomization.medRateUsagePercent);
         }
     }
-    private void resetResourceRandomization()
+    private void undoResourceRandomization()
     {
-        Data.specialBots.resourceRandomization.enable = true;
-        Data.specialBots.resourceRandomization.foodRateMaxChance = 15;
-        Data.specialBots.resourceRandomization.foodRateUsagePercent = 25;
-        Data.specialBots.resourceRandomization.medRateMaxChance = 15;
-        Data.specialBots.resourceRandomization.medRateUsagePercent = 25;
+        _specialResourceRandomizationEnabled = OriginalConfig.specialBots.resourceRandomization.enable;
+        _specialFoodRateMaxChance = OriginalConfig.specialBots.resourceRandomization.foodRateMaxChance;
+        _specialFoodRateUsagePercent = OriginalConfig.specialBots.resourceRandomization.foodRateUsagePercent;
+        _specialMedRateMaxChance = OriginalConfig.specialBots.resourceRandomization.medRateMaxChance;
+        _specialMedRateUsagePercent = OriginalConfig.specialBots.resourceRandomization.medRateUsagePercent;
+    }
+    private void defaultResourceRandomization()
+    {
+        _specialResourceRandomizationEnabled = true;
+        _specialFoodRateMaxChance = 15;
+        _specialFoodRateUsagePercent = 25;
+        _specialMedRateMaxChance = 15;
+        _specialMedRateUsagePercent = 25;
     }
     #endregion
-    #region LOOT
-    private bool _enableLoot
+    #region DURABILITY
+    private bool _specialWeaponDurabilityEnabled
     {
-        get => Data.specialBots.lootConfig.enable;
+        get => Data.specialBots.weaponDurability.enable;
         set
         {
-            Utils.UpdateViewBool(value, Data.specialBots.lootConfig.enable);
-            Data.specialBots.lootConfig.enable = value;
+            Data.specialBots.weaponDurability.enable = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.weaponDurability.enable);
         }
     }
-    private string _lootBlacklistEntryHolder { get; set; } = "";
-
-    private void resetLoot()
+    private int _specialWeaponDurabilityMin
     {
-        Data.specialBots.lootConfig.enable = true;
-        Data.specialBots.lootConfig.blacklist = [];
+        get => Data.specialBots.weaponDurability.min;
+        set
+        {
+            Data.specialBots.weaponDurability.minLimitPercent = value - Data.specialBots.weaponDurability.maxDelta;
+            Data.specialBots.weaponDurability.min = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.weaponDurability.min);
+        }
+    }
+    private int _specialWeaponDurabilityMax
+    {
+        get => Data.specialBots.weaponDurability.max;
+        set
+        {
+            Data.specialBots.weaponDurability.max = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.weaponDurability.max);
+        }
+    }
+    private int _specialWeaponDurabilityMinDelta
+    {
+        get => Data.specialBots.weaponDurability.minDelta;
+        set
+        {
+            Data.specialBots.weaponDurability.minDelta = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.weaponDurability.minDelta);
+        }
+    }
+    private int _specialWeaponDurabilityMaxDelta
+    {
+        get => Data.specialBots.weaponDurability.maxDelta;
+        set
+        {
+            Data.specialBots.weaponDurability.minLimitPercent = Data.specialBots.weaponDurability.min - value;
+            Data.specialBots.weaponDurability.maxDelta = value;
+            Utils.UpdateView(value, OriginalConfig.specialBots.weaponDurability.maxDelta);
+        }
+    }
+    private int _specialWeaponDurabilityMinLimitPercent
+    {
+        get => Data.specialBots.weaponDurability.minLimitPercent;
+        set { }
+    }
+    private int _specialWeaponDurabilityMaxLimitPercent
+    {
+        get => Data.specialBots.weaponDurability.max - Data.specialBots.weaponDurability.minDelta;
+        set { }
+    }
+
+    private void undoWeaponDurability()
+    {
+        _specialWeaponDurabilityEnabled = OriginalConfig.specialBots.weaponDurability.enable;
+        _specialWeaponDurabilityMin = OriginalConfig.specialBots.weaponDurability.min;
+        _specialWeaponDurabilityMax = OriginalConfig.specialBots.weaponDurability.max;
+        _specialWeaponDurabilityMinDelta = OriginalConfig.specialBots.weaponDurability.minDelta;
+        _specialWeaponDurabilityMaxDelta = OriginalConfig.specialBots.weaponDurability.maxDelta;
+        _specialWeaponDurabilityMinLimitPercent = OriginalConfig.specialBots.weaponDurability.minLimitPercent;
+    }
+    private void defaultWeaponDurability()
+    {
+        _specialWeaponDurabilityEnabled = true;
+        _specialWeaponDurabilityMin = 90;
+        _specialWeaponDurabilityMax = 100;
+        _specialWeaponDurabilityMinDelta = 0;
+        _specialWeaponDurabilityMaxDelta = 10;
+        _specialWeaponDurabilityMinLimitPercent = Data.specialBots.weaponDurability.min - Data.specialBots.weaponDurability.maxDelta;
     }
     #endregion
 
     #region INPUT HANDLING
-    private void HandleKeyDown(KeyboardEventArgs e, string value, List<string> list)
+    private bool HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Enter" && !e.ShiftKey)
         {
-            AddItemToList(value, list);
+            return true;
         }
+        return false;
     }
 
-    private void AddItemToList(string value, List<string> list)
+    private bool CanAddItemToList(string value, List<string> list)
     {
         if (value != null)
         {
             bool containsAlready = list.FirstOrDefault(s => s.Contains(value)) == value ? true : false;
             if (!containsAlready && Utils.IsHexAndValidLength(value))
             {
-                list.Add(value);
-                MainLayout.EnableUnsavedChangesButton();
+                return true;
             }
             else if (containsAlready)
             {
                 Snackbar.Add("Already blacklisted.", Severity.Error, config => { config.ShowCloseIcon = false; });
+                return false;
             }
             else
             {
                 Snackbar.Add("Invalid MongoID.", Severity.Error, config => { config.ShowCloseIcon = false; });
+                return false;
             }
         }
+        return false;
     }
 
     private void OnChipClosed(string item, List<string> list)
@@ -384,9 +543,9 @@
         if (item != null)
         {
             list.Remove(item);
-            MainLayout.EnableUnsavedChangesButton();
         }
     }
+
     public bool ValidateDelta(int value)
     {
         if (_specialWeaponDurabilityMinLimitPercent < _specialWeaponDurabilityMaxLimitPercent)
@@ -396,6 +555,7 @@
         return false;
     }
     #endregion
+
     #region CASCADING PARAMETERS
     [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
     #endregion

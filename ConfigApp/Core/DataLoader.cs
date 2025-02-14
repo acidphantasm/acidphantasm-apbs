@@ -1,10 +1,14 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Windows.Input;
 using System.Windows.Media.TextFormatting;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 
 namespace APBSConfig.Core
@@ -39,7 +43,7 @@ namespace APBSConfig.Core
     {
         #region PRESETS
         public bool usePreset { get; set; }
-        public string? presetName { get; set; }
+        public required string presetName { get; set; }
         #endregion
 
         #region MOD COMPATIBILITY
@@ -89,6 +93,7 @@ namespace APBSConfig.Core
         #region DEBUG LOG
         public bool enableDebugLog { get; set; }
         #endregion
+        public required ConfigAppSettings configAppSettings { get; set; }
     }
     public class PMCSpecificConfig
     {
@@ -112,6 +117,7 @@ namespace APBSConfig.Core
     }
     public class WeaponDurabilityConfig
     {
+        public bool enable { get; set; }
         public int min { get; set; }
         public int max { get; set; }
         public int minDelta { get; set; }
@@ -121,8 +127,7 @@ namespace APBSConfig.Core
     public class LootConfig
     {
         public bool enable { get; set; }
-        [AllowNull]
-        public List<string> blacklist { get; set; }
+        public required List<string> blacklist { get; set; }
     }
     public class KeyConfig
     {
@@ -191,25 +196,17 @@ namespace APBSConfig.Core
         public int healthRightArm { get; set; }
         public int healthLeftLeg { get; set; }
         public int healthRightLeg { get; set; }
-        [AllowNull]
-        public List<string> excludedBots { get; set; }
+        public required List<string> excludedBots { get; set; }
     }
     public class TierBlacklistConfig
     {
-        [AllowNull]
-        public List<string> tier1Blacklist { get; set; }
-        [AllowNull]
-        public List<string> tier2Blacklist { get; set; }
-        [AllowNull]
-        public List<string> tier3Blacklist { get; set; }
-        [AllowNull]
-        public List<string> tier4Blacklist { get; set; }
-        [AllowNull]
-        public List<string> tier5Blacklist { get; set; }
-        [AllowNull]
-        public List<string> tier6Blacklist { get; set; }
-        [AllowNull]
-        public List<string> tier7Blacklist { get; set; }
+        public required List<string> tier1Blacklist { get; set; }
+        public required List<string> tier2Blacklist { get; set; }
+        public required List<string> tier3Blacklist { get; set; }
+        public required List<string> tier4Blacklist { get; set; }
+        public required List<string> tier5Blacklist { get; set; }
+        public required List<string> tier6Blacklist { get; set; }
+        public required List<string> tier7Blacklist { get; set; }
     }
     public class CustomLevelDelta
     {
@@ -242,40 +239,65 @@ namespace APBSConfig.Core
         public bool PackNStrap_UnlootablePMCArmbandBelts { get; set; }
         public bool Realism_AddGasMasksToBots { get; set; }
     }
+    public class ConfigAppSettings
+    {
+        public bool showUndo { get; set; }
+        public bool showDefault { get; set; }
+    }
 
     public class DataLoader
     {
-        private static readonly string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+        private static readonly string? directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         public static APBSServerConfig Data { get; set; } = default!;
+        public static APBSServerConfig OriginalConfig { get; set; } = default!;
         public static bool initialLoad = false;
         public static bool LoadJson()
         {
-            var path = Path.Combine(directory, "./Core/config.json");
+            if (directory != null)
+            {
+                var path = Path.Combine(directory, "./config/config.json");
 
-            try
-            {
-                Data = JsonConvert.DeserializeObject<APBSServerConfig>(File.ReadAllText(path)) ?? default!;
-                return true;
+                try
+                {
+                    Data = JsonConvert.DeserializeObject<APBSServerConfig>(File.ReadAllText(path)) ?? default!;
+
+                    // Reserialize Data into temporary object to reset OriginalConfig to current loaded config
+                    string serializedData = JsonConvert.SerializeObject(Data);
+                    OriginalConfig = JsonConvert.DeserializeObject<APBSServerConfig>(serializedData)!;
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
         public static bool SaveJson()
         {
-            var path = Path.Combine(directory, "./Core/config.json");
 
-            try
+            if (directory != null)
             {
-                File.WriteAllText(path, JsonConvert.SerializeObject(Data, Formatting.Indented));
-                return true;
+                var path = Path.Combine(directory, "./config/config.json");
+
+                try
+                {
+                    File.WriteAllText(path, JsonConvert.SerializeObject(Data, Formatting.Indented));
+
+                    // Reserialize Data into temporary object to reset OriginalConfig to current loaded config
+                    string serializedData = JsonConvert.SerializeObject(Data);
+                    OriginalConfig = JsonConvert.DeserializeObject<APBSServerConfig>(serializedData)!;
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
-            catch
-            {
-                return false;
-            }            
+            return false;
         }
     }
 }

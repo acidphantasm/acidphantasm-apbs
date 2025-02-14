@@ -1,12 +1,25 @@
 ﻿<MudDialog>
     <DialogContent>
         <MudText>@ContentText</MudText>
+        @if (ChangeList != null)
+        {
+            <MudText> Changes:</MudText>
+            <MudSpacer/>
+            foreach (var item in ChangeList)
+            {
+                <MudText>@item</MudText>
+            }            
+        }
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
+        @if (showCancel) 
+        {
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+        }
         <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
     </DialogActions>
 </MudDialog>
+
 @code {
     [CascadingParameter]
     private IMudDialogInstance? MudDialog { get; set; }
@@ -15,7 +28,13 @@
     public string? ContentText { get; set; }
 
     [Parameter]
+    public List<string>? ChangeList { get; set; }
+
+    [Parameter]
     public string? ButtonText { get; set; }
+
+    [Parameter]
+    public bool showCancel { get; set; } = true;
 
     [Parameter]
     public Color Color { get; set; }

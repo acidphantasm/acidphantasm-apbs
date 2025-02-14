@@ -3,7 +3,7 @@
 @using static Core.DataLoader;
 
 <MudMainContent>
-    <MudContainer>
+    <MudContainer Class="mb-20">
         <MudExpansionPanels MultiExpansion="true">
             <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Custom Item Importing" Expanded=true>
                 <MudGrid>
@@ -12,17 +12,24 @@
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Allows bots to use custom modded weapons. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                 <MudText>Enable Modded Weapons</MudText>
+                                 <MudText>Modded Weapons</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enableModdedWeapons" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableModdedWeapons</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_modCustomWeaponsEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_modCustomWeaponsEnabled</MudSwitch>
                         </MudPaper>                        
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetModWeapons" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modCustomWeaponsEnabled"))
+                        {
+                            <MudButton @onclick="undoCustomWeapons" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modCustomWeaponsEnabled != false)
+                        {
+                            <MudButton @onclick="defaultCustomWeapons" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -34,13 +41,20 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">@_pmcWeaponWeights</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_modCustomWeaponsEnabled">@_modPMCWeaponWeights</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_pmcWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!_enableModdedWeapons" />
+                        <MudSlider @bind-Value="_modPMCWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!_modCustomWeaponsEnabled" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetPMCWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modPMCWeaponWeights"))
+                        {
+                            <MudButton @onclick="undoPMCWeaponWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modPMCWeaponWeights != 8)
+                        {
+                            <MudButton @onclick="defaultPMCWeaponWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -52,13 +66,20 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">@_scavWeaponWeights</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_modCustomWeaponsEnabled">@_modScavWeaponWeights</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_scavWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!_enableModdedWeapons" />
+                        <MudSlider @bind-Value="_modScavWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!_modCustomWeaponsEnabled" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetScavWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modScavWeaponWeights"))
+                        {
+                            <MudButton @onclick="undoScavWeaponWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modScavWeaponWeights != 1)
+                        {
+                            <MudButton @onclick="defaultScavWeaponWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -70,30 +91,44 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">@_followerWeaponWeights</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_modCustomWeaponsEnabled">@_modFollowerWeaponWeights</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_followerWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!_enableModdedWeapons"/>
+                        <MudSlider @bind-Value="_modFollowerWeaponWeights" ValueLabel="true" Min="1" Max="15" Color="Color.Info" Size="Size.Medium" Disabled="!_modCustomWeaponsEnabled"/>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetFollowerWeight" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modFollowerWeaponWeights"))
+                        {
+                            <MudButton @onclick="undoFollowerWeaponWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modFollowerWeaponWeights != 6)
+                        {
+                            <MudButton @onclick="defaultFollowerWeaponWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Allows bots to use custom modded equipment. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Enable Modded Equipment</MudText>
+                                <MudText>Modded Equipment</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enableModdedEquipment" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableModdedEquipment</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_modCustomEquipmentEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_modCustomEquipmentEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetModEquipment" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modCustomEquipmentEnabled"))
+                        {
+                            <MudButton @onclick="undoCustomEquipment" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modCustomEquipmentEnabled != false)
+                        {
+                            <MudButton @onclick="defaultCustomEquipment" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1">
@@ -106,34 +141,48 @@
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Allows bots to use custom modded clothing. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Enable Modded Clothing</MudText>
+                                <MudText>Modded Clothing</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enableModdedClothing" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End" Disabled="_enableSeasonalPmcAppearance">@_enableModdedClothing</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_modCustomClothingEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End" Disabled="_enableSeasonalPmcAppearance">@_modCustomClothingEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetModClothing" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="_enableSeasonalPmcAppearance">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modCustomClothingEnabled"))
+                        {
+                            <MudButton @onclick="undoCustomClothing" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modCustomClothingEnabled != false)
+                        {
+                            <MudButton @onclick="defaultCustomClothing" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Allows bots to use custom modded attachments. Mods must load prior to APBS to be imported." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Enable Modded Attachments</MudText>
+                                <MudText>Modded Attachments</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enableModdedAttachments" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableModdedAttachments</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_modCustomAttachmentsEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_modCustomAttachmentsEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetModAttachments" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modCustomAttachmentsEnabled"))
+                        {
+                            <MudButton @onclick="undoCustomAttachments" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modCustomAttachmentsEnabled != false)
+                        {
+                            <MudButton @onclick="defaultCustomAttachments" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1" />
@@ -145,13 +194,20 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons && !_enableModdedEquipment">@_initialTierAppearance</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_modCustomWeaponsEnabled && !_modCustomEquipmentEnabled">@_modInitialTierAppearance</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_initialTierAppearance" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!_enableModdedWeapons && !_enableModdedEquipment" />
+                        <MudSlider @bind-Value="_modInitialTierAppearance" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!_modCustomWeaponsEnabled && !_modCustomEquipmentEnabled" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetTierAppearance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableModdedWeapons && !_enableModdedEquipment">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modInitialTierAppearance"))
+                        {
+                            <MudButton @onclick="undoInitialTierAppearance" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modInitialTierAppearance != 3)
+                        {
+                            <MudButton @onclick="defaultInitialTierAppearance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                 </MudGrid>
@@ -163,17 +219,24 @@
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Prevents vanilla mods being added to vanilla attachments due to custom item filters." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Enable Safeguard</MudText>
+                                <MudText>Vanilla Cursing Safeguard</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enableSafeGuard" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableSafeGuard</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_modSafeGuardEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_modSafeGuardEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetSafeguard" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modSafeGuardEnabled"))
+                        {
+                            <MudButton @onclick="undoSafeGuard" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modSafeGuardEnabled != true)
+                        {
+                            <MudButton @onclick="defaultSafeGuard" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1">
@@ -187,18 +250,25 @@
                         <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
                             <MudText>
                                 <MudTooltip Text="Makes belts on PMCs in ArmBand slot unlootable, you can still view contents." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    Enable Unlootable Belts on PMCs
+                                    Unlootable Belts on PMCs
                                 </MudTooltip>
                             </MudText>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_packNStrap" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_packNStrap</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_modPackNStrapCompatibility" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_modPackNStrapCompatibility</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetPackNStrap" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modPackNStrapCompatibility"))
+                        {
+                            <MudButton @onclick="undoPackNStrap" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modPackNStrapCompatibility != true)
+                        {
+                            <MudButton @onclick="defaultPackNStrap" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
                     
                     <MudItem xs="1">
@@ -212,18 +282,25 @@
                         <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
                             <MudText>
                                 <MudTooltip Text="Allows bots to use gas masks - if you don't use Hazard Zones then you don't need this." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                        Enable Adding Gas Masks to Bots
+                                        Add Gas Masks to Bots
                                 </MudTooltip>
                             </MudText>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_realism" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_realism</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_modRealismCompatibility" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_modRealismCompatibility</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetRealism" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modRealismCompatibility"))
+                        {
+                            <MudButton @onclick="undoRealism" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modRealismCompatibility != false)
+                        {
+                            <MudButton @onclick="defaultRealism" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                 </MudGrid>
@@ -242,18 +319,25 @@
                         <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
                             <MudText>
                                 <MudTooltip Text="Do you really need this? Maybe...you're an early release tester?" Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    Enable Debug Logging
+                                    Debug Logging
                                 </MudTooltip>
                             </MudText>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_debugLogging" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_debugLogging</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_debugLogging" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_debugLogging</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetDebug" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_debugLogging"))
+                        {
+                            <MudButton @onclick="undoDebug" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _debugLogging != false)
+                        {
+                            <MudButton @onclick="defaultDebug" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                 </MudGrid>
@@ -264,120 +348,131 @@
 
 @code {
     #region ENABLE/DISABLE TYPES
-    private bool _enableModdedWeapons
+    private bool _modCustomWeaponsEnabled
     {
         get => Data.compatibilityConfig.enableModdedWeapons;
         set
         {
-            Utils.UpdateViewBool(value, Data.compatibilityConfig.enableModdedWeapons);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.enableModdedWeapons);
             Data.compatibilityConfig.enableModdedWeapons = value;
         }
     }
-    private void resetModWeapons() => Data.compatibilityConfig.enableModdedWeapons = false;
-    private bool _enableModdedEquipment
+    private void undoCustomWeapons() => _modCustomWeaponsEnabled = OriginalConfig.compatibilityConfig.enableModdedWeapons;
+    private void defaultCustomWeapons() => _modCustomWeaponsEnabled = false;
+    private bool _modCustomEquipmentEnabled
     {
         get => Data.compatibilityConfig.enableModdedEquipment;
         set
         {
-            Utils.UpdateViewBool(value, Data.compatibilityConfig.enableModdedEquipment);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.enableModdedEquipment);
             Data.compatibilityConfig.enableModdedEquipment = value;
         }
     }
-    private void resetModEquipment() => Data.compatibilityConfig.enableModdedEquipment = false;
-    private bool _enableModdedClothing
+    private void undoCustomEquipment() => _modCustomEquipmentEnabled = OriginalConfig.compatibilityConfig.enableModdedEquipment;
+    private void defaultCustomEquipment() => _modCustomEquipmentEnabled = false;
+    private bool _modCustomClothingEnabled
     {
         get => Data.compatibilityConfig.enableModdedClothing;
         set
         {
-            Utils.UpdateViewBool(value, Data.compatibilityConfig.enableModdedClothing);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.enableModdedClothing);
             Data.compatibilityConfig.enableModdedClothing = value;
         }
     }
-    private void resetModClothing() => Data.compatibilityConfig.enableModdedClothing = false;
-    private bool _enableModdedAttachments
+    private void undoCustomClothing() => _modCustomClothingEnabled = OriginalConfig.compatibilityConfig.enableModdedClothing;
+    private void defaultCustomClothing() => _modCustomClothingEnabled = false;
+    private bool _modCustomAttachmentsEnabled
     {
         get => Data.compatibilityConfig.enableModdedAttachments;
         set
         {
-            Utils.UpdateViewBool(value, Data.compatibilityConfig.enableModdedAttachments);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.enableModdedAttachments);
             Data.compatibilityConfig.enableModdedAttachments = value;
         }
     }
-    private void resetModAttachments() => Data.compatibilityConfig.enableModdedAttachments = false;
+    private void undoCustomAttachments() => _modCustomAttachmentsEnabled = OriginalConfig.compatibilityConfig.enableModdedAttachments;
+    private void defaultCustomAttachments() => _modCustomAttachmentsEnabled = false;
     #endregion
     #region WEIGHTS / APPEARANCE
-    private int _pmcWeaponWeights
+    private int _modPMCWeaponWeights
     {
         get => Data.compatibilityConfig.pmcWeaponWeights;
         set
         {
-            Utils.UpdateViewInt(value, Data.compatibilityConfig.pmcWeaponWeights);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.pmcWeaponWeights);
             Data.compatibilityConfig.pmcWeaponWeights = value;
         }
     }
-    private void resetPMCWeight() => Data.compatibilityConfig.pmcWeaponWeights = 8;
-    private int _scavWeaponWeights
+    private void undoPMCWeaponWeights() => _modPMCWeaponWeights = OriginalConfig.compatibilityConfig.pmcWeaponWeights;
+    private void defaultPMCWeaponWeights() => _modPMCWeaponWeights = 8;
+    private int _modScavWeaponWeights
     {
         get => Data.compatibilityConfig.scavWeaponWeights;
         set
         {
-            Utils.UpdateViewInt(value, Data.compatibilityConfig.scavWeaponWeights);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.scavWeaponWeights);
             Data.compatibilityConfig.scavWeaponWeights = value;
         }
     }
-    private void resetScavWeight() => Data.compatibilityConfig.scavWeaponWeights = 1;
-    private int _followerWeaponWeights
+    private void undoScavWeaponWeights() => _modScavWeaponWeights = OriginalConfig.compatibilityConfig.scavWeaponWeights;
+    private void defaultScavWeaponWeights() => _modScavWeaponWeights = 1;
+    private int _modFollowerWeaponWeights
     {
         get => Data.compatibilityConfig.followerWeaponWeights;
         set
         {
-            Utils.UpdateViewInt(value, Data.compatibilityConfig.followerWeaponWeights);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.followerWeaponWeights);
             Data.compatibilityConfig.followerWeaponWeights = value;
         }
     }
-    private void resetFollowerWeight() => Data.compatibilityConfig.followerWeaponWeights = 6;
-    private int _initialTierAppearance
+    private void undoFollowerWeaponWeights() => _modFollowerWeaponWeights = OriginalConfig.compatibilityConfig.followerWeaponWeights;
+    private void defaultFollowerWeaponWeights() => _modFollowerWeaponWeights = 6;
+    private int _modInitialTierAppearance
     {
         get => Data.compatibilityConfig.initalTierAppearance;
         set
         {
-            Utils.UpdateViewInt(value, Data.compatibilityConfig.initalTierAppearance);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.initalTierAppearance);
             Data.compatibilityConfig.initalTierAppearance = value;
         }
     }
-    private void resetTierAppearance() => Data.compatibilityConfig.initalTierAppearance = 3;
+    private void undoInitialTierAppearance() => _modInitialTierAppearance = OriginalConfig.compatibilityConfig.initalTierAppearance;
+    private void defaultInitialTierAppearance() => _modInitialTierAppearance = 3;
     #endregion
     #region OPTIONS
-    private bool _enableSafeGuard
+    private bool _modSafeGuardEnabled
     {
         get => Data.compatibilityConfig.enableSafeGuard;
         set
         {
-            Utils.UpdateViewBool(value, Data.compatibilityConfig.enableSafeGuard);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.enableSafeGuard);
             Data.compatibilityConfig.enableSafeGuard = value;
         }
     }
-    private void resetSafeguard() => Data.compatibilityConfig.enableSafeGuard = true;
-    private bool _packNStrap
+    private void undoSafeGuard() => _modSafeGuardEnabled = OriginalConfig.compatibilityConfig.enableSafeGuard;
+    private void defaultSafeGuard() => _modSafeGuardEnabled = true;
+    private bool _modPackNStrapCompatibility
     {
         get => Data.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts;
         set
         {
-            Utils.UpdateViewBool(value, Data.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts);
             Data.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts = value;
         }
     }
-    private void resetPackNStrap() => Data.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts = true;
-    private bool _realism
+    private void undoPackNStrap() => _modPackNStrapCompatibility = OriginalConfig.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts;
+    private void defaultPackNStrap() => _modPackNStrapCompatibility = true;
+    private bool _modRealismCompatibility
     {
         get => Data.compatibilityConfig.Realism_AddGasMasksToBots;
         set
         {
-            Utils.UpdateViewBool(value, Data.compatibilityConfig.Realism_AddGasMasksToBots);
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.Realism_AddGasMasksToBots);
             Data.compatibilityConfig.Realism_AddGasMasksToBots = value;
         }
     }
-    private void resetRealism() => Data.compatibilityConfig.Realism_AddGasMasksToBots = false;
+    private void undoRealism() => _modRealismCompatibility = OriginalConfig.compatibilityConfig.Realism_AddGasMasksToBots;
+    private void defaultRealism() => _modRealismCompatibility = false;
     #endregion
     #region DEBUG
     private bool _debugLogging
@@ -385,11 +480,12 @@
         get => Data.enableDebugLog;
         set
         {
-            Utils.UpdateViewBool(value, Data.enableDebugLog);
+            Utils.UpdateView(value, OriginalConfig.enableDebugLog);
             Data.enableDebugLog = value;
         }
     }
-    private void resetDebug() => Data.enableDebugLog = false;
+    private void undoDebug() => _debugLogging = OriginalConfig.enableDebugLog;
+    private void defaultDebug() => _debugLogging = false;
     #endregion
 
     #region GETTER FOR DELEGATES NOT HERE

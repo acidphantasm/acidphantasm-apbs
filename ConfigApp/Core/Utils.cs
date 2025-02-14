@@ -1,7 +1,10 @@
 ﻿using APBSConfig.Shared;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +12,8 @@ namespace APBSConfig.Core
 {
     internal class Utils
     {
+        public static List<string> callerList = new List<string>();
+
         public static IEnumerable<string> TextObjectIDValidation(string value)
         {
             if (!string.IsNullOrEmpty(value) && (value.Length != 24 || !IsHex(value)))
@@ -47,31 +52,122 @@ namespace APBSConfig.Core
                 MainLayout.EnableUnsavedChangesButton();
             }
         }
-
-        public static void UpdateViewInt(int holder, int actual)
+        public static void UpdateView(bool holder, bool originalConfigValue, [CallerMemberName] string caller = "")
         {
-            if (holder != actual)
+            switch (MainLayout.pendingChanges.Contains(caller))
             {
-                MainLayout.EnableUnsavedChangesButton();
+                case true:
+                    if (holder != originalConfigValue) return;
+                    if (holder == originalConfigValue)
+                    {
+                        MainLayout.pendingChanges.Remove(caller);
+                    }
+                    break;
+                case false:
+                    if (holder != originalConfigValue)
+                    {
+                        MainLayout.pendingChanges.Add(caller);
+                    }
+                    if (holder == originalConfigValue)
+                    {
+                        MainLayout.pendingChanges.Remove(caller);
+                    }
+                    break;
             }
+
+            MainLayout.TriggerUIRefresh();
         }
-
-        public static void UpdateViewListInt(List<int> holder, List<int> actual)
+        public static void UpdateView(int holder, int originalConfigValue, [CallerMemberName] string caller = "")
         {
-            bool isListSame = Enumerable.SequenceEqual(holder, actual);
-            if (!isListSame)
+            switch (MainLayout.pendingChanges.Contains(caller))
             {
-                MainLayout.EnableUnsavedChangesButton();
+                case true:
+                    if (holder != originalConfigValue) return;
+                    if (holder == originalConfigValue)
+                    {
+                        MainLayout.pendingChanges.Remove(caller);
+                    }
+                    break;
+                case false:
+                    if (holder != originalConfigValue)
+                    {
+                        MainLayout.pendingChanges.Add(caller);
+                    }
+                    if (holder == originalConfigValue)
+                    {
+                        MainLayout.pendingChanges.Remove(caller);
+                    }
+                    break;
             }
+
+            MainLayout.TriggerUIRefresh();
         }
-
-        public static void UpdateViewListString(List<string> holder, List<string> actual)
+        public static void UpdateView(List<string> holder, List<string> originalConfigValue, [CallerMemberName] string caller = "")
         {
-            bool isListSame = Enumerable.SequenceEqual(holder, actual);
-            if (!isListSame)
+            switch (MainLayout.pendingChanges.Contains(caller))
             {
-                MainLayout.EnableUnsavedChangesButton();
+                case true:
+                    if (!holder.SequenceEqual(originalConfigValue)) return;
+                    if (holder.SequenceEqual(originalConfigValue))
+                    {
+                        MainLayout.pendingChanges.Remove(caller);
+                    }
+                    break;
+                case false:
+                    if (!holder.SequenceEqual(originalConfigValue))
+                    {
+                        MainLayout.pendingChanges.Add(caller);
+                    }
+                    break;
             }
+
+            MainLayout.TriggerUIRefresh();
+        }
+        public static void UpdateView(List<int> holder, List<int> originalConfigValue, [CallerMemberName] string caller = "")
+        {
+            switch (MainLayout.pendingChanges.Contains(caller))
+            {
+                case true:
+                    if (!holder.SequenceEqual(originalConfigValue)) return;
+                    if (holder.SequenceEqual(originalConfigValue))
+                    {
+                        MainLayout.pendingChanges.Remove(caller);
+                    }
+                    break;
+                case false:
+                    if (!holder.SequenceEqual(originalConfigValue))
+                    {
+                        MainLayout.pendingChanges.Add(caller);
+                    }
+                    break;
+            }
+
+            MainLayout.TriggerUIRefresh();
+        }
+        public static void UpdateView(string holder, string originalConfigValue, [CallerMemberName] string caller = "")
+        {
+            switch (MainLayout.pendingChanges.Contains(caller))
+            {
+                case true:
+                    if (holder != originalConfigValue) return;
+                    if (holder == originalConfigValue)
+                    {
+                        MainLayout.pendingChanges.Remove(caller);
+                    }
+                    break;
+                case false:
+                    if (holder != originalConfigValue)
+                    {
+                        MainLayout.pendingChanges.Add(caller);
+                    }
+                    if (holder == originalConfigValue)
+                    {
+                        MainLayout.pendingChanges.Remove(caller);
+                    }
+                    break;
+            }
+
+            MainLayout.TriggerUIRefresh();
         }
     }
 }

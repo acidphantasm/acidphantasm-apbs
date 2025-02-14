@@ -28,7 +28,7 @@ namespace APBSConfig
             serviceCollection.AddBlazorWebViewDeveloperTools();
             serviceCollection.AddMudServices(config =>
             {
-                config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopRight;
+                config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopCenter;
                 config.SnackbarConfiguration.PreventDuplicates = false;
                 config.SnackbarConfiguration.VisibleStateDuration = 2000;
                 config.SnackbarConfiguration.ShowTransitionDuration = 100;

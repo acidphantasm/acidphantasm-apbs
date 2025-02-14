@@ -10,7 +10,7 @@
 </style>
 
 <MudMainContent>
-    <MudContainer>
+    <MudContainer Class="mb-20">
         <MudExpansionPanels MultiExpansion="true">
             <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="PMC Specific Configuration" Expanded=true>
                 <MudGrid>
@@ -22,51 +22,70 @@
                                     <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
                                 </ChildContent>
                                 <TooltipContent>
-                                    <MudText Typo="Typo.body2">All settings on this page, and any other setting that may impact these bots are controlled by this toggle.</MudText>
-                                    <MudText Typo="Typo.body2">EXCEPTION: Normalize Health is always applied if enabled but not excluded.</MudText>
+                                    <MudText Typo="Typo.caption">All settings on this page, and any other setting that may impact these bots are controlled by this toggle.</MudText><MudSpacer />
+                                    <MudSpacer />
+                                    <MudText Typo="Typo.caption">EXCEPTION: Normalize Health is always applied if enabled but not excluded.</MudText>
                                 </TooltipContent>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="Grants APBS control over PMCs. You will have vanilla PMCs if disabled." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Enable PMC Generation</MudText>
+                            <MudTooltip Text="Grants APBS control over PMC Bots. You will have vanilla versions of these bots if disabled." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>PMC Bot Generation</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enablePMCBots" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enablePMCBots</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_pmcEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetPMCBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_pmcEnabled") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoPMCBots" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_pmcEnabled != true && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultPMCBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                 </MudGrid>
             </MudExpansionPanel>
-            @if (_enablePMCBots)
+            @if (_pmcEnabled)
             {
-                <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="PMC Specific Options" Expanded=true>
+                <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Style="padding-bottom:25px" Text="PMC Specific Options" Expanded=true>
                     <MudGrid>
-
 
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                                <MudTooltip Text="Allows PMCs to spawn with additional loot." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    <MudText>Enable Loot</MudText>
+                                <MudTooltip Text="Allows PMC Bots to spawn with additional loot." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Loot</MudText>
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="6">
                             <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                                <MudSwitch T="bool" @bind-Value="_enableLoot" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableLoot</MudSwitch>
+                                <MudSwitch T="bool" @bind-Value="@_pmcLootEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcLootEnabled</MudSwitch>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton @onclick="resetLoot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                            @if (MainLayout._appUndoButtonToggle && (
+                                MainLayout.pendingChanges.Contains("_pmcLootEnabled") || 
+                                MainLayout.pendingChanges.Contains("_pmcLootBlacklist")))
+                            {
+                                <MudButton @onclick="undoLoot" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                                _pmcLootEnabled != true ||
+                                _pmcLootBlacklist.Count != 1 ||
+                                !_pmcLootBlacklist.Contains("6711039f9e648049e50b3307")))
+                            {
+                                <MudButton @onclick="defaultLoot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
                         </MudItem>
 
                         <MudItem xs="1">
@@ -77,24 +96,44 @@
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="4" Class="align-center">
-                            <MudTextField T="string" @bind-Value="_lootBlacklistEntryHolder"
+                            <MudTextField T="string" @bind-Value="@_lootBlacklistEntryHolder"
                                           Typo="Typo.body2" HelperText="Enter valid MongoID"
                                           Placeholder="ItemID"
                                           Variant="Variant.Text"
-                                          OnKeyDown="@((e) => HandleKeyDown(e, _lootBlacklistEntryHolder, Data.pmcBots.lootConfig.blacklist))"
+                                          OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_lootBlacklistEntryHolder, _pmcLootBlacklist))
+                                                        {
+                                                            _pmcLootBlacklist.Add(_lootBlacklistEntryHolder);
+                                                            Utils.UpdateView(_pmcLootBlacklist, OriginalConfig.pmcBots.lootConfig.blacklist, "_pmcLootBlacklist");
+                                                        } else {
+                                                            Utils.UpdateView(_pmcLootBlacklist, OriginalConfig.pmcBots.lootConfig.blacklist, "_pmcLootBlacklist");
+                                                        }
+                                                    }
+                                                } )"
                                           Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
                                           Immediate="true"
                                           Adornment="Adornment.End"
                                           AdornmentIcon="@Icons.Material.Filled.ArrowRight"
-                                          OnAdornmentClick="@(() => AddItemToList(_lootBlacklistEntryHolder, Data.pmcBots.lootConfig.blacklist))" />
+                                          OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_lootBlacklistEntryHolder, _pmcLootBlacklist))
+                                                    {
+                                                        _pmcLootBlacklist.Add(_lootBlacklistEntryHolder);
+                                                        Utils.UpdateView(_pmcLootBlacklist, OriginalConfig.pmcBots.lootConfig.blacklist, "_pmcLootBlacklist");
+                                                    } else {
+                                                        Utils.UpdateView(_pmcLootBlacklist, OriginalConfig.pmcBots.lootConfig.blacklist, "_pmcLootBlacklist");
+                                                    }
+                                                } )" />
+
                         </MudItem>
                         <MudItem xs="6">
-                            @if (Data.pmcBots.lootConfig.blacklist != null)
+                            @foreach (var item in _pmcLootBlacklist)
                             {
-                                foreach (var item in Data.pmcBots.lootConfig.blacklist)
-                                {
-                                    <MudChip Value="@item" T="string" OnClose="@(() => OnChipClosed(item, Data.pmcBots.lootConfig.blacklist))" Color="Color.Default">@item</MudChip>
-                                }
+                                <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _pmcLootBlacklist.Remove(item);
+                                        Utils.UpdateView(_pmcLootBlacklist, OriginalConfig.pmcBots.lootConfig.blacklist, "_pmcLootBlacklist");
+                                    })">@item</MudChip>
                             }
                         </MudItem>
 
@@ -104,17 +143,34 @@
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                                 <MudTooltip Text="Allows random resource consumption on Food/Drink/Medical Items." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    <MudText>Enable Resource Randomization</MudText>
+                                    <MudText>Resource Randomization</MudText>
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="6">
                             <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                                <MudSwitch T="bool" @bind-Value="_enablePMCResourceRandomization" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enablePMCResourceRandomization</MudSwitch>
+                                <MudSwitch T="bool" @bind-Value="_pmcResourceRandomizationEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcResourceRandomizationEnabled</MudSwitch>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton @onclick="resetResourceRandomization" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_pmcResourceRandomizationEnabled") ||
+                           MainLayout.pendingChanges.Contains("_pmcMedRateMaxChance") ||
+                           MainLayout.pendingChanges.Contains("_pmcMedRateUsagePercent") ||
+                           MainLayout.pendingChanges.Contains("_pmcFoodRateMaxChance") ||
+                           MainLayout.pendingChanges.Contains("_pmcFoodRateUsagePercent")))
+                            {
+                                <MudButton @onclick="undoResourceRandomization" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _pmcResourceRandomizationEnabled != true ||
+                            _pmcMedRateMaxChance != 10 ||
+                            _pmcMedRateUsagePercent != 33 ||
+                            _pmcFoodRateMaxChance != 10 ||
+                            _pmcFoodRateUsagePercent != 33 ))
+                            {
+                                <MudButton @onclick="defaultResourceRandomization" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
                         </MudItem>
 
                         <MudItem xs="2" />
@@ -124,22 +180,22 @@
                             </MudTooltip>
                         </MudItem>
                         <MudItem xs="3">
-                            <MudPaper Class="d-flex align-center mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Chance for medical items to be full resource usage." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcMedRateMaxChance" Label="Full Chance" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enablePMCResourceRandomization" />
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcMedRateMaxChance" Label="Full Chance" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_pmcResourceRandomizationEnabled" />
                                 </MudTooltip>
                                 <MudTooltip Text="Lowest percent possible for a medical item's usage to be." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcMedRateUsagePercent" Label="Minimum %" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enablePMCResourceRandomization" />
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcMedRateUsagePercent" Label="Minimum %" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_pmcResourceRandomizationEnabled" />
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="3">
-                            <MudPaper Class="d-flex align-center mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Chance for food/drink items to be full resource usage." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcFoodRateMaxChance" Label="Full Chance" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enablePMCResourceRandomization" />
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcFoodRateMaxChance" Label="Full Chance" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_pmcResourceRandomizationEnabled" />
                                 </MudTooltip>
                                 <MudTooltip Text="Lowest percent possible for a food/drink item's usage to be." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcFoodRateUsagePercent" Label="Minimum %" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_enablePMCResourceRandomization" />
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcFoodRateUsagePercent" Label="Minimum %" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_pmcResourceRandomizationEnabled" />
                                 </MudTooltip>
                                 <MudSpacer />
                             </MudPaper>
@@ -148,42 +204,95 @@
 
                         <MudItem xs="1" />
                         <MudItem xs="4">
-                            <MudTooltip Text="Adjust PMC Weapon Durability." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Weapon Durability</MudText>
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows configurable weapon durability." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Weapon Durability Changes</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_pmcWeaponDurabilityEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcWeaponDurabilityEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityEnabled") ||
+                           MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMin") ||
+                           MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMax") ||
+                           MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMinDelta") ||
+                           MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMaxDelta")))
+                            {
+                                <MudButton @onclick="undoWeaponDurability" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _pmcWeaponDurabilityEnabled != true ||
+                            _pmcWeaponDurabilityMin != 95 ||
+                            _pmcWeaponDurabilityMax != 100 ||
+                            _pmcWeaponDurabilityMinDelta != 0 ||
+                            _pmcWeaponDurabilityMaxDelta != 5))
+                            {
+                                <MudButton @onclick="defaultWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudTooltip Text="Adjust weapon durability values." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Weapon Durability Values</MudText>
                             </MudTooltip>
                         </MudItem>
                         <MudItem xs="2">
-                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Lowest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcWeaponDurabilityMin" Label="Min" HelperText="Durability" Variant="Variant.Filled"
                                                      Min="0"
-                                                     Max="_pmcWeaponDurabilityMax" />
+                                                     Max="_pmcWeaponDurabilityMax"
+                                                     Disabled="!_pmcWeaponDurabilityEnabled" />
                                 </MudTooltip>
                                 <MudTooltip Text="Highest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcWeaponDurabilityMax" Label="Max" HelperText="Durability" Variant="Variant.Filled"
+                                    <MudNumericField Margin="Margin.Dense"
+                                                     HideSpinButtons="true"
+                                                     @bind-Value="_pmcWeaponDurabilityMax"
+                                                     Label="Max"
+                                                     HelperText="Durability"
+                                                     Variant="Variant.Filled"
                                                      Min="_pmcWeaponDurabilityMin"
-                                                     Max="100" />
+                                                     Max="100"
+                                                     Disabled="!_pmcWeaponDurabilityEnabled" />
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="2">
-                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Lowest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcWeaponDurabilityMinDelta" Label="Min" HelperText="Delta" Variant="Variant.Filled"
+                                    <MudNumericField Margin="Margin.Dense"
+                                                     HideSpinButtons="true"
+                                                     @bind-Value="_pmcWeaponDurabilityMinDelta"
+                                                     Label="Min"
+                                                     HelperText="Delta"
+                                                     Variant="Variant.Filled"
                                                      Min="0"
                                                      Max="100"
-                                                     Validation="@(new Func<int, bool>(ValidateDelta))" />
+                                                     Validation="@(new Func<int, bool>(ValidateDelta))"
+                                                     Disabled="!_pmcWeaponDurabilityEnabled" />
                                 </MudTooltip>
                                 <MudTooltip Text="Highest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
-                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcWeaponDurabilityMaxDelta" Label="Max" HelperText="Delta" Variant="Variant.Filled"
+                                    <MudNumericField Margin="Margin.Dense"
+                                                     HideSpinButtons="true"
+                                                     @bind-Value="_pmcWeaponDurabilityMaxDelta"
+                                                     Label="Max"
+                                                     HelperText="Delta"
+                                                     Variant="Variant.Filled"
                                                      Min="0"
                                                      Max="100"
-                                                     Validation="@(new Func<int, bool>(ValidateDelta))" />
+                                                     Validation="@(new Func<int, bool>(ValidateDelta))"
+                                                     Disabled="!_pmcWeaponDurabilityEnabled" />
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="2">
-                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Lowest Possible Current Durability Roll." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Disabled Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcWeaponDurabilityMinLimitPercent" Label="Min" HelperText="Actual" Variant="Variant.Filled"
                                                      Min="0"
@@ -196,9 +305,7 @@
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
-                        <MudItem xs="1">
-                            <MudButton @onclick="resetWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
-                        </MudItem>
+                        <MudItem xs="1" />
 
                         <MudItem xs="1" />
                         <MudItem xs="4">
@@ -210,11 +317,20 @@
                         </MudItem>
                         <MudItem xs="6">
                             <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                                <MudSwitch T="bool" @bind-Value="_enableSeasonalAppearance" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableSeasonalAppearance</MudSwitch>
+                                <MudSwitch T="bool" @bind-Value="_pmcSeasonalAppearanceEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcSeasonalAppearanceEnabled</MudSwitch>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton @onclick="resetPMCSeasonalAppearance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                            @if (MainLayout._appUndoButtonToggle &&
+                                MainLayout.pendingChanges.Contains("_pmcSeasonalAppearanceEnabled"))
+                            {
+                                <MudButton @onclick="undoPMCSeasonalAppearance" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle &&
+                                _pmcSeasonalAppearanceEnabled != true)
+                            {
+                                <MudButton @onclick="defaultPMCSeasonalAppearance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
                         </MudItem>
 
                         <MudItem xs="1" />
@@ -227,11 +343,24 @@
                         </MudItem>
                         <MudItem xs="6">
                             <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                                <MudSwitch T="bool" @bind-Value="_enableAmmoTierSliding" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableAmmoTierSliding</MudSwitch>
+                                <MudSwitch T="bool" @bind-Value="_pmcAmmoTierSlideEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcAmmoTierSlideEnabled</MudSwitch>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton @onclick="resetPMCAmmoTierSliding" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                            @if (MainLayout._appUndoButtonToggle && (
+                                MainLayout.pendingChanges.Contains("_pmcAmmoTierSlideEnabled") ||
+                                MainLayout.pendingChanges.Contains("_pmcAmmoTierSlideAmount") ||
+                                MainLayout.pendingChanges.Contains("_pmcAmmoTierSlideChance")))
+                            {
+                                <MudButton @onclick="undoPMCAmmoTierSliding" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                                _pmcAmmoTierSlideEnabled != false ||
+                                _pmcAmmoTierSlideAmount != 1 ||
+                                _pmcAmmoTierSlideChance != 33))
+                            {
+                                <MudButton @onclick="defaultPMCAmmoTierSliding" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
                         </MudItem>
 
                         <MudItem xs="2" />
@@ -243,10 +372,10 @@
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableAmmoTierSliding">@_slideAmount</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcAmmoTierSlideEnabled">@_pmcAmmoTierSlideAmount</MudButton>
                         </MudItem>
                         <MudItem xs="6">
-                            <MudSlider @bind-Value="_slideAmount" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!_enableAmmoTierSliding" />
+                            <MudSlider @bind-Value="_pmcAmmoTierSlideAmount" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcAmmoTierSlideEnabled" />
                         </MudItem>
 
                         <MudItem xs="2" />
@@ -258,27 +387,46 @@
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableAmmoTierSliding">@_slideChance</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcAmmoTierSlideEnabled">@_pmcAmmoTierSlideChance</MudButton>
                         </MudItem>
                         <MudItem xs="6">
-                            <MudSlider @bind-Value="_slideChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_enableAmmoTierSliding" />
+                            <MudSlider @bind-Value="_pmcAmmoTierSlideChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcAmmoTierSlideEnabled" />
                         </MudItem>
 
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                                 <MudTooltip Text="Adjust how often you see specific game versions." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                    <MudText>Custom Game Version Weighting</MudText>
+                                    <MudText>Game Version Weighting</MudText>
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="6">
                             <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                                <MudSwitch T="bool" @bind-Value="_enableGameVersionWeighting" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableGameVersionWeighting</MudSwitch>
+                                <MudSwitch T="bool" @bind-Value="_pmcVersionWeightingEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcVersionWeightingEnabled</MudSwitch>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton @onclick="resetGameVersion" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                            @if (MainLayout._appUndoButtonToggle && (
+                                MainLayout.pendingChanges.Contains("_pmcVersionWeightingEnabled") ||
+                                MainLayout.pendingChanges.Contains("_pmcStandardVersionWeight") ||
+                                MainLayout.pendingChanges.Contains("_pmcLeftBehindVersionWeight") ||
+                                MainLayout.pendingChanges.Contains("_pmcPrepareForEscapeVersionWeight") ||
+                                MainLayout.pendingChanges.Contains("_pmcEdgeOfDarknessVersionWeight") ||
+                                MainLayout.pendingChanges.Contains("_pmcUnheardVersionWeight")))
+                            {
+                                <MudButton @onclick="undoPMCVersionWeighting" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                                _pmcVersionWeightingEnabled != false ||
+                                _pmcStandardVersionWeight != 20 ||
+                                _pmcLeftBehindVersionWeight != 10 ||
+                                _pmcPrepareForEscapeVersionWeight != 10 ||
+                                _pmcEdgeOfDarknessVersionWeight != 40 ||
+                                _pmcUnheardVersionWeight != 20))
+                            {
+                                <MudButton @onclick="defaultPMCVersionWeighting" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
                         </MudItem>
 
                         <MudItem xs="2" />
@@ -290,10 +438,10 @@
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableGameVersionWeighting">@_standardVersion</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcVersionWeightingEnabled">@_pmcStandardVersionWeight</MudButton>
                         </MudItem>
                         <MudItem xs="6">
-                            <MudSlider @bind-Value="_standardVersion" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_enableGameVersionWeighting" />
+                            <MudSlider @bind-Value="_pmcStandardVersionWeight" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcVersionWeightingEnabled" />
                         </MudItem>
 
                         <MudItem xs="2" />
@@ -305,10 +453,10 @@
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableGameVersionWeighting">@_leftBehindVersion</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcVersionWeightingEnabled">@_pmcLeftBehindVersionWeight</MudButton>
                         </MudItem>
                         <MudItem xs="6">
-                            <MudSlider @bind-Value="_leftBehindVersion" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_enableGameVersionWeighting" />
+                            <MudSlider @bind-Value="_pmcLeftBehindVersionWeight" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcVersionWeightingEnabled" />
                         </MudItem>
 
                         <MudItem xs="2" />
@@ -320,10 +468,10 @@
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableGameVersionWeighting">@_prepareForEscapeVersion</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcVersionWeightingEnabled">@_pmcPrepareForEscapeVersionWeight</MudButton>
                         </MudItem>
                         <MudItem xs="6">
-                            <MudSlider @bind-Value="_prepareForEscapeVersion" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_enableGameVersionWeighting" />
+                            <MudSlider @bind-Value="_pmcPrepareForEscapeVersionWeight" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcVersionWeightingEnabled" />
                         </MudItem>
 
                         <MudItem xs="2" />
@@ -335,10 +483,10 @@
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableGameVersionWeighting">@_edgeOfDarknessVersion</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcVersionWeightingEnabled">@_pmcEdgeOfDarknessVersionWeight</MudButton>
                         </MudItem>
                         <MudItem xs="6">
-                            <MudSlider @bind-Value="_edgeOfDarknessVersion" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_enableGameVersionWeighting" />
+                            <MudSlider @bind-Value="_pmcEdgeOfDarknessVersionWeight" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcVersionWeightingEnabled" />
                         </MudItem>
 
                         <MudItem xs="2" />
@@ -350,10 +498,10 @@
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableGameVersionWeighting">@_unheardEditionVersion</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcVersionWeightingEnabled">@_pmcUnheardVersionWeight</MudButton>
                         </MudItem>
                         <MudItem xs="6">
-                            <MudSlider @bind-Value="_unheardEditionVersion" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_enableGameVersionWeighting" />
+                            <MudSlider @bind-Value="_pmcUnheardVersionWeight" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcVersionWeightingEnabled" />
                         </MudItem>
 
                     </MudGrid>
@@ -365,26 +513,142 @@
 
 @code {
     #region ENABLE / DISABLE
-    private bool _enablePMCBots
+    private bool _pmcEnabled
     {
         get => Data.pmcBots.enable;
         set
         {
-            Utils.UpdateViewBool(value, Data.pmcBots.enable);
+            Utils.UpdateView(value, OriginalConfig.pmcBots.enable);
             Data.pmcBots.enable = value;
         }
     }
-    private void resetPMCBots() => Data.pmcBots.enable = true;
+    private void undoPMCBots() => _pmcEnabled = OriginalConfig.pmcBots.enable;
+    private void defaultPMCBots() => _pmcEnabled = true;
+    #endregion
+    #region LOOT
+    private bool _pmcLootEnabled
+    {
+        get => Data.pmcBots.lootConfig.enable;
+        set
+        {
+            Data.pmcBots.lootConfig.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.lootConfig.enable);
+        }
+    }
+    private string _lootBlacklistEntryHolder { get; set; } = "";
+
+    private List<string> _pmcLootBlacklist
+    {
+        get => Data.pmcBots.lootConfig.blacklist;
+        set
+        {
+            Data.pmcBots.lootConfig.blacklist = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.lootConfig.blacklist);
+        }
+    }
+
+    private void undoLoot()
+    {
+        _pmcLootEnabled = OriginalConfig.pmcBots.lootConfig.enable;
+        _pmcLootBlacklist.Clear();
+        foreach (var item in OriginalConfig.pmcBots.lootConfig.blacklist)
+        {
+            _pmcLootBlacklist.Add(item);
+        }
+        MainLayout.pendingChanges.Remove("_pmcLootEnabled");
+        MainLayout.pendingChanges.Remove("_pmcLootBlacklist");
+    }
+
+    private void defaultLoot()
+    {
+        _pmcLootEnabled = true;
+        _pmcLootBlacklist.Clear();
+        _pmcLootBlacklist.Add("6711039f9e648049e50b3307");
+        if (!MainLayout.pendingChanges.Contains("_pmcLootEnabled")) MainLayout.pendingChanges.Add("_pmcLootEnabled");
+        if (!MainLayout.pendingChanges.Contains("_pmcLootBlacklist")) MainLayout.pendingChanges.Add("_pmcLootBlacklist");
+    }
+    #endregion
+    #region RESOURCE RANDOMIZATION
+    private bool _pmcResourceRandomizationEnabled
+    {
+        get => Data.pmcBots.resourceRandomization.enable;
+        set
+        {
+            Data.pmcBots.resourceRandomization.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.resourceRandomization.enable);
+        }
+    }
+    private int _pmcFoodRateMaxChance
+    {
+        get => Data.pmcBots.resourceRandomization.foodRateMaxChance;
+        set
+        {
+            Data.pmcBots.resourceRandomization.foodRateMaxChance = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.resourceRandomization.foodRateMaxChance);
+        }
+    }
+    private int _pmcFoodRateUsagePercent
+    {
+        get => Data.pmcBots.resourceRandomization.foodRateUsagePercent;
+        set
+        {
+            Data.pmcBots.resourceRandomization.foodRateUsagePercent = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.resourceRandomization.foodRateUsagePercent);
+        }
+    }
+    private int _pmcMedRateMaxChance
+    {
+        get => Data.pmcBots.resourceRandomization.medRateMaxChance;
+        set
+        {
+            Data.pmcBots.resourceRandomization.medRateMaxChance = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.resourceRandomization.medRateMaxChance);
+        }
+    }
+    private int _pmcMedRateUsagePercent
+    {
+        get => Data.pmcBots.resourceRandomization.medRateUsagePercent;
+        set
+        {
+            Data.pmcBots.resourceRandomization.medRateUsagePercent = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.resourceRandomization.medRateUsagePercent);
+        }
+    }
+    private void undoResourceRandomization()
+    {
+        _pmcResourceRandomizationEnabled = OriginalConfig.pmcBots.resourceRandomization.enable;
+        _pmcFoodRateMaxChance = OriginalConfig.pmcBots.resourceRandomization.foodRateMaxChance;
+        _pmcFoodRateUsagePercent = OriginalConfig.pmcBots.resourceRandomization.foodRateUsagePercent;
+        _pmcMedRateMaxChance = OriginalConfig.pmcBots.resourceRandomization.medRateMaxChance;
+        _pmcMedRateUsagePercent = OriginalConfig.pmcBots.resourceRandomization.medRateUsagePercent;
+    }
+    private void defaultResourceRandomization()
+    {
+        _pmcResourceRandomizationEnabled = true;
+        _pmcFoodRateMaxChance = 10;
+        _pmcFoodRateUsagePercent = 33;
+        _pmcMedRateMaxChance = 10;
+        _pmcMedRateUsagePercent = 33;
+    }
     #endregion
     #region DURABILITY
+    private bool _pmcWeaponDurabilityEnabled
+    {
+        get => Data.pmcBots.weaponDurability.enable;
+        set
+        {
+            Data.pmcBots.weaponDurability.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.weaponDurability.enable);
+        }
+    }
     private int _pmcWeaponDurabilityMin
     {
         get => Data.pmcBots.weaponDurability.min;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.weaponDurability.min);
             Data.pmcBots.weaponDurability.minLimitPercent = value - Data.pmcBots.weaponDurability.maxDelta;
             Data.pmcBots.weaponDurability.min = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.weaponDurability.min);
         }
     }
     private int _pmcWeaponDurabilityMax
@@ -392,8 +656,8 @@
         get => Data.pmcBots.weaponDurability.max;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.weaponDurability.max);
             Data.pmcBots.weaponDurability.max = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.weaponDurability.max);
         }
     }
     private int _pmcWeaponDurabilityMinDelta
@@ -401,8 +665,8 @@
         get => Data.pmcBots.weaponDurability.minDelta;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.weaponDurability.minDelta);
             Data.pmcBots.weaponDurability.minDelta = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.weaponDurability.minDelta);
         }
     }
     private int _pmcWeaponDurabilityMaxDelta
@@ -410,9 +674,9 @@
         get => Data.pmcBots.weaponDurability.maxDelta;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.weaponDurability.maxDelta);
             Data.pmcBots.weaponDurability.minLimitPercent = Data.pmcBots.weaponDurability.min - value;
             Data.pmcBots.weaponDurability.maxDelta = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.weaponDurability.maxDelta);
         }
     }
     private int _pmcWeaponDurabilityMinLimitPercent
@@ -425,230 +689,185 @@
         get => Data.pmcBots.weaponDurability.max - Data.pmcBots.weaponDurability.minDelta;
         set { }
     }
-
-    private void resetWeaponDurability()
+    private void undoWeaponDurability()
     {
-        Data.pmcBots.weaponDurability.min = 95;
-        Data.pmcBots.weaponDurability.max = 100;
-        Data.pmcBots.weaponDurability.minDelta = 0;
-        Data.pmcBots.weaponDurability.maxDelta = 5;
-        Data.pmcBots.weaponDurability.minLimitPercent = Data.pmcBots.weaponDurability.min - Data.pmcBots.weaponDurability.maxDelta;
+        _pmcWeaponDurabilityEnabled = OriginalConfig.pmcBots.weaponDurability.enable;
+        _pmcWeaponDurabilityMin = OriginalConfig.pmcBots.weaponDurability.min;
+        _pmcWeaponDurabilityMax = OriginalConfig.pmcBots.weaponDurability.max;
+        _pmcWeaponDurabilityMinDelta = OriginalConfig.pmcBots.weaponDurability.minDelta;
+        _pmcWeaponDurabilityMaxDelta = OriginalConfig.pmcBots.weaponDurability.maxDelta;
+        _pmcWeaponDurabilityMinLimitPercent = OriginalConfig.pmcBots.weaponDurability.minLimitPercent;
     }
-    #endregion
-    #region RESOURCE RANDOMIZATION
-    private bool _enablePMCResourceRandomization
+    private void defaultWeaponDurability()
     {
-        get => Data.pmcBots.resourceRandomization.enable;
-        set
-        {
-            Utils.UpdateViewBool(value, Data.pmcBots.resourceRandomization.enable);
-            Data.pmcBots.resourceRandomization.enable = value;
-        }
-    }
-    private int _pmcFoodRateMaxChance
-    {
-        get => Data.pmcBots.resourceRandomization.foodRateMaxChance;
-        set
-        {
-            Utils.UpdateViewInt(value, Data.pmcBots.resourceRandomization.foodRateMaxChance);
-            Data.pmcBots.resourceRandomization.foodRateMaxChance = value;
-        }
-    }
-    private int _pmcFoodRateUsagePercent
-    {
-        get => Data.pmcBots.resourceRandomization.foodRateUsagePercent;
-        set
-        {
-            Utils.UpdateViewInt(value, Data.pmcBots.resourceRandomization.foodRateUsagePercent);
-            Data.pmcBots.resourceRandomization.foodRateUsagePercent = value;
-        }
-    }
-    private int _pmcMedRateMaxChance
-    {
-        get => Data.pmcBots.resourceRandomization.medRateMaxChance;
-        set
-        {
-            Utils.UpdateViewInt(value, Data.pmcBots.resourceRandomization.medRateMaxChance);
-            Data.pmcBots.resourceRandomization.medRateMaxChance = value;
-        }
-    }
-    private int _pmcMedRateUsagePercent
-    {
-        get => Data.pmcBots.resourceRandomization.medRateUsagePercent;
-        set
-        {
-            Utils.UpdateViewInt(value, Data.pmcBots.resourceRandomization.medRateUsagePercent);
-            Data.pmcBots.resourceRandomization.medRateUsagePercent = value;
-        }
-    }
-    private void resetResourceRandomization()
-    {
-        Data.pmcBots.resourceRandomization.enable = true;
-        Data.pmcBots.resourceRandomization.foodRateMaxChance = 10;
-        Data.pmcBots.resourceRandomization.foodRateUsagePercent = 33;
-        Data.pmcBots.resourceRandomization.medRateMaxChance = 10;
-        Data.pmcBots.resourceRandomization.medRateUsagePercent = 33;
-    }
-    #endregion
-    #region LOOT
-    private bool _enableLoot
-    {
-        get => Data.pmcBots.lootConfig.enable;
-        set
-        {
-            Utils.UpdateViewBool(value, Data.pmcBots.lootConfig.enable);
-            Data.pmcBots.lootConfig.enable = value;
-        }
-    }
-    private string _lootBlacklistEntryHolder { get; set; } = "";
-
-    private void resetLoot()
-    {
-        Data.pmcBots.lootConfig.enable = false;
-        Data.pmcBots.lootConfig.blacklist = ["6711039f9e648049e50b3307"];
+        _pmcWeaponDurabilityEnabled = true;
+        _pmcWeaponDurabilityMin = 95;
+        _pmcWeaponDurabilityMax = 100;
+        _pmcWeaponDurabilityMinDelta = 0;
+        _pmcWeaponDurabilityMaxDelta = 5;
+        _pmcWeaponDurabilityMinLimitPercent = Data.pmcBots.weaponDurability.min - Data.pmcBots.weaponDurability.maxDelta;
     }
     #endregion
     #region AMMO TIER SLIDING
-    private bool _enableAmmoTierSliding
+    private bool _pmcAmmoTierSlideEnabled
     {
         get => Data.pmcBots.additionalOptions.ammoTierSliding.enable;
         set
         {
-            Utils.UpdateViewBool(value, Data.pmcBots.additionalOptions.ammoTierSliding.enable);
             Data.pmcBots.additionalOptions.ammoTierSliding.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.ammoTierSliding.enable);
         }
     }
-    private int _slideAmount
+    private int _pmcAmmoTierSlideAmount
     {
         get => Data.pmcBots.additionalOptions.ammoTierSliding.slideAmount;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.additionalOptions.ammoTierSliding.slideAmount);
             Data.pmcBots.additionalOptions.ammoTierSliding.slideAmount = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.ammoTierSliding.slideAmount);
         }
     }
-    private int _slideChance
+    private int _pmcAmmoTierSlideChance
     {
         get => Data.pmcBots.additionalOptions.ammoTierSliding.slideChance;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.additionalOptions.ammoTierSliding.slideChance);
             Data.pmcBots.additionalOptions.ammoTierSliding.slideChance = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.ammoTierSliding.slideChance);
         }
     }
-    private void resetPMCAmmoTierSliding()
+    private void undoPMCAmmoTierSliding()
     {
-        Data.pmcBots.additionalOptions.ammoTierSliding.enable = false;
-        Data.pmcBots.additionalOptions.ammoTierSliding.slideAmount = 1;
-        Data.pmcBots.additionalOptions.ammoTierSliding.slideChance = 33;
+        _pmcAmmoTierSlideEnabled = OriginalConfig.pmcBots.weaponDurability.enable;
+        _pmcAmmoTierSlideAmount = OriginalConfig.pmcBots.additionalOptions.ammoTierSliding.slideAmount;
+        _pmcAmmoTierSlideChance = OriginalConfig.pmcBots.additionalOptions.ammoTierSliding.slideChance;
+    }
+    private void defaultPMCAmmoTierSliding()
+    {
+        _pmcAmmoTierSlideEnabled = false;
+        _pmcAmmoTierSlideAmount = 1;
+        _pmcAmmoTierSlideChance = 33;
     }
     #endregion
     #region SEASONAL APPEARANCE
-    private bool _enableSeasonalAppearance
+    private bool _pmcSeasonalAppearanceEnabled
     {
         get => Data.pmcBots.additionalOptions.seasonalPmcAppearance;
         set
         {
-            Utils.UpdateViewBool(value, Data.pmcBots.additionalOptions.seasonalPmcAppearance);
             Data.pmcBots.additionalOptions.seasonalPmcAppearance = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.seasonalPmcAppearance);
         }
     }
-    private void resetPMCSeasonalAppearance() => Data.pmcBots.additionalOptions.seasonalPmcAppearance = true;
+    private void undoPMCSeasonalAppearance() => _pmcSeasonalAppearanceEnabled = OriginalConfig.pmcBots.additionalOptions.seasonalPmcAppearance;
+    private void defaultPMCSeasonalAppearance() => _pmcSeasonalAppearanceEnabled = true;
     #endregion
     #region GAME VERSION WEIGHTING
-    private bool _enableGameVersionWeighting
+    private bool _pmcVersionWeightingEnabled
     {
         get => Data.pmcBots.additionalOptions.gameVersionWeighting.enable;
         set
         {
-            Utils.UpdateViewBool(value, Data.pmcBots.additionalOptions.gameVersionWeighting.enable);
             Data.pmcBots.additionalOptions.gameVersionWeighting.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.enable);
         }
     }
-    private int _standardVersion
+    private int _pmcStandardVersionWeight
     {
         get => Data.pmcBots.additionalOptions.gameVersionWeighting.standard;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.additionalOptions.gameVersionWeighting.standard);
             Data.pmcBots.additionalOptions.gameVersionWeighting.standard = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.standard);
         }
     }
-    private int _leftBehindVersion
+    private int _pmcLeftBehindVersionWeight
     {
         get => Data.pmcBots.additionalOptions.gameVersionWeighting.leftBehind;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.additionalOptions.gameVersionWeighting.leftBehind);
             Data.pmcBots.additionalOptions.gameVersionWeighting.leftBehind = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.leftBehind);
         }
     }
-    private int _prepareForEscapeVersion
+    private int _pmcPrepareForEscapeVersionWeight
     {
         get => Data.pmcBots.additionalOptions.gameVersionWeighting.prepareForEscape;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.additionalOptions.gameVersionWeighting.prepareForEscape);
             Data.pmcBots.additionalOptions.gameVersionWeighting.prepareForEscape = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.prepareForEscape);
         }
     }
-    private int _edgeOfDarknessVersion
+    private int _pmcEdgeOfDarknessVersionWeight
     {
         get => Data.pmcBots.additionalOptions.gameVersionWeighting.edgeOfDarkness;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.additionalOptions.gameVersionWeighting.edgeOfDarkness);
             Data.pmcBots.additionalOptions.gameVersionWeighting.edgeOfDarkness = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.edgeOfDarkness);
         }
     }
-    private int _unheardEditionVersion
+    private int _pmcUnheardVersionWeight
     {
         get => Data.pmcBots.additionalOptions.gameVersionWeighting.unheardEdition;
         set
         {
-            Utils.UpdateViewInt(value, Data.pmcBots.additionalOptions.gameVersionWeighting.unheardEdition);
             Data.pmcBots.additionalOptions.gameVersionWeighting.unheardEdition = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.unheardEdition);
         }
     }
-    private void resetGameVersion()
+    private void undoPMCVersionWeighting()
     {
-        Data.pmcBots.additionalOptions.gameVersionWeighting.enable = false;
-        Data.pmcBots.additionalOptions.gameVersionWeighting.standard = 20;
-        Data.pmcBots.additionalOptions.gameVersionWeighting.leftBehind = 10;
-        Data.pmcBots.additionalOptions.gameVersionWeighting.prepareForEscape = 10;
-        Data.pmcBots.additionalOptions.gameVersionWeighting.edgeOfDarkness = 40;
-        Data.pmcBots.additionalOptions.gameVersionWeighting.unheardEdition = 20;
+        _pmcVersionWeightingEnabled = OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.enable;
+        _pmcStandardVersionWeight = OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.standard;
+        _pmcLeftBehindVersionWeight = OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.leftBehind;
+        _pmcPrepareForEscapeVersionWeight = OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.prepareForEscape;
+        _pmcEdgeOfDarknessVersionWeight = OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.edgeOfDarkness;
+        _pmcUnheardVersionWeight = OriginalConfig.pmcBots.additionalOptions.gameVersionWeighting.unheardEdition;
+    }
+    private void defaultPMCVersionWeighting()
+    {
+        _pmcVersionWeightingEnabled = false;
+        _pmcStandardVersionWeight = 20;
+        _pmcLeftBehindVersionWeight = 10;
+        _pmcPrepareForEscapeVersionWeight = 10;
+        _pmcEdgeOfDarknessVersionWeight = 40;
+        _pmcUnheardVersionWeight = 20;
     }
     #endregion
 
     #region INPUT HANDLING
-    private void HandleKeyDown(KeyboardEventArgs e, string value, List<string> list)
+    private bool HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Enter" && !e.ShiftKey)
         {
-            AddItemToList(value, list);
+            return true;
         }
+        return false;
     }
 
-    private void AddItemToList(string value, List<string> list)
+    private bool CanAddItemToList(string value, List<string> list)
     {
         if (value != null)
         {
             bool containsAlready = list.FirstOrDefault(s => s.Contains(value)) == value ? true : false;
             if (!containsAlready && Utils.IsHexAndValidLength(value))
             {
-                list.Add(value);
-                MainLayout.EnableUnsavedChangesButton();
+                return true;
             }
             else if (containsAlready)
             {
                 Snackbar.Add("Already blacklisted.", Severity.Error, config => { config.ShowCloseIcon = false; });
+                return false;
             }
             else
             {
                 Snackbar.Add("Invalid MongoID.", Severity.Error, config => { config.ShowCloseIcon = false; });
+                return false;
             }
         }
+        return false;
     }
 
     private void OnChipClosed(string item, List<string> list)
@@ -656,7 +875,6 @@
         if (item != null)
         {
             list.Remove(item);
-            MainLayout.EnableUnsavedChangesButton();
         }
     }
 

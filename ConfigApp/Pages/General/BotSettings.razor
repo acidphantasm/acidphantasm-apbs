@@ -9,7 +9,7 @@
 </style>
 
 <MudMainContent>
-    <MudContainer>
+    <MudContainer Class="mb-20">
         <MudExpansionPanels MultiExpansion="true">
 
             <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="AI Health" Expanded=true>
@@ -31,11 +31,18 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enableNormalizedHealthPool" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableNormalizedHealthPool</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allNormalizeHealthEnable" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allNormalizeHealthEnable</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetNormalizeHealth" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_allNormalizeHealthEnable") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoNormalizeHealthEnable" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_allNormalizeHealthEnable != false && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultNormalizeHealthEnable" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -47,13 +54,20 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">@_healthHead</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allNormalizeHealthEnable">@_allNormalizeHealthHead</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_healthHead" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_enableNormalizedHealthPool" />
+                        <MudSlider @bind-Value="_allNormalizeHealthHead" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_allNormalizeHealthEnable" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetHealthHead" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_allNormalizeHealthHead") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoNormalizeHealthHead" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_allNormalizeHealthHead != 35 && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultNormalizeHealthHead" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -65,13 +79,20 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">@_healthChest</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allNormalizeHealthEnable">@_allNormalizeHealthChest</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_healthChest" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_enableNormalizedHealthPool" />
+                        <MudSlider @bind-Value="_allNormalizeHealthChest" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_allNormalizeHealthEnable" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetHealthChest" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_allNormalizeHealthChest") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoNormalizeHealthChest" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_allNormalizeHealthChest != 85 && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultNormalizeHealthChest" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -83,13 +104,20 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">@_healthStomach</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allNormalizeHealthEnable">@_allNormalizeHealthStomach</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_healthStomach" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_enableNormalizedHealthPool" />
+                        <MudSlider @bind-Value="_allNormalizeHealthStomach" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_allNormalizeHealthEnable" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetHealthStomach" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_allNormalizeHealthStomach") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoNormalizeHealthStomach" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_allNormalizeHealthStomach != 70 && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultNormalizeHealthStomach" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -101,13 +129,20 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">@_healthLeftArm</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allNormalizeHealthEnable">@_allNormalizeHealthLeftArm</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_healthLeftArm" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_enableNormalizedHealthPool" />
+                        <MudSlider @bind-Value="_allNormalizeHealthLeftArm" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_allNormalizeHealthEnable" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetHealthLeftArm" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_allNormalizeHealthLeftArm") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoNormalizeHealthLeftArm" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_allNormalizeHealthLeftArm != 60 && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultNormalizeHealthLeftArm" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -119,13 +154,20 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">@_healthRightArm</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allNormalizeHealthEnable">@_allNormalizeHealthRightArm</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_healthRightArm" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_enableNormalizedHealthPool" />
+                        <MudSlider @bind-Value="_allNormalizeHealthRightArm" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_allNormalizeHealthEnable" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetHealthRightArm" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_allNormalizeHealthRightArm") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoNormalizeHealthRightArm" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_allNormalizeHealthRightArm != 60 && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultNormalizeHealthRightArm" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -137,13 +179,20 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">@_healthLeftLeg</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allNormalizeHealthEnable">@_allNormalizeHealthLeftLeg</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_healthLeftLeg" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_enableNormalizedHealthPool" />
+                        <MudSlider @bind-Value="_allNormalizeHealthLeftLeg" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_allNormalizeHealthEnable" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetHealthLeftLeg" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_allNormalizeHealthLeftLeg") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoNormalizeHealthLeftLeg" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_allNormalizeHealthLeftLeg != 65 && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultNormalizeHealthLeftLeg" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -155,26 +204,33 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">@_healthRightLeg</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allNormalizeHealthEnable">@_allNormalizeHealthRightLeg</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_healthRightLeg" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_enableNormalizedHealthPool" />
+                        <MudSlider @bind-Value="_allNormalizeHealthRightLeg" ValueLabel="true" Min="1" Max="250" Color="Color.Info" Size="Size.Medium" Disabled="!_allNormalizeHealthEnable" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetHealthRightLeg" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_allNormalizeHealthRightLeg") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoNormalizeHealthRightLeg" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small" >Undo</MudButton>
+                        }
+                        else if (_allNormalizeHealthRightLeg != 65 && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultNormalizeHealthRightLeg" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
                     <MudItem xs="9">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1"  Elevation="0">
                             <MudSelect T="string" Label="Excluded Bots"
                                        MultiSelection="true"
-                                       SelectedValues="_selectedExcludedBotHolder"
+                                       SelectedValues="_allNormalizeHealthExcludedBots"
                                        SelectedValuesChanged="OnExcludedBotsValueChanged"
                                        Variant="Variant.Filled"
                                        AnchorOrigin="Origin.CenterLeft"
                                        Dense Clearable
-                                       Disabled="!_enableNormalizedHealthPool">
+                                       Disabled="!_allNormalizeHealthEnable">
                                 @foreach (var name in BotNames)
                                 {
                                     <MudSelectItem T="string" Value="@name">@name</MudSelectItem>
@@ -183,7 +239,14 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetExcludedBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableNormalizedHealthPool">Reset</MudButton>
+                        @if (MainLayout.pendingChanges.Contains("_allNormalizeHealthExcludedBots") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoNormalizeHealthExcludedBots" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_allNormalizeHealthExcludedBots.Count > 0 && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultNormalizeHealthExcludedBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                 </MudGrid>
@@ -196,36 +259,45 @@
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Allows bots to roll their selected round from their weapons caliber, max one time per each magazine." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Reroll Selected Ammunition</MudText>
+                                <MudText>Roll Ammunition Selection Again</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enableBotsToRollAmmoAgain" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableBotsToRollAmmoAgain</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allWeaponAmmunitionRollEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allWeaponAmmunitionRollEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetRollAmmoAgain" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && (
+                            MainLayout.pendingChanges.Contains("_allWeaponAmmunitionRollEnabled") ||
+                            MainLayout.pendingChanges.Contains("_allWeaponAmmunitionRollChance")))
+                        {
+                            <MudButton @onclick="undoRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && (
+                                _allWeaponAmmunitionRollEnabled != true ||
+                                _allWeaponAmmunitionRollChance != 50))
+                        {
+                            <MudButton @onclick="defaultRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
-                    <MudItem xs="1" />
-                    <MudItem xs="4">
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="This is the chance that bots will roll for a different round from the same caliber, max one time per each magazine." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Chance to Reroll for Each Magazine</MudText>
+                                <MudText>Roll Again Chance</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableBotsToRollAmmoAgain">@_chanceToRollAmmoAgain</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allWeaponAmmunitionRollEnabled">@_allWeaponAmmunitionRollChance</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_chanceToRollAmmoAgain" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_enableBotsToRollAmmoAgain" />
+                        <MudSlider @bind-Value="_allWeaponAmmunitionRollChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_allWeaponAmmunitionRollEnabled" />
                     </MudItem>
-                    <MudItem xs="1">
-                        <MudButton @onclick="resetRollAmmoChance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableBotsToRollAmmoAgain">Reset</MudButton>
-                    </MudItem>
+                    <MudItem xs="1" />
 
                     <MudItem xs="1" />
                     <MudItem xs="4">
@@ -237,63 +309,91 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enablePerWeaponAttachmentChances" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enablePerWeaponAttachmentChances</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allPerWeaponAttachmentRolls" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allPerWeaponAttachmentRolls</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetPerWeaponAttachments" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
-                    </MudItem>
-
-                    <MudItem xs="1" />
-                    <MudItem xs="4">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="Forces bots to use a stock if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Forced Stock</MudText>
-                            </MudTooltip>
-                        </MudPaper>
-                    </MudItem>
-                    <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_forceStock" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_forceStock</MudSwitch>
-                        </MudPaper>
-                    </MudItem>
-                    <MudItem xs="1">
-                        <MudButton @onclick="resetForceStock" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_allPerWeaponAttachmentRolls"))
+                        {
+                            <MudButton @onclick="undoPerWeaponAttachmentRolls" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _allPerWeaponAttachmentRolls != true)
+                        {
+                            <MudButton @onclick="defaultPerWeaponAttachmentRolls" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="This is the chance that bot weapons, that have a stock with an available buttpad have one." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Chance for Buttpad to Spawn on Stock</MudText>
+                                <MudText>Buttpad Chance</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">@_stockButtpadChance</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">@_allWeaponButtpadChance</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                        <MudSlider @bind-Value="_stockButtpadChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" />
+                        <MudSlider @bind-Value="_allWeaponButtpadChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" />
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetButtpadChance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_allWeaponButtpadChance"))
+                        {
+                            <MudButton @onclick="undoWeaponButtpadChance" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _allWeaponButtpadChance != 50)
+                        {
+                            <MudButton @onclick="defaultWeaponButtpadChance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
+                    </MudItem>
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Forces bots to use a stock if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Force Stock</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="_allWeaponForceStock" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allWeaponForceStock</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_allWeaponForceStock"))
+                        {
+                            <MudButton @onclick="undoWeaponForceStock" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _allWeaponForceStock != false)
+                        {
+                            <MudButton @onclick="defaultWeaponForceStock" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Forces bots to use a dust cover if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Forced Dust Cover</MudText>
+                                <MudText>Force Dust Cover</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_forceDustCover" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_forceDustCover</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allWeaponForceDustcover" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allWeaponForceDustcover</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetForceDustcover" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_allWeaponForceDustcover"))
+                        {
+                            <MudButton @onclick="undoWeaponForceDustcover" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _allWeaponForceDustcover != false)
+                        {
+                            <MudButton @onclick="defaultWeaponForceDustcover" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1">
@@ -306,20 +406,51 @@
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Forces bots to use an optic if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Forced Optic</MudText>
+                                <MudText>Force Optical Devices</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_forceScopeSlot" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_forceScopeSlot</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allWeaponForceOpticalDevice" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allWeaponForceOpticalDevice</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetForceScopeSlot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_allWeaponForceOpticalDevice"))
+                        {
+                            <MudButton @onclick="undoWeaponForceOpticalDevice" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _allWeaponForceOpticalDevice != false)
+                        {
+                            <MudButton @onclick="defaultWeaponForceOpticalDevice" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
-                    <MudItem xs="1"/>
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="If a muzzle is selected for their weapon, this will force it to have it's children attachments (muzzle device -> suppressor)." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Force Muzzle Children Attachments</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="_allWeaponForceMuzzleChildren" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allWeaponForceMuzzleChildren</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_allWeaponForceMuzzleChildren"))
+                        {
+                            <MudButton @onclick="undoWeaponForceMuzzleChildren" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _allWeaponForceMuzzleChildren != false)
+                        {
+                            <MudButton @onclick="defaultWeaponForceMuzzleChildren" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
+                    </MudItem>
+
+                    <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Override default database and preset chances of having a muzzle, if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
@@ -329,49 +460,49 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_forceMuzzle" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_forceMuzzle</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allWeaponOverrideMuzzleChanceEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allWeaponOverrideMuzzleChanceEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetForceMuzzle" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && (
+                            MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceEnabled") ||
+                        MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceValueTier1") ||
+                        MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceValueTier2") ||
+                        MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceValueTier3") ||
+                        MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceValueTier4") ||
+                        MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceValueTier5") ||
+                        MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceValueTier6") ||
+                        MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceValueTier7")))
+                        {
+                            <MudButton @onclick="undoWeaponOverrideMuzzleChances" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && (
+                            _allWeaponOverrideMuzzleChanceEnabled != false || 
+                            !_allWeaponOverrideMuzzleChanceValues.SequenceEqual(OriginalConfig.generalConfig.muzzleChance)))
+                        {
+                            <MudButton @onclick="defaultWeaponOverrideMuzzleChances" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="2" />
                     <MudItem xs="3">
-                            <MudTooltip Text="Chance of weapon having a muzzle device, configurable per tier, if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Muzzle Chance</MudText>
-                            </MudTooltip>
+                        <MudTooltip Text="Chance of weapon having a muzzle device, configurable per tier, if their weapon allows it." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudText>Muzzle Chance</MudText>
+                        </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_muzzleChanceHolder[0]" Label="Weight" HelperText="Tier 1" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_forceMuzzle" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_muzzleChanceHolder[1]" Label="Weight" HelperText="Tier 2" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_forceMuzzle" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_muzzleChanceHolder[2]" Label="Weight" HelperText="Tier 3" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_forceMuzzle" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_muzzleChanceHolder[3]" Label="Weight" HelperText="Tier 4" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_forceMuzzle" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_muzzleChanceHolder[4]" Label="Weight" HelperText="Tier 5" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_forceMuzzle" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_muzzleChanceHolder[5]" Label="Weight" HelperText="Tier 6" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_forceMuzzle" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_muzzleChanceHolder[6]" Label="Weight" HelperText="Tier 7" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_forceMuzzle" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_allWeaponOverrideMuzzleChanceValueTier1" Label="Weight" HelperText="Tier 1" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_allWeaponOverrideMuzzleChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_allWeaponOverrideMuzzleChanceValueTier2" Label="Weight" HelperText="Tier 2" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_allWeaponOverrideMuzzleChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_allWeaponOverrideMuzzleChanceValueTier3" Label="Weight" HelperText="Tier 3" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_allWeaponOverrideMuzzleChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_allWeaponOverrideMuzzleChanceValueTier4" Label="Weight" HelperText="Tier 4" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_allWeaponOverrideMuzzleChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_allWeaponOverrideMuzzleChanceValueTier5" Label="Weight" HelperText="Tier 5" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_allWeaponOverrideMuzzleChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_allWeaponOverrideMuzzleChanceValueTier6" Label="Weight" HelperText="Tier 6" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_allWeaponOverrideMuzzleChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_allWeaponOverrideMuzzleChanceValueTier7" Label="Weight" HelperText="Tier 7" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_allWeaponOverrideMuzzleChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
-                    <MudItem xs="1"/>
-                    <MudItem xs="4">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="If a muzzle is selected for their weapon, this will force it to have it's children attachments (muzzle device -> suppressor)." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Forced Muzzle Child Attachments</MudText>
-                            </MudTooltip>
-                        </MudPaper>
-                    </MudItem>
-                    <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_forceChildrenMuzzle" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_forceChildrenMuzzle</MudSwitch>
-                        </MudPaper>
-                    </MudItem>
-                    <MudItem xs="1">
-                        <MudButton @onclick="resetForceChildMuzzle" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
-                    </MudItem>
-
-                    <MudItem xs="1"/>
+                    <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Limits weapons to specified number of optics & tactical devices listed below." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
@@ -381,28 +512,41 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_forceWeaponModLimits" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_forceWeaponModLimits</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allWeaponAttachmentLimitEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allWeaponAttachmentLimitEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetForceWeaponModLimits" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && (
+                            MainLayout.pendingChanges.Contains("_allWeaponAttachmentLimitEnabled") || 
+                            MainLayout.pendingChanges.Contains("_allWeaponAttachmentOpticalLimit") ||
+                            MainLayout.pendingChanges.Contains("_allWeaponAttachmentTacticalLimit")))
+                        {
+                            <MudButton @onclick="undoWeaponAttachmentLimits" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && (
+                            _allWeaponAttachmentLimitEnabled != true || 
+                            _allWeaponAttachmentOpticalLimit != 2 || 
+                            _allWeaponAttachmentTacticalLimit != 1))
+                        {
+                            <MudButton @onclick="defaultWeaponAttachmentLimits" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
-                    
+
                     <MudItem xs="2" />
                     <MudItem xs="3">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Limit to number of optics on weapons." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Optic Device Limit</MudText>
+                                <MudText>Optical Device Limit</MudText>
                             </MudTooltip>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_forceWeaponModLimits">@_scopeLimit</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allWeaponAttachmentLimitEnabled">@_allWeaponAttachmentOpticalLimit</MudButton>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudSlider @bind-Value="_scopeLimit" ValueLabel="true" Min="1" Max="3" Color="Color.Info" Size="Size.Medium" Disabled="!_forceWeaponModLimits" />
+                        <MudSlider @bind-Value="_allWeaponAttachmentOpticalLimit" ValueLabel="true" Min="1" Max="5" Color="Color.Info" Size="Size.Medium" Disabled="!_allWeaponAttachmentLimitEnabled" />
                     </MudItem>
-                    
+
                     <MudItem xs="2" />
                     <MudItem xs="3">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
@@ -412,10 +556,10 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_forceWeaponModLimits">@_tacticalLimit</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allWeaponAttachmentLimitEnabled">@_allWeaponAttachmentTacticalLimit</MudButton>
                     </MudItem>
                     <MudItem xs="6">
-                        <MudSlider @bind-Value="_tacticalLimit" ValueLabel="true" Min="1" Max="3" Color="Color.Info" Size="Size.Medium" Disabled="!_forceWeaponModLimits"/>
+                        <MudSlider @bind-Value="_allWeaponAttachmentTacticalLimit" ValueLabel="true" Min="1" Max="5" Color="Color.Info" Size="Size.Medium" Disabled="!_allWeaponAttachmentLimitEnabled" />
                     </MudItem>
 
                 </MudGrid>
@@ -439,11 +583,18 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_onlyChads" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_onlyChads</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allOnlyChadsEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allOnlyChadsEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetOnlyChads" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_allOnlyChadsEnabled"))
+                        {
+                            <MudButton @onclick="undoOnlyChads" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _allOnlyChadsEnabled != false)
+                        {
+                            <MudButton @onclick="defaultOnlyChads" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1">
@@ -462,11 +613,18 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_tarkovAndChill" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_tarkovAndChill</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allTarkovAndChillEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allTarkovAndChillEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetTarkovAndChill" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_allTarkovAndChillEnabled"))
+                        {
+                            <MudButton @onclick="undoTarkovAndChill" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _allTarkovAndChillEnabled != false)
+                        {
+                            <MudButton @onclick="defaultTarkovAndChill" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1">
@@ -485,11 +643,18 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" Disabled="(_tarkovAndChill || _onlyChads) ? true : false" @bind-Value="_blickyMode" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_blickyMode</MudSwitch>
+                            <MudSwitch T="bool" Disabled="(_allTarkovAndChillEnabled || _allOnlyChadsEnabled) ? true : false" @bind-Value="_allBlickyModeEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allBlickyModeEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetBlickyMode" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_allBlickyModeEnabled"))
+                        {
+                            <MudButton @onclick="undoBlickyMode" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _allBlickyModeEnabled != false)
+                        {
+                            <MudButton @onclick="defaultBlickyMode" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
 
                     <MudItem xs="1"/>
@@ -502,11 +667,22 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enableT7Thermals" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enableT7Thermals</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allEquipmentT7ThermalEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allEquipmentT7ThermalEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetT7Thermal" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        @if (MainLayout._appUndoButtonToggle && (
+                            MainLayout.pendingChanges.Contains("_allEquipmentT7ThermalEnabled") ||
+                            MainLayout.pendingChanges.Contains("_allEquipmentT7ThermalStartTier")))
+                        {
+                            <MudButton @onclick="undoT7Thermal" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && (
+                            _allBlickyModeEnabled != false ||
+                            _allEquipmentT7ThermalStartTier != 6))
+                        {
+                            <MudButton @onclick="defaultT7Thermal" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
                     </MudItem>
                     
                     <MudItem xs="2" />
@@ -518,10 +694,10 @@
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                    <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_enableT7Thermals">@_startTier</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allEquipmentT7ThermalEnabled">@_allEquipmentT7ThermalStartTier</MudButton>
                     </MudItem>
                     <MudItem xs="5">
-                    <MudSlider @bind-Value="_startTier" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!_enableT7Thermals" />
+                        <MudSlider @bind-Value="_allEquipmentT7ThermalStartTier" ValueLabel="true" Min="1" Max="7" Color="Color.Info" Size="Size.Medium" Disabled="!_allEquipmentT7ThermalEnabled" />
                     </MudItem>
 
                     <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
@@ -536,11 +712,11 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_enablePlateChances" Color="Color.Success" UncheckedColor="Color.Error" LabelPlacement="Placement.End">@_enablePlateChances</MudSwitch>
+                            <MudSwitch T="bool" @bind-Value="_allPlateChanceEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allPlateChanceEnabled</MudSwitch>
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
-                        <MudButton @onclick="resetCustomPlateChances" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Reset</MudButton>
+                        <MudButton @onclick="resetCustomPlateChances" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
                     </MudItem>
 
                     <MudItem xs="2" />
@@ -550,14 +726,14 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcMainPlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
@@ -568,14 +744,14 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_pmcSidePlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
@@ -586,14 +762,14 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavMainPlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
@@ -604,14 +780,14 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_scavSidePlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
@@ -622,14 +798,14 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossMainPlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
@@ -640,14 +816,14 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_bossSidePlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
@@ -658,14 +834,14 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerMainPlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
@@ -676,14 +852,14 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_followerSidePlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
@@ -694,14 +870,14 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialMainPlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
@@ -712,14 +888,14 @@
                         </MudTooltip>
                     </MudItem>
                     <MudItem xs="7">
-                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -13px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_enablePlateChances" />
+                        <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[0]" Label="Chance" HelperText="Tier 1" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[1]" Label="Chance" HelperText="Tier 2" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[2]" Label="Chance" HelperText="Tier 3" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[3]" Label="Chance" HelperText="Tier 4" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[4]" Label="Chance" HelperText="Tier 5" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[5]" Label="Chance" HelperText="Tier 6" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_specialSidePlateChance[6]" Label="Chance" HelperText="Tier 7" Variant="Variant.Filled" Min="0" Max="100" Disabled="!_allPlateChanceEnabled" />
                         </MudPaper>
                     </MudItem>
 
@@ -731,93 +907,102 @@
 
 @code {
     #region HEALTH
-    private bool _enableNormalizedHealthPool
+    private bool _allNormalizeHealthEnable
     {
         get => Data.normalizedHealthPool.enable;
         set
         {
-            Utils.UpdateViewBool(value, Data.normalizedHealthPool.enable);
+            Utils.UpdateView(value, OriginalConfig.normalizedHealthPool.enable);
             Data.normalizedHealthPool.enable = value;
         }
     }
-    private void resetNormalizeHealth() => Data.normalizedHealthPool.enable = false;
-    private int _healthHead
+    private void undoNormalizeHealthEnable() => _allNormalizeHealthEnable = OriginalConfig.normalizedHealthPool.enable;
+    private void defaultNormalizeHealthEnable() => _allNormalizeHealthEnable = false;
+    private int _allNormalizeHealthHead
     {
         get => Data.normalizedHealthPool.healthHead;
         set
         {
-            Utils.UpdateViewInt(value, Data.normalizedHealthPool.healthHead);
+            Utils.UpdateView(value, OriginalConfig.normalizedHealthPool.healthHead);
             Data.normalizedHealthPool.healthHead = value;
         }
     }
-    private void resetHealthHead() => Data.normalizedHealthPool.healthHead = 35;
-    private int _healthChest
+    private void undoNormalizeHealthHead() => _allNormalizeHealthHead = OriginalConfig.normalizedHealthPool.healthHead;
+    private void defaultNormalizeHealthHead() => _allNormalizeHealthHead = 35;
+    private int _allNormalizeHealthChest
     {
         get => Data.normalizedHealthPool.healthChest;
         set
         {
-            Utils.UpdateViewInt(value, Data.normalizedHealthPool.healthChest);
+            Utils.UpdateView(value, OriginalConfig.normalizedHealthPool.healthChest);
             Data.normalizedHealthPool.healthChest = value;
         }
     }
-    private void resetHealthChest() => Data.normalizedHealthPool.healthChest = 85;
-    private int _healthStomach
+    private void undoNormalizeHealthChest() => _allNormalizeHealthChest = OriginalConfig.normalizedHealthPool.healthChest;
+    private void defaultNormalizeHealthChest() => _allNormalizeHealthChest = 85;
+    private int _allNormalizeHealthStomach
     {
         get => Data.normalizedHealthPool.healthStomach;
         set
         {
-            Utils.UpdateViewInt(value, Data.normalizedHealthPool.healthStomach);
+            Utils.UpdateView(value, OriginalConfig.normalizedHealthPool.healthStomach);
             Data.normalizedHealthPool.healthStomach = value;
         }
     }
-    private void resetHealthStomach() => Data.normalizedHealthPool.healthStomach = 70;
-    private int _healthLeftArm
+    private void undoNormalizeHealthStomach() => _allNormalizeHealthStomach = OriginalConfig.normalizedHealthPool.healthStomach;
+    private void defaultNormalizeHealthStomach() => _allNormalizeHealthStomach = 70;
+    private int _allNormalizeHealthLeftArm
     {
         get => Data.normalizedHealthPool.healthLeftArm;
         set
         {
-            Utils.UpdateViewInt(value, Data.normalizedHealthPool.healthLeftArm);
+            Utils.UpdateView(value, OriginalConfig.normalizedHealthPool.healthLeftArm);
             Data.normalizedHealthPool.healthLeftArm = value;
         }
     }
-    private void resetHealthLeftArm() => Data.normalizedHealthPool.healthLeftArm = 60;
-    private int _healthRightArm
+    private void undoNormalizeHealthLeftArm() => _allNormalizeHealthLeftArm = OriginalConfig.normalizedHealthPool.healthLeftArm;
+    private void defaultNormalizeHealthLeftArm() => _allNormalizeHealthLeftArm = 60;
+    private int _allNormalizeHealthRightArm
     {
         get => Data.normalizedHealthPool.healthRightArm;
         set
         {
-            Utils.UpdateViewInt(value, Data.normalizedHealthPool.healthRightArm);
+            Utils.UpdateView(value, OriginalConfig.normalizedHealthPool.healthRightArm);
             Data.normalizedHealthPool.healthRightArm = value;
         }
     }
-    private void resetHealthRightArm() => Data.normalizedHealthPool.healthRightArm = 60;
-    private int _healthLeftLeg
+    private void undoNormalizeHealthRightArm() => _allNormalizeHealthRightArm = OriginalConfig.normalizedHealthPool.healthRightArm;
+    private void defaultNormalizeHealthRightArm() => _allNormalizeHealthRightArm = 60;
+    private int _allNormalizeHealthLeftLeg
     {
         get => Data.normalizedHealthPool.healthLeftLeg;
         set
         {
-            Utils.UpdateViewInt(value, Data.normalizedHealthPool.healthLeftLeg);
+            Utils.UpdateView(value, OriginalConfig.normalizedHealthPool.healthLeftLeg);
             Data.normalizedHealthPool.healthLeftLeg = value;
         }
     }
-    private void resetHealthLeftLeg() => Data.normalizedHealthPool.healthLeftLeg = 65;
-    private int _healthRightLeg
+    private void undoNormalizeHealthLeftLeg() => _allNormalizeHealthLeftLeg = OriginalConfig.normalizedHealthPool.healthLeftLeg;
+    private void defaultNormalizeHealthLeftLeg() => _allNormalizeHealthLeftLeg = 65;
+    private int _allNormalizeHealthRightLeg
     {
         get => Data.normalizedHealthPool.healthRightLeg;
         set
         {
-            Utils.UpdateViewInt(value, Data.normalizedHealthPool.healthRightLeg);
+            Utils.UpdateView(value, OriginalConfig.normalizedHealthPool.healthRightLeg);
             Data.normalizedHealthPool.healthRightLeg = value;
         }
     }
-    private void resetHealthRightLeg() => Data.normalizedHealthPool.healthRightLeg = 65;
+    private void undoNormalizeHealthRightLeg() => _allNormalizeHealthRightLeg = OriginalConfig.normalizedHealthPool.healthRightLeg;
+    private void defaultNormalizeHealthRightLeg() => _allNormalizeHealthRightLeg = 65;
 
-    private List<string> _selectedExcludedBotHolder
+    private List<string> _allNormalizeHealthExcludedBots
     {
         get => Data.normalizedHealthPool.excludedBots;
         set 
         {
-            Data.normalizedHealthPool.excludedBots = value; 
+            Utils.UpdateView(value, OriginalConfig.normalizedHealthPool.excludedBots);
+            Data.normalizedHealthPool.excludedBots = value;
         }
     }
     private string[] BotNames =
@@ -838,212 +1023,317 @@
     private void OnExcludedBotsValueChanged(IEnumerable<string> selected)
     {
         MainLayout.EnableUnsavedChangesButton();
-        Data.normalizedHealthPool.excludedBots = selected.ToList();
+        _allNormalizeHealthExcludedBots = selected.ToList();
     }
-
-    private void resetExcludedBots() => Data.normalizedHealthPool.excludedBots = [];
+    private void undoNormalizeHealthExcludedBots() => _allNormalizeHealthExcludedBots = OriginalConfig.normalizedHealthPool.excludedBots;
+    private void defaultNormalizeHealthExcludedBots() => _allNormalizeHealthExcludedBots.Clear();
     #endregion
     #region WEAPON CONFIG
-    private bool _enableBotsToRollAmmoAgain
+    private bool _allWeaponAmmunitionRollEnabled
     {
         get => Data.generalConfig.enableBotsToRollAmmoAgain;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.enableBotsToRollAmmoAgain);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.enableBotsToRollAmmoAgain);
             Data.generalConfig.enableBotsToRollAmmoAgain = value;
         }
     }
-    private void resetRollAmmoAgain() => Data.generalConfig.enableBotsToRollAmmoAgain = true;
-    private int _chanceToRollAmmoAgain
+    private int _allWeaponAmmunitionRollChance
     {
         get => Data.generalConfig.chanceToRollAmmoAgain;
         set
         {
-            Utils.UpdateViewInt(value, Data.generalConfig.chanceToRollAmmoAgain);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.chanceToRollAmmoAgain);
             Data.generalConfig.chanceToRollAmmoAgain = value;
         }
     }
-    private void resetRollAmmoChance() => Data.generalConfig.chanceToRollAmmoAgain = 50;
-    private bool _enablePerWeaponAttachmentChances
+    private void undoRollAmmunitionEnabled()
+    {
+        _allWeaponAmmunitionRollEnabled = OriginalConfig.generalConfig.enableBotsToRollAmmoAgain;
+        _allWeaponAmmunitionRollChance = OriginalConfig.generalConfig.chanceToRollAmmoAgain;
+    }
+    private void defaultRollAmmunitionEnabled() 
+    {
+        _allWeaponAmmunitionRollEnabled = true;
+        _allWeaponAmmunitionRollChance = 50;
+    }
+    private bool _allPerWeaponAttachmentRolls
     {
         get => Data.generalConfig.enablePerWeaponTypeAttachmentChances;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.enablePerWeaponTypeAttachmentChances);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.enablePerWeaponTypeAttachmentChances);
             Data.generalConfig.enablePerWeaponTypeAttachmentChances = value;
         }
     }
-
-    private void resetPerWeaponAttachments() => Data.generalConfig.enablePerWeaponTypeAttachmentChances = true;
-    private bool _forceStock
-    {
-        get => Data.generalConfig.forceStock;
-        set
-        {
-            Utils.UpdateViewBool(value, Data.generalConfig.forceStock);
-            Data.generalConfig.forceStock = value;
-        }
-    }
-    private void resetForceStock() => Data.generalConfig.forceStock = false;
-    private int _stockButtpadChance
+    private void undoPerWeaponAttachmentRolls() => _allPerWeaponAttachmentRolls = OriginalConfig.generalConfig.enablePerWeaponTypeAttachmentChances;
+    private void defaultPerWeaponAttachmentRolls() => _allPerWeaponAttachmentRolls = true;
+    private int _allWeaponButtpadChance
     {
         get => Data.generalConfig.stockButtpadChance;
         set
         {
-            Utils.UpdateViewInt(value, Data.generalConfig.stockButtpadChance);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.stockButtpadChance);
             Data.generalConfig.stockButtpadChance = value;
         }
     }
-    private void resetButtpadChance() => Data.generalConfig.stockButtpadChance = 50;
-    private bool _forceDustCover
+    private void undoWeaponButtpadChance() => _allWeaponButtpadChance = OriginalConfig.generalConfig.stockButtpadChance;
+    private void defaultWeaponButtpadChance() => _allWeaponButtpadChance = 50;
+    private bool _allWeaponForceStock
+    {
+        get => Data.generalConfig.forceStock;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.forceStock);
+            Data.generalConfig.forceStock = value;
+        }
+    }
+    private void undoWeaponForceStock() => _allWeaponForceStock = OriginalConfig.generalConfig.forceStock;
+    private void defaultWeaponForceStock() => _allWeaponForceStock = false;
+    private bool _allWeaponForceDustcover
     {
         get => Data.generalConfig.forceDustCover;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.forceDustCover);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.forceDustCover);
             Data.generalConfig.forceDustCover = value;
         }
     }
-    private void resetForceDustcover() => Data.generalConfig.forceDustCover = false;
-    private bool _forceScopeSlot
+    private void undoWeaponForceDustcover() => _allWeaponForceDustcover = OriginalConfig.generalConfig.forceDustCover;
+    private void defaultWeaponForceDustcover() => _allWeaponForceDustcover = false;
+    private bool _allWeaponForceOpticalDevice
     {
         get => Data.generalConfig.forceScopeSlot;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.forceScopeSlot);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.forceScopeSlot);
             Data.generalConfig.forceScopeSlot = value;
         }
     }
-    private void resetForceScopeSlot() => Data.generalConfig.forceScopeSlot = false;
-    private bool _forceMuzzle
-    {
-        get => Data.generalConfig.forceMuzzle;
-        set
-        {
-            Utils.UpdateViewBool(value, Data.generalConfig.forceMuzzle);
-            Data.generalConfig.forceMuzzle = value;
-        }
-    }
-    private List<int> _muzzleChanceHolder
-    {
-        get => Data.generalConfig.muzzleChance;
-        set 
-        { 
-            Data.generalConfig.muzzleChance = value; 
-        }
-    }
-    private void resetForceMuzzle()
-    {
-        Data.generalConfig.forceMuzzle = false;
-        Data.generalConfig.muzzleChance = [10, 25, 40, 55, 65, 75, 75];
-    }
-    private bool _forceChildrenMuzzle
+    private void undoWeaponForceOpticalDevice() => _allWeaponForceOpticalDevice = OriginalConfig.generalConfig.forceScopeSlot;
+    private void defaultWeaponForceOpticalDevice() => _allWeaponForceOpticalDevice = false;
+    private bool _allWeaponForceMuzzleChildren
     {
         get => Data.generalConfig.forceChildrenMuzzle;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.forceChildrenMuzzle);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.forceChildrenMuzzle);
             Data.generalConfig.forceChildrenMuzzle = value;
         }
     }
-    private void resetForceChildMuzzle() => Data.generalConfig.forceChildrenMuzzle = false;
-    private bool _forceWeaponModLimits
+    private void undoWeaponForceMuzzleChildren() => _allWeaponForceMuzzleChildren = OriginalConfig.generalConfig.forceChildrenMuzzle;
+    private void defaultWeaponForceMuzzleChildren() => _allWeaponForceMuzzleChildren = false;
+    private bool _allWeaponOverrideMuzzleChanceEnabled
+    {
+        get => Data.generalConfig.forceMuzzle;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.forceMuzzle);
+            Data.generalConfig.forceMuzzle = value;
+        }
+    }
+    private int _allWeaponOverrideMuzzleChanceValueTier1
+    {
+        get => Data.generalConfig.muzzleChance[0];
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.muzzleChance[0]);
+            Data.generalConfig.muzzleChance[0] = value;
+        }
+    }
+    private int _allWeaponOverrideMuzzleChanceValueTier2
+    {
+        get => Data.generalConfig.muzzleChance[1];
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.muzzleChance[1]);
+            Data.generalConfig.muzzleChance[1] = value;
+        }
+    }
+    private int _allWeaponOverrideMuzzleChanceValueTier3
+    {
+        get => Data.generalConfig.muzzleChance[2];
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.muzzleChance[2]);
+            Data.generalConfig.muzzleChance[2] = value;
+        }
+    }
+    private int _allWeaponOverrideMuzzleChanceValueTier4
+    {
+        get => Data.generalConfig.muzzleChance[3];
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.muzzleChance[3]);
+            Data.generalConfig.muzzleChance[3] = value;
+        }
+    }
+    private int _allWeaponOverrideMuzzleChanceValueTier5
+    {
+        get => Data.generalConfig.muzzleChance[4];
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.muzzleChance[4]);
+            Data.generalConfig.muzzleChance[4] = value;
+        }
+    }
+    private int _allWeaponOverrideMuzzleChanceValueTier6
+    {
+        get => Data.generalConfig.muzzleChance[5];
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.muzzleChance[5]);
+            Data.generalConfig.muzzleChance[5] = value;
+        }
+    }
+    private int _allWeaponOverrideMuzzleChanceValueTier7
+    {
+        get => Data.generalConfig.muzzleChance[6];
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.muzzleChance[6]);
+            Data.generalConfig.muzzleChance[6] = value;
+        }
+    }
+    private List<int> _allWeaponOverrideMuzzleChanceValues
+    {
+        get => Data.generalConfig.muzzleChance;
+        set { Data.generalConfig.muzzleChance = value; }
+    }
+    private void undoWeaponOverrideMuzzleChances()
+    {
+        _allWeaponOverrideMuzzleChanceEnabled = OriginalConfig.generalConfig.forceMuzzle;
+        _allWeaponOverrideMuzzleChanceValueTier1 = OriginalConfig.generalConfig.muzzleChance[0];
+        _allWeaponOverrideMuzzleChanceValueTier2 = OriginalConfig.generalConfig.muzzleChance[1];
+        _allWeaponOverrideMuzzleChanceValueTier3 = OriginalConfig.generalConfig.muzzleChance[2];
+        _allWeaponOverrideMuzzleChanceValueTier4 = OriginalConfig.generalConfig.muzzleChance[3];
+        _allWeaponOverrideMuzzleChanceValueTier5 = OriginalConfig.generalConfig.muzzleChance[4];
+        _allWeaponOverrideMuzzleChanceValueTier6 = OriginalConfig.generalConfig.muzzleChance[5];
+        _allWeaponOverrideMuzzleChanceValueTier7 = OriginalConfig.generalConfig.muzzleChance[6];
+    }
+
+    private void defaultWeaponOverrideMuzzleChances()
+    {
+        _allWeaponOverrideMuzzleChanceEnabled = false;
+        _allWeaponOverrideMuzzleChanceValueTier1 = 10;
+        _allWeaponOverrideMuzzleChanceValueTier2 = 25;
+        _allWeaponOverrideMuzzleChanceValueTier3 = 40;
+        _allWeaponOverrideMuzzleChanceValueTier4 = 55;
+        _allWeaponOverrideMuzzleChanceValueTier5 = 65;
+        _allWeaponOverrideMuzzleChanceValueTier6 = 75;
+        _allWeaponOverrideMuzzleChanceValueTier7 = 75;
+    }
+    private bool _allWeaponAttachmentLimitEnabled
     {
         get => Data.generalConfig.forceWeaponModLimits;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.forceWeaponModLimits);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.forceWeaponModLimits);
             Data.generalConfig.forceWeaponModLimits = value;
         }
     }
-    private int _scopeLimit
+    private int _allWeaponAttachmentOpticalLimit
     {
         get => Data.generalConfig.scopeLimit;
         set
         {
-            Utils.UpdateViewInt(value, Data.generalConfig.scopeLimit);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.scopeLimit);
             Data.generalConfig.scopeLimit = value;
         }
     }
-    private int _tacticalLimit
+    private int _allWeaponAttachmentTacticalLimit
     {
         get => Data.generalConfig.tacticalLimit;
         set
         {
-            Utils.UpdateViewInt(value, Data.generalConfig.tacticalLimit);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.tacticalLimit);
             Data.generalConfig.tacticalLimit = value;
         }
     }
-    private void resetForceWeaponModLimits()
+    private void undoWeaponAttachmentLimits()
     {
-        Data.generalConfig.forceWeaponModLimits = true;
-        Data.generalConfig.scopeLimit = 2;
-        Data.generalConfig.tacticalLimit = 1;
+        _allWeaponAttachmentLimitEnabled = OriginalConfig.generalConfig.forceWeaponModLimits;
+        _allWeaponAttachmentOpticalLimit = OriginalConfig.generalConfig.scopeLimit;
+        _allWeaponAttachmentTacticalLimit = OriginalConfig.generalConfig.tacticalLimit;
+    }
+    private void defaultWeaponAttachmentLimits()
+    {
+        _allWeaponAttachmentLimitEnabled = true;
+        _allWeaponAttachmentOpticalLimit = 2;
+        _allWeaponAttachmentTacticalLimit = 1;
     }
     #endregion
     #region UBER GENERAL STUFF
-    private bool _onlyChads
+    private bool _allOnlyChadsEnabled
     {
         get => Data.generalConfig.onlyChads;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.onlyChads);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.onlyChads);
             Data.generalConfig.onlyChads = value;
         }
     }
-    private void resetOnlyChads() => Data.generalConfig.onlyChads = false;
-    private bool _tarkovAndChill
+    private void undoOnlyChads() => _allOnlyChadsEnabled = OriginalConfig.generalConfig.onlyChads;
+    private void defaultOnlyChads() => _allOnlyChadsEnabled = false;
+    private bool _allTarkovAndChillEnabled
     {
         get => Data.generalConfig.tarkovAndChill;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.tarkovAndChill);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.tarkovAndChill);
             Data.generalConfig.tarkovAndChill = value;
         }
     }
-    private void resetTarkovAndChill() => Data.generalConfig.tarkovAndChill = false;
-    private bool _blickyMode
+    private void undoTarkovAndChill() => _allTarkovAndChillEnabled = OriginalConfig.generalConfig.tarkovAndChill;
+    private void defaultTarkovAndChill() => _allTarkovAndChillEnabled = false;
+    private bool _allBlickyModeEnabled
     {
         get => Data.generalConfig.blickyMode;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.blickyMode);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.blickyMode);
             Data.generalConfig.blickyMode = value;
         }
     }
-    private void resetBlickyMode() => Data.generalConfig.blickyMode = false;
-    private bool _enableT7Thermals
+    private void undoBlickyMode() => _allBlickyModeEnabled = OriginalConfig.generalConfig.blickyMode;
+    private void defaultBlickyMode() => _allBlickyModeEnabled = false;
+    private bool _allEquipmentT7ThermalEnabled
     {
         get => Data.generalConfig.enableT7Thermals;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.enableT7Thermals);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.enableT7Thermals);
             Data.generalConfig.enableT7Thermals = value;
         }
     }
-    private int _startTier
+    private int _allEquipmentT7ThermalStartTier
     {
         get => Data.generalConfig.startTier;
         set
         {
-            Utils.UpdateViewInt(value, Data.generalConfig.startTier);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.startTier);
             Data.generalConfig.startTier = value;
         }
     }
-    private void resetT7Thermal()
+    private void undoT7Thermal()
     {
-        Data.generalConfig.enableT7Thermals = false;
-        Data.generalConfig.startTier = 6;
+        _allEquipmentT7ThermalEnabled = OriginalConfig.generalConfig.enableT7Thermals;
+        _allEquipmentT7ThermalStartTier = OriginalConfig.generalConfig.startTier;
+    }
+    private void defaultT7Thermal()
+    {
+        _allEquipmentT7ThermalEnabled = false;
+        _allEquipmentT7ThermalStartTier = 6;
     }
     #endregion
     
     #region PLATE CHANCES
-    private bool _enablePlateChances
+    private bool _allPlateChanceEnabled
     {
         get => Data.generalConfig.plateChances.enable;
         set
         {
-            Utils.UpdateViewBool(value, Data.generalConfig.plateChances.enable);
+            Utils.UpdateView(value, OriginalConfig.generalConfig.plateChances.enable);
             Data.generalConfig.plateChances.enable = value;
         }
     }
