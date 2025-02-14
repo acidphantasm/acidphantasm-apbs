@@ -27,6 +27,7 @@ namespace APBSConfig.Core
         public required WeaponDurabilityConfig weaponDurability { get; set; }
         public required LootConfig lootConfig { get; set; }
         public required PMCSpecificConfig additionalOptions { get; set; }
+        public required PMCSecrets secrets { get; set; }
     }
     public class ScavBotData
     {
@@ -239,13 +240,42 @@ namespace APBSConfig.Core
         public bool PackNStrap_UnlootablePMCArmbandBelts { get; set; }
         public bool Realism_AddGasMasksToBots { get; set; }
     }
-    public class ConfigAppSettings
+
+    public class PMCSecrets
+    {
+        public required DeveloperSettings developerSettings { get; set; }
+    }
+    public class DeveloperSettings
+    {
+        public required DeveloperNames devNames { get; set; }
+        public required DeveloperLevels devLevels { get; set; }
+
+    }
+    public class DeveloperNames
+    {
+        public bool enable { get; set; }
+        public required List<string> nameList { get; set; }
+    }
+
+    public class DeveloperLevels
+    {
+        public bool enable { get; set; }
+        public int min { get; set; }
+        public int max { get; set; }
+    }
+        public class ConfigAppSettings
     {
         public bool showUndo { get; set; }
         public bool showDefault { get; set; }
     }
+    public class PMCSecretLevels
+    {
+        public bool enable { get; set; }
+        public int min { get; set; }
+        public int max { get; set; }
+    }
 
-    public class DataLoader
+public class DataLoader
     {
         private static readonly string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
 

@@ -184,6 +184,30 @@
                                 "edgeOfDarkness": 40,
                                 "unheardEdition": 20
                         }
+                },
+                "secrets": {
+                        "developerSettings": {
+                                "devNames": {
+                                        "enable": true,
+                                        "nameList": [
+                                                "Chomp",
+                                                "Dirtbikercj",
+                                                "Clodan",
+                                                "CWX",
+                                                "DrakiaXYZ",
+                                                "Kaeno",
+                                                "Refringe",
+                                                "Waffle",
+                                                "AcidPhantasm",
+                                                "Archangel"
+                                        ]
+                                },
+                                "devLevels": {
+                                        "enable": false,
+                                        "min": 30,
+                                        "max": 79
+                                }
+                        }
                 }
         },
         "scavBots": {

@@ -506,6 +506,159 @@
 
                     </MudGrid>
                 </MudExpansionPanel>
+
+                <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Style="padding-bottom:25px" Text="Nothing to see here..." Expanded=false>
+                    <MudGrid>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Flags SPT & APBS Devs as Developers. Also contributors to APBS." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Developer Bots</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="@_pmcSecretDevelopersNameMarkEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcSecretDevelopersNameMarkEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_pmcSecretDevelopersNameMarkEnabled") ||
+                           MainLayout.pendingChanges.Contains("_pmcSecretDevelopersNameList")))
+                            {
+                                <MudButton @onclick="undoSecretDeveloperEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _pmcSecretDevelopersNameMarkEnabled != true ||
+                            _pmcSecretDevelopersNameList.Count != 10 ||
+                            !_pmcSecretDevelopersNameList.Contains("Chomp") ||
+                            !_pmcSecretDevelopersNameList.Contains("Dirtbikercj") ||
+                            !_pmcSecretDevelopersNameList.Contains("Clodan") ||
+                            !_pmcSecretDevelopersNameList.Contains("CWX") ||
+                            !_pmcSecretDevelopersNameList.Contains("DrakiaXYZ") ||
+                            !_pmcSecretDevelopersNameList.Contains("Kaeno") ||
+                            !_pmcSecretDevelopersNameList.Contains("Refringe") ||
+                            !_pmcSecretDevelopersNameList.Contains("Waffle") ||
+                            !_pmcSecretDevelopersNameList.Contains("AcidPhantasm") ||
+                            !_pmcSecretDevelopersNameList.Contains("Archangel")))
+                            {
+                                <MudButton @onclick="defaultSecretDeveloperEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="1">
+                            <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                                <MudTooltip Text="Enter the name of the bot you want marked as a developer, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="4" Class="align-center">
+                            <MudTextField T="string" @bind-Value="@_pmcSecretDevelopersEntryHolder"
+                                          Typo="Typo.body2" HelperText="Enter valid Bot name"
+                                          Placeholder="Bot Name"
+                                          Variant="Variant.Text"
+                                          Disabled="!_pmcSecretDevelopersNameMarkEnabled"
+                                          OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_pmcSecretDevelopersEntryHolder, _pmcSecretDevelopersNameList))
+                                                        {
+                                                            _pmcSecretDevelopersNameList.Add(_pmcSecretDevelopersEntryHolder);
+                                                            Utils.UpdateView(_pmcSecretDevelopersNameList, OriginalConfig.pmcBots.secrets.developerSettings.devNames.nameList, "_pmcSecretDevelopersNameList");
+                                                        } else {
+                                                            Utils.UpdateView(_pmcSecretDevelopersNameList, OriginalConfig.pmcBots.secrets.developerSettings.devNames.nameList, "_pmcSecretDevelopersNameList");
+                                                        }
+                                                    }
+                                                } )"
+                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                          Immediate="true"
+                                          Adornment="Adornment.End"
+                                          AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                          OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_pmcSecretDevelopersEntryHolder, _pmcSecretDevelopersNameList))
+                                                    {
+                                                        _pmcSecretDevelopersNameList.Add(_pmcSecretDevelopersEntryHolder);
+                                                        Utils.UpdateView(_pmcSecretDevelopersNameList, OriginalConfig.pmcBots.secrets.developerSettings.devNames.nameList, "_pmcSecretDevelopersNameList");
+                                                    } else {
+                                                        Utils.UpdateView(_pmcSecretDevelopersNameList, OriginalConfig.pmcBots.secrets.developerSettings.devNames.nameList, "_pmcSecretDevelopersNameList");
+                                                    }
+                                                } )" />
+
+                        </MudItem>
+                        <MudItem xs="6">
+                            @foreach (var item in _pmcSecretDevelopersNameList)
+                            {
+                                <MudChip Disabled="!_pmcSecretDevelopersNameMarkEnabled" Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _pmcSecretDevelopersNameList.Remove(item);
+                                        Utils.UpdateView(_pmcSecretDevelopersNameList, OriginalConfig.pmcBots.secrets.developerSettings.devNames.nameList, "_pmcSecretDevelopersNameList");
+                                    })">@item</MudChip>
+                            }
+                        </MudItem>
+
+                        <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows enabled developer bots to always spawn within the specified level ranges." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Force Developer Bot Levels</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="@_pmcSecretDeveloperLevelsEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End" Disabled="!_pmcSecretDevelopersNameMarkEnabled">@_pmcSecretDeveloperLevelsEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_pmcSecretDeveloperLevelsEnabled"))
+                            {
+                                <MudButton @onclick="undoSecretDeveloperLevelsEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && _pmcSecretDeveloperLevelsEnabled != false)
+                            {
+                                <MudButton @onclick="defaultSecretDeveloperLevelsEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+                        
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudTooltip Text="Minimum and maximum levels for bots in the Developer Name list, if enabled." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Developer Bot Level Values</MudText>
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                                <MudTooltip Text="Lowest level that above named bots can be." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcSecretDeveloperLevelsMin" Label="Minimum" HelperText="Level" Variant="Variant.Filled" Min="1" Max="_pmcSecretDeveloperLevelsMax - 1" Disabled="!_pmcSecretDeveloperLevelsEnabled" />
+                                </MudTooltip>
+                                <MudSpacer/>
+                                <MudTooltip Text="Highest level that above named bots can be." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcSecretDeveloperLevelsMax" Label="Maximum" HelperText="Level" Variant="Variant.Filled" Min="_pmcSecretDeveloperLevelsMin + 1" Max="79" Disabled="!_pmcSecretDeveloperLevelsEnabled" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                                MainLayout.pendingChanges.Contains("_pmcSecretDeveloperLevelsMin") ||
+                                MainLayout.pendingChanges.Contains("_pmcSecretDeveloperLevelsMax")))
+                            {
+                                <MudButton @onclick="undoSecretDeveloperLevelsMinMax" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                                _pmcSecretDeveloperLevelsMin != 30 ||
+                                _pmcSecretDeveloperLevelsMax != 79))
+                            {
+                                <MudButton @onclick="defaultSecretDeveloperLevelsMinMax" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                    </MudGrid>
+                </MudExpansionPanel>
             }
         </MudExpansionPanels>
     </MudContainer>
@@ -834,6 +987,98 @@
         _pmcPrepareForEscapeVersionWeight = 10;
         _pmcEdgeOfDarknessVersionWeight = 40;
         _pmcUnheardVersionWeight = 20;
+    }
+    #endregion
+
+    #region SECRET LOL
+    private bool _pmcSecretDevelopersNameMarkEnabled
+    {
+        get => Data.pmcBots.secrets.developerSettings.devNames.enable;
+        set
+        {
+            Data.pmcBots.secrets.developerSettings.devNames.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.secrets.developerSettings.devNames.enable);
+        }
+    }
+    private string _pmcSecretDevelopersEntryHolder { get; set; } = "";
+
+    private List<string> _pmcSecretDevelopersNameList
+    {
+        get => Data.pmcBots.secrets.developerSettings.devNames.nameList;
+        set
+        {
+            Data.pmcBots.secrets.developerSettings.devNames.nameList = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.secrets.developerSettings.devNames.nameList);
+        }
+    }
+
+    private void undoSecretDeveloperEnabled()
+    {
+        _pmcSecretDevelopersNameMarkEnabled = OriginalConfig.pmcBots.secrets.developerSettings.devNames.enable;
+        _pmcSecretDevelopersNameList.Clear();
+        foreach (var item in OriginalConfig.pmcBots.secrets.developerSettings.devNames.nameList)
+        {
+            _pmcSecretDevelopersNameList.Add(item);
+        }
+        MainLayout.pendingChanges.Remove("_pmcSecretDevelopersNameMarkEnabled");
+        MainLayout.pendingChanges.Remove("_pmcSecretDevelopersNameList");
+    }
+
+    private void defaultSecretDeveloperEnabled()
+    {
+        _pmcSecretDevelopersNameMarkEnabled = true;
+        _pmcSecretDevelopersNameList.Clear();
+        _pmcSecretDevelopersNameList.Add("Chomp");
+        _pmcSecretDevelopersNameList.Add("Dirtbikercj");
+        _pmcSecretDevelopersNameList.Add("Clodan");
+        _pmcSecretDevelopersNameList.Add("CWX");
+        _pmcSecretDevelopersNameList.Add("DrakiaXYZ");
+        _pmcSecretDevelopersNameList.Add("Kaeno");
+        _pmcSecretDevelopersNameList.Add("Refringe");
+        _pmcSecretDevelopersNameList.Add("Waffle");
+        _pmcSecretDevelopersNameList.Add("AcidPhantasm");
+        _pmcSecretDevelopersNameList.Add("Archangel");
+        if (!MainLayout.pendingChanges.Contains("_pmcSecretDevelopersNameMarkEnabled")) MainLayout.pendingChanges.Add("_pmcSecretDevelopersNameMarkEnabled");
+        if (!MainLayout.pendingChanges.Contains("_pmcSecretDevelopersNameList")) MainLayout.pendingChanges.Add("_pmcSecretDevelopersNameList");
+    }
+    private bool _pmcSecretDeveloperLevelsEnabled
+    {
+        get => Data.pmcBots.secrets.developerSettings.devLevels.enable;
+        set
+        {
+            Data.pmcBots.secrets.developerSettings.devLevels.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.secrets.developerSettings.devLevels.enable);
+        }
+    }
+    private void undoSecretDeveloperLevelsEnabled() => _pmcSecretDeveloperLevelsEnabled = OriginalConfig.pmcBots.secrets.developerSettings.devLevels.enable;
+    private void defaultSecretDeveloperLevelsEnabled() => _pmcSecretDeveloperLevelsEnabled = false;
+    private int _pmcSecretDeveloperLevelsMin
+    {
+        get => Data.pmcBots.secrets.developerSettings.devLevels.min;
+        set
+        {
+            Data.pmcBots.secrets.developerSettings.devLevels.min = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.secrets.developerSettings.devLevels.min);
+        }
+    }
+    private int _pmcSecretDeveloperLevelsMax
+    {
+        get => Data.pmcBots.secrets.developerSettings.devLevels.max;
+        set
+        {
+            Data.pmcBots.secrets.developerSettings.devLevels.max = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.secrets.developerSettings.devLevels.max);
+        }
+    }
+    private void undoSecretDeveloperLevelsMinMax()
+    {
+        _pmcSecretDeveloperLevelsMin = OriginalConfig.pmcBots.secrets.developerSettings.devLevels.min;
+        _pmcSecretDeveloperLevelsMax = OriginalConfig.pmcBots.secrets.developerSettings.devLevels.max;
+    }
+    private void defaultSecretDeveloperLevelsMinMax()
+    {
+        _pmcSecretDeveloperLevelsMin = 30;
+        _pmcSecretDeveloperLevelsMax = 79;
     }
     #endregion
 

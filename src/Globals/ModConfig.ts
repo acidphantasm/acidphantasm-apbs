@@ -6,6 +6,7 @@ import path from "path";
 import { TierInformation } from "./TierInformation";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
+import { Logging } from "../Enums/Logging";
 
 @injectable()
 export class ModConfig
@@ -25,12 +26,12 @@ export class ModConfig
     public serverLogDetails(): void
     {
         this.logger.debug("[APBS] Mod Config - FOR SUPPORT FOLKS ❤❤")
-        this.logger.debug(`[APBS] Using a Preset? ${ModConfig.config.usePreset} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Mod Weapons: ${ModConfig.config.compatibilityConfig.enableModdedWeapons} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Mod Equipment: ${ModConfig.config.compatibilityConfig.enableModdedEquipment} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Mod Clothing: ${ModConfig.config.compatibilityConfig.enableModdedClothing} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Mod Attachments: ${ModConfig.config.compatibilityConfig.enableModdedAttachments} <- MUST BE FALSE FOR SUPPORT`)
-        this.logger.debug(`[APBS] Seasonal PMC Clothing: ${ModConfig.config.pmcBots.additionalOptions.seasonalPmcAppearance} <- IF TRUE, Mod Clothing not used`)
+        this.logger.debug("[APBS] If any of these values are true, you can send them to me for support regarding bots/bot gen.")
+        this.logger.debug(`[APBS] Using a Preset? ${ModConfig.config.usePreset}`)
+        this.logger.debug(`[APBS] Mod Weapons: ${ModConfig.config.compatibilityConfig.enableModdedWeapons}`)
+        this.logger.debug(`[APBS] Mod Equipment: ${ModConfig.config.compatibilityConfig.enableModdedEquipment}`)
+        this.logger.debug(`[APBS] Mod Clothing: ${ModConfig.config.compatibilityConfig.enableModdedClothing}`)
+        this.logger.debug(`[APBS] Mod Attachments: ${ModConfig.config.compatibilityConfig.enableModdedAttachments}`)
     }
 }
 export interface Config
@@ -78,6 +79,7 @@ export interface Config
         weaponDurability: WeaponDurabilityConfig,
         lootConfig: LootConfig,
         additionalOptions: PMCSpecificConfig,
+        secrets: PMCSecrets,
     }
     scavBots: {
         enable: boolean,
@@ -238,7 +240,26 @@ export interface PlateWeightConfig
     specialMainPlateChance: [number, number, number, number, number, number, number],
     specialSidePlateChance: [number, number, number, number, number, number, number],
 }
-
+export interface PMCSecrets
+{
+    developerSettings: PMCSecretDeveloperSettings
+}
+export interface PMCSecretDeveloperSettings
+{
+    devNames: PMCSecretDeveloperNames,
+    devLevels: PMCSecretDeveloperLevels,
+}
+export interface PMCSecretDeveloperNames
+{
+    enable: boolean,
+    nameList: string[],
+}
+export interface PMCSecretDeveloperLevels
+{
+    enable: boolean,
+    min: number,
+    max:  number,
+}
 export interface ConfigAppSettings
 {
     showUndo: boolean,
