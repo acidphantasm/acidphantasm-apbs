@@ -9,6 +9,7 @@
         <UseWPF>true</UseWPF>
         <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
         <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <ApplicationIcon>Resources\app.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,8 +18,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="8.0.71" />
-        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.7" />
+      <Content Include="Resources\app.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="8.0.100" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.13" />
         <PackageReference Include="MudBlazor" Version="8.2.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>

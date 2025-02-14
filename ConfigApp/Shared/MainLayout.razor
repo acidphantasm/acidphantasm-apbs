@@ -1,7 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
-@inject NavigationManager _navigationManager
 @using APBSConfig.Core;
 @using static Core.DataLoader;
 
@@ -25,7 +24,9 @@
     </MudDrawer>
     <MudMainContent Class="pt-3">
         <CascadingValue Value="this">
-            @Body
+            <div class="content">
+                @Body
+            </div>
         </CascadingValue>
     </MudMainContent>
     <MudAppBar Dense Elevation="1" Bottom>
@@ -139,7 +140,7 @@
             {
                 { x => x.ChangeList, pendingChanges },
                 { x => x.ButtonText, "Reload Anyway" },
-                { x => x.Color, Color.Secondary }
+                { x => x.Color, Color.Primary }
             };
 
             var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, BackgroundClass = "custom-blur-background" };

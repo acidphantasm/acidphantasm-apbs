@@ -6,11 +6,84 @@
         xmlns:blazor="clr-namespace:Microsoft.AspNetCore.Components.WebView.Wpf;assembly=Microsoft.AspNetCore.Components.WebView.Wpf"
         xmlns:EBWV="clr-namespace:APBSConfig"
         mc:Ignorable="d"
-        Title="APBS Configuration Manager" Height="1024" Width="1200">
-    
-    <EBWV:EmbeddedBlazorWebView UseEmbeddedResources="True" HostPage="index.html" Services="{DynamicResource services}">
-        <EBWV:EmbeddedBlazorWebView.RootComponents>
-            <blazor:RootComponent Selector="#app" ComponentType="{x:Type EBWV:Routes}" />
-        </EBWV:EmbeddedBlazorWebView.RootComponents>
-    </EBWV:EmbeddedBlazorWebView>
+        Title="APBS Configuration Manager" Height="1024" Width="1200" ResizeMode="NoResize" WindowStyle="None">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="34" />
+    </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <ResourceDictionary>
+
+            <!--Base style for title bar buttons-->
+            <Style x:Key="CaptionButtonStyle" TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid x:Name="LayoutRoot" Background="Transparent" Width="44" Height="30">
+                                <TextBlock x:Name="txt" Text="{TemplateBinding Content}" FontFamily="Segoe MDL2 Assets" FontSize="10" 
+                                   Foreground="#BEBEC1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   RenderOptions.ClearTypeHint="Auto" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="LayoutRoot" Property="Background" Value="#E5E5E5"/>
+                                    <Setter TargetName="txt" Property="Foreground" Value="#000000"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--Minimize-->
+            <Style x:Key="MinimizeButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+                <Setter Property="Content" Value="&#xE949;"/>
+            </Style>
+            
+            <!--Close-->
+            <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+                <Setter Property="Content" Value="&#xE106;"/>
+            </Style>
+
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <!--Title bar button commands-->
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Close" />
+        <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Minimize" />
+    </Window.CommandBindings>
+
+    <Border x:Name="MainWindowBorder" BorderBrush="#BEBEC1" BorderThickness="1" >
+        <Grid x:Name="parentContainer" Background="#27272F">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height ="Auto"/>
+                <RowDefinition Height ="*"/>
+            </Grid.RowDefinitions>
+
+            <!--Window chrome-->
+            <Grid Grid.Row="0" Height="30" Background="#27272F">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock Text="APBS Configuration Manager" Margin="35 3 0 0" FontSize="16" Foreground="#BEBEC1"/>
+                </StackPanel>
+
+                <!--Caption buttons-->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <Button Style="{StaticResource MinimizeButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Minimize"
+                            Command="{x:Static SystemCommands.MinimizeWindowCommand}"/>
+                    <Button Style="{StaticResource CloseButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Close"
+                            Command="{x:Static SystemCommands.CloseWindowCommand}"/>
+                </StackPanel>
+            </Grid>
+
+            <!--App content-->
+
+            <EBWV:EmbeddedBlazorWebView x:Name="EmbeddedBlazorWebView" UseEmbeddedResources="True" HostPage="index.html" Services="{DynamicResource services}" Grid.Row="1">
+                <EBWV:EmbeddedBlazorWebView.RootComponents>
+                    <blazor:RootComponent Selector="#app" ComponentType="{x:Type EBWV:Routes}" />
+                </EBWV:EmbeddedBlazorWebView.RootComponents>
+            </EBWV:EmbeddedBlazorWebView>
+
+        </Grid>
+    </Border>
 </Window>

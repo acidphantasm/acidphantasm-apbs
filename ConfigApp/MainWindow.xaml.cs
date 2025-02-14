@@ -1,16 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using APBSConfig.Shared;
+using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using MudBlazor.Services;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace APBSConfig
 {
@@ -22,6 +15,8 @@ namespace APBSConfig
         public MainWindow()
         {
             InitializeComponent();
+
+            Environment.SetEnvironmentVariable("WEBVIEW2_DEFAULT_BACKGROUND_COLOR", "0");
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddWpfBlazorWebView();
@@ -36,6 +31,23 @@ namespace APBSConfig
             });
 
             Resources.Add("services", serviceCollection.BuildServiceProvider());
+        }
+
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        // Minimize
+        private void CommandBinding_Executed_Minimize(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.MinimizeWindow(this);
+        }
+
+        // Close
+        private void CommandBinding_Executed_Close(object sender, ExecutedRoutedEventArgs e)
+        {
+            SystemCommands.CloseWindow(this);
         }
     }
 }

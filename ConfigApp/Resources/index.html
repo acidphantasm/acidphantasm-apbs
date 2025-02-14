@@ -24,3 +24,13 @@
     <script src="app.js"></script>
 </body>
 </html>
+ <script>
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F5') {
+                e.preventDefault();
+            }
+            if (e.key === 'r' && e.ctrlKey) {
+                e.preventDefault();
+            }
+        });
+  </script>

@@ -17,7 +17,7 @@
 
                     <MudItem xs="1">
                         <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudTooltip Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                 <ChildContent>
                                     <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
                                 </ChildContent>
@@ -31,7 +31,7 @@
                     </MudItem>
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="Grants APBS control over Special Bots (Raiders, Rogues, Cultists, and Bloodhounds). You will have vanilla versions of these bots if disabled." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudTooltip Text="Grants APBS control over Special Bots (Raiders, Rogues, Cultists, and Bloodhounds). You will have vanilla versions of these bots if disabled." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                 <MudText>Special Bot Generation</MudText>
                             </MudTooltip>
                         </MudPaper>
@@ -62,7 +62,7 @@
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                                <MudTooltip Text="Allows Special Bots to spawn with additional loot." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudTooltip Text="Allows Special Bots to spawn with additional loot." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudText>Loot</MudText>
                                 </MudTooltip>
                             </MudPaper>
@@ -85,7 +85,7 @@
 
                         <MudItem xs="1">
                             <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
-                                <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the weapon you want blacklisted, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the weapon you want blacklisted, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
                                 </MudTooltip>
                             </MudPaper>
@@ -137,7 +137,7 @@
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                                <MudTooltip Text="Allows random resource consumption on Food/Drink/Medical Items." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudTooltip Text="Allows random resource consumption on Food/Drink/Medical Items." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudText>Resource Randomization</MudText>
                                 </MudTooltip>
                             </MudPaper>
@@ -170,26 +170,26 @@
 
                         <MudItem xs="2" />
                         <MudItem xs="3">
-                            <MudTooltip Text="Medical & Food full chances and minimum usage percent." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudTooltip Text="Medical & Food full chances and minimum usage percent." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                 <MudText>Medical & Food Values</MudText>
                             </MudTooltip>
                         </MudItem>
                         <MudItem xs="3">
                             <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                                <MudTooltip Text="Chance for medical items to be full resource usage." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudTooltip Text="Chance for medical items to be full resource usage." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialMedRateMaxChance" Label="Full Chance" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_specialResourceRandomizationEnabled" />
                                 </MudTooltip>
-                                <MudTooltip Text="Lowest percent possible for a medical item's usage to be." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudTooltip Text="Lowest percent possible for a medical item's usage to be." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialMedRateUsagePercent" Label="Minimum %" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_specialResourceRandomizationEnabled" />
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="3">
                             <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                                <MudTooltip Text="Chance for food/drink items to be full resource usage." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
+                                <MudTooltip Text="Chance for food/drink items to be full resource usage." Color="Color.Primary" Placement="Placement.Left" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialFoodRateMaxChance" Label="Full Chance" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_specialResourceRandomizationEnabled" />
                                 </MudTooltip>
-                                <MudTooltip Text="Lowest percent possible for a food/drink item's usage to be." Color="Color.Secondary" Placement="Placement.Left" Arrow="true">
+                                <MudTooltip Text="Lowest percent possible for a food/drink item's usage to be." Color="Color.Primary" Placement="Placement.Left" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialFoodRateUsagePercent" Label="Minimum %" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_specialResourceRandomizationEnabled" />
                                 </MudTooltip>
                                 <MudSpacer />
@@ -200,7 +200,7 @@
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                                <MudTooltip Text="Allows configurable weapon durability." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                                <MudTooltip Text="Allows configurable weapon durability." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudText>Weapon Durability Changes</MudText>
                                 </MudTooltip>
                             </MudPaper>
@@ -233,19 +233,19 @@
 
                         <MudItem xs="2" />
                         <MudItem xs="3">
-                            <MudTooltip Text="Adjust weapon durability values." Color="Color.Secondary" Placement="Placement.Right" Arrow="true">
+                            <MudTooltip Text="Adjust weapon durability values." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                 <MudText>Weapon Durability Values</MudText>
                             </MudTooltip>
                         </MudItem>
                         <MudItem xs="2">
                             <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                                <MudTooltip Text="Lowest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                <MudTooltip Text="Lowest a weapon's 'non-repairable' durability can be." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialWeaponDurabilityMin" Label="Min" HelperText="Durability" Variant="Variant.Filled"
                                                      Min="0"
                                                      Max="_specialWeaponDurabilityMax"
                                                      Disabled="!_specialWeaponDurabilityEnabled" />
                                 </MudTooltip>
-                                <MudTooltip Text="Highest a weapon's 'non-repairable' durability can be." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                <MudTooltip Text="Highest a weapon's 'non-repairable' durability can be." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense"
                                                      HideSpinButtons="true"
                                                      @bind-Value="_specialWeaponDurabilityMax"
@@ -260,7 +260,7 @@
                         </MudItem>
                         <MudItem xs="2">
                             <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                                <MudTooltip Text="Lowest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                <MudTooltip Text="Lowest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense"
                                                      HideSpinButtons="true"
                                                      @bind-Value="_specialWeaponDurabilityMinDelta"
@@ -272,7 +272,7 @@
                                                      Validation="@(new Func<int, bool>(ValidateDelta))"
                                                      Disabled="!_specialWeaponDurabilityEnabled" />
                                 </MudTooltip>
-                                <MudTooltip Text="Highest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                <MudTooltip Text="Highest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense"
                                                      HideSpinButtons="true"
                                                      @bind-Value="_specialWeaponDurabilityMaxDelta"
@@ -288,12 +288,12 @@
                         </MudItem>
                         <MudItem xs="2">
                             <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                                <MudTooltip Text="Lowest Possible Current Durability Roll." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                <MudTooltip Text="Lowest Possible Current Durability Roll." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Disabled Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialWeaponDurabilityMinLimitPercent" Label="Min" HelperText="Actual" Variant="Variant.Filled"
                                                      Min="0"
                                                      Max="100" />
                                 </MudTooltip>
-                                <MudTooltip Text="Highest Possible Current Durability Roll." Color="Color.Secondary" Placement="Placement.Bottom" Arrow="true">
+                                <MudTooltip Text="Highest Possible Current Durability Roll." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Disabled Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_specialWeaponDurabilityMaxLimitPercent" Label="Max" HelperText="Actual" Variant="Variant.Filled"
                                                      Min="0"
                                                      Max="100" />
