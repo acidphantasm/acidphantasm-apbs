@@ -198,7 +198,7 @@ export class BotConfigs
         {
             if (!this.raidInformation.isBotEnabled(botType)) continue;
 
-            if (Object.values(PMCBots).includes(botType as PMCBots))
+            if (Object.values(PMCBots).includes(botType as PMCBots) && ModConfig.config.pmcBots.weaponDurability.enable)
             {
                 botConfigDurability[botType].weapon.lowestMax = ModConfig.config.pmcBots.weaponDurability.min;
                 botConfigDurability[botType].weapon.highestMax = ModConfig.config.pmcBots.weaponDurability.max;
@@ -206,7 +206,7 @@ export class BotConfigs
                 botConfigDurability[botType].weapon.maxDelta = ModConfig.config.pmcBots.weaponDurability.maxDelta;
                 botConfigDurability[botType].weapon.minLimitPercent = ModConfig.config.pmcBots.weaponDurability.minLimitPercent;
             }
-            if (Object.values(ScavBots).includes(botType as ScavBots))
+            if (Object.values(ScavBots).includes(botType as ScavBots) && ModConfig.config.scavBots.weaponDurability.enable)
             {
                 botConfigDurability[botType].weapon.lowestMax = ModConfig.config.scavBots.weaponDurability.min;
                 botConfigDurability[botType].weapon.highestMax = ModConfig.config.scavBots.weaponDurability.max;
@@ -214,7 +214,7 @@ export class BotConfigs
                 botConfigDurability[botType].weapon.maxDelta = ModConfig.config.scavBots.weaponDurability.maxDelta;
                 botConfigDurability[botType].weapon.minLimitPercent = ModConfig.config.scavBots.weaponDurability.minLimitPercent;
             }
-            if (Object.values(BossBots).includes(botType as BossBots))
+            if (Object.values(BossBots).includes(botType as BossBots) && ModConfig.config.bossBots.weaponDurability.enable)
             {
                 botConfigDurability[botType].weapon.lowestMax = ModConfig.config.bossBots.weaponDurability.min;
                 botConfigDurability[botType].weapon.highestMax = ModConfig.config.bossBots.weaponDurability.max;
@@ -222,7 +222,7 @@ export class BotConfigs
                 botConfigDurability[botType].weapon.maxDelta = ModConfig.config.bossBots.weaponDurability.maxDelta;
                 botConfigDurability[botType].weapon.minLimitPercent = ModConfig.config.bossBots.weaponDurability.minLimitPercent;
             }
-            if (Object.values(FollowerBots).includes(botType as FollowerBots))
+            if (Object.values(FollowerBots).includes(botType as FollowerBots) && ModConfig.config.followerBots.weaponDurability.enable)
             {
                 botConfigDurability[botType].weapon.lowestMax = ModConfig.config.followerBots.weaponDurability.min;
                 botConfigDurability[botType].weapon.highestMax = ModConfig.config.followerBots.weaponDurability.max;
@@ -230,7 +230,7 @@ export class BotConfigs
                 botConfigDurability[botType].weapon.maxDelta = ModConfig.config.followerBots.weaponDurability.maxDelta;
                 botConfigDurability[botType].weapon.minLimitPercent = ModConfig.config.followerBots.weaponDurability.minLimitPercent;
             }
-            if (Object.values(SpecialBots).includes(botType as SpecialBots))
+            if (Object.values(SpecialBots).includes(botType as SpecialBots) && ModConfig.config.specialBots.weaponDurability.enable)
             {
                 botConfigDurability[botType].weapon.lowestMax = ModConfig.config.specialBots.weaponDurability.min;
                 botConfigDurability[botType].weapon.highestMax = ModConfig.config.specialBots.weaponDurability.max;

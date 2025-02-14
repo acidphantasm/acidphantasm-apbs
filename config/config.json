@@ -156,6 +156,7 @@
                         "medRateUsagePercent": 33
                 },
                 "weaponDurability": {
+                        "enable": true,
                         "min": 95,
                         "max": 100,
                         "minDelta": 0,
@@ -195,6 +196,7 @@
                         "medRateUsagePercent": 10
                 },
                 "weaponDurability": {
+                        "enable": true,
                         "min": 70,
                         "max": 90,
                         "minDelta": 5,
@@ -225,6 +227,7 @@
                         "medRateUsagePercent": 50
                 },
                 "weaponDurability": {
+                        "enable": true,
                         "min": 90,
                         "max": 100,
                         "minDelta": 0,
@@ -246,6 +249,7 @@
                         "medRateUsagePercent": 25
                 },
                 "weaponDurability": {
+                        "enable": true,
                         "min": 90,
                         "max": 100,
                         "minDelta": 0,
@@ -267,11 +271,12 @@
                         "medRateUsagePercent": 25
                 },
                 "weaponDurability": {
-                        "min": 95,
+                        "enable": true,
+                        "min": 90,
                         "max": 100,
                         "minDelta": 0,
                         "maxDelta": 10,
-                        "minLimitPercent": 85
+                        "minLimitPercent": 80
                 },
                 "lootConfig": {
                         "enable": true,
@@ -376,5 +381,9 @@
                         "max": -10
                 }
         },
-        "enableDebugLog": false
+        "enableDebugLog": false,
+        "configAppSettings": {
+                "showUndo": true,
+                "showDefault": false
+        }
 }

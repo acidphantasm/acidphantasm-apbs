@@ -112,6 +112,7 @@ export interface Config
     customLevelDeltas: CustomLevelDeltas,
     customScavLevelDeltas: CustomLevelDeltas,
     enableDebugLog: boolean,
+    configAppSettings: ConfigAppSettings,
 }
 export interface PMCSpecificConfig
 {
@@ -122,7 +123,7 @@ export interface PMCSpecificConfig
 export interface ScavSpecificConfig
 {
     enableScavAttachmentTiering: boolean,
-    enableScavEqualEquipmentTiering: boolean
+    enableScavEqualEquipmentTiering: boolean,
 }
 export interface ResourceRandomizationConfig
 {
@@ -134,6 +135,7 @@ export interface ResourceRandomizationConfig
 }
 export interface WeaponDurabilityConfig
 {
+    enable: boolean,
     min: number,
     max: number,
     minDelta: number,
@@ -149,7 +151,7 @@ export interface KeyConfig
 {
     addAllKeysToScavs: boolean,
     addOnlyMechanicalKeysToScavs: boolean,
-    addOnlyKeyCardsToScavs: boolean
+    addOnlyKeyCardsToScavs: boolean,
 }
 
 export interface GameVersionWeightConfig
@@ -182,13 +184,13 @@ export interface NormalizeHealthConfig
 
 export interface TierBlacklistConfig
 {
-    tier1Blacklist: string[]
-    tier2Blacklist: string[]
-    tier3Blacklist: string[]
-    tier4Blacklist: string[]
-    tier5Blacklist: string[]
-    tier6Blacklist: string[]
-    tier7Blacklist: string[]
+    tier1Blacklist: string[],
+    tier2Blacklist: string[],
+    tier3Blacklist: string[],
+    tier4Blacklist: string[],
+    tier5Blacklist: string[],
+    tier6Blacklist: string[],
+    tier7Blacklist: string[],
 }
 export interface CustomLevelDeltas
 {
@@ -225,14 +227,20 @@ export interface CustomLevelDeltas
 export interface PlateWeightConfig
 {
     enable: boolean,
-    pmcMainPlateChance: [number, number, number, number, number, number, number]
-    pmcSidePlateChance: [number, number, number, number, number, number, number]
-    scavMainPlateChance: [number, number, number, number, number, number, number]
-    scavSidePlateChance: [number, number, number, number, number, number, number]
-    bossMainPlateChance: [number, number, number, number, number, number, number]
-    bossSidePlateChance: [number, number, number, number, number, number, number]
-    followerMainPlateChance: [number, number, number, number, number, number, number]
-    followerSidePlateChance: [number, number, number, number, number, number, number]
-    specialMainPlateChance: [number, number, number, number, number, number, number]
-    specialSidePlateChance: [number, number, number, number, number, number, number]
+    pmcMainPlateChance: [number, number, number, number, number, number, number],
+    pmcSidePlateChance: [number, number, number, number, number, number, number],
+    scavMainPlateChance: [number, number, number, number, number, number, number],
+    scavSidePlateChance: [number, number, number, number, number, number, number],
+    bossMainPlateChance: [number, number, number, number, number, number, number],
+    bossSidePlateChance: [number, number, number, number, number, number, number],
+    followerMainPlateChance: [number, number, number, number, number, number, number],
+    followerSidePlateChance: [number, number, number, number, number, number, number],
+    specialMainPlateChance: [number, number, number, number, number, number, number],
+    specialSidePlateChance: [number, number, number, number, number, number, number],
+}
+
+export interface ConfigAppSettings
+{
+    showUndo: boolean,
+    showDefault: boolean,
 }
