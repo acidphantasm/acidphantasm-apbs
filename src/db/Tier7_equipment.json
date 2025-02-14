@@ -728,7 +728,14 @@
             "SecuredContainer": {
                 "5c0a794586f77461c458f892": 1
             },
-            "ArmBand": {},
+            "ArmBand": {
+                "5b3f16c486f7747c327f55f7": 7,
+                "5b3f3ade86f7746b6b790d8e": 7,
+                "5b3f3af486f774679e752c1f": 7,
+                "5b3f3b0186f774021a2afef7": 7,
+                "5b3f3b0e86f7746752107cda": 7,
+                "60b0f988c4449e4cb624c1da": 1
+            },
             "ArmorVest": {
                 "5df8a2ca86f7740bfe6df777": 35,
                 "59e7635f86f7742cbf2c1095": 35,

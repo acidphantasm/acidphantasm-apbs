@@ -1,0 +1,1587 @@
+﻿@page "/blacklisting"
+@inherits LayoutComponentBase
+@inject ISnackbar Snackbar
+@using static Core.DataLoader;
+@using static Core.Utils;
+@using APBSConfig.Shared;
+
+<style>
+    .mud-divider {
+        border-width: 2.5px;
+    }
+</style>
+
+<MudMainContent>
+    <MudContainer Class="mb-20">
+        <MudTabs Centered="true" Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6 ma-2">
+            <MudTabPanel Text="Weapon Blacklists">
+                <MudGrid>
+                    
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                            <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the weapon you want blacklisted, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" />
+                            </MudTooltip>
+                            <MudText Align="Align.Center">Tier 1</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier1WeaponBlacklistEntryHolder"
+                                Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                Placeholder="ItemID"
+                                Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier1WeaponBlacklistEntryHolder, _blacklistTier1Weapon))
+                                                        {
+                                                            _blacklistTier1Weapon.Add(_tier1WeaponBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier1Weapon, OriginalConfig.weaponBlacklist.tier1Blacklist, "_blacklistTier1Weapon");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier1Weapon, OriginalConfig.weaponBlacklist.tier1Blacklist, "_blacklistTier1Weapon");
+                                                        }
+                                                    }
+                                                } )"
+                                Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))" 
+                                Immediate="true"
+                                Adornment="Adornment.End"
+                                AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier1WeaponBlacklistEntryHolder, _blacklistTier1Weapon))
+                                                    {
+                                                        _blacklistTier1Weapon.Add(_tier1WeaponBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier1Weapon, OriginalConfig.weaponBlacklist.tier1Blacklist, "_blacklistTier1Weapon");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier1Weapon, OriginalConfig.weaponBlacklist.tier1Blacklist, "_blacklistTier1Weapon");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier1Weapon)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier1Weapon.Remove(item);
+                                        Utils.UpdateView(_blacklistTier1Weapon, OriginalConfig.weaponBlacklist.tier1Blacklist, "_blacklistTier1Weapon");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3"/>
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 2</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier2WeaponBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier2WeaponBlacklistEntryHolder, _blacklistTier2Weapon))
+                                                        {
+                                                            _blacklistTier2Weapon.Add(_tier2WeaponBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier2Weapon, OriginalConfig.weaponBlacklist.tier2Blacklist, "_blacklistTier2Weapon");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier2Weapon, OriginalConfig.weaponBlacklist.tier2Blacklist, "_blacklistTier2Weapon");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier2WeaponBlacklistEntryHolder, _blacklistTier2Weapon))
+                                                    {
+                                                        _blacklistTier2Weapon.Add(_tier2WeaponBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier2Weapon, OriginalConfig.weaponBlacklist.tier2Blacklist, "_blacklistTier2Weapon");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier2Weapon, OriginalConfig.weaponBlacklist.tier2Blacklist, "_blacklistTier2Weapon");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier2Weapon)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier2Weapon.Remove(item);
+                                        Utils.UpdateView(_blacklistTier2Weapon, OriginalConfig.weaponBlacklist.tier2Blacklist, "_blacklistTier2Weapon");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 3</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier3WeaponBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier3WeaponBlacklistEntryHolder, _blacklistTier3Weapon))
+                                                        {
+                                                            _blacklistTier3Weapon.Add(_tier3WeaponBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier3Weapon, OriginalConfig.weaponBlacklist.tier3Blacklist, "_blacklistTier3Weapon");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier3Weapon, OriginalConfig.weaponBlacklist.tier3Blacklist, "_blacklistTier3Weapon");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier3WeaponBlacklistEntryHolder, _blacklistTier3Weapon))
+                                                    {
+                                                        _blacklistTier3Weapon.Add(_tier3WeaponBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier3Weapon, OriginalConfig.weaponBlacklist.tier3Blacklist, "_blacklistTier3Weapon");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier3Weapon, OriginalConfig.weaponBlacklist.tier3Blacklist, "_blacklistTier3Weapon");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier3Weapon)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier3Weapon.Remove(item);
+                                        Utils.UpdateView(_blacklistTier3Weapon, OriginalConfig.weaponBlacklist.tier3Blacklist, "_blacklistTier3Weapon");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 4</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier4WeaponBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier4WeaponBlacklistEntryHolder, _blacklistTier4Weapon))
+                                                        {
+                                                            _blacklistTier4Weapon.Add(_tier4WeaponBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier4Weapon, OriginalConfig.weaponBlacklist.tier4Blacklist, "_blacklistTier4Weapon");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier4Weapon, OriginalConfig.weaponBlacklist.tier4Blacklist, "_blacklistTier4Weapon");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier4WeaponBlacklistEntryHolder, _blacklistTier4Weapon))
+                                                    {
+                                                        _blacklistTier4Weapon.Add(_tier4WeaponBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier4Weapon, OriginalConfig.weaponBlacklist.tier4Blacklist, "_blacklistTier4Weapon");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier4Weapon, OriginalConfig.weaponBlacklist.tier4Blacklist, "_blacklistTier4Weapon");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier4Weapon)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier4Weapon.Remove(item);
+                                        Utils.UpdateView(_blacklistTier4Weapon, OriginalConfig.weaponBlacklist.tier4Blacklist, "_blacklistTier4Weapon");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 5</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier5WeaponBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier5WeaponBlacklistEntryHolder, _blacklistTier5Weapon))
+                                                        {
+                                                            _blacklistTier5Weapon.Add(_tier5WeaponBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier5Weapon, OriginalConfig.weaponBlacklist.tier5Blacklist, "_blacklistTier5Weapon");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier5Weapon, OriginalConfig.weaponBlacklist.tier5Blacklist, "_blacklistTier5Weapon");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier5WeaponBlacklistEntryHolder, _blacklistTier5Weapon))
+                                                    {
+                                                        _blacklistTier5Weapon.Add(_tier5WeaponBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier5Weapon, OriginalConfig.weaponBlacklist.tier5Blacklist, "_blacklistTier5Weapon");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier5Weapon, OriginalConfig.weaponBlacklist.tier5Blacklist, "_blacklistTier5Weapon");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier5Weapon)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier5Weapon.Remove(item);
+                                        Utils.UpdateView(_blacklistTier5Weapon, OriginalConfig.weaponBlacklist.tier5Blacklist, "_blacklistTier5Weapon");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 6</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier6WeaponBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier6WeaponBlacklistEntryHolder, _blacklistTier6Weapon))
+                                                        {
+                                                            _blacklistTier6Weapon.Add(_tier6WeaponBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier6Weapon, OriginalConfig.weaponBlacklist.tier6Blacklist, "_blacklistTier6Weapon");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier6Weapon, OriginalConfig.weaponBlacklist.tier6Blacklist, "_blacklistTier6Weapon");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier6WeaponBlacklistEntryHolder, _blacklistTier6Weapon))
+                                                    {
+                                                        _blacklistTier6Weapon.Add(_tier6WeaponBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier6Weapon, OriginalConfig.weaponBlacklist.tier6Blacklist, "_blacklistTier6Weapon");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier6Weapon, OriginalConfig.weaponBlacklist.tier6Blacklist, "_blacklistTier6Weapon");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier6Weapon)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier6Weapon.Remove(item);
+                                        Utils.UpdateView(_blacklistTier6Weapon, OriginalConfig.weaponBlacklist.tier6Blacklist, "_blacklistTier6Weapon");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3"/>
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 7</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier7WeaponBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier7WeaponBlacklistEntryHolder, _blacklistTier7Weapon))
+                                                        {
+                                                            _blacklistTier7Weapon.Add(_tier7WeaponBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier7Weapon, OriginalConfig.weaponBlacklist.tier7Blacklist, "_blacklistTier7Weapon");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier7Weapon, OriginalConfig.weaponBlacklist.tier7Blacklist, "_blacklistTier7Weapon");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier7WeaponBlacklistEntryHolder, _blacklistTier7Weapon))
+                                                    {
+                                                        _blacklistTier7Weapon.Add(_tier7WeaponBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier7Weapon, OriginalConfig.weaponBlacklist.tier7Blacklist, "_blacklistTier7Weapon");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier7Weapon, OriginalConfig.weaponBlacklist.tier7Blacklist, "_blacklistTier7Weapon");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier7Weapon)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier7Weapon.Remove(item);
+                                        Utils.UpdateView(_blacklistTier7Weapon, OriginalConfig.weaponBlacklist.tier7Blacklist, "_blacklistTier7Weapon");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                </MudGrid>
+            </MudTabPanel>
+            <MudTabPanel Text="Equipment Blacklists">
+                <MudGrid>
+
+                <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                            <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the equipment you want blacklisted, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" />
+                            </MudTooltip>
+                            <MudText Align="Align.Center">Tier 1</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier1EquipmentBlacklistEntryHolder"
+                                Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                Placeholder="ItemID"
+                                Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier1EquipmentBlacklistEntryHolder, _blacklistTier1Equipment))
+                                                        {
+                                                            _blacklistTier1Equipment.Add(_tier1EquipmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier1Equipment, OriginalConfig.equipmentBlacklist.tier1Blacklist, "_blacklistTier1Equipment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier1Equipment, OriginalConfig.equipmentBlacklist.tier1Blacklist, "_blacklistTier1Equipment");
+                                                        }
+                                                    }
+                                                } )"
+                                Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))" 
+                                Immediate="true"
+                                Adornment="Adornment.End"
+                                AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier1EquipmentBlacklistEntryHolder, _blacklistTier1Equipment))
+                                                    {
+                                                        _blacklistTier1Equipment.Add(_tier1EquipmentBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier1Equipment, OriginalConfig.equipmentBlacklist.tier1Blacklist, "_blacklistTier1Equipment");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier1Equipment, OriginalConfig.equipmentBlacklist.tier1Blacklist, "_blacklistTier1Equipment");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier1Equipment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier1Equipment.Remove(item);
+                                        Utils.UpdateView(_blacklistTier1Equipment, OriginalConfig.equipmentBlacklist.tier1Blacklist, "_blacklistTier1Equipment");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3"/>
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 2</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                    <MudTextField T="string" @bind-Value="_tier2EquipmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier2EquipmentBlacklistEntryHolder, _blacklistTier2Equipment))
+                                                        {
+                                                            _blacklistTier2Equipment.Add(_tier2EquipmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier2Equipment, OriginalConfig.equipmentBlacklist.tier2Blacklist, "_blacklistTier2Equipment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier2Equipment, OriginalConfig.equipmentBlacklist.tier2Blacklist, "_blacklistTier2Equipment");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier2EquipmentBlacklistEntryHolder, _blacklistTier2Equipment))
+                                                    {
+                                                        _blacklistTier2Equipment.Add(_tier2EquipmentBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier2Equipment, OriginalConfig.equipmentBlacklist.tier2Blacklist, "_blacklistTier2Equipment");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier2Equipment, OriginalConfig.equipmentBlacklist.tier2Blacklist, "_blacklistTier2Equipment");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                    @foreach (var item in _blacklistTier2Equipment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier2Equipment.Remove(item);
+                                        Utils.UpdateView(_blacklistTier2Equipment, OriginalConfig.equipmentBlacklist.tier2Blacklist, "_blacklistTier2Equipment");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 3</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier3EquipmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                        if (HandleKeyDown(e))
+                                                        {
+                                                            if (CanAddItemToList(_tier3EquipmentBlacklistEntryHolder, _blacklistTier3Equipment))
+                                                            {
+                                                                _blacklistTier3Equipment.Add(_tier3EquipmentBlacklistEntryHolder);
+                                                                Utils.UpdateView(_blacklistTier3Equipment, OriginalConfig.equipmentBlacklist.tier3Blacklist, "_blacklistTier3Equipment");
+                                                            } else {
+                                                                Utils.UpdateView(_blacklistTier3Equipment, OriginalConfig.equipmentBlacklist.tier3Blacklist, "_blacklistTier3Equipment");
+                                                            }
+                                                        }
+                                                    } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                        if (CanAddItemToList(_tier3EquipmentBlacklistEntryHolder, _blacklistTier3Equipment))
+                                                        {
+                                                            _blacklistTier3Equipment.Add(_tier3EquipmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier3Equipment, OriginalConfig.equipmentBlacklist.tier3Blacklist, "_blacklistTier3Equipment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier3Equipment, OriginalConfig.equipmentBlacklist.tier3Blacklist, "_blacklistTier3Equipment");
+                                                        }
+                                                    } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier3Equipment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                            _blacklistTier3Equipment.Remove(item);
+                                            Utils.UpdateView(_blacklistTier3Equipment, OriginalConfig.equipmentBlacklist.tier3Blacklist, "_blacklistTier3Equipment");
+                                        })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 4</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier4EquipmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                        if (HandleKeyDown(e))
+                                                        {
+                                                            if (CanAddItemToList(_tier4EquipmentBlacklistEntryHolder, _blacklistTier4Equipment))
+                                                            {
+                                                                _blacklistTier4Equipment.Add(_tier4EquipmentBlacklistEntryHolder);
+                                                                Utils.UpdateView(_blacklistTier4Equipment, OriginalConfig.equipmentBlacklist.tier4Blacklist, "_blacklistTier4Equipment");
+                                                            } else {
+                                                                Utils.UpdateView(_blacklistTier4Equipment, OriginalConfig.equipmentBlacklist.tier4Blacklist, "_blacklistTier4Equipment");
+                                                            }
+                                                        }
+                                                    } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                        if (CanAddItemToList(_tier4EquipmentBlacklistEntryHolder, _blacklistTier4Equipment))
+                                                        {
+                                                            _blacklistTier4Equipment.Add(_tier4EquipmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier4Equipment, OriginalConfig.equipmentBlacklist.tier4Blacklist, "_blacklistTier4Equipment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier4Equipment, OriginalConfig.equipmentBlacklist.tier4Blacklist, "_blacklistTier4Equipment");
+                                                        }
+                                                    } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier4Equipment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                            _blacklistTier4Equipment.Remove(item);
+                                            Utils.UpdateView(_blacklistTier4Equipment, OriginalConfig.equipmentBlacklist.tier4Blacklist, "_blacklistTier4Equipment");
+                                        })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                        <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                        <MudItem xs="2">
+                            <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                                <MudText Align="Align.Center">Tier 5</MudText>
+                            </MudPaper>
+                        </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier5EquipmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                        if (HandleKeyDown(e))
+                                                        {
+                                                            if (CanAddItemToList(_tier5EquipmentBlacklistEntryHolder, _blacklistTier5Equipment))
+                                                            {
+                                                                _blacklistTier5Equipment.Add(_tier5EquipmentBlacklistEntryHolder);
+                                                                Utils.UpdateView(_blacklistTier5Equipment, OriginalConfig.equipmentBlacklist.tier5Blacklist, "_blacklistTier5Equipment");
+                                                            } else {
+                                                                Utils.UpdateView(_blacklistTier5Equipment, OriginalConfig.equipmentBlacklist.tier5Blacklist, "_blacklistTier5Equipment");
+                                                            }
+                                                        }
+                                                    } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                        if (CanAddItemToList(_tier5EquipmentBlacklistEntryHolder, _blacklistTier5Equipment))
+                                                        {
+                                                            _blacklistTier5Equipment.Add(_tier5EquipmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier5Equipment, OriginalConfig.equipmentBlacklist.tier5Blacklist, "_blacklistTier5Equipment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier5Equipment, OriginalConfig.equipmentBlacklist.tier5Blacklist, "_blacklistTier5Equipment");
+                                                        }
+                                                    } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier5Equipment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                            _blacklistTier5Equipment.Remove(item);
+                                            Utils.UpdateView(_blacklistTier5Equipment, OriginalConfig.equipmentBlacklist.tier5Blacklist, "_blacklistTier5Equipment");
+                                        })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                        <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                        <MudItem xs="2">
+                            <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                                <MudText Align="Align.Center">Tier 6</MudText>
+                            </MudPaper>
+                        </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier6EquipmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                        if (HandleKeyDown(e))
+                                                        {
+                                                            if (CanAddItemToList(_tier6EquipmentBlacklistEntryHolder, _blacklistTier6Equipment))
+                                                            {
+                                                                _blacklistTier6Equipment.Add(_tier6EquipmentBlacklistEntryHolder);
+                                                                Utils.UpdateView(_blacklistTier6Equipment, OriginalConfig.equipmentBlacklist.tier6Blacklist, "_blacklistTier6Equipment");
+                                                            } else {
+                                                                Utils.UpdateView(_blacklistTier6Equipment, OriginalConfig.equipmentBlacklist.tier6Blacklist, "_blacklistTier6Equipment");
+                                                            }
+                                                        }
+                                                    } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                        if (CanAddItemToList(_tier6EquipmentBlacklistEntryHolder, _blacklistTier6Equipment))
+                                                        {
+                                                            _blacklistTier6Equipment.Add(_tier6EquipmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier6Equipment, OriginalConfig.equipmentBlacklist.tier6Blacklist, "_blacklistTier6Equipment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier6Equipment, OriginalConfig.equipmentBlacklist.tier6Blacklist, "_blacklistTier6Equipment");
+                                                        }
+                                                    } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier6Equipment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                            _blacklistTier6Equipment.Remove(item);
+                                            Utils.UpdateView(_blacklistTier6Equipment, OriginalConfig.equipmentBlacklist.tier6Blacklist, "_blacklistTier6Equipment");
+                                        })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                        <MudDivider DividerType="DividerType.FullWidth" Class="my-3"/>
+
+                        <MudItem xs="2">
+                            <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                                <MudText Align="Align.Center">Tier 7</MudText>
+                            </MudPaper>
+                        </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier7EquipmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                        if (HandleKeyDown(e))
+                                                        {
+                                                            if (CanAddItemToList(_tier7EquipmentBlacklistEntryHolder, _blacklistTier7Equipment))
+                                                            {
+                                                                _blacklistTier7Equipment.Add(_tier7EquipmentBlacklistEntryHolder);
+                                                                Utils.UpdateView(_blacklistTier7Equipment, OriginalConfig.equipmentBlacklist.tier7Blacklist, "_blacklistTier7Equipment");
+                                                            } else {
+                                                                Utils.UpdateView(_blacklistTier7Equipment, OriginalConfig.equipmentBlacklist.tier7Blacklist, "_blacklistTier7Equipment");
+                                                            }
+                                                        }
+                                                    } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                        if (CanAddItemToList(_tier7EquipmentBlacklistEntryHolder, _blacklistTier7Equipment))
+                                                        {
+                                                            _blacklistTier7Equipment.Add(_tier7EquipmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier7Equipment, OriginalConfig.equipmentBlacklist.tier7Blacklist, "_blacklistTier7Equipment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier6Equipment, OriginalConfig.equipmentBlacklist.tier7Blacklist, "_blacklistTier7Equipment");
+                                                        }
+                                                    } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier7Equipment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                            _blacklistTier7Equipment.Remove(item);
+                                            Utils.UpdateView(_blacklistTier7Equipment, OriginalConfig.equipmentBlacklist.tier7Blacklist, "_blacklistTier7Equipment");
+                                        })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                </MudGrid>
+            </MudTabPanel>
+            <MudTabPanel Text="Ammo Blacklists">
+                <MudGrid>
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                            <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the ammo you want blacklisted, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" />
+                            </MudTooltip>
+                            <MudText Align="Align.Center">Tier 1</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier1AmmoBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier1AmmoBlacklistEntryHolder, _blacklistTier1Ammo))
+                                                        {
+                                                            _blacklistTier1Ammo.Add(_tier1AmmoBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier1Ammo, OriginalConfig.ammoBlacklist.tier1Blacklist, "_blacklistTier1Ammo");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier1Ammo, OriginalConfig.ammoBlacklist.tier1Blacklist, "_blacklistTier1Ammo");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier1AmmoBlacklistEntryHolder, _blacklistTier1Ammo))
+                                                    {
+                                                        _blacklistTier1Ammo.Add(_tier1AmmoBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier1Ammo, OriginalConfig.ammoBlacklist.tier1Blacklist, "_blacklistTier1Ammo");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier1Ammo, OriginalConfig.ammoBlacklist.tier1Blacklist, "_blacklistTier1Ammo");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier1Ammo)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier1Ammo.Remove(item);
+                                        Utils.UpdateView(_blacklistTier1Ammo, OriginalConfig.ammoBlacklist.tier1Blacklist, "_blacklistTier1Ammo");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 2</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier2AmmoBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier2AmmoBlacklistEntryHolder, _blacklistTier2Ammo))
+                                                        {
+                                                            _blacklistTier2Ammo.Add(_tier2AmmoBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier2Ammo, OriginalConfig.ammoBlacklist.tier2Blacklist, "_blacklistTier2Ammo");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier2Ammo, OriginalConfig.ammoBlacklist.tier2Blacklist, "_blacklistTier2Ammo");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier2AmmoBlacklistEntryHolder, _blacklistTier2Ammo))
+                                                    {
+                                                        _blacklistTier2Ammo.Add(_tier2AmmoBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier2Ammo, OriginalConfig.ammoBlacklist.tier2Blacklist, "_blacklistTier2Ammo");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier2Ammo, OriginalConfig.ammoBlacklist.tier2Blacklist, "_blacklistTier2Ammo");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier2Ammo)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier2Ammo.Remove(item);
+                                        Utils.UpdateView(_blacklistTier2Ammo, OriginalConfig.ammoBlacklist.tier2Blacklist, "_blacklistTier2Ammo");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 3</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier3AmmoBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier3AmmoBlacklistEntryHolder, _blacklistTier3Ammo))
+                                                        {
+                                                            _blacklistTier3Ammo.Add(_tier3AmmoBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier3Ammo, OriginalConfig.ammoBlacklist.tier3Blacklist, "_blacklistTier3Ammo");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier3Ammo, OriginalConfig.ammoBlacklist.tier3Blacklist, "_blacklistTier3Ammo");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier3AmmoBlacklistEntryHolder, _blacklistTier3Ammo))
+                                                    {
+                                                        _blacklistTier3Ammo.Add(_tier3AmmoBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier3Ammo, OriginalConfig.ammoBlacklist.tier3Blacklist, "_blacklistTier3Ammo");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier3Ammo, OriginalConfig.ammoBlacklist.tier3Blacklist, "_blacklistTier3Ammo");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier3Ammo)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier3Ammo.Remove(item);
+                                        Utils.UpdateView(_blacklistTier3Ammo, OriginalConfig.ammoBlacklist.tier3Blacklist, "_blacklistTier3Ammo");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3"/>
+                    
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 4</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier4AmmoBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier4AmmoBlacklistEntryHolder, _blacklistTier4Ammo))
+                                                        {
+                                                            _blacklistTier4Ammo.Add(_tier4AmmoBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier4Ammo, OriginalConfig.ammoBlacklist.tier4Blacklist, "_blacklistTier4Ammo");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier4Ammo, OriginalConfig.ammoBlacklist.tier4Blacklist, "_blacklistTier4Ammo");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier4AmmoBlacklistEntryHolder, _blacklistTier4Ammo))
+                                                    {
+                                                        _blacklistTier4Ammo.Add(_tier4AmmoBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier4Ammo, OriginalConfig.ammoBlacklist.tier4Blacklist, "_blacklistTier4Ammo");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier4Ammo, OriginalConfig.ammoBlacklist.tier4Blacklist, "_blacklistTier4Ammo");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier4Ammo)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier4Ammo.Remove(item);
+                                        Utils.UpdateView(_blacklistTier4Ammo, OriginalConfig.ammoBlacklist.tier4Blacklist, "_blacklistTier4Ammo");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+                    
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 5</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier5AmmoBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier5AmmoBlacklistEntryHolder, _blacklistTier5Ammo))
+                                                        {
+                                                            _blacklistTier5Ammo.Add(_tier5AmmoBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier5Ammo, OriginalConfig.ammoBlacklist.tier5Blacklist, "_blacklistTier5Ammo");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier5Ammo, OriginalConfig.ammoBlacklist.tier5Blacklist, "_blacklistTier5Ammo");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier5AmmoBlacklistEntryHolder, _blacklistTier5Ammo))
+                                                    {
+                                                        _blacklistTier5Ammo.Add(_tier5AmmoBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier5Ammo, OriginalConfig.ammoBlacklist.tier5Blacklist, "_blacklistTier5Ammo");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier5Ammo, OriginalConfig.ammoBlacklist.tier5Blacklist, "_blacklistTier5Ammo");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier5Ammo)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier5Ammo.Remove(item);
+                                        Utils.UpdateView(_blacklistTier5Ammo, OriginalConfig.ammoBlacklist.tier5Blacklist, "_blacklistTier5Ammo");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 6</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier6AmmoBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier6AmmoBlacklistEntryHolder, _blacklistTier6Ammo))
+                                                        {
+                                                            _blacklistTier6Ammo.Add(_tier6AmmoBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier6Ammo, OriginalConfig.ammoBlacklist.tier6Blacklist, "_blacklistTier6Ammo");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier6Ammo, OriginalConfig.ammoBlacklist.tier6Blacklist, "_blacklistTier6Ammo");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier6AmmoBlacklistEntryHolder, _blacklistTier6Ammo))
+                                                    {
+                                                        _blacklistTier6Ammo.Add(_tier6AmmoBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier6Ammo, OriginalConfig.ammoBlacklist.tier6Blacklist, "_blacklistTier6Ammo");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier6Ammo, OriginalConfig.ammoBlacklist.tier6Blacklist, "_blacklistTier6Ammo");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier6Ammo)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier6Ammo.Remove(item);
+                                        Utils.UpdateView(_blacklistTier6Ammo, OriginalConfig.ammoBlacklist.tier6Blacklist, "_blacklistTier6Ammo");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+                    
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 7</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier7AmmoBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier7AmmoBlacklistEntryHolder, _blacklistTier7Ammo))
+                                                        {
+                                                            _blacklistTier7Ammo.Add(_tier7AmmoBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier7Ammo, OriginalConfig.ammoBlacklist.tier7Blacklist, "_blacklistTier7Ammo");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier7Ammo, OriginalConfig.ammoBlacklist.tier7Blacklist, "_blacklistTier7Ammo");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier7AmmoBlacklistEntryHolder, _blacklistTier7Ammo))
+                                                    {
+                                                        _blacklistTier7Ammo.Add(_tier7AmmoBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier7Ammo, OriginalConfig.ammoBlacklist.tier7Blacklist, "_blacklistTier7Ammo");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier7Ammo, OriginalConfig.ammoBlacklist.tier7Blacklist, "_blacklistTier7Ammo");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier7Ammo)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier7Ammo.Remove(item);
+                                        Utils.UpdateView(_blacklistTier7Ammo, OriginalConfig.ammoBlacklist.tier7Blacklist, "_blacklistTier7Ammo");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                </MudGrid>
+            </MudTabPanel>
+            <MudTabPanel Text="Attachment Blacklists">
+                <MudGrid>
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                            <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the attachment you want blacklisted, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" />
+                            </MudTooltip>
+                            <MudText Align="Align.Center">Tier 1</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier1AttachmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier1AttachmentBlacklistEntryHolder, _blacklistTier1Attachment))
+                                                        {
+                                                            _blacklistTier1Attachment.Add(_tier1AttachmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier1Attachment, OriginalConfig.attachmentBlacklist.tier1Blacklist, "_blacklistTier1Attachment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier1Attachment, OriginalConfig.attachmentBlacklist.tier1Blacklist, "_blacklistTier1Attachment");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier1AttachmentBlacklistEntryHolder, _blacklistTier1Attachment))
+                                                    {
+                                                        _blacklistTier1Attachment.Add(_tier1AttachmentBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier1Attachment, OriginalConfig.attachmentBlacklist.tier1Blacklist, "_blacklistTier1Attachment");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier1Attachment, OriginalConfig.attachmentBlacklist.tier1Blacklist, "_blacklistTier1Attachment");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier1Attachment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier1Attachment.Remove(item);
+                                        Utils.UpdateView(_blacklistTier1Attachment, OriginalConfig.attachmentBlacklist.tier1Blacklist, "_blacklistTier1Attachment");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+                    
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 2</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier2AttachmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier2AttachmentBlacklistEntryHolder, _blacklistTier2Attachment))
+                                                        {
+                                                            _blacklistTier2Attachment.Add(_tier2AttachmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier2Attachment, OriginalConfig.attachmentBlacklist.tier2Blacklist, "_blacklistTier2Attachment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier2Attachment, OriginalConfig.attachmentBlacklist.tier2Blacklist, "_blacklistTier2Attachment");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier2AttachmentBlacklistEntryHolder, _blacklistTier2Attachment))
+                                                    {
+                                                        _blacklistTier2Attachment.Add(_tier2AttachmentBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier2Attachment, OriginalConfig.attachmentBlacklist.tier2Blacklist, "_blacklistTier2Attachment");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier2Attachment, OriginalConfig.attachmentBlacklist.tier2Blacklist, "_blacklistTier2Attachment");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier2Attachment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier2Attachment.Remove(item);
+                                        Utils.UpdateView(_blacklistTier2Attachment, OriginalConfig.attachmentBlacklist.tier2Blacklist, "_blacklistTier2Attachment");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 3</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier3AttachmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier3AttachmentBlacklistEntryHolder, _blacklistTier3Attachment))
+                                                        {
+                                                            _blacklistTier3Attachment.Add(_tier3AttachmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier3Attachment, OriginalConfig.attachmentBlacklist.tier3Blacklist, "_blacklistTier3Attachment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier3Attachment, OriginalConfig.attachmentBlacklist.tier3Blacklist, "_blacklistTier3Attachment");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier3AttachmentBlacklistEntryHolder, _blacklistTier3Attachment))
+                                                    {
+                                                        _blacklistTier3Attachment.Add(_tier3AttachmentBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier3Attachment, OriginalConfig.attachmentBlacklist.tier3Blacklist, "_blacklistTier3Attachment");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier3Attachment, OriginalConfig.attachmentBlacklist.tier3Blacklist, "_blacklistTier3Attachment");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier3Attachment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier3Attachment.Remove(item);
+                                        Utils.UpdateView(_blacklistTier3Attachment, OriginalConfig.attachmentBlacklist.tier3Blacklist, "_blacklistTier3Attachment");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+                    
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 4</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier4AttachmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier4AttachmentBlacklistEntryHolder, _blacklistTier4Attachment))
+                                                        {
+                                                            _blacklistTier4Attachment.Add(_tier4AttachmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier4Attachment, OriginalConfig.attachmentBlacklist.tier4Blacklist, "_blacklistTier4Attachment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier4Attachment, OriginalConfig.attachmentBlacklist.tier4Blacklist, "_blacklistTier4Attachment");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier4AttachmentBlacklistEntryHolder, _blacklistTier4Attachment))
+                                                    {
+                                                        _blacklistTier4Attachment.Add(_tier4AttachmentBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier4Attachment, OriginalConfig.attachmentBlacklist.tier4Blacklist, "_blacklistTier4Attachment");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier4Attachment, OriginalConfig.attachmentBlacklist.tier4Blacklist, "_blacklistTier4Attachment");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier4Attachment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier4Attachment.Remove(item);
+                                        Utils.UpdateView(_blacklistTier4Attachment, OriginalConfig.attachmentBlacklist.tier4Blacklist, "_blacklistTier4Attachment");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+                    
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 5</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier5AttachmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier5AttachmentBlacklistEntryHolder, _blacklistTier5Attachment))
+                                                        {
+                                                            _blacklistTier5Attachment.Add(_tier5AttachmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier5Attachment, OriginalConfig.attachmentBlacklist.tier5Blacklist, "_blacklistTier5Attachment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier5Attachment, OriginalConfig.attachmentBlacklist.tier5Blacklist, "_blacklistTier5Attachment");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier5AttachmentBlacklistEntryHolder, _blacklistTier5Attachment))
+                                                    {
+                                                        _blacklistTier5Attachment.Add(_tier5AttachmentBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier5Attachment, OriginalConfig.attachmentBlacklist.tier5Blacklist, "_blacklistTier5Attachment");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier5Attachment, OriginalConfig.attachmentBlacklist.tier5Blacklist, "_blacklistTier5Attachment");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier5Attachment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier5Attachment.Remove(item);
+                                        Utils.UpdateView(_blacklistTier5Attachment, OriginalConfig.attachmentBlacklist.tier5Blacklist, "_blacklistTier5Attachment");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+                    
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 6</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier6AttachmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier6AttachmentBlacklistEntryHolder, _blacklistTier6Attachment))
+                                                        {
+                                                            _blacklistTier6Attachment.Add(_tier6AttachmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier6Attachment, OriginalConfig.attachmentBlacklist.tier6Blacklist, "_blacklistTier6Attachment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier6Attachment, OriginalConfig.attachmentBlacklist.tier6Blacklist, "_blacklistTier6Attachment");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier6AttachmentBlacklistEntryHolder, _blacklistTier6Attachment))
+                                                    {
+                                                        _blacklistTier6Attachment.Add(_tier6AttachmentBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier6Attachment, OriginalConfig.attachmentBlacklist.tier6Blacklist, "_blacklistTier6Attachment");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier6Attachment, OriginalConfig.attachmentBlacklist.tier6Blacklist, "_blacklistTier6Attachment");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier6Attachment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier6Attachment.Remove(item);
+                                        Utils.UpdateView(_blacklistTier6Attachment, OriginalConfig.attachmentBlacklist.tier6Blacklist, "_blacklistTier6Attachment");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                    <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                    <MudItem xs="2">
+                        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                            <MudText Align="Align.Center">Tier 7</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3" Class="align-center">
+                        <MudTextField T="string" @bind-Value="_tier7AttachmentBlacklistEntryHolder"
+                                      Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                      Placeholder="ItemID"
+                                      Variant="Variant.Text"
+                                      OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_tier7AttachmentBlacklistEntryHolder, _blacklistTier7Attachment))
+                                                        {
+                                                            _blacklistTier7Attachment.Add(_tier7AttachmentBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier7Attachment, OriginalConfig.attachmentBlacklist.tier7Blacklist, "_blacklistTier7Attachment");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier7Attachment, OriginalConfig.attachmentBlacklist.tier7Blacklist, "_blacklistTier7Attachment");
+                                                        }
+                                                    }
+                                                } )"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Immediate="true"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                      OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_tier7AttachmentBlacklistEntryHolder, _blacklistTier7Attachment))
+                                                    {
+                                                        _blacklistTier7Attachment.Add(_tier7AttachmentBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier7Attachment, OriginalConfig.attachmentBlacklist.tier7Blacklist, "_blacklistTier7Attachment");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier7Attachment, OriginalConfig.attachmentBlacklist.tier7Blacklist, "_blacklistTier7Attachment");
+                                                    }
+                                                } )" />
+                    </MudItem>
+                    <MudItem xs="7">
+                        @foreach (var item in _blacklistTier7Attachment)
+                        {
+                            <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier7Attachment.Remove(item);
+                                        Utils.UpdateView(_blacklistTier7Attachment, OriginalConfig.attachmentBlacklist.tier7Blacklist, "_blacklistTier7Attachment");
+                                    })">@item</MudChip>
+                        }
+                    </MudItem>
+
+                </MudGrid>
+            </MudTabPanel>
+        </MudTabs>
+    </MudContainer>
+</MudMainContent>
+
+@code
+{
+    #region WEAPONs
+    private string _tier1WeaponBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier1Weapon
+    {
+        get => Data.weaponBlacklist.tier1Blacklist;
+    }
+    private string _tier2WeaponBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier2Weapon
+    {
+        get => Data.weaponBlacklist.tier2Blacklist;
+    }
+    private string _tier3WeaponBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier3Weapon
+    {
+        get => Data.weaponBlacklist.tier3Blacklist;
+    }
+    private string _tier4WeaponBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier4Weapon
+    {
+        get => Data.weaponBlacklist.tier4Blacklist;
+    }
+    private string _tier5WeaponBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier5Weapon
+    {
+        get => Data.weaponBlacklist.tier5Blacklist;
+    }
+    private string _tier6WeaponBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier6Weapon
+    {
+        get => Data.weaponBlacklist.tier6Blacklist;
+    }
+    private string _tier7WeaponBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier7Weapon
+    {
+        get => Data.weaponBlacklist.tier7Blacklist;
+    }
+    #endregion
+    #region EQUIPMENTs
+
+    private string _tier1EquipmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier1Equipment
+    {
+        get => Data.equipmentBlacklist.tier1Blacklist;
+    }
+    private string _tier2EquipmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier2Equipment
+    {
+        get => Data.equipmentBlacklist.tier2Blacklist;
+    }
+    private string _tier3EquipmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier3Equipment
+    {
+        get => Data.equipmentBlacklist.tier3Blacklist;
+    }
+    private string _tier4EquipmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier4Equipment
+    {
+        get => Data.equipmentBlacklist.tier4Blacklist;
+    }
+    private string _tier5EquipmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier5Equipment
+    {
+        get => Data.equipmentBlacklist.tier5Blacklist;
+    }
+    private string _tier6EquipmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier6Equipment
+    {
+        get => Data.equipmentBlacklist.tier6Blacklist;
+    }
+    private string _tier7EquipmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier7Equipment
+    {
+        get => Data.equipmentBlacklist.tier7Blacklist;
+    }
+    #endregion
+    #region AMMOs
+
+    private string _tier1AmmoBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier1Ammo
+    {
+        get => Data.ammoBlacklist.tier1Blacklist;
+    }
+    private string _tier2AmmoBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier2Ammo
+    {
+        get => Data.ammoBlacklist.tier2Blacklist;
+    }
+    private string _tier3AmmoBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier3Ammo
+    {
+        get => Data.ammoBlacklist.tier3Blacklist;
+    }
+    private string _tier4AmmoBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier4Ammo
+    {
+        get => Data.ammoBlacklist.tier4Blacklist;
+    }
+    private string _tier5AmmoBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier5Ammo
+    {
+        get => Data.ammoBlacklist.tier5Blacklist;
+    }
+    private string _tier6AmmoBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier6Ammo
+    {
+        get => Data.ammoBlacklist.tier6Blacklist;
+    }
+    private string _tier7AmmoBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier7Ammo
+    {
+        get => Data.ammoBlacklist.tier7Blacklist;
+    }
+    #endregion
+    #region ATTACHMENTs
+
+    private string _tier1AttachmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier1Attachment
+    {
+        get => Data.attachmentBlacklist.tier1Blacklist;
+    }
+    private string _tier2AttachmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier2Attachment
+    {
+        get => Data.attachmentBlacklist.tier2Blacklist;
+    }
+    private string _tier3AttachmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier3Attachment
+    {
+        get => Data.attachmentBlacklist.tier3Blacklist;
+    }
+    private string _tier4AttachmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier4Attachment
+    {
+        get => Data.attachmentBlacklist.tier4Blacklist;
+    }
+    private string _tier5AttachmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier5Attachment
+    {
+        get => Data.attachmentBlacklist.tier5Blacklist;
+    }
+    private string _tier6AttachmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier6Attachment
+    {
+        get => Data.attachmentBlacklist.tier6Blacklist;
+    }
+    private string _tier7AttachmentBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier7Attachment
+    {
+        get => Data.attachmentBlacklist.tier7Blacklist;
+    }
+    #endregion
+
+    #region INPUT HANDLING
+    private bool HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool CanAddItemToList(string value, List<string> list)
+    {
+        if (value != null)
+        {
+            bool containsAlready = list.FirstOrDefault(s => s.Contains(value)) == value ? true : false;
+            if (!containsAlready && Utils.IsHexAndValidLength(value))
+            {
+                return true;
+            }
+            else if (containsAlready)
+            {
+                Snackbar.Add("Already blacklisted.", Severity.Error, config => { config.ShowCloseIcon = false; });
+                return false;
+            }
+            else
+            {
+                Snackbar.Add("Invalid MongoID.", Severity.Error, config => { config.ShowCloseIcon = false; });
+                return false;
+            }
+        }
+        return false;
+    }
+    private void OnChipClosed(string item, List<string> list)
+    {
+        if (item != null)
+        {
+            list.Remove(item);
+        }
+    }
+    #endregion
+    
+    #region CASCADING PARAMETERS
+    [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+    #endregion
+}

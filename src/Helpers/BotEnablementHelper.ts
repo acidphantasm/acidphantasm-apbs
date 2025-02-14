@@ -26,11 +26,15 @@ export class BotEnablementHelper
     
     public botDisabled(botType: string): boolean
     {
-        if (this.isBoss(botType)) return ModConfig.config.disableBossTierGeneration;
-        if (this.isFollower(botType)) return ModConfig.config.disableBossFollowerTierGeneration;
-        if (this.isPMC(botType)) return ModConfig.config.disablePMCTierGeneration;
-        if (this.isScav(botType)) return ModConfig.config.disableScavTierGeneration;
-        if (this.isSpecial(botType)) return ModConfig.config.disableSpecialTierGeneration;
+        // Special handling for punisher & legion
+        if (botType.toLowerCase() == "bosspunisher" || botType.toLowerCase() == "bosslegion") return true;
+
+        // Normal bot types
+        if (this.isPMC(botType)) return !ModConfig.config.pmcBots.enable;
+        if (this.isScav(botType)) return !ModConfig.config.scavBots.enable;
+        if (this.isBoss(botType)) return !ModConfig.config.bossBots.enable;
+        if (this.isFollower(botType)) return !ModConfig.config.followerBots.enable;
+        if (this.isSpecial(botType)) return !ModConfig.config.specialBots.enable;
         if (this.isEvent(botType)) return true;
         return false;
     }

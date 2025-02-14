@@ -215,20 +215,22 @@ export class ModdedImportHelper
 
     public initialize():void
     {
-        if (ModConfig.config.initalTierAppearance < 1 || ModConfig.config.initalTierAppearance > 7)
+        if (ModConfig.config.compatibilityConfig.initalTierAppearance < 1 || ModConfig.config.compatibilityConfig.initalTierAppearance > 7)
         {
-            this.apbsLogger.log(Logging.WARN, `Config value for "initialTierAppearance" is invalid. Must be 1-7. Currently configured for ${ModConfig.config.initalTierAppearance}`)
+            this.apbsLogger.log(Logging.WARN, `Config value for "initialTierAppearance" is invalid. Must be 1-7. Currently configured for ${ModConfig.config.compatibilityConfig.initalTierAppearance}`)
             return;
         }
-        if (ModConfig.config.enableModdedWeapons) this.buildVanillaWeaponList();
-        if (ModConfig.config.enableModdedEquipment) this.buildVanillaEquipmentList();
-        if (ModConfig.config.enableModdedClothing && !ModConfig.config.seasonalPmcAppearance) this.buildVanillaClothingList();
-        if (ModConfig.config.enableAddingModdedAttachmentsToVanillaWeapons) this.buildModAttachments();
+        if (ModConfig.config.compatibilityConfig.enableModdedWeapons) this.buildVanillaWeaponList();
+        if (ModConfig.config.compatibilityConfig.enableModdedEquipment) this.buildVanillaEquipmentList();
+        if (ModConfig.config.compatibilityConfig.enableModdedClothing && !ModConfig.config.pmcBots.additionalOptions.seasonalPmcAppearance) this.buildVanillaClothingList();
         
-        if (this.invalidModAttachments.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModAttachments.length} Invalid Attachment ItemIDs found in mods: ${JSON.stringify(this.invalidModAttachments)}`)
-        if (this.invalidModEquipment.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModEquipment.length} Invalid Weapon/Equipment ItemIDs found in mods: ${JSON.stringify(this.invalidModEquipment)}`)
-            
-        if (ModConfig.config.enableAddingModdedAttachmentsToVanillaWeapons) this.apbsLogger.log(Logging.WARN, `     Imported ${this.allImportedAttachments.length} Modded Attachments to ${this.numberOfAttachments} mount points on vanilla weapons...`)
+        if (ModConfig.config.compatibilityConfig.enableModdedAttachments) 
+        {
+            this.buildModAttachments();
+            if (this.invalidModAttachments.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModAttachments.length} Invalid Attachment ItemIDs found in mods: ${JSON.stringify(this.invalidModAttachments)}`)
+            if (this.invalidModEquipment.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModEquipment.length} Invalid Weapon/Equipment ItemIDs found in mods: ${JSON.stringify(this.invalidModEquipment)}`)
+            if (this.allImportedAttachments.length > 0) this.apbsLogger.log(Logging.WARN, `     Imported ${this.allImportedAttachments.length} Modded Attachments to ${this.numberOfAttachments} mount points on vanilla weapons...`)
+        }
     }
 
     private buildVanillaWeaponList(): void
@@ -260,10 +262,14 @@ export class ModdedImportHelper
         const tacticalVests = {};        
         vanillaItemList.equipment.TacticalVest.forEach(element => tacticalVests[element] = this.getItem(element))
         
+        const armbands = {};        
+        vanillaItemList.equipment.ArmBand.forEach(element => armbands[element] = this.getItem(element))
+        
         // Push these lists to the function to filter and import
         this.getModdedItems(armours as ITemplateItem, BaseClasses.ARMOR, "Armours");
         this.getModdedItems(headwear as ITemplateItem, BaseClasses.HEADWEAR, "Helmets");
         this.getModdedItems(tacticalVests as ITemplateItem, BaseClasses.VEST, "Vests");
+        this.getModdedItems(armbands as ITemplateItem, BaseClasses.ARMBAND, "ArmBands");
     }
 
     private buildVanillaClothingList(): void
@@ -313,9 +319,6 @@ export class ModdedImportHelper
         {
             const tierNumber = this.tierInformation.tiers[object].tier
             const tierJson = this.apbsEquipmentGetter.getAppearanceJson(tierNumber, true);
-
-            // Skip tiers based on configuration
-            if (tierNumber < ModConfig.config.initalTierAppearance) continue;
 
             // Add each item from the clothing list to each tier JSON - this completes the import
             for (const item in clothingList)
@@ -384,21 +387,44 @@ export class ModdedImportHelper
         // Loop each equipment in the pool of equipment to be imported - push them individually
         for (const equipment in equipmentPool)
         {
-            const equipmentParent = equipmentPool[equipment]._parent;
-            const equipmentId = equipmentPool[equipment]._id;
-            const equipmentSlots = equipmentPool[equipment]?._props?.Slots;
-            const equipmentSlotsLength = equipmentPool[equipment]?._props?.Slots.length;
-            const gridLength = equipmentPool[equipment]?._props?.Grids.length;
+            const equipmentInfo = equipmentPool[equipment];
+            const equipmentParent = equipmentInfo._parent;
+            const equipmentId = equipmentInfo._id;
+            const equipmentSlots = equipmentInfo?._props?.Slots;
+            const equipmentSlotsLength = equipmentInfo?._props?.Slots.length;
+            const gridLength = equipmentInfo?._props?.Grids.length;
             let equipmentSlot: string;
 
             // Check if item is actually valid and in the database, skip if it isn't
             if (!this.doesItemExist(equipmentId, true)) continue;
 
             // Set equipmentSlot string to the proper value - this is only done to separate TacticalVests & ArmouredRigs
-            if (equipmentParent == "5448e5284bdc2dcb718b4567" && (equipmentSlots.length == 0 || equipmentSlots == undefined)) equipmentSlot = "TacticalVest"
-            if (equipmentParent == "5448e5284bdc2dcb718b4567" && equipmentSlots.length >= 1) equipmentSlot = "ArmouredRig"
             if (equipmentParent == "5448e54d4bdc2dcc718b4568") equipmentSlot = "ArmorVest"
             if (equipmentParent == "5a341c4086f77401f2541505") equipmentSlot = "Headwear"
+            if (equipmentParent == "5448e5284bdc2dcb718b4567")
+            {
+                // No additional slots, probably tactical vest
+                if ((equipmentSlots.length == 0 || equipmentSlots == undefined)) equipmentSlot = "TacticalVest";
+                // Additional slots, likely armoured rig
+                if (equipmentSlots.length >= 1) equipmentSlot = "ArmouredRig";
+
+                // Might be a Pack N Strap belt, check that.
+                const defaultInventorySlots = this.databaseService.getTables().templates.items["55d7217a4bdc2d86028b456d"]?._props?.Slots;
+                for (const slot in defaultInventorySlots)
+                {
+                    const slotName = defaultInventorySlots[slot]?._name;
+                    const slotFilter = defaultInventorySlots[slot]?._props?.filters[0]?.Filter;
+                    if (slotName != "ArmBand") continue;
+
+                    if (slotFilter.includes(equipmentId)) equipmentSlot = "ArmBand"
+                    if (ModConfig.config.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts)
+                    {
+                        equipmentInfo._props.Unlootable = true;
+                        equipmentInfo._props.UnlootableFromSide.push("Bear", "Usec", "Savage");
+                        equipmentInfo._props.UnlootableFromSlot = "ArmBand";
+                    }
+                }
+            }
 
 
             // Push Equipment details to relevant pools
@@ -411,9 +437,9 @@ export class ModdedImportHelper
     {
         // Define weights to use, and which range they go to (for logging).
         let range = "";
-        const pmcWeight = ModConfig.config.pmcWeaponWeights <= 0 ? 1 : ModConfig.config.pmcWeaponWeights;
-        const scavWeight = ModConfig.config.scavWeaponWeights <= 0 ? 1 : ModConfig.config.scavWeaponWeights;
-        const defaultWeight = ModConfig.config.followerWeaponWeights <= 0 ? 1 : ModConfig.config.followerWeaponWeights;
+        const pmcWeight = ModConfig.config.compatibilityConfig.pmcWeaponWeights <= 0 ? 1 : ModConfig.config.compatibilityConfig.pmcWeaponWeights;
+        const scavWeight = ModConfig.config.compatibilityConfig.scavWeaponWeights <= 0 ? 1 : ModConfig.config.compatibilityConfig.scavWeaponWeights;
+        const defaultWeight = ModConfig.config.compatibilityConfig.followerWeaponWeights <= 0 ? 1 : ModConfig.config.compatibilityConfig.followerWeaponWeights;
 
         // Loop over each tier to easily use the proper tierJSON
         for (const object in this.tierInformation.tiers)
@@ -422,7 +448,7 @@ export class ModdedImportHelper
             const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber, true);
 
             // Skip tiers based on configuration
-            if (tierNumber < ModConfig.config.initalTierAppearance) continue;
+            if (tierNumber < ModConfig.config.compatibilityConfig.initalTierAppearance) continue;
 
             // Use multiple variable switch to set specific weapon "types" to the correct pool
             switch (true) 
@@ -515,7 +541,7 @@ export class ModdedImportHelper
                     continue;
             }
         }
-        this.apbsLogger.log(Logging.DEBUG, `[Tier${ModConfig.config.initalTierAppearance}+] Added ${weaponId} to ${range} weapons.`)
+        this.apbsLogger.log(Logging.DEBUG, `[Tier${ModConfig.config.compatibilityConfig.initalTierAppearance}+] Added ${weaponId} to ${range} weapons.`)
     }
 
     private pushEquipmentToTiers(itemID: string, equipmentSlot: string, gridLength: number, equipmentSlotsLength: number): void
@@ -527,12 +553,13 @@ export class ModdedImportHelper
             const tierJson = this.apbsEquipmentGetter.getTierJson(tierNumber, true);
 
             // Skip tiers based on configuration
-            if (tierNumber < ModConfig.config.initalTierAppearance) continue;
+            if (tierNumber < ModConfig.config.compatibilityConfig.initalTierAppearance) continue;
 
             // Set weights based on witch slot they are in. Check TacticalVests for belts (low grid count) and check Helmets to see if armoured or decorative
             let weight;
             if (equipmentSlot == "TacticalVest" && gridLength > 10) weight = 10;
             if (equipmentSlot == "TacticalVest" && gridLength <= 10) weight = 1;
+            if (equipmentSlot == "ArmBand") weight = 1;
             if (equipmentSlot == "ArmouredRig") weight = 7;
             if (equipmentSlot == "ArmorVest") weight = 10;
             if (equipmentSlot == "Headwear" && equipmentSlotsLength > 0) weight = 6;
@@ -544,7 +571,7 @@ export class ModdedImportHelper
             tierJson.scav.equipment[equipmentSlot][itemID] = 1
             tierJson.default.equipment[equipmentSlot][itemID] = weight
         }
-        this.apbsLogger.log(Logging.DEBUG, `[Tier${ModConfig.config.initalTierAppearance}+] Added ${itemID} to ${equipmentSlot}.`)
+        this.apbsLogger.log(Logging.DEBUG, `[Tier${ModConfig.config.compatibilityConfig.initalTierAppearance}+] Added ${itemID} to ${equipmentSlot}.`)
     }
 
     private pushItemAndPrimaryMods(itemID: string, itemSlots: ISlot[]): void
@@ -688,7 +715,7 @@ export class ModdedImportHelper
                     if (!lowTierItem) this.tierInformation.tier6mods[parentSlotItemID][slotName].push(slotFilterItem);
                     if (!lowTierItem) this.tierInformation.tier7mods[parentSlotItemID][slotName].push(slotFilterItem);
 
-                    if (ModConfig.config.enableAddingModdedAttachmentsToVanillaWeapons && standaloneAttachment)
+                    if (ModConfig.config.compatibilityConfig.enableModdedAttachments && standaloneAttachment)
                     {
                         this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. ParentSlotItem: ${parentSlotFilterItem} | Slot: ${slotName} | Attachment: ${slotFilterItem}`);
                         if (!this.allImportedAttachments.includes(slotFilterItem)) this.allImportedAttachments.push(slotFilterItem);
@@ -845,7 +872,7 @@ export class ModdedImportHelper
                         // Slot is missing from weapon, add it
                         if (this.tierInformation.tier1mods[weaponID][slotName] == undefined)
                         {
-                            this.apbsLogger.log(Logging.WARN, `New Slot Found! Weapon: ${weaponID} | Slot: ${slotName} | Item: ${slotFilterItem} - REPORT THIS TO ACIDPHANTASM PLEASE`)
+                            this.apbsLogger.log(Logging.DEBUG, `New Slot Found! Weapon: ${weaponID} | Slot: ${slotName} | Item: ${slotFilterItem}`)
                             this.tierInformation.tier1mods[weaponID][slotName] = [];
                             this.tierInformation.tier2mods[weaponID][slotName] = [];
                             this.tierInformation.tier3mods[weaponID][slotName] = [];
@@ -961,7 +988,7 @@ export class ModdedImportHelper
         const isVanillaItem = this.apbsAttachmentChecker.isVanillaItem(itemID);
 
         // Are both items vanilla?
-        if (isVanillaParent && isVanillaItem && ModConfig.config.enableSafeGuard) return true;
+        if (isVanillaParent && isVanillaItem && ModConfig.config.compatibilityConfig.enableSafeGuard) return true;
 
         slotName = slotName.toLowerCase();
 

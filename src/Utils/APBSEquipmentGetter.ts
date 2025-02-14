@@ -27,13 +27,13 @@ export class APBSEquipmentGetter
 
     private chadOrChill(tierInfo: number): number
     {
-        if (ModConfig.config.onlyChads && ModConfig.config.tarkovAndChill)
+        if (ModConfig.config.generalConfig.onlyChads && ModConfig.config.generalConfig.tarkovAndChill)
         {
             return this.randomUtil.getInt(1, 7);
         }
-        if (ModConfig.config.onlyChads) return 7;
-        if (ModConfig.config.tarkovAndChill) return 1;
-        if (ModConfig.config.blickyMode) return 0;
+        if (ModConfig.config.generalConfig.onlyChads) return 7;
+        if (ModConfig.config.generalConfig.tarkovAndChill) return 1;
+        if (ModConfig.config.generalConfig.blickyMode) return 0;
 
         return tierInfo;
     }
@@ -202,7 +202,7 @@ export class APBSEquipmentGetter
             case "marksman":
             case "cursedassault":
             case "assault":
-                if (ModConfig.config.blickyMode || ModConfig.config.onlyChads || ModConfig.config.enableScavAttachmentTiering) return tierJson;
+                if (ModConfig.config.generalConfig.blickyMode || ModConfig.config.generalConfig.onlyChads || ModConfig.config.scavBots.additionalOptions.enableScavAttachmentTiering) return tierJson;
                 else return this.tierInformation.tier1mods;
             default:
                 return tierJson;
@@ -310,6 +310,8 @@ export class APBSEquipmentGetter
             case "sectantwarrior":
                 return tierJson.sectantwarrior.chances;
             case "exusec":
+            case "arenafighterevent":
+            case "arenafighter":
                 return tierJson.exusec.chances;
             case "pmcbot":
                 return tierJson.pmcbot.chances;
@@ -320,11 +322,11 @@ export class APBSEquipmentGetter
 
     public getAmmoByBotRole(botRole: string, tierInfo: number): Record<string, Record<string, number>>
     {
-        if ((botRole == "pmcusec" || botRole == "pmcbear") && ModConfig.config.enablePMCAmmoTierSliding)
+        if ((botRole == "pmcusec" || botRole == "pmcbear") && ModConfig.config.pmcBots.additionalOptions.ammoTierSliding.enable)
         {
-            if (this.randomUtil.getChance100(ModConfig.config.slideChance))
+            if (this.randomUtil.getChance100(ModConfig.config.pmcBots.additionalOptions.ammoTierSliding.slideChance))
             {
-                const slideAmount = ModConfig.config.slideAmount;
+                const slideAmount = ModConfig.config.pmcBots.additionalOptions.ammoTierSliding.slideAmount;
                 const minTier = (tierInfo - slideAmount) <= 0 ? 1 : tierInfo - slideAmount
                 const maxTier = tierInfo - 1
                 tierInfo = this.newTierCalc(tierInfo, minTier, maxTier);

@@ -12,7 +12,9 @@ export enum BossBots
     BOSSZRYACHIY = "bosszryachiy",
     BOSSKNIGHT = "bossknight",
     FOLLOWERBIGPIPE = "followerbigpipe",
-    FOLLOWERBIRDEYE = "followerbirdeye"
+    FOLLOWERBIRDEYE = "followerbirdeye",
+    BOSSLEGION = "bosslegion",
+    BOSSPUNISHER = "bosspunisher"
 }
 
 export enum FollowerBots
@@ -49,7 +51,8 @@ export enum PMCBots
     PMCUSEC = "pmcusec",
     PMCBEAR = "pmcbear",
     USEC = "usec",
-    BEAR = "bear"
+    BEAR = "bear",
+    PMC = "pmc"
 }
 
 export enum ScavBots
@@ -83,7 +86,5 @@ export enum EventBots
     SPIRITWINTER = "spiritwinter",
     TEST = "test",
     FOLLOWERTEST = "followertest",
-    BOSSTEST = "bosstest",
-    BOSSLEGION = "bosslegion",
-    BOSSPUNISHER = "bosspunisher"
+    BOSSTEST = "bosstest"
 }

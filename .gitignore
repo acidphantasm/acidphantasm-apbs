@@ -6,3 +6,14 @@
 .eslintrc.json
 build.mjs
 package-lock.json
+APBSConfig.exe
+APBSConfig.pdb
+/Core
+/wwwroot
+ConfigApp/obj
+ConfigApp/bin
+ConfigApp/APBSConfig.csproj.user
+ConfigApp/.vs
+ConfigApp/Properties/PublishProfiles/FolderProfile.pubxml.user
+APBSConfig.pdb
+ConfigApp/config

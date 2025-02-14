@@ -1,0 +1,203 @@
+﻿@inherits LayoutComponentBase
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@using APBSConfig.Core;
+@using static Core.DataLoader;
+
+<MudThemeProvider IsDarkMode="true"/>
+<MudPopoverProvider/>
+<MudSnackbarProvider />
+<MudDialogProvider />
+
+<MudLayout>
+    <MudAppBar Dense Elevation="1">
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.MenuOpen" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())">Menu</MudButton>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Refresh" Color="Color.Inherit" OnClick="@((e) => RefreshData())">Reload config</MudButton>
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Save" Color="Color.Inherit" OnClick="@((e) => SaveData())">Save config</MudButton>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2" ClipMode="DrawerClipMode.Always" Variant="@DrawerVariant.Temporary" Breakpoint="Breakpoint.None">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Class="mt-1">SETTINGS</MudText>
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent Class="pt-3">
+        <CascadingValue Value="this">
+            <div class="content">
+                @Body
+            </div>
+        </CascadingValue>
+    </MudMainContent>
+    <MudAppBar Dense Elevation="1" Bottom>
+        <MudCheckBox @bind-Value="_appUndoButtonToggle" Label="Show Undo Button"></MudCheckBox>
+        <MudCheckBox @bind-Value="_appDefaultButtonToggle" Label="Show Default Button"></MudCheckBox>
+        <MudSpacer />
+        @if (pendingChanges.Count > 0)
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="ShowPendingChanges">@pendingChanges.Count.ToString() Unsaved changes</MudButton>
+        }
+        @if (pendingChanges.Count == 0)
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Inherit">@pendingChanges.Count.ToString() Unsaved Changes</MudButton>
+        }
+    </MudAppBar>
+</MudLayout>
+
+
+<style>
+    .custom-blur-background {
+        backdrop-filter: blur(7px);
+    }
+</style>
+
+
+@code {
+    bool _drawerOpen = false;
+    static bool _unsavedChanges = false;
+    public static bool _appUndoButtonToggle
+    {
+        get => Data.configAppSettings.showUndo; 
+        set { 
+            Data.configAppSettings.showUndo = value;
+            if (!MainLayout.pendingChanges.Contains("_appUndoButtonToggle")) MainLayout.pendingChanges.Add("_appUndoButtonToggle");
+            else MainLayout.pendingChanges.Remove("_appUndoButtonToggle");
+        }
+    }
+    public static bool _appDefaultButtonToggle
+    {
+        get => Data.configAppSettings.showDefault;
+        set
+        {
+            Data.configAppSettings.showDefault = value;
+            if (!MainLayout.pendingChanges.Contains("_appDefaultButtonToggle")) MainLayout.pendingChanges.Add("_appDefaultButtonToggle");
+            else MainLayout.pendingChanges.Remove("_appDefaultButtonToggle");
+        }
+    }
+
+    public static List<string> pendingChanges = new List<string>();
+
+    private static MainLayout? _app;
+
+    public MainLayout()
+    {
+        _app = this;
+    }
+
+    public static void EnableUnsavedChangesButton()
+    {
+        _unsavedChanges = true;
+        _app?.StateHasChanged();
+    }
+
+    public static void TriggerUIRefresh()
+    {
+        _app?.StateHasChanged();
+    }
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    void SaveData()
+    {
+        if (DataLoader.SaveJson())
+        {
+            Snackbar.Add("Config saved", Severity.Info, config => { config.ShowCloseIcon = false; });
+            pendingChanges.Clear();
+            Utils.callerList.Clear();
+            _unsavedChanges = false;
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Config failed to save", Severity.Error, config => { config.ShowCloseIcon = false; });
+        }
+    }
+    private async Task RefreshData()
+    {
+        if (!_unsavedChanges && pendingChanges.Count == 0)
+        {
+            if (DataLoader.LoadJson())
+            {
+                Snackbar.Add("Config reloaded", Severity.Info, config => { config.ShowCloseIcon = false; });
+                _unsavedChanges = false;
+                pendingChanges.Clear();
+                Utils.callerList.Clear();
+                StateHasChanged();
+                return;
+            }
+            else
+            {
+                Snackbar.Add("Config failed to reload", Severity.Error, config => { config.ShowCloseIcon = false; });
+            }
+        }
+        else
+        {
+            var changeCount = pendingChanges.Count > 1 ? $"{pendingChanges.Count} unsaved changes" : $"{pendingChanges.Count} unsaved change";
+            var parameters = new DialogParameters<RefreshWarningDialog>
+            {
+                { x => x.ChangeList, pendingChanges },
+                { x => x.ButtonText, "Reload Anyway" },
+                { x => x.Color, Color.Primary }
+            };
+
+            var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, BackgroundClass = "custom-blur-background" };
+
+            var dialog = await DialogService.ShowAsync<RefreshWarningDialog>($"You have {changeCount}.", parameters, options);
+            var result = await dialog.Result;
+
+            if (result != null)
+            {
+                if (!result.Canceled) DiscardChangesAndReload();
+            }            
+        }
+    }
+
+    private async Task ShowPendingChanges()
+    {
+        var changeCount = pendingChanges.Count > 1 ? $"{pendingChanges.Count} unsaved changes" : $"{pendingChanges.Count} unsaved change";
+        var parameters = new DialogParameters<RefreshWarningDialog>
+            {
+                { x => x.ChangeList, pendingChanges },
+                { x => x.ButtonText, "OK" },
+                { x => x.showCancel, false },
+                { x => x.Color, Color.Default }
+            };
+
+        var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, BackgroundClass = "custom-blur-background" };
+
+        await DialogService.ShowAsync<RefreshWarningDialog>($"You have {changeCount}.", parameters, options);
+    }
+
+    private void DiscardChangesAndReload()
+    {
+        var changeCount = pendingChanges.Count > 1 ? $"{pendingChanges.Count} changes" : $"{pendingChanges.Count} change";
+        if (DataLoader.LoadJson())
+        {
+            Snackbar.Add($"{changeCount} discarded", Severity.Warning, config => { config.ShowCloseIcon = false; });
+            pendingChanges.Clear();
+            Utils.callerList.Clear();
+            _unsavedChanges = false;
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Config failed to reload", Severity.Error, config => { config.ShowCloseIcon = false; });
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        if (!DataLoader.initialLoad && DataLoader.LoadJson())
+        {
+            Snackbar.Add("Config loaded", Severity.Info, config => { config.ShowCloseIcon = false; });
+            DataLoader.initialLoad = true;
+        }
+        else
+        {
+            Snackbar.Add("Config failed to load", Severity.Error, config => { config.ShowCloseIcon = false; });
+        }
+    }
+}

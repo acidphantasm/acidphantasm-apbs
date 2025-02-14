@@ -1,0 +1,744 @@
+﻿@page "/scav"
+@inherits LayoutComponentBase
+@inject ISnackbar Snackbar
+@using static Core.DataLoader;
+
+<style>
+    .mud-divider {
+        border-width: 2.5px;
+    }
+</style>
+
+<MudMainContent>
+    <MudContainer Class="mb-20">
+        <MudExpansionPanels MultiExpansion="true">
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Scav Specific Configuration" Expanded=true>
+                <MudGrid>
+
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <ChildContent>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.caption">All settings on this page, and any other setting that may impact these bots are controlled by this toggle.</MudText><MudSpacer />
+                                    <MudSpacer />
+                                    <MudText Typo="Typo.caption">EXCEPTION: Normalize Health is always applied if enabled but not excluded.</MudText>
+                                </TooltipContent>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Grants APBS control over Scav Bots. You will have vanilla versions of these bots if disabled." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Scav Bot Generation</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="_scavEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavEnabled</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        @if (MainLayout.pendingChanges.Contains("_scavEnabled") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoScavBots" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_scavEnabled != true && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultScavBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+            @if (_scavEnabled)
+            {
+                <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Style="padding-bottom:25px" Text="Scav Specific Options" Expanded=true>
+                    <MudGrid>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Scav Bots to spawn with additional loot." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Loot</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="@_scavLootEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavLootEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout.pendingChanges.Contains("_scavLootEnabled") && MainLayout._appUndoButtonToggle || MainLayout.pendingChanges.Contains("_scavLootBlacklist") && MainLayout._appUndoButtonToggle)
+                            {
+                                <MudButton @onclick="undoLoot" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (_scavLootEnabled != true && MainLayout._appDefaultButtonToggle || _scavLootBlacklist.Count > 0 && MainLayout._appDefaultButtonToggle)
+                            {
+                                <MudButton @onclick="defaultLoot" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="1">
+                            <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                                <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the weapon you want blacklisted, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="4" Class="align-center">
+                            <MudTextField T="string" @bind-Value="@_lootBlacklistEntryHolder"
+                                          Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                          Placeholder="ItemID"
+                                          Variant="Variant.Text"
+                                          OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddItemToList(_lootBlacklistEntryHolder, _scavLootBlacklist))
+                                                        {
+                                                            _scavLootBlacklist.Add(_lootBlacklistEntryHolder);
+                                                            Utils.UpdateView(_scavLootBlacklist, OriginalConfig.scavBots.lootConfig.blacklist, "_scavLootBlacklist");
+                                                        } else {
+                                                            Utils.UpdateView(_scavLootBlacklist, OriginalConfig.scavBots.lootConfig.blacklist, "_scavLootBlacklist");
+                                                        }
+                                                    }
+                                                } )"
+                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                          Immediate="true"
+                                          Adornment="Adornment.End"
+                                          AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                          OnAdornmentClick="@(() => {
+                                                    if (CanAddItemToList(_lootBlacklistEntryHolder, _scavLootBlacklist))
+                                                    {
+                                                        _scavLootBlacklist.Add(_lootBlacklistEntryHolder);
+                                                        Utils.UpdateView(_scavLootBlacklist, OriginalConfig.scavBots.lootConfig.blacklist, "_scavLootBlacklist");
+                                                    } else {
+                                                        Utils.UpdateView(_scavLootBlacklist, OriginalConfig.scavBots.lootConfig.blacklist, "_scavLootBlacklist");
+                                                    }
+                                                } )" />
+
+                        </MudItem>
+                        <MudItem xs="6">
+                            @foreach (var item in _scavLootBlacklist)
+                            {
+                                <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _scavLootBlacklist.Remove(item);
+                                        Utils.UpdateView(_scavLootBlacklist, OriginalConfig.scavBots.lootConfig.blacklist, "_scavLootBlacklist");
+                                    })">@item</MudChip>
+                            }
+                        </MudItem>
+
+                        <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows random resource consumption on Food/Drink/Medical Items." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Resource Randomization</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_scavResourceRandomizationEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavResourceRandomizationEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (
+                           MainLayout.pendingChanges.Contains("_scavResourceRandomizationEnabled") && MainLayout._appUndoButtonToggle ||
+                           MainLayout.pendingChanges.Contains("_scavMedRateMaxChance") && MainLayout._appUndoButtonToggle ||
+                           MainLayout.pendingChanges.Contains("_scavMedRateUsagePercent") && MainLayout._appUndoButtonToggle ||
+                           MainLayout.pendingChanges.Contains("_scavFoodRateMaxChance") && MainLayout._appUndoButtonToggle ||
+                           MainLayout.pendingChanges.Contains("_scavFoodRateUsagePercent") && MainLayout._appUndoButtonToggle)
+                            {
+                                <MudButton @onclick="undoResourceRandomization" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (
+                            _scavResourceRandomizationEnabled != true && MainLayout._appDefaultButtonToggle ||
+                            _scavMedRateMaxChance != 10 && MainLayout._appDefaultButtonToggle ||
+                            _scavMedRateUsagePercent != 10 && MainLayout._appDefaultButtonToggle ||
+                            _scavFoodRateMaxChance != 10 && MainLayout._appDefaultButtonToggle ||
+                            _scavFoodRateUsagePercent != 10 && MainLayout._appDefaultButtonToggle)
+                            {
+                                <MudButton @onclick="defaultResourceRandomization" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudTooltip Text="Medical & Food full chances and minimum usage percent." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Medical & Food Values</MudText>
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                                <MudTooltip Text="Chance for medical items to be full resource usage." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_scavMedRateMaxChance" Label="Full Chance" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_scavResourceRandomizationEnabled" />
+                                </MudTooltip>
+                                <MudTooltip Text="Lowest percent possible for a medical item's usage to be." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_scavMedRateUsagePercent" Label="Minimum %" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_scavResourceRandomizationEnabled" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                                <MudTooltip Text="Chance for food/drink items to be full resource usage." Color="Color.Primary" Placement="Placement.Left" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_scavFoodRateMaxChance" Label="Full Chance" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_scavResourceRandomizationEnabled" />
+                                </MudTooltip>
+                                <MudTooltip Text="Lowest percent possible for a food/drink item's usage to be." Color="Color.Primary" Placement="Placement.Left" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_scavFoodRateUsagePercent" Label="Minimum %" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_scavResourceRandomizationEnabled" />
+                                </MudTooltip>
+                                <MudSpacer />
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows configurable weapon durability." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Weapon Durability Changes</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_scavWeaponDurabilityEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavWeaponDurabilityEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_scavWeaponDurabilityEnabled") ||
+                           MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMin") ||
+                           MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMax") ||
+                           MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMinDelta") ||
+                           MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMaxDelta")))
+                            {
+                                <MudButton @onclick="undoWeaponDurability" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _scavWeaponDurabilityEnabled != true ||
+                            _scavWeaponDurabilityMin != 70 ||
+                            _scavWeaponDurabilityMax != 90 ||
+                            _scavWeaponDurabilityMinDelta != 5 ||
+                            _scavWeaponDurabilityMaxDelta != 20))
+                            {
+                                <MudButton @onclick="defaultWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudTooltip Text="Adjust weapon durability values." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Weapon Durability Values</MudText>
+                            </MudTooltip>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                                <MudTooltip Text="Lowest a weapon's 'non-repairable' durability can be." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_scavWeaponDurabilityMin" Label="Min" HelperText="Durability" Variant="Variant.Filled"
+                                                     Min="0"
+                                                     Max="_scavWeaponDurabilityMax"
+                                                     Disabled="!_scavWeaponDurabilityEnabled" />
+                                </MudTooltip>
+                                <MudTooltip Text="Highest a weapon's 'non-repairable' durability can be." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense"
+                                                     HideSpinButtons="true"
+                                                     @bind-Value="_scavWeaponDurabilityMax"
+                                                     Label="Max"
+                                                     HelperText="Durability"
+                                                     Variant="Variant.Filled"
+                                                     Min="_scavWeaponDurabilityMin"
+                                                     Max="100"
+                                                     Disabled="!_scavWeaponDurabilityEnabled" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                                <MudTooltip Text="Lowest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense"
+                                                     HideSpinButtons="true"
+                                                     @bind-Value="_scavWeaponDurabilityMinDelta"
+                                                     Label="Min"
+                                                     HelperText="Delta"
+                                                     Variant="Variant.Filled"
+                                                     Min="0"
+                                                     Max="100"
+                                                     Validation="@(new Func<int, bool>(ValidateDelta))"
+                                                     Disabled="!_scavWeaponDurabilityEnabled" />
+                                </MudTooltip>
+                                <MudTooltip Text="Highest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Margin="Margin.Dense"
+                                                     HideSpinButtons="true"
+                                                     @bind-Value="_scavWeaponDurabilityMaxDelta"
+                                                     Label="Max"
+                                                     HelperText="Delta"
+                                                     Variant="Variant.Filled"
+                                                     Min="0"
+                                                     Max="100"
+                                                     Validation="@(new Func<int, bool>(ValidateDelta))"
+                                                     Disabled="!_scavWeaponDurabilityEnabled" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                                <MudTooltip Text="Lowest Possible Current Durability Roll." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Disabled Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_scavWeaponDurabilityMinLimitPercent" Label="Min" HelperText="Actual" Variant="Variant.Filled"
+                                                     Min="0"
+                                                     Max="100" />
+                                </MudTooltip>
+                                <MudTooltip Text="Highest Possible Current Durability Roll." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                                    <MudNumericField Disabled Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_scavWeaponDurabilityMaxLimitPercent" Label="Max" HelperText="Actual" Variant="Variant.Filled"
+                                                     Min="0"
+                                                     Max="100" />
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Adds all keys to existing scav loot pool." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Add All Keys</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" Disabled="(_scavAddKeycards || _scavAddMechanicalKeys) ? true : false" @bind-Value="_scavAddAllKeys" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavAddAllKeys</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                        @if (MainLayout.pendingChanges.Contains("_scavAddAllKeys") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoScavAllKeys" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_scavAddAllKeys != false && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultScavAllKeys" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Adds all mechanical keys to existing scav loot pool." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Add Only Mechanical Keys</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" Disabled="(_scavAddKeycards || _scavAddAllKeys) ? true : false" @bind-Value="_scavAddMechanicalKeys" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavAddMechanicalKeys</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout.pendingChanges.Contains("_scavAddMechanicalKeys") && MainLayout._appUndoButtonToggle)
+                            {
+                                <MudButton @onclick="undoScavMechanicalKeys" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (_scavAddMechanicalKeys != false && MainLayout._appDefaultButtonToggle)
+                            {
+                                <MudButton @onclick="defaultScavMechanicalKeys" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Adds all keycards to existing scav loot pool." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Add Only Keycards</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" Disabled="(_scavAddMechanicalKeys || _scavAddAllKeys) ? true : false" @bind-Value="_scavAddKeycards" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavAddKeycards</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout.pendingChanges.Contains("_scavAddKeycards") && MainLayout._appUndoButtonToggle)
+                            {
+                                <MudButton @onclick="undoScavKeyCards" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (_scavAddKeycards != false && MainLayout._appDefaultButtonToggle)
+                            {
+                                <MudButton @onclick="defaultScavKeyCards" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Scavs to use tiered attachments." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Scav Attachment Tiering</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_scavAttachmentTieringEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavAttachmentTieringEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout.pendingChanges.Contains("_scavAttachmentTieringEnabled") && MainLayout._appUndoButtonToggle)
+                            {
+                                <MudButton @onclick="undoScavAttachmentTiering" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (_scavAttachmentTieringEnabled != false && MainLayout._appDefaultButtonToggle)
+                            {
+                                <MudButton @onclick="defaultScavAttachmentTiering" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Makes all equipment in the generated Scav's Tier equal chance of being selected." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Normalize Equipment Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_scavEqualEquipmentWeightsEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavEqualEquipmentWeightsEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout.pendingChanges.Contains("_scavEqualEquipmentWeightsEnabled") && MainLayout._appUndoButtonToggle)
+                            {
+                                <MudButton @onclick="undoScavEquipmentTiering" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (_scavEqualEquipmentWeightsEnabled != false && MainLayout._appDefaultButtonToggle)
+                            {
+                                <MudButton @onclick="defaultScavEquipmentTiering" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                    </MudGrid>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+    </MudContainer>
+</MudMainContent>
+
+@code {
+    #region ENABLE / DISABLE
+    private bool _scavEnabled
+    {
+        get => Data.scavBots.enable;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.scavBots.enable);
+            Data.scavBots.enable = value;
+        }
+    }
+    private void undoScavBots() => _scavEnabled = OriginalConfig.scavBots.enable;
+    private void defaultScavBots() => _scavEnabled = true;
+    #endregion
+    #region LOOT
+    private bool _scavLootEnabled
+    {
+        get => Data.scavBots.lootConfig.enable;
+        set
+        {
+            Data.scavBots.lootConfig.enable = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.lootConfig.enable);
+        }
+    }
+    private string _lootBlacklistEntryHolder { get; set; } = "";
+
+    private List<string> _scavLootBlacklist
+    {
+        get => Data.scavBots.lootConfig.blacklist;
+        set
+        {
+            Data.scavBots.lootConfig.blacklist = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.lootConfig.blacklist);
+        }
+    }
+
+    private void undoLoot()
+    {
+        _scavLootEnabled = OriginalConfig.scavBots.lootConfig.enable;
+        _scavLootBlacklist.Clear();
+        foreach (var item in OriginalConfig.scavBots.lootConfig.blacklist)
+        {
+            _scavLootBlacklist.Add(item);
+        }
+        MainLayout.pendingChanges.Remove("_scavLootBlacklist");
+    }
+
+    private void defaultLoot()
+    {
+        _scavLootEnabled = true;
+        _scavLootBlacklist.Clear();
+        MainLayout.pendingChanges.Add("_scavLootBlacklist");
+    }
+    #endregion
+    #region RESOURCE RANDOMIZATION
+    private bool _scavResourceRandomizationEnabled
+    {
+        get => Data.scavBots.resourceRandomization.enable;
+        set
+        {
+            Data.scavBots.resourceRandomization.enable = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.resourceRandomization.enable);
+        }
+    }
+    private int _scavFoodRateMaxChance
+    {
+        get => Data.scavBots.resourceRandomization.foodRateMaxChance;
+        set
+        {
+            Data.scavBots.resourceRandomization.foodRateMaxChance = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.resourceRandomization.foodRateMaxChance);
+        }
+    }
+    private int _scavFoodRateUsagePercent
+    {
+        get => Data.scavBots.resourceRandomization.foodRateUsagePercent;
+        set
+        {
+            Data.scavBots.resourceRandomization.foodRateUsagePercent = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.resourceRandomization.foodRateUsagePercent);
+        }
+    }
+    private int _scavMedRateMaxChance
+    {
+        get => Data.scavBots.resourceRandomization.medRateMaxChance;
+        set
+        {
+            Data.scavBots.resourceRandomization.medRateMaxChance = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.resourceRandomization.medRateMaxChance);
+        }
+    }
+    private int _scavMedRateUsagePercent
+    {
+        get => Data.scavBots.resourceRandomization.medRateUsagePercent;
+        set
+        {
+            Data.scavBots.resourceRandomization.medRateUsagePercent = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.resourceRandomization.medRateUsagePercent);
+        }
+    }
+    private void undoResourceRandomization()
+    {
+        _scavResourceRandomizationEnabled = OriginalConfig.scavBots.resourceRandomization.enable;
+        _scavFoodRateMaxChance = OriginalConfig.scavBots.resourceRandomization.foodRateMaxChance;
+        _scavFoodRateUsagePercent = OriginalConfig.scavBots.resourceRandomization.foodRateUsagePercent;
+        _scavMedRateMaxChance = OriginalConfig.scavBots.resourceRandomization.medRateMaxChance;
+        _scavMedRateUsagePercent = OriginalConfig.scavBots.resourceRandomization.medRateUsagePercent;
+    }
+    private void defaultResourceRandomization()
+    {
+        _scavResourceRandomizationEnabled = true;
+        _scavFoodRateMaxChance = 10;
+        _scavFoodRateUsagePercent = 10;
+        _scavMedRateMaxChance = 10;
+        _scavMedRateUsagePercent = 10;
+    }
+    #endregion
+    #region DURABILITY
+    private bool _scavWeaponDurabilityEnabled
+    {
+        get => Data.scavBots.weaponDurability.enable;
+        set
+        {
+            Data.scavBots.weaponDurability.enable = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.weaponDurability.enable);
+        }
+    }
+    private int _scavWeaponDurabilityMin
+    {
+        get => Data.scavBots.weaponDurability.min;
+        set
+        {
+            Data.scavBots.weaponDurability.minLimitPercent = value - Data.scavBots.weaponDurability.maxDelta;
+            Data.scavBots.weaponDurability.min = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.weaponDurability.min);
+        }
+    }
+    private int _scavWeaponDurabilityMax
+    {
+        get => Data.scavBots.weaponDurability.max;
+        set
+        {
+            Data.scavBots.weaponDurability.max = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.weaponDurability.max);
+        }
+    }
+    private int _scavWeaponDurabilityMinDelta
+    {
+        get => Data.scavBots.weaponDurability.minDelta;
+        set
+        {
+            Data.scavBots.weaponDurability.minDelta = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.weaponDurability.minDelta);
+        }
+    }
+    private int _scavWeaponDurabilityMaxDelta
+    {
+        get => Data.scavBots.weaponDurability.maxDelta;
+        set
+        {
+            Data.scavBots.weaponDurability.minLimitPercent = Data.scavBots.weaponDurability.min - value;
+            Data.scavBots.weaponDurability.maxDelta = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.weaponDurability.maxDelta);
+        }
+    }
+    private int _scavWeaponDurabilityMinLimitPercent
+    {
+        get => Data.scavBots.weaponDurability.minLimitPercent;
+        set { }
+    }
+    private int _scavWeaponDurabilityMaxLimitPercent
+    {
+        get => Data.scavBots.weaponDurability.max - Data.scavBots.weaponDurability.minDelta;
+        set { }
+    }
+
+    private void undoWeaponDurability()
+    {
+        _scavWeaponDurabilityEnabled = OriginalConfig.scavBots.weaponDurability.enable;
+        _scavWeaponDurabilityMin = OriginalConfig.scavBots.weaponDurability.min;
+        _scavWeaponDurabilityMax = OriginalConfig.scavBots.weaponDurability.max;
+        _scavWeaponDurabilityMinDelta = OriginalConfig.scavBots.weaponDurability.minDelta;
+        _scavWeaponDurabilityMaxDelta = OriginalConfig.scavBots.weaponDurability.maxDelta;
+        _scavWeaponDurabilityMinLimitPercent = OriginalConfig.scavBots.weaponDurability.minLimitPercent;
+    }
+    private void defaultWeaponDurability()
+    {
+        _scavWeaponDurabilityEnabled = true;
+        _scavWeaponDurabilityMin = 70;
+        _scavWeaponDurabilityMax = 90;
+        _scavWeaponDurabilityMinDelta = 5;
+        _scavWeaponDurabilityMaxDelta = 20;
+        _scavWeaponDurabilityMinLimitPercent = Data.scavBots.weaponDurability.min - Data.scavBots.weaponDurability.maxDelta;
+    }
+    #endregion
+    #region KEYS
+    private bool _scavAddAllKeys
+    {
+        get => Data.scavBots.keyConfig.addAllKeysToScavs;
+        set
+        {
+            Data.scavBots.keyConfig.addAllKeysToScavs = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.keyConfig.addAllKeysToScavs);
+        }
+    }
+    private void undoScavAllKeys() => _scavAddAllKeys = OriginalConfig.scavBots.keyConfig.addAllKeysToScavs;
+    private void defaultScavAllKeys() => _scavAddAllKeys = false;
+
+    private bool _scavAddMechanicalKeys
+    {
+        get => Data.scavBots.keyConfig.addOnlyMechanicalKeysToScavs;
+        set
+        {
+            Data.scavBots.keyConfig.addOnlyMechanicalKeysToScavs = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.keyConfig.addOnlyMechanicalKeysToScavs);
+        }
+    }
+    private void undoScavMechanicalKeys() => _scavAddMechanicalKeys = OriginalConfig.scavBots.keyConfig.addOnlyMechanicalKeysToScavs;
+    private void defaultScavMechanicalKeys() => _scavAddMechanicalKeys = false;
+
+    private bool _scavAddKeycards
+    {
+        get => Data.scavBots.keyConfig.addOnlyKeyCardsToScavs;
+        set
+        {
+            Data.scavBots.keyConfig.addOnlyKeyCardsToScavs = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.keyConfig.addOnlyKeyCardsToScavs);
+        }
+    }
+    private void undoScavKeyCards() => _scavAddKeycards = OriginalConfig.scavBots.keyConfig.addOnlyKeyCardsToScavs;
+    private void defaultScavKeyCards() => _scavAddKeycards = false;
+    #endregion
+    #region OTHER
+    private bool _scavAttachmentTieringEnabled
+    {
+        get => Data.scavBots.additionalOptions.enableScavAttachmentTiering;
+        set
+        {
+            Data.scavBots.additionalOptions.enableScavAttachmentTiering = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.additionalOptions.enableScavAttachmentTiering);
+        }
+    }
+    private void undoScavAttachmentTiering() => _scavAttachmentTieringEnabled = OriginalConfig.scavBots.additionalOptions.enableScavAttachmentTiering;
+    private void defaultScavAttachmentTiering() => _scavAttachmentTieringEnabled = false;
+
+    private bool _scavEqualEquipmentWeightsEnabled
+    {
+        get => Data.scavBots.additionalOptions.enableScavEqualEquipmentTiering;
+        set
+        {
+            Data.scavBots.additionalOptions.enableScavEqualEquipmentTiering = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.additionalOptions.enableScavEqualEquipmentTiering);
+        }
+    }
+    private void undoScavEquipmentTiering() => _scavEqualEquipmentWeightsEnabled = OriginalConfig.scavBots.additionalOptions.enableScavEqualEquipmentTiering;
+    private void defaultScavEquipmentTiering() => _scavEqualEquipmentWeightsEnabled = false;
+    #endregion
+
+    #region INPUT HANDLING
+    private bool HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool CanAddItemToList(string value, List<string> list)
+    {
+        if (value != null)
+        {
+            bool containsAlready = list.FirstOrDefault(s => s.Contains(value)) == value ? true : false;
+            if (!containsAlready && Utils.IsHexAndValidLength(value))
+            {
+                return true;
+            }
+            else if (containsAlready)
+            {
+                Snackbar.Add("Already blacklisted.", Severity.Error, config => { config.ShowCloseIcon = false; });
+                return false;
+            }
+            else
+            {
+                Snackbar.Add("Invalid MongoID.", Severity.Error, config => { config.ShowCloseIcon = false; });
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private void OnChipClosed(string item, List<string> list)
+    {
+        if (item != null)
+        {
+            list.Remove(item);
+        }
+    }
+
+    public bool ValidateDelta(int value)
+    {
+        if (_scavWeaponDurabilityMinLimitPercent < _scavWeaponDurabilityMaxLimitPercent)
+        {
+            return true;
+        }
+        return false;
+    }
+    #endregion
+
+    #region CASCADING PARAMETERS
+    [CascadingParameter] public APBSConfig.Shared.MainLayout? Layout { get; set; }
+    #endregion
+}
