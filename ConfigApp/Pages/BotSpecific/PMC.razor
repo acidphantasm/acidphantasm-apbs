@@ -80,7 +80,7 @@
                                 <MudButton @onclick="undoLoot" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
                             else if (MainLayout._appDefaultButtonToggle && (
-                                _pmcLootEnabled != true ||
+                                _pmcLootEnabled != false ||
                                 _pmcLootBlacklist.Count != 1 ||
                                 !_pmcLootBlacklist.Contains("6711039f9e648049e50b3307")))
                             {
@@ -714,7 +714,7 @@
 
     private void defaultLoot()
     {
-        _pmcLootEnabled = true;
+        _pmcLootEnabled = false;
         _pmcLootBlacklist.Clear();
         _pmcLootBlacklist.Add("6711039f9e648049e50b3307");
         if (!MainLayout.pendingChanges.Contains("_pmcLootEnabled")) MainLayout.pendingChanges.Add("_pmcLootEnabled");
