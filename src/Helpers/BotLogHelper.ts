@@ -95,7 +95,7 @@ export class BotLogHelper
         const botDetails = this.getBotDetails(outputJSON);
         const logMessages = this.getLogMessage(botDetails);
         const botRole = outputJSON.data[0].Info.Settings.Role.toLowerCase();
-        const enabledStringText = this.raidInformation.isBotEnabled(botRole) ? "ENABLED" : "DISABLED";
+        const enabledStringText = this.raidInformation.isBotEnabled(botRole) ? "APBS Bot" : "Vanilla Bot";
         let logged = false;
 
         if (Object.values(BossBots).includes(botRole as BossBots) || Object.values(FollowerBots).includes(botRole as FollowerBots))
