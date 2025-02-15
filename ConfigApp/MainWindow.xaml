@@ -6,6 +6,7 @@
         xmlns:blazor="clr-namespace:Microsoft.AspNetCore.Components.WebView.Wpf;assembly=Microsoft.AspNetCore.Components.WebView.Wpf"
         xmlns:EBWV="clr-namespace:APBSConfig"
         mc:Ignorable="d"
+        Background="{StaticResource WindowBackgroundBrush}"
         Title="APBS Configuration Manager" Height="1024" Width="1200" ResizeMode="NoResize" WindowStyle="None">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="34" />
