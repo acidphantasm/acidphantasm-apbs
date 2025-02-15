@@ -292,7 +292,7 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier1Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier1Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="10" Disabled="!_tierDeltaCustomScavEnabled" />
                             <MudSpacer />
                             <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier1Max" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
                         </MudPaper>
@@ -320,9 +320,9 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier2Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier2Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="20" Disabled="!_tierDeltaCustomScavEnabled" />
                             <MudSpacer />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier2Max" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier2Max" Label="Levels Above You" Variant="Variant.Filled" Min="-_tierDeltaCustomScavTier2Min" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
@@ -348,9 +348,9 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier3Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier3Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="30" Disabled="!_tierDeltaCustomScavEnabled" />
                             <MudSpacer />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier3Max" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier3Max" Label="Levels Above You" Variant="Variant.Filled" Min="-_tierDeltaCustomScavTier3Min" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
@@ -376,9 +376,9 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier4Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier4Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="40" Disabled="!_tierDeltaCustomScavEnabled" />
                             <MudSpacer />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier4Max" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier4Max" Label="Levels Above You" Variant="Variant.Filled" Min="-_tierDeltaCustomScavTier4Min" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
@@ -404,9 +404,9 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier5Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier5Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="50" Disabled="!_tierDeltaCustomScavEnabled" />
                             <MudSpacer />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier5Max" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier5Max" Label="Levels Above You" Variant="Variant.Filled" Min="-_tierDeltaCustomScavTier5Min" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
@@ -432,9 +432,9 @@
                     </MudItem>
                     <MudItem xs="6">
                         <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier6Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier6Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="60" Disabled="!_tierDeltaCustomScavEnabled" />
                             <MudSpacer />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier6Max" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier6Max" Label="Levels Above You" Variant="Variant.Filled" Min="-_tierDeltaCustomScavTier6Min" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
@@ -462,7 +462,7 @@
                         <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                             <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier7Min" Label="Levels Below You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
                             <MudSpacer />
-                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier7Max" Label="Levels Above You" Variant="Variant.Filled" Min="0" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
+                            <MudNumericField Margin="Margin.Dense" HideSpinButtons @bind-Value="_tierDeltaCustomScavTier7Max" Label="Levels Above You" Variant="Variant.Filled" Min="-_tierDeltaCustomScavTier7Min" Max="79" Disabled="!_tierDeltaCustomScavEnabled" />
                         </MudPaper>
                     </MudItem>
                     <MudItem xs="1">
