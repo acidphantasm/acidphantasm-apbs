@@ -98,7 +98,7 @@
                                           OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_lootBlacklistEntryHolder, _specialLootBlacklist))
+                                                        if (CanAddMongoIDToList(_lootBlacklistEntryHolder, _specialLootBlacklist))
                                                         {
                                                             _specialLootBlacklist.Add(_lootBlacklistEntryHolder);
                                                             Utils.UpdateView(_specialLootBlacklist, OriginalConfig.specialBots.lootConfig.blacklist, "_specialLootBlacklist");
@@ -107,12 +107,12 @@
                                                         }
                                                     }
                                                 } )"
-                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                           Immediate="true"
                                           Adornment="Adornment.End"
                                           AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                           OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_lootBlacklistEntryHolder, _specialLootBlacklist))
+                                                    if (CanAddMongoIDToList(_lootBlacklistEntryHolder, _specialLootBlacklist))
                                                     {
                                                         _specialLootBlacklist.Add(_lootBlacklistEntryHolder);
                                                         Utils.UpdateView(_specialLootBlacklist, OriginalConfig.specialBots.lootConfig.blacklist, "_specialLootBlacklist");
@@ -515,7 +515,7 @@
         return false;
     }
 
-    private bool CanAddItemToList(string value, List<string> list)
+    private bool CanAddMongoIDToList(string value, List<string> list)
     {
         if (value != null)
         {

@@ -103,7 +103,7 @@
                                           OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_lootBlacklistEntryHolder, _pmcLootBlacklist))
+                                                        if (CanAddMongoIDToList(_lootBlacklistEntryHolder, _pmcLootBlacklist))
                                                         {
                                                             _pmcLootBlacklist.Add(_lootBlacklistEntryHolder);
                                                             Utils.UpdateView(_pmcLootBlacklist, OriginalConfig.pmcBots.lootConfig.blacklist, "_pmcLootBlacklist");
@@ -112,12 +112,12 @@
                                                         }
                                                     }
                                                 } )"
-                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                           Immediate="true"
                                           Adornment="Adornment.End"
                                           AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                           OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_lootBlacklistEntryHolder, _pmcLootBlacklist))
+                                                    if (CanAddMongoIDToList(_lootBlacklistEntryHolder, _pmcLootBlacklist))
                                                     {
                                                         _pmcLootBlacklist.Add(_lootBlacklistEntryHolder);
                                                         Utils.UpdateView(_pmcLootBlacklist, OriginalConfig.pmcBots.lootConfig.blacklist, "_pmcLootBlacklist");
@@ -564,7 +564,7 @@
                                           OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_pmcSecretDevelopersEntryHolder, _pmcSecretDevelopersNameList))
+                                                        if (CanAddStringToList(_pmcSecretDevelopersEntryHolder, _pmcSecretDevelopersNameList))
                                                         {
                                                             _pmcSecretDevelopersNameList.Add(_pmcSecretDevelopersEntryHolder);
                                                             Utils.UpdateView(_pmcSecretDevelopersNameList, OriginalConfig.pmcBots.secrets.developerSettings.devNames.nameList, "_pmcSecretDevelopersNameList");
@@ -573,12 +573,12 @@
                                                         }
                                                     }
                                                 } )"
-                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.StringLengthValidation))"
                                           Immediate="true"
                                           Adornment="Adornment.End"
                                           AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                           OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_pmcSecretDevelopersEntryHolder, _pmcSecretDevelopersNameList))
+                                                    if (CanAddStringToList(_pmcSecretDevelopersEntryHolder, _pmcSecretDevelopersNameList))
                                                     {
                                                         _pmcSecretDevelopersNameList.Add(_pmcSecretDevelopersEntryHolder);
                                                         Utils.UpdateView(_pmcSecretDevelopersNameList, OriginalConfig.pmcBots.secrets.developerSettings.devNames.nameList, "_pmcSecretDevelopersNameList");
@@ -1092,7 +1092,7 @@
         return false;
     }
 
-    private bool CanAddItemToList(string value, List<string> list)
+    private bool CanAddMongoIDToList(string value, List<string> list)
     {
         if (value != null)
         {
@@ -1109,6 +1109,29 @@
             else
             {
                 Snackbar.Add("Invalid MongoID.", Severity.Error, config => { config.ShowCloseIcon = false; });
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private bool CanAddStringToList(string value, List<string> list)
+    {
+        if (value != null)
+        {
+            bool containsAlready = list.FirstOrDefault(s => s.Contains(value)) == value ? true : false;
+            if (!containsAlready && Utils.IsStringAndValidLength(value))
+            {
+                return true;
+            }
+            else if (containsAlready)
+            {
+                Snackbar.Add("Name already added.", Severity.Error, config => { config.ShowCloseIcon = false; });
+                return false;
+            }
+            else
+            {
+                Snackbar.Add("Invalid Name.", Severity.Error, config => { config.ShowCloseIcon = false; });
                 return false;
             }
         }

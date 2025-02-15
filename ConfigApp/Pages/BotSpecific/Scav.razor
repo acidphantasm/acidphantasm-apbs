@@ -98,7 +98,7 @@
                                           OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_lootBlacklistEntryHolder, _scavLootBlacklist))
+                                                        if (CanAddMongoIDToList(_lootBlacklistEntryHolder, _scavLootBlacklist))
                                                         {
                                                             _scavLootBlacklist.Add(_lootBlacklistEntryHolder);
                                                             Utils.UpdateView(_scavLootBlacklist, OriginalConfig.scavBots.lootConfig.blacklist, "_scavLootBlacklist");
@@ -107,12 +107,12 @@
                                                         }
                                                     }
                                                 } )"
-                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                           Immediate="true"
                                           Adornment="Adornment.End"
                                           AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                           OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_lootBlacklistEntryHolder, _scavLootBlacklist))
+                                                    if (CanAddMongoIDToList(_lootBlacklistEntryHolder, _scavLootBlacklist))
                                                     {
                                                         _scavLootBlacklist.Add(_lootBlacklistEntryHolder);
                                                         Utils.UpdateView(_scavLootBlacklist, OriginalConfig.scavBots.lootConfig.blacklist, "_scavLootBlacklist");
@@ -697,7 +697,7 @@
         return false;
     }
 
-    private bool CanAddItemToList(string value, List<string> list)
+    private bool CanAddMongoIDToList(string value, List<string> list)
     {
         if (value != null)
         {
