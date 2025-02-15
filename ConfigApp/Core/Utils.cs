@@ -14,13 +14,21 @@ namespace APBSConfig.Core
     {
         public static List<string> callerList = new List<string>();
 
-        public static IEnumerable<string> TextObjectIDValidation(string value)
+        public static IEnumerable<string> StringObjectIDValidation(string value)
         {
             if (!string.IsNullOrEmpty(value) && (value.Length != 24 || !IsHex(value)))
             {
                 yield return "Invalid MongoID";
             }
         }
+        public static IEnumerable<string> StringLengthValidation(string value)
+        {
+            if (!string.IsNullOrEmpty(value) && (value.Length >= 19))
+            {
+                yield return "Invalid, Name too long";
+            }
+        }
+
         public static bool IsHex(IEnumerable<char> chars)
         {
             bool isHex;
@@ -42,6 +50,12 @@ namespace APBSConfig.Core
         public static bool IsHexAndValidLength(string value)
         {
             if (value.Length == 24 && IsHex(value)) return true;
+            else return false;
+        }
+
+        public static bool IsStringAndValidLength(string value)
+        {
+            if (value.Length <= 19) return true;
             else return false;
         }
 

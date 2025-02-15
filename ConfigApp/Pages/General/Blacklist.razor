@@ -33,7 +33,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier1WeaponBlacklistEntryHolder, _blacklistTier1Weapon))
+                                                        if (CanAddMongoIDToList(_tier1WeaponBlacklistEntryHolder, _blacklistTier1Weapon))
                                                         {
                                                             _blacklistTier1Weapon.Add(_tier1WeaponBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier1Weapon, OriginalConfig.weaponBlacklist.tier1Blacklist, "_blacklistTier1Weapon");
@@ -42,12 +42,12 @@
                                                         }
                                                     }
                                                 } )"
-                                Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))" 
+                                Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))" 
                                 Immediate="true"
                                 Adornment="Adornment.End"
                                 AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier1WeaponBlacklistEntryHolder, _blacklistTier1Weapon))
+                                                    if (CanAddMongoIDToList(_tier1WeaponBlacklistEntryHolder, _blacklistTier1Weapon))
                                                     {
                                                         _blacklistTier1Weapon.Add(_tier1WeaponBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier1Weapon, OriginalConfig.weaponBlacklist.tier1Blacklist, "_blacklistTier1Weapon");
@@ -81,7 +81,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier2WeaponBlacklistEntryHolder, _blacklistTier2Weapon))
+                                                        if (CanAddMongoIDToList(_tier2WeaponBlacklistEntryHolder, _blacklistTier2Weapon))
                                                         {
                                                             _blacklistTier2Weapon.Add(_tier2WeaponBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier2Weapon, OriginalConfig.weaponBlacklist.tier2Blacklist, "_blacklistTier2Weapon");
@@ -90,12 +90,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier2WeaponBlacklistEntryHolder, _blacklistTier2Weapon))
+                                                    if (CanAddMongoIDToList(_tier2WeaponBlacklistEntryHolder, _blacklistTier2Weapon))
                                                     {
                                                         _blacklistTier2Weapon.Add(_tier2WeaponBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier2Weapon, OriginalConfig.weaponBlacklist.tier2Blacklist, "_blacklistTier2Weapon");
@@ -129,7 +129,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier3WeaponBlacklistEntryHolder, _blacklistTier3Weapon))
+                                                        if (CanAddMongoIDToList(_tier3WeaponBlacklistEntryHolder, _blacklistTier3Weapon))
                                                         {
                                                             _blacklistTier3Weapon.Add(_tier3WeaponBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier3Weapon, OriginalConfig.weaponBlacklist.tier3Blacklist, "_blacklistTier3Weapon");
@@ -138,12 +138,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier3WeaponBlacklistEntryHolder, _blacklistTier3Weapon))
+                                                    if (CanAddMongoIDToList(_tier3WeaponBlacklistEntryHolder, _blacklistTier3Weapon))
                                                     {
                                                         _blacklistTier3Weapon.Add(_tier3WeaponBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier3Weapon, OriginalConfig.weaponBlacklist.tier3Blacklist, "_blacklistTier3Weapon");
@@ -177,7 +177,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier4WeaponBlacklistEntryHolder, _blacklistTier4Weapon))
+                                                        if (CanAddMongoIDToList(_tier4WeaponBlacklistEntryHolder, _blacklistTier4Weapon))
                                                         {
                                                             _blacklistTier4Weapon.Add(_tier4WeaponBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier4Weapon, OriginalConfig.weaponBlacklist.tier4Blacklist, "_blacklistTier4Weapon");
@@ -186,12 +186,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier4WeaponBlacklistEntryHolder, _blacklistTier4Weapon))
+                                                    if (CanAddMongoIDToList(_tier4WeaponBlacklistEntryHolder, _blacklistTier4Weapon))
                                                     {
                                                         _blacklistTier4Weapon.Add(_tier4WeaponBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier4Weapon, OriginalConfig.weaponBlacklist.tier4Blacklist, "_blacklistTier4Weapon");
@@ -225,7 +225,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier5WeaponBlacklistEntryHolder, _blacklistTier5Weapon))
+                                                        if (CanAddMongoIDToList(_tier5WeaponBlacklistEntryHolder, _blacklistTier5Weapon))
                                                         {
                                                             _blacklistTier5Weapon.Add(_tier5WeaponBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier5Weapon, OriginalConfig.weaponBlacklist.tier5Blacklist, "_blacklistTier5Weapon");
@@ -234,12 +234,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier5WeaponBlacklistEntryHolder, _blacklistTier5Weapon))
+                                                    if (CanAddMongoIDToList(_tier5WeaponBlacklistEntryHolder, _blacklistTier5Weapon))
                                                     {
                                                         _blacklistTier5Weapon.Add(_tier5WeaponBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier5Weapon, OriginalConfig.weaponBlacklist.tier5Blacklist, "_blacklistTier5Weapon");
@@ -273,7 +273,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier6WeaponBlacklistEntryHolder, _blacklistTier6Weapon))
+                                                        if (CanAddMongoIDToList(_tier6WeaponBlacklistEntryHolder, _blacklistTier6Weapon))
                                                         {
                                                             _blacklistTier6Weapon.Add(_tier6WeaponBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier6Weapon, OriginalConfig.weaponBlacklist.tier6Blacklist, "_blacklistTier6Weapon");
@@ -282,12 +282,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier6WeaponBlacklistEntryHolder, _blacklistTier6Weapon))
+                                                    if (CanAddMongoIDToList(_tier6WeaponBlacklistEntryHolder, _blacklistTier6Weapon))
                                                     {
                                                         _blacklistTier6Weapon.Add(_tier6WeaponBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier6Weapon, OriginalConfig.weaponBlacklist.tier6Blacklist, "_blacklistTier6Weapon");
@@ -321,7 +321,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier7WeaponBlacklistEntryHolder, _blacklistTier7Weapon))
+                                                        if (CanAddMongoIDToList(_tier7WeaponBlacklistEntryHolder, _blacklistTier7Weapon))
                                                         {
                                                             _blacklistTier7Weapon.Add(_tier7WeaponBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier7Weapon, OriginalConfig.weaponBlacklist.tier7Blacklist, "_blacklistTier7Weapon");
@@ -330,12 +330,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier7WeaponBlacklistEntryHolder, _blacklistTier7Weapon))
+                                                    if (CanAddMongoIDToList(_tier7WeaponBlacklistEntryHolder, _blacklistTier7Weapon))
                                                     {
                                                         _blacklistTier7Weapon.Add(_tier7WeaponBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier7Weapon, OriginalConfig.weaponBlacklist.tier7Blacklist, "_blacklistTier7Weapon");
@@ -375,7 +375,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier1EquipmentBlacklistEntryHolder, _blacklistTier1Equipment))
+                                                        if (CanAddMongoIDToList(_tier1EquipmentBlacklistEntryHolder, _blacklistTier1Equipment))
                                                         {
                                                             _blacklistTier1Equipment.Add(_tier1EquipmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier1Equipment, OriginalConfig.equipmentBlacklist.tier1Blacklist, "_blacklistTier1Equipment");
@@ -384,12 +384,12 @@
                                                         }
                                                     }
                                                 } )"
-                                Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))" 
+                                Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))" 
                                 Immediate="true"
                                 Adornment="Adornment.End"
                                 AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier1EquipmentBlacklistEntryHolder, _blacklistTier1Equipment))
+                                                    if (CanAddMongoIDToList(_tier1EquipmentBlacklistEntryHolder, _blacklistTier1Equipment))
                                                     {
                                                         _blacklistTier1Equipment.Add(_tier1EquipmentBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier1Equipment, OriginalConfig.equipmentBlacklist.tier1Blacklist, "_blacklistTier1Equipment");
@@ -423,7 +423,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier2EquipmentBlacklistEntryHolder, _blacklistTier2Equipment))
+                                                        if (CanAddMongoIDToList(_tier2EquipmentBlacklistEntryHolder, _blacklistTier2Equipment))
                                                         {
                                                             _blacklistTier2Equipment.Add(_tier2EquipmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier2Equipment, OriginalConfig.equipmentBlacklist.tier2Blacklist, "_blacklistTier2Equipment");
@@ -432,12 +432,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier2EquipmentBlacklistEntryHolder, _blacklistTier2Equipment))
+                                                    if (CanAddMongoIDToList(_tier2EquipmentBlacklistEntryHolder, _blacklistTier2Equipment))
                                                     {
                                                         _blacklistTier2Equipment.Add(_tier2EquipmentBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier2Equipment, OriginalConfig.equipmentBlacklist.tier2Blacklist, "_blacklistTier2Equipment");
@@ -471,7 +471,7 @@
                                       OnKeyDown="@((e) => {
                                                         if (HandleKeyDown(e))
                                                         {
-                                                            if (CanAddItemToList(_tier3EquipmentBlacklistEntryHolder, _blacklistTier3Equipment))
+                                                            if (CanAddMongoIDToList(_tier3EquipmentBlacklistEntryHolder, _blacklistTier3Equipment))
                                                             {
                                                                 _blacklistTier3Equipment.Add(_tier3EquipmentBlacklistEntryHolder);
                                                                 Utils.UpdateView(_blacklistTier3Equipment, OriginalConfig.equipmentBlacklist.tier3Blacklist, "_blacklistTier3Equipment");
@@ -480,12 +480,12 @@
                                                             }
                                                         }
                                                     } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                        if (CanAddItemToList(_tier3EquipmentBlacklistEntryHolder, _blacklistTier3Equipment))
+                                                        if (CanAddMongoIDToList(_tier3EquipmentBlacklistEntryHolder, _blacklistTier3Equipment))
                                                         {
                                                             _blacklistTier3Equipment.Add(_tier3EquipmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier3Equipment, OriginalConfig.equipmentBlacklist.tier3Blacklist, "_blacklistTier3Equipment");
@@ -519,7 +519,7 @@
                                       OnKeyDown="@((e) => {
                                                         if (HandleKeyDown(e))
                                                         {
-                                                            if (CanAddItemToList(_tier4EquipmentBlacklistEntryHolder, _blacklistTier4Equipment))
+                                                            if (CanAddMongoIDToList(_tier4EquipmentBlacklistEntryHolder, _blacklistTier4Equipment))
                                                             {
                                                                 _blacklistTier4Equipment.Add(_tier4EquipmentBlacklistEntryHolder);
                                                                 Utils.UpdateView(_blacklistTier4Equipment, OriginalConfig.equipmentBlacklist.tier4Blacklist, "_blacklistTier4Equipment");
@@ -528,12 +528,12 @@
                                                             }
                                                         }
                                                     } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                        if (CanAddItemToList(_tier4EquipmentBlacklistEntryHolder, _blacklistTier4Equipment))
+                                                        if (CanAddMongoIDToList(_tier4EquipmentBlacklistEntryHolder, _blacklistTier4Equipment))
                                                         {
                                                             _blacklistTier4Equipment.Add(_tier4EquipmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier4Equipment, OriginalConfig.equipmentBlacklist.tier4Blacklist, "_blacklistTier4Equipment");
@@ -567,7 +567,7 @@
                                       OnKeyDown="@((e) => {
                                                         if (HandleKeyDown(e))
                                                         {
-                                                            if (CanAddItemToList(_tier5EquipmentBlacklistEntryHolder, _blacklistTier5Equipment))
+                                                            if (CanAddMongoIDToList(_tier5EquipmentBlacklistEntryHolder, _blacklistTier5Equipment))
                                                             {
                                                                 _blacklistTier5Equipment.Add(_tier5EquipmentBlacklistEntryHolder);
                                                                 Utils.UpdateView(_blacklistTier5Equipment, OriginalConfig.equipmentBlacklist.tier5Blacklist, "_blacklistTier5Equipment");
@@ -576,12 +576,12 @@
                                                             }
                                                         }
                                                     } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                        if (CanAddItemToList(_tier5EquipmentBlacklistEntryHolder, _blacklistTier5Equipment))
+                                                        if (CanAddMongoIDToList(_tier5EquipmentBlacklistEntryHolder, _blacklistTier5Equipment))
                                                         {
                                                             _blacklistTier5Equipment.Add(_tier5EquipmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier5Equipment, OriginalConfig.equipmentBlacklist.tier5Blacklist, "_blacklistTier5Equipment");
@@ -615,7 +615,7 @@
                                       OnKeyDown="@((e) => {
                                                         if (HandleKeyDown(e))
                                                         {
-                                                            if (CanAddItemToList(_tier6EquipmentBlacklistEntryHolder, _blacklistTier6Equipment))
+                                                            if (CanAddMongoIDToList(_tier6EquipmentBlacklistEntryHolder, _blacklistTier6Equipment))
                                                             {
                                                                 _blacklistTier6Equipment.Add(_tier6EquipmentBlacklistEntryHolder);
                                                                 Utils.UpdateView(_blacklistTier6Equipment, OriginalConfig.equipmentBlacklist.tier6Blacklist, "_blacklistTier6Equipment");
@@ -624,12 +624,12 @@
                                                             }
                                                         }
                                                     } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                        if (CanAddItemToList(_tier6EquipmentBlacklistEntryHolder, _blacklistTier6Equipment))
+                                                        if (CanAddMongoIDToList(_tier6EquipmentBlacklistEntryHolder, _blacklistTier6Equipment))
                                                         {
                                                             _blacklistTier6Equipment.Add(_tier6EquipmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier6Equipment, OriginalConfig.equipmentBlacklist.tier6Blacklist, "_blacklistTier6Equipment");
@@ -663,7 +663,7 @@
                                       OnKeyDown="@((e) => {
                                                         if (HandleKeyDown(e))
                                                         {
-                                                            if (CanAddItemToList(_tier7EquipmentBlacklistEntryHolder, _blacklistTier7Equipment))
+                                                            if (CanAddMongoIDToList(_tier7EquipmentBlacklistEntryHolder, _blacklistTier7Equipment))
                                                             {
                                                                 _blacklistTier7Equipment.Add(_tier7EquipmentBlacklistEntryHolder);
                                                                 Utils.UpdateView(_blacklistTier7Equipment, OriginalConfig.equipmentBlacklist.tier7Blacklist, "_blacklistTier7Equipment");
@@ -672,12 +672,12 @@
                                                             }
                                                         }
                                                     } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                        if (CanAddItemToList(_tier7EquipmentBlacklistEntryHolder, _blacklistTier7Equipment))
+                                                        if (CanAddMongoIDToList(_tier7EquipmentBlacklistEntryHolder, _blacklistTier7Equipment))
                                                         {
                                                             _blacklistTier7Equipment.Add(_tier7EquipmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier7Equipment, OriginalConfig.equipmentBlacklist.tier7Blacklist, "_blacklistTier7Equipment");
@@ -717,7 +717,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier1AmmoBlacklistEntryHolder, _blacklistTier1Ammo))
+                                                        if (CanAddMongoIDToList(_tier1AmmoBlacklistEntryHolder, _blacklistTier1Ammo))
                                                         {
                                                             _blacklistTier1Ammo.Add(_tier1AmmoBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier1Ammo, OriginalConfig.ammoBlacklist.tier1Blacklist, "_blacklistTier1Ammo");
@@ -726,12 +726,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier1AmmoBlacklistEntryHolder, _blacklistTier1Ammo))
+                                                    if (CanAddMongoIDToList(_tier1AmmoBlacklistEntryHolder, _blacklistTier1Ammo))
                                                     {
                                                         _blacklistTier1Ammo.Add(_tier1AmmoBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier1Ammo, OriginalConfig.ammoBlacklist.tier1Blacklist, "_blacklistTier1Ammo");
@@ -765,7 +765,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier2AmmoBlacklistEntryHolder, _blacklistTier2Ammo))
+                                                        if (CanAddMongoIDToList(_tier2AmmoBlacklistEntryHolder, _blacklistTier2Ammo))
                                                         {
                                                             _blacklistTier2Ammo.Add(_tier2AmmoBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier2Ammo, OriginalConfig.ammoBlacklist.tier2Blacklist, "_blacklistTier2Ammo");
@@ -774,12 +774,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier2AmmoBlacklistEntryHolder, _blacklistTier2Ammo))
+                                                    if (CanAddMongoIDToList(_tier2AmmoBlacklistEntryHolder, _blacklistTier2Ammo))
                                                     {
                                                         _blacklistTier2Ammo.Add(_tier2AmmoBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier2Ammo, OriginalConfig.ammoBlacklist.tier2Blacklist, "_blacklistTier2Ammo");
@@ -813,7 +813,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier3AmmoBlacklistEntryHolder, _blacklistTier3Ammo))
+                                                        if (CanAddMongoIDToList(_tier3AmmoBlacklistEntryHolder, _blacklistTier3Ammo))
                                                         {
                                                             _blacklistTier3Ammo.Add(_tier3AmmoBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier3Ammo, OriginalConfig.ammoBlacklist.tier3Blacklist, "_blacklistTier3Ammo");
@@ -822,12 +822,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier3AmmoBlacklistEntryHolder, _blacklistTier3Ammo))
+                                                    if (CanAddMongoIDToList(_tier3AmmoBlacklistEntryHolder, _blacklistTier3Ammo))
                                                     {
                                                         _blacklistTier3Ammo.Add(_tier3AmmoBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier3Ammo, OriginalConfig.ammoBlacklist.tier3Blacklist, "_blacklistTier3Ammo");
@@ -861,7 +861,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier4AmmoBlacklistEntryHolder, _blacklistTier4Ammo))
+                                                        if (CanAddMongoIDToList(_tier4AmmoBlacklistEntryHolder, _blacklistTier4Ammo))
                                                         {
                                                             _blacklistTier4Ammo.Add(_tier4AmmoBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier4Ammo, OriginalConfig.ammoBlacklist.tier4Blacklist, "_blacklistTier4Ammo");
@@ -870,12 +870,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier4AmmoBlacklistEntryHolder, _blacklistTier4Ammo))
+                                                    if (CanAddMongoIDToList(_tier4AmmoBlacklistEntryHolder, _blacklistTier4Ammo))
                                                     {
                                                         _blacklistTier4Ammo.Add(_tier4AmmoBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier4Ammo, OriginalConfig.ammoBlacklist.tier4Blacklist, "_blacklistTier4Ammo");
@@ -909,7 +909,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier5AmmoBlacklistEntryHolder, _blacklistTier5Ammo))
+                                                        if (CanAddMongoIDToList(_tier5AmmoBlacklistEntryHolder, _blacklistTier5Ammo))
                                                         {
                                                             _blacklistTier5Ammo.Add(_tier5AmmoBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier5Ammo, OriginalConfig.ammoBlacklist.tier5Blacklist, "_blacklistTier5Ammo");
@@ -918,12 +918,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier5AmmoBlacklistEntryHolder, _blacklistTier5Ammo))
+                                                    if (CanAddMongoIDToList(_tier5AmmoBlacklistEntryHolder, _blacklistTier5Ammo))
                                                     {
                                                         _blacklistTier5Ammo.Add(_tier5AmmoBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier5Ammo, OriginalConfig.ammoBlacklist.tier5Blacklist, "_blacklistTier5Ammo");
@@ -957,7 +957,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier6AmmoBlacklistEntryHolder, _blacklistTier6Ammo))
+                                                        if (CanAddMongoIDToList(_tier6AmmoBlacklistEntryHolder, _blacklistTier6Ammo))
                                                         {
                                                             _blacklistTier6Ammo.Add(_tier6AmmoBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier6Ammo, OriginalConfig.ammoBlacklist.tier6Blacklist, "_blacklistTier6Ammo");
@@ -966,12 +966,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier6AmmoBlacklistEntryHolder, _blacklistTier6Ammo))
+                                                    if (CanAddMongoIDToList(_tier6AmmoBlacklistEntryHolder, _blacklistTier6Ammo))
                                                     {
                                                         _blacklistTier6Ammo.Add(_tier6AmmoBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier6Ammo, OriginalConfig.ammoBlacklist.tier6Blacklist, "_blacklistTier6Ammo");
@@ -1005,7 +1005,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier7AmmoBlacklistEntryHolder, _blacklistTier7Ammo))
+                                                        if (CanAddMongoIDToList(_tier7AmmoBlacklistEntryHolder, _blacklistTier7Ammo))
                                                         {
                                                             _blacklistTier7Ammo.Add(_tier7AmmoBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier7Ammo, OriginalConfig.ammoBlacklist.tier7Blacklist, "_blacklistTier7Ammo");
@@ -1014,12 +1014,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier7AmmoBlacklistEntryHolder, _blacklistTier7Ammo))
+                                                    if (CanAddMongoIDToList(_tier7AmmoBlacklistEntryHolder, _blacklistTier7Ammo))
                                                     {
                                                         _blacklistTier7Ammo.Add(_tier7AmmoBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier7Ammo, OriginalConfig.ammoBlacklist.tier7Blacklist, "_blacklistTier7Ammo");
@@ -1059,7 +1059,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier1AttachmentBlacklistEntryHolder, _blacklistTier1Attachment))
+                                                        if (CanAddMongoIDToList(_tier1AttachmentBlacklistEntryHolder, _blacklistTier1Attachment))
                                                         {
                                                             _blacklistTier1Attachment.Add(_tier1AttachmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier1Attachment, OriginalConfig.attachmentBlacklist.tier1Blacklist, "_blacklistTier1Attachment");
@@ -1068,12 +1068,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier1AttachmentBlacklistEntryHolder, _blacklistTier1Attachment))
+                                                    if (CanAddMongoIDToList(_tier1AttachmentBlacklistEntryHolder, _blacklistTier1Attachment))
                                                     {
                                                         _blacklistTier1Attachment.Add(_tier1AttachmentBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier1Attachment, OriginalConfig.attachmentBlacklist.tier1Blacklist, "_blacklistTier1Attachment");
@@ -1107,7 +1107,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier2AttachmentBlacklistEntryHolder, _blacklistTier2Attachment))
+                                                        if (CanAddMongoIDToList(_tier2AttachmentBlacklistEntryHolder, _blacklistTier2Attachment))
                                                         {
                                                             _blacklistTier2Attachment.Add(_tier2AttachmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier2Attachment, OriginalConfig.attachmentBlacklist.tier2Blacklist, "_blacklistTier2Attachment");
@@ -1116,12 +1116,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier2AttachmentBlacklistEntryHolder, _blacklistTier2Attachment))
+                                                    if (CanAddMongoIDToList(_tier2AttachmentBlacklistEntryHolder, _blacklistTier2Attachment))
                                                     {
                                                         _blacklistTier2Attachment.Add(_tier2AttachmentBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier2Attachment, OriginalConfig.attachmentBlacklist.tier2Blacklist, "_blacklistTier2Attachment");
@@ -1155,7 +1155,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier3AttachmentBlacklistEntryHolder, _blacklistTier3Attachment))
+                                                        if (CanAddMongoIDToList(_tier3AttachmentBlacklistEntryHolder, _blacklistTier3Attachment))
                                                         {
                                                             _blacklistTier3Attachment.Add(_tier3AttachmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier3Attachment, OriginalConfig.attachmentBlacklist.tier3Blacklist, "_blacklistTier3Attachment");
@@ -1164,12 +1164,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier3AttachmentBlacklistEntryHolder, _blacklistTier3Attachment))
+                                                    if (CanAddMongoIDToList(_tier3AttachmentBlacklistEntryHolder, _blacklistTier3Attachment))
                                                     {
                                                         _blacklistTier3Attachment.Add(_tier3AttachmentBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier3Attachment, OriginalConfig.attachmentBlacklist.tier3Blacklist, "_blacklistTier3Attachment");
@@ -1203,7 +1203,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier4AttachmentBlacklistEntryHolder, _blacklistTier4Attachment))
+                                                        if (CanAddMongoIDToList(_tier4AttachmentBlacklistEntryHolder, _blacklistTier4Attachment))
                                                         {
                                                             _blacklistTier4Attachment.Add(_tier4AttachmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier4Attachment, OriginalConfig.attachmentBlacklist.tier4Blacklist, "_blacklistTier4Attachment");
@@ -1212,12 +1212,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier4AttachmentBlacklistEntryHolder, _blacklistTier4Attachment))
+                                                    if (CanAddMongoIDToList(_tier4AttachmentBlacklistEntryHolder, _blacklistTier4Attachment))
                                                     {
                                                         _blacklistTier4Attachment.Add(_tier4AttachmentBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier4Attachment, OriginalConfig.attachmentBlacklist.tier4Blacklist, "_blacklistTier4Attachment");
@@ -1251,7 +1251,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier5AttachmentBlacklistEntryHolder, _blacklistTier5Attachment))
+                                                        if (CanAddMongoIDToList(_tier5AttachmentBlacklistEntryHolder, _blacklistTier5Attachment))
                                                         {
                                                             _blacklistTier5Attachment.Add(_tier5AttachmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier5Attachment, OriginalConfig.attachmentBlacklist.tier5Blacklist, "_blacklistTier5Attachment");
@@ -1260,12 +1260,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier5AttachmentBlacklistEntryHolder, _blacklistTier5Attachment))
+                                                    if (CanAddMongoIDToList(_tier5AttachmentBlacklistEntryHolder, _blacklistTier5Attachment))
                                                     {
                                                         _blacklistTier5Attachment.Add(_tier5AttachmentBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier5Attachment, OriginalConfig.attachmentBlacklist.tier5Blacklist, "_blacklistTier5Attachment");
@@ -1299,7 +1299,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier6AttachmentBlacklistEntryHolder, _blacklistTier6Attachment))
+                                                        if (CanAddMongoIDToList(_tier6AttachmentBlacklistEntryHolder, _blacklistTier6Attachment))
                                                         {
                                                             _blacklistTier6Attachment.Add(_tier6AttachmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier6Attachment, OriginalConfig.attachmentBlacklist.tier6Blacklist, "_blacklistTier6Attachment");
@@ -1308,12 +1308,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier6AttachmentBlacklistEntryHolder, _blacklistTier6Attachment))
+                                                    if (CanAddMongoIDToList(_tier6AttachmentBlacklistEntryHolder, _blacklistTier6Attachment))
                                                     {
                                                         _blacklistTier6Attachment.Add(_tier6AttachmentBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier6Attachment, OriginalConfig.attachmentBlacklist.tier6Blacklist, "_blacklistTier6Attachment");
@@ -1347,7 +1347,7 @@
                                       OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
-                                                        if (CanAddItemToList(_tier7AttachmentBlacklistEntryHolder, _blacklistTier7Attachment))
+                                                        if (CanAddMongoIDToList(_tier7AttachmentBlacklistEntryHolder, _blacklistTier7Attachment))
                                                         {
                                                             _blacklistTier7Attachment.Add(_tier7AttachmentBlacklistEntryHolder);
                                                             Utils.UpdateView(_blacklistTier7Attachment, OriginalConfig.attachmentBlacklist.tier7Blacklist, "_blacklistTier7Attachment");
@@ -1356,12 +1356,12 @@
                                                         }
                                                     }
                                                 } )"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.TextObjectIDValidation))"
+                                      Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
                                       Immediate="true"
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.ArrowRight"
                                       OnAdornmentClick="@(() => {
-                                                    if (CanAddItemToList(_tier7AttachmentBlacklistEntryHolder, _blacklistTier7Attachment))
+                                                    if (CanAddMongoIDToList(_tier7AttachmentBlacklistEntryHolder, _blacklistTier7Attachment))
                                                     {
                                                         _blacklistTier7Attachment.Add(_tier7AttachmentBlacklistEntryHolder);
                                                         Utils.UpdateView(_blacklistTier7Attachment, OriginalConfig.attachmentBlacklist.tier7Blacklist, "_blacklistTier7Attachment");
@@ -1550,7 +1550,7 @@
         return false;
     }
 
-    private bool CanAddItemToList(string value, List<string> list)
+    private bool CanAddMongoIDToList(string value, List<string> list)
     {
         if (value != null)
         {
