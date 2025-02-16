@@ -170,7 +170,8 @@ export class ModdedImportHelper
             "655f13e0a246670fb0373245",
             "6567e751a715f85433025998",
             "67617ec9ea1e82ea5e103054",
-            "672e37d19f3e60fb0cbbe568"
+            "672e37d19f3e60fb0cbbe568",
+            "5649a2464bdc2d91118b45a8"
         ];
 
         this.foldingModSights = [
@@ -414,9 +415,9 @@ export class ModdedImportHelper
                 for (const slot in defaultInventorySlots)
                 {
                     const slotName = defaultInventorySlots[slot]?._name;
-                    const slotFilter = defaultInventorySlots[slot]?._props?.filters[0]?.Filter;
                     if (slotName != "ArmBand") continue;
 
+                    const slotFilter = defaultInventorySlots[slot]?._props?.filters[0]?.Filter;
                     if (slotFilter.includes(equipmentId)) equipmentSlot = "ArmBand"
                     if (ModConfig.config.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts)
                     {
@@ -426,8 +427,6 @@ export class ModdedImportHelper
                     }
                 }
             }
-
-
             // Push Equipment details to relevant pools
             this.pushEquipmentToTiers(equipmentId, equipmentSlot, gridLength, equipmentSlotsLength);
             this.pushItemAndPrimaryMods(equipmentId, equipmentSlots);
@@ -583,8 +582,24 @@ export class ModdedImportHelper
             const slotName = itemSlots[slot]?._name;
             let slotFilter = itemSlots[slot]?._props?.filters[0]?.Filter
 
-            // If a slot's filters contain the canted sight mount, remove all other items from the filter - this ensures ONLY the canted sight is added            
-            if (slotFilter.includes("5649a2464bdc2d91118b45a8")) slotFilter = [ "5649a2464bdc2d91118b45a8" ];
+            // If a slot's filters contain the canted sight mount, check config and take action based on config         
+            if (slotFilter.includes("5649a2464bdc2d91118b45a8"))
+            {
+                if (ModConfig.config.compatibilityConfig.enableMPRSafeGuard)
+                {
+                    slotFilter = ["5649a2464bdc2d91118b45a8"]
+                }
+                else
+                {
+                    const baseClassArrayToFilterOut = [
+                        BaseClasses.COLLIMATOR, BaseClasses.OPTIC_SCOPE, BaseClasses.ASSAULT_SCOPE, BaseClasses.COMPACT_COLLIMATOR, BaseClasses.MOUNT, BaseClasses.SPECIAL_SCOPE
+                    ]
+                    slotFilter = slotFilter.filter(item => !this.itemHelper.isOfBaseclasses(item, baseClassArrayToFilterOut))
+    
+                    // Add MPR back
+                    slotFilter.push("5649a2464bdc2d91118b45a8");
+                }
+            }
 
             // Loop over all items in the filter for the slot
             for (const item in slotFilter)
@@ -633,12 +648,16 @@ export class ModdedImportHelper
 
                     /*
                     Uncomment this to check a specific items slot
-                    if (itemID == "93bcdfda236122e67c098847" && slotName == "mod_reciever")
+                    if (itemID == "67ac94a942c1d1f45270acd9" && slotName == "mod_scope")
                     {
-                        this.apbsLogger.log(Logging.WARN, `attempting to add ${slotFilterItem}`)
-                        this.apbsLogger.log(Logging.WARN, `high: ${highTierItem} | low: ${lowTierItem}`)
-                        this.apbsLogger.log(Logging.WARN, `SVD T3: ${JSON.stringify(this.tierInformation.tier3mods[itemID][slotName])}`)
-                        this.apbsLogger.log(Logging.WARN, `SVD T4: ${JSON.stringify(this.tierInformation.tier4mods[itemID][slotName])}`)
+                    this.apbsLogger.log(Logging.WARN, `attempting to add ${slotFilterItem} to parent item ${parentSlotFilterItem} in slot ${slotName}`)
+                    this.apbsLogger.log(Logging.WARN, `high: ${highTierItem} | low: ${lowTierItem}`)
+                    this.apbsLogger.log(Logging.WARN, `Does have MPR?: ${slotFilter.includes("5649a2464bdc2d91118b45a8")}`)
+                    this.apbsLogger.log(Logging.WARN, `Does have more than one item in slot filter?: ${slotFilter.length > 1}`)
+                    this.apbsLogger.log(Logging.WARN, `Slot Filter: ${JSON.stringify(slotFilter)}`)
+                    this.apbsLogger.log(Logging.WARN, `SAND RAIL T3: ${JSON.stringify(this.tierInformation.tier3mods[parentSlotFilterItem][slotName])}`)
+                    this.apbsLogger.log(Logging.WARN, `SAND RAIL T4: ${JSON.stringify(this.tierInformation.tier4mods[parentSlotFilterItem][slotName])}`)
+                    this.apbsLogger.log(Logging.WARN, `----------------------------------------`)
                     }
                     */
 
@@ -667,18 +686,48 @@ export class ModdedImportHelper
             const slotName = parentSlotSlots[slot]?._name;
             let slotFilter = parentSlotSlots[slot]?._props?.filters[0]?.Filter;
 
-            // If a slot's filters contain the canted sight mount, remove all other items from the filter - this ensures ONLY the canted sight is added            
-            if (slotFilter.includes("5649a2464bdc2d91118b45a8")) slotFilter = [ "5649a2464bdc2d91118b45a8" ];
+            // If a slot's filters contain the canted sight mount, check config and take action based on config         
+            if (slotFilter.includes("5649a2464bdc2d91118b45a8"))
+            {
+                if (ModConfig.config.compatibilityConfig.enableMPRSafeGuard)
+                {
+                    slotFilter = ["5649a2464bdc2d91118b45a8"]
+                }
+                else
+                {
+                    const baseClassArrayToFilterOut = [
+                        BaseClasses.COLLIMATOR, BaseClasses.OPTIC_SCOPE, BaseClasses.ASSAULT_SCOPE, BaseClasses.COMPACT_COLLIMATOR, BaseClasses.MOUNT, BaseClasses.SPECIAL_SCOPE
+                    ]
+                    slotFilter = slotFilter.filter(item => !this.itemHelper.isOfBaseclasses(item, baseClassArrayToFilterOut))
+    
+                    // Add MPR back
+                    slotFilter.push("5649a2464bdc2d91118b45a8");
+                }
+            }
 
             // Loop over each item in the slot's filters
             for (const item in slotFilter)
             {
-                const slotFilterItem = parentSlotSlots[slot]?._props?.filters[0]?.Filter[item]; 
+                const slotFilterItem = slotFilter[item]; 
 
                 if (this.shouldItemBeSkipped(parentSlotFilterItem, slotFilterItem, slotName, standaloneAttachment)) continue;
 
                 const highTierItem = this.tier4PlusOnly(parentSlotItemID, slotName, slotFilterItem);
                 const lowTierItem = this.tier4MinusOnly(parentSlotItemID, slotName, slotFilterItem);
+
+                /*
+                if (parentSlotFilterItem == "67ac94a942c1d1f45270acd9" && slotName == "mod_scope")
+                {
+                    this.apbsLogger.log(Logging.WARN, `attempting to add ${slotFilterItem} to parent item ${parentSlotFilterItem} in slot ${slotName}`)
+                    this.apbsLogger.log(Logging.WARN, `high: ${highTierItem} | low: ${lowTierItem}`)
+                    this.apbsLogger.log(Logging.WARN, `Does have MPR?: ${slotFilter.includes("5649a2464bdc2d91118b45a8")}`)
+                    this.apbsLogger.log(Logging.WARN, `Does have more than one item in slot filter?: ${slotFilter.length > 1}`)
+                    this.apbsLogger.log(Logging.WARN, `Slot Filter: ${JSON.stringify(slotFilter)}`)
+                    this.apbsLogger.log(Logging.WARN, `SAND RAIL T3: ${JSON.stringify(this.tierInformation.tier3mods[parentSlotFilterItem][slotName])}`)
+                    this.apbsLogger.log(Logging.WARN, `SAND RAIL T4: ${JSON.stringify(this.tierInformation.tier4mods[parentSlotFilterItem][slotName])}`)
+                    this.apbsLogger.log(Logging.WARN, `----------------------------------------`)
+                }
+                */
 
                 // Check if the PARENT itemID already exists in the tierJsons, if not - create it in all tierJSONs.
                 if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
