@@ -78,7 +78,8 @@ export class ModdedImportHelper
             "628e4dd1f477aa12234918aa",
             "5c066ef40db834001966a595",
             "59ef13ca86f77445fd0e2483",
-            "6531119b9afebff7ff0a1769"
+            "6531119b9afebff7ff0a1769",
+            "66c765dac66697e20a35a411" // Armband from guiding light for some reason
         ];
 
         this.attachmentBlacklist = [ 
