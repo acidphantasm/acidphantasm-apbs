@@ -239,6 +239,37 @@
                         }
                     </MudItem>
 
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <ChildContent>
+                                    <MudText>MPR45 Canted Mount Safeguard</MudText>
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.caption">If a modded item has a NcSTAR MPR45 in a slot, only allow the MPR45 to be in that slot.</MudText><MudSpacer />
+                                    <MudSpacer />
+                                    <MudText Typo="Typo.caption">If you disable this, all Optical Devices will still be removed - but tactical devices will be allowed (they may block vision).</MudText>
+                                </TooltipContent>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="_modMPRSafeGuardEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_modMPRSafeGuardEnabled</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modMPRSafeGuardEnabled"))
+                        {
+                            <MudButton @onclick="undoMPRSafeGuard" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modMPRSafeGuardEnabled != true)
+                        {
+                            <MudButton @onclick="defaultMPRSafeGuard" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
+                    </MudItem>
+
                     <MudItem xs="1">
                         <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Pack'N'Strap Only" Color="Color.Primary" Placement="Placement.Right" Arrow="true">
@@ -451,6 +482,17 @@
     }
     private void undoSafeGuard() => _modSafeGuardEnabled = OriginalConfig.compatibilityConfig.enableSafeGuard;
     private void defaultSafeGuard() => _modSafeGuardEnabled = true;
+    private bool _modMPRSafeGuardEnabled
+    {
+        get => Data.compatibilityConfig.enableMPRSafeGuard;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.enableMPRSafeGuard);
+            Data.compatibilityConfig.enableMPRSafeGuard = value;
+        }
+    }
+    private void undoMPRSafeGuard() => _modMPRSafeGuardEnabled = OriginalConfig.compatibilityConfig.enableMPRSafeGuard;
+    private void defaultMPRSafeGuard() => _modMPRSafeGuardEnabled = true;
     private bool _modPackNStrapCompatibility
     {
         get => Data.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts;

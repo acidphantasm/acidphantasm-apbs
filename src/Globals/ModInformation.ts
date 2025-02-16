@@ -11,7 +11,7 @@ export class ModInformation
     // Don't mess with this shit unless you are making a preset and know what you are doing
     public testMode: boolean = false;
     public testBotRole: (string)[] = [ "pmcusec", "pmcbear" ]
-    public testTrader: string = "6741449944c5b44c53741ccc"
+    public testTrader: string = "100000000000000000000000"
     public testLevelLock: boolean = true;
     public clearAssortPreRaid: boolean = true;
 }
