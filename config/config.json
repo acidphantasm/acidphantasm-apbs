@@ -11,6 +11,7 @@
                 "scavWeaponWeights": 1,
                 "followerWeaponWeights": 6,
                 "enableSafeGuard": true,
+                "enableMPRSafeGuard": true,
                 "PackNStrap_UnlootablePMCArmbandBelts": true,
                 "Realism_AddGasMasksToBots": false
         },

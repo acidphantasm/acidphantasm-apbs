@@ -48,6 +48,7 @@ export interface Config
         scavWeaponWeights: number,
         followerWeaponWeights: number,
         enableSafeGuard: boolean,
+        enableMPRSafeGuard: boolean,
         PackNStrap_UnlootablePMCArmbandBelts: boolean,
         Realism_AddGasMasksToBots: boolean,
     },

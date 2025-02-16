@@ -237,6 +237,7 @@ namespace APBSConfig.Core
         public int scavWeaponWeights { get; set; }
         public int followerWeaponWeights { get; set; }
         public bool enableSafeGuard { get; set; }
+        public bool enableMPRSafeGuard { get; set; }
         public bool PackNStrap_UnlootablePMCArmbandBelts { get; set; }
         public bool Realism_AddGasMasksToBots { get; set; }
     }
