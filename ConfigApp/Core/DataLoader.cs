@@ -264,10 +264,11 @@ namespace APBSConfig.Core
         public int min { get; set; }
         public int max { get; set; }
     }
-        public class ConfigAppSettings
+    public class ConfigAppSettings
     {
         public bool showUndo { get; set; }
         public bool showDefault { get; set; }
+        public bool disableAnimations { get; set; }
     }
     public class PMCSecretLevels
     {
@@ -278,7 +279,7 @@ namespace APBSConfig.Core
 
 public class DataLoader
     {
-        private static readonly string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+        private static readonly string directory = System.AppContext.BaseDirectory;
 
         public static APBSServerConfig Data { get; set; } = default!;
         public static APBSServerConfig OriginalConfig { get; set; } = default!;

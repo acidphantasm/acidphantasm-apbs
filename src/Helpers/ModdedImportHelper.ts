@@ -407,6 +407,7 @@ export class ModdedImportHelper
             {
                 // No additional slots, probably tactical vest
                 if ((equipmentSlots.length == 0 || equipmentSlots == undefined)) equipmentSlot = "TacticalVest";
+
                 // Additional slots, likely armoured rig
                 if (equipmentSlots.length >= 1) equipmentSlot = "ArmouredRig";
 
@@ -427,6 +428,9 @@ export class ModdedImportHelper
                     }
                 }
             }
+            
+            if (this.itemHelper.isOfBaseclass(equipmentId, BaseClasses.ARMBAND)) equipmentSlot = "ArmBand";
+
             // Push Equipment details to relevant pools
             this.pushEquipmentToTiers(equipmentId, equipmentSlot, gridLength, equipmentSlotsLength);
             this.pushItemAndPrimaryMods(equipmentId, equipmentSlots);
