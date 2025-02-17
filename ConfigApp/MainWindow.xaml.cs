@@ -35,7 +35,7 @@ namespace APBSConfig
         {
             EmbeddedBlazorWebView.BlazorWebViewInitialized += (sender, args) =>
             {
-                args.WebView.DefaultBackgroundColor = System.Drawing.Color.FromArgb(0, 50, 51, 61);
+                args.WebView.DefaultBackgroundColor = System.Drawing.Color.FromArgb(0, 39, 39, 47);
             };
         }
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)

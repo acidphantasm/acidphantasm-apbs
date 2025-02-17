@@ -4,7 +4,7 @@
 @using APBSConfig.Core;
 @using static Core.DataLoader;
 
-<MudThemeProvider IsDarkMode="true"/>
+<MudThemeProvider Theme="@APBSThemeAdjustments" IsDarkMode/>
 <MudPopoverProvider/>
 <MudSnackbarProvider />
 <MudDialogProvider />
@@ -95,6 +95,18 @@
         }
     }
 
+    MudTheme APBSThemeAdjustments = new MudTheme()
+    {
+        PaletteDark = new PaletteDark()
+        {
+                Background = "#27272F",
+                Info = "#776BE7",
+                Warning = "#8AABA1",
+                Error = "#FF4081"
+        },
+        
+    };
+
     public static List<string> pendingChanges = new List<string>();
 
     private static MainLayout? _app;
@@ -160,7 +172,7 @@
             {
                 { x => x.ChangeList, pendingChanges },
                 { x => x.ButtonText, "Reload Anyway" },
-                { x => x.Color, Color.Primary }
+                { x => x.Color, Color.Secondary }
             };
 
             var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, BackgroundClass = "custom-blur-background" };

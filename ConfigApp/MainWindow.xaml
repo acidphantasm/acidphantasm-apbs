@@ -55,7 +55,7 @@
     </Window.CommandBindings>
 
     <Border x:Name="MainWindowBorder" BorderBrush="#BEBEC1" BorderThickness="2" >
-        <Grid x:Name="parentContainer" Background="#32333D">
+        <Grid x:Name="parentContainer" Background="#27272F">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height ="Auto"/>
