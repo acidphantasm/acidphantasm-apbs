@@ -7,7 +7,7 @@
         xmlns:EBWV="clr-namespace:APBSConfig"
         mc:Ignorable="d"
         Background="{StaticResource WindowBackgroundBrush}"
-        Title="APBS Configuration Manager" Height="1024" Width="1200" ResizeMode="NoResize" WindowStyle="None">
+        Title="APBS Configuration Manager" Height="1024" Width="1200" WindowStyle="None">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="34" />
     </WindowChrome.WindowChrome>
@@ -54,7 +54,7 @@
         <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Minimize" />
     </Window.CommandBindings>
 
-    <Border x:Name="MainWindowBorder" BorderBrush="#BEBEC1" BorderThickness="1" >
+    <Border x:Name="MainWindowBorder" BorderBrush="#BEBEC1" BorderThickness="2" >
         <Grid x:Name="parentContainer" Background="#27272F">
 
             <Grid.RowDefinitions>
