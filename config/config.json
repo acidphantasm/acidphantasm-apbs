@@ -409,6 +409,7 @@
         "enableDebugLog": false,
         "configAppSettings": {
                 "showUndo": true,
-                "showDefault": false
+                "showDefault": false,
+                "disableAnimations": false
         }
 }
