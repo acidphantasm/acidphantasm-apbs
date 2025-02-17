@@ -4,7 +4,7 @@
 @using APBSConfig.Core;
 @using static Core.DataLoader;
 
-<MudThemeProvider IsDarkMode="true"/>
+<MudThemeProvider Theme="@APBSThemeAdjustments" IsDarkMode/>
 <MudPopoverProvider/>
 <MudSnackbarProvider />
 <MudDialogProvider />
@@ -24,14 +24,24 @@
     </MudDrawer>
     <MudMainContent Class="pt-3">
         <CascadingValue Value="this">
-            <div class="content">
-                @Body
-            </div>
+            @if (_appDisableAnimations)
+            {
+                <div class="no-animation-content">
+                    @Body
+                </div>
+            }
+            else
+            {
+                <div class="content">
+                    @Body
+                </div>                
+            }
         </CascadingValue>
     </MudMainContent>
     <MudAppBar Dense Elevation="1" Bottom>
         <MudCheckBox @bind-Value="_appUndoButtonToggle" Label="Show Undo Button"></MudCheckBox>
         <MudCheckBox @bind-Value="_appDefaultButtonToggle" Label="Show Default Button"></MudCheckBox>
+        <MudCheckBox @bind-Value="_appDisableAnimations" Label="Disable Animations"></MudCheckBox>
         <MudSpacer />
         @if (pendingChanges.Count > 0)
         {
@@ -74,6 +84,28 @@
             else MainLayout.pendingChanges.Remove("_appDefaultButtonToggle");
         }
     }
+    public static bool _appDisableAnimations
+    {
+        get => Data.configAppSettings.disableAnimations;
+        set
+        {
+            Data.configAppSettings.disableAnimations = value;
+            if (!MainLayout.pendingChanges.Contains("_appDisableAnimations")) MainLayout.pendingChanges.Add("_appDisableAnimations");
+            else MainLayout.pendingChanges.Remove("_appDisableAnimations");
+        }
+    }
+
+    MudTheme APBSThemeAdjustments = new MudTheme()
+    {
+        PaletteDark = new PaletteDark()
+        {
+                Background = "#27272F",
+                Info = "#776BE7",
+                Warning = "#8AABA1",
+                Error = "#FF4081"
+        },
+        
+    };
 
     public static List<string> pendingChanges = new List<string>();
 
@@ -140,7 +172,7 @@
             {
                 { x => x.ChangeList, pendingChanges },
                 { x => x.ButtonText, "Reload Anyway" },
-                { x => x.Color, Color.Primary }
+                { x => x.Color, Color.Secondary }
             };
 
             var options = new DialogOptions() { MaxWidth = MaxWidth.Medium, BackgroundClass = "custom-blur-background" };

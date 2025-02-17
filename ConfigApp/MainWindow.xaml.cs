@@ -31,12 +31,11 @@ namespace APBSConfig
 
             Resources.Add("services", serviceCollection.BuildServiceProvider());
         }
-
         private void ChangeWebviewDefaultBackground()
         {
             EmbeddedBlazorWebView.BlazorWebViewInitialized += (sender, args) =>
             {
-                args.WebView.DefaultBackgroundColor = System.Drawing.Color.FromArgb(255, 39, 39, 47);
+                args.WebView.DefaultBackgroundColor = System.Drawing.Color.FromArgb(0, 39, 39, 47);
             };
         }
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)

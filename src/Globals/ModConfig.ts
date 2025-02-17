@@ -265,4 +265,5 @@ export interface ConfigAppSettings
 {
     showUndo: boolean,
     showDefault: boolean,
+    disableAnimations: boolean,
 }
