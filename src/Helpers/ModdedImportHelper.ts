@@ -329,11 +329,13 @@ export class ModdedImportHelper
                 {
                     if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcBEAR.appearance.feet[clothingList[item]._id] = 1
                     if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcBEAR.appearance.body[clothingList[item]._id] = 1
+                    this.apbsLogger.log(Logging.DEBUG, `[Clothing Tier ${tierNumber}] Added ${clothingList[item]._id} to ${clothingList[item]._props.BodyPart} BEAR.`)
                 }
                 if (clothingList[item]._props.Side.includes("Usec"))
                 {
                     if (clothingList[item]._props.BodyPart == "Feet") tierJson.pmcUSEC.appearance.feet[clothingList[item]._id] = 1
                     if (clothingList[item]._props.BodyPart == "Body") tierJson.pmcUSEC.appearance.body[clothingList[item]._id] = 1
+                    this.apbsLogger.log(Logging.DEBUG, `[Clothing Tier ${tierNumber}] Added ${clothingList[item]._id} to ${clothingList[item]._props.BodyPart} USEC.`)
                 }
             }
         }        
