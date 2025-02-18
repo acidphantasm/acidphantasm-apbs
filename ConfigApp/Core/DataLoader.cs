@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
@@ -84,6 +84,7 @@ namespace APBSConfig.Core
         public required TierBlacklistConfig equipmentBlacklist { get; set; }
         public required TierBlacklistConfig ammoBlacklist { get; set; }
         public required TierBlacklistConfig attachmentBlacklist { get; set; }
+        public required TierBlacklistConfig clothingBlacklist { get; set; }
         #endregion
 
         #region LEVEL DELTAS

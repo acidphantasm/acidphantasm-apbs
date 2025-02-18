@@ -5,6 +5,7 @@ import { DatabaseService } from "@spt/services/DatabaseService";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
 import { ModConfig } from "../Globals/ModConfig";
+import { ICustomizationItem } from "@spt/models/eft/common/tables/ICustomizationItem";
 
 @injectable()
 export class BlacklistHelper
@@ -20,6 +21,7 @@ export class BlacklistHelper
     private invalidEquipmentIDs: string[] = [];
     private invalidWeaponIDs: string[] = [];
     private invalidAttachmentIDs: string[] = [];
+    private invalidClothingIDs: string[] = [];
 
     public initialize(): void
     {
@@ -30,6 +32,7 @@ export class BlacklistHelper
         if (ModConfig.config.weaponBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier5Blacklist, 5);
         if (ModConfig.config.weaponBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier6Blacklist, 6);
         if (ModConfig.config.weaponBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier7Blacklist, 7);
+
         if (ModConfig.config.equipmentBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier1Blacklist, 1);
         if (ModConfig.config.equipmentBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier2Blacklist, 2);
         if (ModConfig.config.equipmentBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier3Blacklist, 3);
@@ -37,6 +40,7 @@ export class BlacklistHelper
         if (ModConfig.config.equipmentBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier5Blacklist, 5);
         if (ModConfig.config.equipmentBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier6Blacklist, 6);
         if (ModConfig.config.equipmentBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier7Blacklist, 7);
+
         if (ModConfig.config.ammoBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier1Blacklist, 1);
         if (ModConfig.config.ammoBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier2Blacklist, 2);
         if (ModConfig.config.ammoBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier3Blacklist, 3);
@@ -44,6 +48,7 @@ export class BlacklistHelper
         if (ModConfig.config.ammoBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier5Blacklist, 5);
         if (ModConfig.config.ammoBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier6Blacklist, 6);
         if (ModConfig.config.ammoBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier7Blacklist, 7);
+
         if (ModConfig.config.attachmentBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier1Blacklist, 1);
         if (ModConfig.config.attachmentBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier2Blacklist, 2);
         if (ModConfig.config.attachmentBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier3Blacklist, 3);
@@ -51,6 +56,14 @@ export class BlacklistHelper
         if (ModConfig.config.attachmentBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier5Blacklist, 5);
         if (ModConfig.config.attachmentBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier6Blacklist, 6);
         if (ModConfig.config.attachmentBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier7Blacklist, 7);
+
+        if (ModConfig.config.clothingBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier1Blacklist, 1);
+        if (ModConfig.config.clothingBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier2Blacklist, 2);
+        if (ModConfig.config.clothingBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier3Blacklist, 3);
+        if (ModConfig.config.clothingBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier4Blacklist, 4);
+        if (ModConfig.config.clothingBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier5Blacklist, 5);
+        if (ModConfig.config.clothingBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier6Blacklist, 6);
+        if (ModConfig.config.clothingBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier7Blacklist, 7);
 
         this.validateBlacklist();
     }
@@ -230,6 +243,41 @@ export class BlacklistHelper
             }
         }
     }
+
+    private removeBlacklistedClothing(clothingBlacklist: string[], tier: number): void
+    {
+        const tierJSON = this.apbsEquipmentGetter.getAppearanceJson(tier, true);
+        for (const item in clothingBlacklist)
+        {
+            const itemDetails = this.getCustomization(clothingBlacklist[item])
+            if (itemDetails != undefined)
+            {
+                for (const botType in tierJSON)
+                {
+                    for (const type in tierJSON[botType].appearance)
+                    {
+                        if (type == "hands" || type == "head") continue;
+
+                        if (Object.keys(tierJSON[botType].appearance[type]).includes(itemDetails._id))
+                        {
+                            if (Object.keys(tierJSON[botType].appearance[type]).length > 1)
+                            {
+                                delete tierJSON[botType].appearance[type][itemDetails._id]
+                                this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${type} pool.`)
+                                continue;
+                            }
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${type} pool empty.`)
+                            continue;
+                        }
+                    }
+                }
+            }
+            if (itemDetails == undefined)
+            {
+                if (!this.invalidClothingIDs.includes(clothingBlacklist[item])) this.invalidClothingIDs.push(clothingBlacklist[item])
+            }
+        }
+    }
     
     private getItem(tpl: string): ITemplateItem
     {
@@ -241,6 +289,37 @@ export class BlacklistHelper
         return undefined;
     }
 
+    private getCustomization(tpl: string): ICustomizationItem
+    {
+        if (tpl in this.database.getCustomization())
+        {
+            return this.database.getCustomization()[tpl];
+        }
+
+        return undefined;
+    }
+
+    private isCustomization(tpl: string, type: string): boolean
+    {
+        if (tpl in this.database.getCustomization())
+        {
+            const item = this.database.getCustomization()[tpl];
+            if (item._props.Side == undefined)
+            {
+                return false;
+            }
+            if (item._props.Side.includes("Bear") || item._props.Side.includes("Usec"))
+            {
+                if (item._props.BodyPart == type)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        return false;
+    }
     private validateBlacklist(): void
     {
         if (this.invalidAmmoIDs.length > 0) 

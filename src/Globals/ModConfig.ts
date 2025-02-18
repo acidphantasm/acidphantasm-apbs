@@ -114,6 +114,7 @@ export interface Config
     equipmentBlacklist: TierBlacklistConfig,
     ammoBlacklist: TierBlacklistConfig,
     attachmentBlacklist: TierBlacklistConfig,
+    clothingBlacklist: TierBlacklistConfig,
     customLevelDeltas: CustomLevelDeltas,
     customScavLevelDeltas: CustomLevelDeltas,
     enableDebugLog: boolean,

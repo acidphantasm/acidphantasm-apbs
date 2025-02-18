@@ -1379,6 +1379,347 @@
                                     })">@item</MudChip>
                         }
                     </MudItem>
+                </MudGrid>
+            </MudTabPanel>
+                    <MudTabPanel Text="Clothing Blacklists">
+                        <MudGrid>
+
+                            <MudItem xs="2">
+                                <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-2">
+                                    <MudTooltip Text="Only valid MongoIDs are accepted. Enter the ID of the clothing you want blacklisted, then click the arrow (or press enter) to add it to the blacklist." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                        <MudIconButton Icon="@Icons.Material.Filled.Warning" />
+                                    </MudTooltip>
+                                    <MudText Align="Align.Center">Tier 1</MudText>
+                                </MudPaper>
+                            </MudItem>
+                            <MudItem xs="3" Class="align-center">
+                                <MudTextField T="string" @bind-Value="_tier1ClothingBlacklistEntryHolder"
+                                              Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                              Placeholder="ItemID"
+                                              Variant="Variant.Text"
+                                              OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddMongoIDToList(_tier1ClothingBlacklistEntryHolder, _blacklistTier1Clothing))
+                                                        {
+                                                            _blacklistTier1Clothing.Add(_tier1ClothingBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier1Clothing, OriginalConfig.clothingBlacklist.tier1Blacklist, "_blacklistTier1Clothing");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier1Clothing, OriginalConfig.clothingBlacklist.tier1Blacklist, "_blacklistTier1Clothing");
+                                                        }
+                                                    }
+                                                } )"
+                                              Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
+                                              Immediate="true"
+                                              Adornment="Adornment.End"
+                                              AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                              OnAdornmentClick="@(() => {
+                                                    if (CanAddMongoIDToList(_tier1ClothingBlacklistEntryHolder, _blacklistTier1Clothing))
+                                                    {
+                                                        _blacklistTier1Clothing.Add(_tier1ClothingBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier1Clothing, OriginalConfig.clothingBlacklist.tier1Blacklist, "_blacklistTier1Clothing");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier1Clothing, OriginalConfig.clothingBlacklist.tier1Blacklist, "_blacklistTier1Clothing");
+                                                    }
+                                                } )" />
+                            </MudItem>
+                            <MudItem xs="7">
+                                @foreach (var item in _blacklistTier1Clothing)
+                                {
+                                    <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier1Clothing.Remove(item);
+                                        Utils.UpdateView(_blacklistTier1Clothing, OriginalConfig.clothingBlacklist.tier1Blacklist, "_blacklistTier1Clothing");
+                                    })">@item</MudChip>
+                                }
+                            </MudItem>
+
+                            <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                            <MudItem xs="2">
+                                <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                                    <MudText Align="Align.Center">Tier 2</MudText>
+                                </MudPaper>
+                            </MudItem>
+                            <MudItem xs="3" Class="align-center">
+                                <MudTextField T="string" @bind-Value="_tier2ClothingBlacklistEntryHolder"
+                                              Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                              Placeholder="ItemID"
+                                              Variant="Variant.Text"
+                                              OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddMongoIDToList(_tier2ClothingBlacklistEntryHolder, _blacklistTier2Clothing))
+                                                        {
+                                                            _blacklistTier2Clothing.Add(_tier2ClothingBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier2Clothing, OriginalConfig.clothingBlacklist.tier2Blacklist, "_blacklistTier2Clothing");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier2Clothing, OriginalConfig.clothingBlacklist.tier2Blacklist, "_blacklistTier2Clothing");
+                                                        }
+                                                    }
+                                                } )"
+                                              Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
+                                              Immediate="true"
+                                              Adornment="Adornment.End"
+                                              AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                              OnAdornmentClick="@(() => {
+                                                    if (CanAddMongoIDToList(_tier2ClothingBlacklistEntryHolder, _blacklistTier2Clothing))
+                                                    {
+                                                        _blacklistTier2Clothing.Add(_tier2ClothingBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier2Clothing, OriginalConfig.clothingBlacklist.tier2Blacklist, "_blacklistTier2Clothing");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier2Clothing, OriginalConfig.clothingBlacklist.tier2Blacklist, "_blacklistTier2Clothing");
+                                                    }
+                                                } )" />
+                            </MudItem>
+                            <MudItem xs="7">
+                                @foreach (var item in _blacklistTier2Clothing)
+                                {
+                                    <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier2Clothing.Remove(item);
+                                        Utils.UpdateView(_blacklistTier2Clothing, OriginalConfig.clothingBlacklist.tier2Blacklist, "_blacklistTier2Clothing");
+                                    })">@item</MudChip>
+                                }
+                            </MudItem>
+
+                            <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                            <MudItem xs="2">
+                                <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                                    <MudText Align="Align.Center">Tier 3</MudText>
+                                </MudPaper>
+                            </MudItem>
+                            <MudItem xs="3" Class="align-center">
+                                <MudTextField T="string" @bind-Value="_tier3ClothingBlacklistEntryHolder"
+                                              Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                              Placeholder="ItemID"
+                                              Variant="Variant.Text"
+                                              OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddMongoIDToList(_tier3ClothingBlacklistEntryHolder, _blacklistTier3Clothing))
+                                                        {
+                                                            _blacklistTier3Clothing.Add(_tier3ClothingBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier3Clothing, OriginalConfig.clothingBlacklist.tier3Blacklist, "_blacklistTier3Clothing");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier3Clothing, OriginalConfig.clothingBlacklist.tier3Blacklist, "_blacklistTier3Clothing");
+                                                        }
+                                                    }
+                                                } )"
+                                              Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
+                                              Immediate="true"
+                                              Adornment="Adornment.End"
+                                              AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                              OnAdornmentClick="@(() => {
+                                                    if (CanAddMongoIDToList(_tier3ClothingBlacklistEntryHolder, _blacklistTier3Clothing))
+                                                    {
+                                                        _blacklistTier3Clothing.Add(_tier3ClothingBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier3Clothing, OriginalConfig.clothingBlacklist.tier3Blacklist, "_blacklistTier3Clothing");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier3Clothing, OriginalConfig.clothingBlacklist.tier3Blacklist, "_blacklistTier3Clothing");
+                                                    }
+                                                } )" />
+                            </MudItem>
+                            <MudItem xs="7">
+                                @foreach (var item in _blacklistTier3Clothing)
+                                {
+                                    <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier3Clothing.Remove(item);
+                                        Utils.UpdateView(_blacklistTier3Clothing, OriginalConfig.clothingBlacklist.tier3Blacklist, "_blacklistTier3Clothing");
+                                    })">@item</MudChip>
+                                }
+                            </MudItem>
+
+                            <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                            <MudItem xs="2">
+                                <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                                    <MudText Align="Align.Center">Tier 4</MudText>
+                                </MudPaper>
+                            </MudItem>
+                            <MudItem xs="3" Class="align-center">
+                                <MudTextField T="string" @bind-Value="_tier4ClothingBlacklistEntryHolder"
+                                              Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                              Placeholder="ItemID"
+                                              Variant="Variant.Text"
+                                              OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddMongoIDToList(_tier4ClothingBlacklistEntryHolder, _blacklistTier4Clothing))
+                                                        {
+                                                            _blacklistTier4Clothing.Add(_tier4ClothingBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier4Clothing, OriginalConfig.clothingBlacklist.tier4Blacklist, "_blacklistTier4Clothing");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier4Clothing, OriginalConfig.clothingBlacklist.tier4Blacklist, "_blacklistTier4Clothing");
+                                                        }
+                                                    }
+                                                } )"
+                                              Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
+                                              Immediate="true"
+                                              Adornment="Adornment.End"
+                                              AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                              OnAdornmentClick="@(() => {
+                                                    if (CanAddMongoIDToList(_tier4ClothingBlacklistEntryHolder, _blacklistTier4Clothing))
+                                                    {
+                                                        _blacklistTier4Clothing.Add(_tier4ClothingBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier4Clothing, OriginalConfig.clothingBlacklist.tier4Blacklist, "_blacklistTier4Clothing");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier4Clothing, OriginalConfig.clothingBlacklist.tier4Blacklist, "_blacklistTier4Clothing");
+                                                    }
+                                                } )" />
+                            </MudItem>
+                            <MudItem xs="7">
+                                @foreach (var item in _blacklistTier4Clothing)
+                                {
+                                    <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier4Clothing.Remove(item);
+                                        Utils.UpdateView(_blacklistTier4Clothing, OriginalConfig.clothingBlacklist.tier4Blacklist, "_blacklistTier4Clothing");
+                                    })">@item</MudChip>
+                                }
+                            </MudItem>
+
+                            <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                            <MudItem xs="2">
+                                <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                                    <MudText Align="Align.Center">Tier 5</MudText>
+                                </MudPaper>
+                            </MudItem>
+                            <MudItem xs="3" Class="align-center">
+                                <MudTextField T="string" @bind-Value="_tier5ClothingBlacklistEntryHolder"
+                                              Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                              Placeholder="ItemID"
+                                              Variant="Variant.Text"
+                                              OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddMongoIDToList(_tier5ClothingBlacklistEntryHolder, _blacklistTier5Clothing))
+                                                        {
+                                                            _blacklistTier5Clothing.Add(_tier5ClothingBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier5Clothing, OriginalConfig.clothingBlacklist.tier5Blacklist, "_blacklistTier5Clothing");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier5Clothing, OriginalConfig.clothingBlacklist.tier5Blacklist, "_blacklistTier5Clothing");
+                                                        }
+                                                    }
+                                                } )"
+                                              Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
+                                              Immediate="true"
+                                              Adornment="Adornment.End"
+                                              AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                              OnAdornmentClick="@(() => {
+                                                    if (CanAddMongoIDToList(_tier5ClothingBlacklistEntryHolder, _blacklistTier5Clothing))
+                                                    {
+                                                        _blacklistTier5Clothing.Add(_tier5ClothingBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier5Clothing, OriginalConfig.clothingBlacklist.tier5Blacklist, "_blacklistTier5Clothing");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier5Clothing, OriginalConfig.clothingBlacklist.tier5Blacklist, "_blacklistTier5Clothing");
+                                                    }
+                                                } )" />
+                            </MudItem>
+                            <MudItem xs="7">
+                                @foreach (var item in _blacklistTier5Clothing)
+                                {
+                                    <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier5Clothing.Remove(item);
+                                        Utils.UpdateView(_blacklistTier5Clothing, OriginalConfig.clothingBlacklist.tier5Blacklist, "_blacklistTier5Clothing");
+                                    })">@item</MudChip>
+                                }
+                            </MudItem>
+
+                            <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                            <MudItem xs="2">
+                                <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                                    <MudText Align="Align.Center">Tier 6</MudText>
+                                </MudPaper>
+                            </MudItem>
+                            <MudItem xs="3" Class="align-center">
+                                <MudTextField T="string" @bind-Value="_tier6ClothingBlacklistEntryHolder"
+                                              Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                              Placeholder="ItemID"
+                                              Variant="Variant.Text"
+                                              OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddMongoIDToList(_tier6ClothingBlacklistEntryHolder, _blacklistTier6Clothing))
+                                                        {
+                                                            _blacklistTier6Clothing.Add(_tier6ClothingBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier6Clothing, OriginalConfig.clothingBlacklist.tier6Blacklist, "_blacklistTier6Clothing");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier6Clothing, OriginalConfig.clothingBlacklist.tier6Blacklist, "_blacklistTier6Clothing");
+                                                        }
+                                                    }
+                                                } )"
+                                              Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
+                                              Immediate="true"
+                                              Adornment="Adornment.End"
+                                              AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                              OnAdornmentClick="@(() => {
+                                                    if (CanAddMongoIDToList(_tier6ClothingBlacklistEntryHolder, _blacklistTier6Clothing))
+                                                    {
+                                                        _blacklistTier6Clothing.Add(_tier6ClothingBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier6Clothing, OriginalConfig.clothingBlacklist.tier6Blacklist, "_blacklistTier6Clothing");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier6Clothing, OriginalConfig.clothingBlacklist.tier6Blacklist, "_blacklistTier6Clothing");
+                                                    }
+                                                } )" />
+                            </MudItem>
+                            <MudItem xs="7">
+                                @foreach (var item in _blacklistTier6Clothing)
+                                {
+                                    <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier6Clothing.Remove(item);
+                                        Utils.UpdateView(_blacklistTier6Clothing, OriginalConfig.clothingBlacklist.tier6Blacklist, "_blacklistTier6Clothing");
+                                    })">@item</MudChip>
+                                }
+                            </MudItem>
+
+                            <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
+
+                            <MudItem xs="2">
+                                <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-3">
+                                    <MudText Align="Align.Center">Tier 7</MudText>
+                                </MudPaper>
+                            </MudItem>
+                            <MudItem xs="3" Class="align-center">
+                                <MudTextField T="string" @bind-Value="_tier7ClothingBlacklistEntryHolder"
+                                              Typo="Typo.body2" HelperText="Enter valid MongoID"
+                                              Placeholder="ItemID"
+                                              Variant="Variant.Text"
+                                              OnKeyDown="@((e) => {
+                                                    if (HandleKeyDown(e))
+                                                    {
+                                                        if (CanAddMongoIDToList(_tier7ClothingBlacklistEntryHolder, _blacklistTier7Clothing))
+                                                        {
+                                                            _blacklistTier7Clothing.Add(_tier7ClothingBlacklistEntryHolder);
+                                                            Utils.UpdateView(_blacklistTier7Clothing, OriginalConfig.clothingBlacklist.tier7Blacklist, "_blacklistTier7Clothing");
+                                                        } else {
+                                                            Utils.UpdateView(_blacklistTier7Clothing, OriginalConfig.clothingBlacklist.tier7Blacklist, "_blacklistTier7Clothing");
+                                                        }
+                                                    }
+                                                } )"
+                                              Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
+                                              Immediate="true"
+                                              Adornment="Adornment.End"
+                                              AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                                              OnAdornmentClick="@(() => {
+                                                    if (CanAddMongoIDToList(_tier7ClothingBlacklistEntryHolder, _blacklistTier7Clothing))
+                                                    {
+                                                        _blacklistTier7Clothing.Add(_tier7ClothingBlacklistEntryHolder);
+                                                        Utils.UpdateView(_blacklistTier7Clothing, OriginalConfig.clothingBlacklist.tier7Blacklist, "_blacklistTier7Clothing");
+                                                    } else {
+                                                        Utils.UpdateView(_blacklistTier7Clothing, OriginalConfig.clothingBlacklist.tier7Blacklist, "_blacklistTier7Clothing");
+                                                    }
+                                                } )" />
+                            </MudItem>
+                            <MudItem xs="7">
+                                @foreach (var item in _blacklistTier7Clothing)
+                                {
+                                    <MudChip Value="@item" T="string" Color="Color.Default" OnClose="@(() => {
+                                        _blacklistTier7Clothing.Remove(item);
+                                        Utils.UpdateView(_blacklistTier7Clothing, OriginalConfig.clothingBlacklist.tier7Blacklist, "_blacklistTier7Clothing");
+                                    })">@item</MudChip>
+                                }
+                            </MudItem>
 
                 </MudGrid>
             </MudTabPanel>
@@ -1537,6 +1878,44 @@
     private List<string> _blacklistTier7Attachment
     {
         get => Data.attachmentBlacklist.tier7Blacklist;
+    }
+    #endregion
+    #region CLOTHING
+
+    private string _tier1ClothingBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier1Clothing
+    {
+        get => Data.clothingBlacklist.tier1Blacklist;
+    }
+    private string _tier2ClothingBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier2Clothing
+    {
+        get => Data.clothingBlacklist.tier2Blacklist;
+    }
+    private string _tier3ClothingBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier3Clothing
+    {
+        get => Data.clothingBlacklist.tier3Blacklist;
+    }
+    private string _tier4ClothingBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier4Clothing
+    {
+        get => Data.clothingBlacklist.tier4Blacklist;
+    }
+    private string _tier5ClothingBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier5Clothing
+    {
+        get => Data.clothingBlacklist.tier5Blacklist;
+    }
+    private string _tier6ClothingBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier6Clothing
+    {
+        get => Data.clothingBlacklist.tier6Blacklist;
+    }
+    private string _tier7ClothingBlacklistEntryHolder { get; set; } = "";
+    private List<string> _blacklistTier7Clothing
+    {
+        get => Data.clothingBlacklist.tier7Blacklist;
     }
     #endregion
 
