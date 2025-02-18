@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
@@ -141,6 +141,8 @@ namespace APBSConfig.Core
         public bool enableBotsToRollAmmoAgain { get; set; }
         public int chanceToRollAmmoAgain { get; set; }
         public bool enablePerWeaponTypeAttachmentChances { get; set; }
+        public bool enableLargeCapacityMagazineLimit { get; set; }
+        public int largeCapacityMagazineCount { get; set; }
         public bool forceStock { get; set; }
         public int stockButtpadChance { get; set; }
         public bool forceDustCover { get; set; }

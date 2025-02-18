@@ -3,6 +3,7 @@ import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { IInventory } from "@spt/models/eft/common/tables/IBotBase";
 import { IGenerationData } from "@spt/models/eft/common/tables/IBotType";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { IModToSpawnRequest } from "@spt/models/spt/bots/IModToSpawnRequest";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { LocalisationService } from "@spt/services/LocalisationService";
 import { inject, injectable } from "tsyringe";
@@ -10,6 +11,12 @@ import { inject, injectable } from "tsyringe";
 @injectable()
 export class APBSMethodHolder 
 {
+    public weaponsWithNoSmallMagazines: string[] = [
+        "5cc82d76e24e8d00134b4b83",
+        "64ca3d3954fc657e230529cc",
+        "64637076203536ad5600c990"
+    ]
+    
     constructor(
         @inject("PrimaryLogger") protected logger: ILogger,
         @inject("LocalisationService") protected localisationService: LocalisationService,
@@ -112,5 +119,22 @@ export class APBSMethodHolder
         }
 
         return cartridges;
+    }
+
+    // Custom filtered magazine pool by capacity - returns empty array if nothing is compatible
+    public getFilteredMagazinePoolByCapacity(tier: number, weaponTpl: string, currentMagazineSize: number, modPool: string[]): string[] 
+    {
+        const desiredMagazineTpls = modPool.filter((magTpl) => {
+
+            const magazineDb = this.itemHelper.getItem(magTpl)[1];
+            if (!this.itemHelper.getItem(magazineDb._id)[0]) return false;
+            return magazineDb._props && magazineDb._props.Cartridges[0]._max_count < currentMagazineSize && magazineDb._props.Cartridges[0]._max_count >= 30;
+        });
+
+        if (desiredMagazineTpls.length === 0) {
+            this.logger.warning(`Magazine size filter for ${weaponTpl} was too strict on Tier ${tier} bot, ignoring filter`);
+        }
+
+        return desiredMagazineTpls;
     }
 }

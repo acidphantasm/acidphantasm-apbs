@@ -323,6 +323,51 @@
                         }
                     </MudItem>
 
+
+                    <MudItem xs="1" />
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Limits the amount of large capacity (36 rounds or higher) magazines a bot can spawn with (per weapon)." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Large Capacity Magazine Limit</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="_allWeaponLargeCapacityMagazineLimitEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allWeaponLargeCapacityMagazineLimitEnabled</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        @if (MainLayout._appUndoButtonToggle && (
+                        MainLayout.pendingChanges.Contains("_allWeaponLargeCapacityMagazineLimitEnabled") ||
+                        MainLayout.pendingChanges.Contains("_allWeaponLargeCapacityMagazineCount")))
+                        {
+                            <MudButton @onclick="undoLargeCapacityMagazineLimit" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && (
+                        _allWeaponLargeCapacityMagazineLimitEnabled != true ||
+                        _allWeaponLargeCapacityMagazineCount != 2))
+                        {
+                            <MudButton @onclick="defaultLargeCapacityMagazineLimit" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
+                    </MudItem>
+
+                    <MudItem xs="2" />
+                    <MudItem xs="3">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="This is the limit on the number of large capacity magazines a bot can have, individually, for each weapon." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Number of Large Capacity Magazines</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allWeaponLargeCapacityMagazineLimitEnabled">@_allWeaponLargeCapacityMagazineCount</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="_allWeaponLargeCapacityMagazineCount" ValueLabel="true" Min="1" Max="3" Color="Color.Info" Size="Size.Medium" Disabled="!_allWeaponLargeCapacityMagazineLimitEnabled" />
+                    </MudItem>
+                    <MudItem xs="1" />
+
                     <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
@@ -1068,6 +1113,34 @@
     }
     private void undoPerWeaponAttachmentRolls() => _allPerWeaponAttachmentRolls = OriginalConfig.generalConfig.enablePerWeaponTypeAttachmentChances;
     private void defaultPerWeaponAttachmentRolls() => _allPerWeaponAttachmentRolls = true;
+    private bool _allWeaponLargeCapacityMagazineLimitEnabled
+    {
+        get => Data.generalConfig.enableLargeCapacityMagazineLimit;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.enableLargeCapacityMagazineLimit);
+            Data.generalConfig.enableLargeCapacityMagazineLimit = value;
+        }
+    }
+    private int _allWeaponLargeCapacityMagazineCount
+    {
+        get => Data.generalConfig.largeCapacityMagazineCount;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.largeCapacityMagazineCount);
+            Data.generalConfig.largeCapacityMagazineCount = value;
+        }
+    }
+    private void undoLargeCapacityMagazineLimit()
+    {
+        _allWeaponLargeCapacityMagazineLimitEnabled = OriginalConfig.generalConfig.enableLargeCapacityMagazineLimit;
+        _allWeaponLargeCapacityMagazineCount = OriginalConfig.generalConfig.largeCapacityMagazineCount;
+    }
+    private void defaultLargeCapacityMagazineLimit()
+    {
+        _allWeaponLargeCapacityMagazineLimitEnabled = true;
+        _allWeaponLargeCapacityMagazineCount = 2;
+    }
     private int _allWeaponButtpadChance
     {
         get => Data.generalConfig.stockButtpadChance;
