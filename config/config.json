@@ -164,7 +164,8 @@
                         "max": 100,
                         "minDelta": 0,
                         "maxDelta": 5,
-                        "minLimitPercent": 90
+                        "minLimitPercent": 90,
+                        "enhancementChance": 10
                 },
                 "lootConfig": {
                         "enable": false,
@@ -232,7 +233,8 @@
                         "max": 90,
                         "minDelta": 5,
                         "maxDelta": 20,
-                        "minLimitPercent": 50
+                        "minLimitPercent": 50,
+                        "enhancementChance": 1
                 },
                 "lootConfig": {
                         "enable": true,
@@ -263,7 +265,8 @@
                         "max": 100,
                         "minDelta": 0,
                         "maxDelta": 5,
-                        "minLimitPercent": 85
+                        "minLimitPercent": 85,
+                        "enhancementChance": 0
                 },
                 "lootConfig": {
                         "enable": true,
@@ -285,7 +288,8 @@
                         "max": 100,
                         "minDelta": 0,
                         "maxDelta": 15,
-                        "minLimitPercent": 75
+                        "minLimitPercent": 75,
+                        "enhancementChance": 0
                 },
                 "lootConfig": {
                         "enable": true,
@@ -307,7 +311,8 @@
                         "max": 100,
                         "minDelta": 0,
                         "maxDelta": 10,
-                        "minLimitPercent": 80
+                        "minLimitPercent": 80,
+                        "enhancementChance": 0
                 },
                 "lootConfig": {
                         "enable": true,

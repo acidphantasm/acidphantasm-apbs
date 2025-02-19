@@ -153,6 +153,7 @@ export interface WeaponDurabilityConfig
     minDelta: number,
     maxDelta: number,
     minLimitPercent: number,
+    enhancementChance: number,
 }
 export interface LootConfig
 {

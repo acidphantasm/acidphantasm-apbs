@@ -37,6 +37,7 @@ import { IItem } from "@spt/models/eft/common/tables/IItem";
 import { APBSIChances } from "../Interface/APBSIChances";
 import { APBSIQuestBotGenerationDetails } from "../Interface/APBSIQuestBotGear";
 import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
+import { BossBots, FollowerBots, PMCBots, ScavBots, SpecialBots } from "../Enums/Bots";
 
 /** Handle profile related client events */
 @injectable()
@@ -247,8 +248,33 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             botRole
         );
 
+        let weaponEnhancementChance = 0;
+        if (this.raidInformation.isBotEnabled(botRole))
+        {
+            if (Object.values(PMCBots).includes(botRole as PMCBots))
+            {
+                weaponEnhancementChance = ModConfig.config.pmcBots.weaponDurability.enhancementChance;
+            }
+            if (Object.values(ScavBots).includes(botRole as ScavBots))
+            {
+                weaponEnhancementChance = ModConfig.config.scavBots.weaponDurability.enhancementChance;
+            }
+            if (Object.values(BossBots).includes(botRole as BossBots))
+            {
+                weaponEnhancementChance = ModConfig.config.bossBots.weaponDurability.enhancementChance;
+            }
+            if (Object.values(FollowerBots).includes(botRole as FollowerBots))
+            {
+                weaponEnhancementChance = ModConfig.config.followerBots.weaponDurability.enhancementChance;
+            }
+            if (Object.values(SpecialBots).includes(botRole as SpecialBots))
+            {
+                weaponEnhancementChance = ModConfig.config.specialBots.weaponDurability.enhancementChance;
+            }
+        }
+        
         // Chance to add randomised weapon enhancement
-        if (isPmc && this.randomUtil.getChance100(this.pmcConfig.weaponHasEnhancementChancePercent))
+        if (this.randomUtil.getChance100(weaponEnhancementChance))
         {
             const weaponConfig = this.repairConfig.repairKit.weapon;
             this.repairService.addBuff(weaponConfig, weaponWithModsArray[0]);
