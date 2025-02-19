@@ -26,6 +26,7 @@ namespace APBSConfig.Core
         public required ResourceRandomizationConfig resourceRandomization { get; set; }
         public required WeaponDurabilityConfig weaponDurability { get; set; }
         public required LootConfig lootConfig { get; set; }
+        public required QuestLoadoutConfig questConfig { get; set; }
         public required PMCSpecificConfig additionalOptions { get; set; }
         public required PMCSecrets secrets { get; set; }
     }
@@ -103,6 +104,11 @@ namespace APBSConfig.Core
         public required AmmoTierSlideConfig ammoTierSliding { get; set; }
         public required GameVersionWeightConfig gameVersionWeighting { get; set; }
 
+    }
+    public class QuestLoadoutConfig
+    {
+        public bool enable { get; set; }
+        public int chance { get; set; }
     }
     public class ScavSpecificConfig
     {

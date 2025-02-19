@@ -336,6 +336,49 @@
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="PMCs have a chance to wear quest loadouts on appropriate maps at appropriate levels." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Quest Loadouts</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_pmcQuestLoadoutEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcQuestLoadoutEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                        MainLayout.pendingChanges.Contains("_pmcQuestLoadoutEnabled") ||
+                        MainLayout.pendingChanges.Contains("_pmcQuestLoadoutChance")))
+                            {
+                                <MudButton @onclick="undoPMCQuestLoadouts" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _pmcQuestLoadoutEnabled != true) ||
+                            _pmcQuestLoadoutChance != 10)
+                            {
+                                <MudButton @onclick="defaultPMCQuestLoadouts" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Chance of them using quest loadouts." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Quest Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcQuestLoadoutEnabled">@_pmcQuestLoadoutChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="_pmcQuestLoadoutChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcQuestLoadoutEnabled" />
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                                 <MudTooltip Text="Allows PMCs to slide down to a lower ammo pool tier when they are generated." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudText>Ammo Tier Sliding</MudText>
                                 </MudTooltip>
@@ -900,6 +943,36 @@
         _pmcAmmoTierSlideEnabled = false;
         _pmcAmmoTierSlideAmount = 1;
         _pmcAmmoTierSlideChance = 33;
+    }
+    #endregion
+    #region QUEST LOADOUTS
+    private bool _pmcQuestLoadoutEnabled
+    {
+        get => Data.pmcBots.questConfig.enable;
+        set
+        {
+            Data.pmcBots.questConfig.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.questConfig.enable);
+        }
+    }
+    private int _pmcQuestLoadoutChance
+    {
+        get => Data.pmcBots.questConfig.chance;
+        set
+        {
+            Data.pmcBots.questConfig.chance = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.questConfig.chance);
+        }
+    }
+    private void undoPMCQuestLoadouts()
+    {
+        _pmcQuestLoadoutEnabled = OriginalConfig.pmcBots.questConfig.enable;
+        _pmcQuestLoadoutChance = OriginalConfig.pmcBots.questConfig.chance;
+    }
+    private void defaultPMCQuestLoadouts()
+    {
+        _pmcQuestLoadoutEnabled = true;
+        _pmcQuestLoadoutChance = 10;
     }
     #endregion
     #region SEASONAL APPEARANCE
