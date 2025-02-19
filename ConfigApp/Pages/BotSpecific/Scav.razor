@@ -212,20 +212,22 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle && (
-                           MainLayout.pendingChanges.Contains("_scavWeaponDurabilityEnabled") ||
-                           MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMin") ||
-                           MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMax") ||
-                           MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMinDelta") ||
-                           MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMaxDelta")))
+                                   MainLayout.pendingChanges.Contains("_scavWeaponDurabilityEnabled") ||
+                                   MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMin") ||
+                                   MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMax") ||
+                                   MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMinDelta") ||
+                                   MainLayout.pendingChanges.Contains("_scavWeaponDurabilityMaxDelta") ||
+                                   MainLayout.pendingChanges.Contains("_scavWeaponDurabilityEnhancementChance")))
                             {
                                 <MudButton @onclick="undoWeaponDurability" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
                             else if (MainLayout._appDefaultButtonToggle && (
-                            _scavWeaponDurabilityEnabled != true ||
-                            _scavWeaponDurabilityMin != 70 ||
-                            _scavWeaponDurabilityMax != 90 ||
-                            _scavWeaponDurabilityMinDelta != 5 ||
-                            _scavWeaponDurabilityMaxDelta != 20))
+                                    _scavWeaponDurabilityEnabled != true ||
+                                    _scavWeaponDurabilityMin != 70 ||
+                                    _scavWeaponDurabilityMax != 90 ||
+                                    _scavWeaponDurabilityMinDelta != 5 ||
+                                    _scavWeaponDurabilityMaxDelta != 20 ||
+                                    _scavWeaponDurabilityEnhancementChance != 1))
                             {
                                 <MudButton @onclick="defaultWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
                             }
@@ -301,6 +303,21 @@
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1" />
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that bot weapons have an enhancement applied to them." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Enhancement Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">@_scavWeaponDurabilityEnhancementChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="_scavWeaponDurabilityEnhancementChance" ValueLabel="true" Min="0" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_scavWeaponDurabilityEnabled" />
+                        </MudItem>
 
                         <MudItem xs="1" />
                         <MudItem xs="4">
@@ -604,7 +621,15 @@
         get => Data.scavBots.weaponDurability.max - Data.scavBots.weaponDurability.minDelta;
         set { }
     }
-
+    private int _scavWeaponDurabilityEnhancementChance
+    {
+        get => Data.scavBots.weaponDurability.enhancementChance;
+        set
+        {
+            Data.scavBots.weaponDurability.enhancementChance = value;
+            Utils.UpdateView(value, OriginalConfig.scavBots.weaponDurability.enhancementChance);
+        }
+    }
     private void undoWeaponDurability()
     {
         _scavWeaponDurabilityEnabled = OriginalConfig.scavBots.weaponDurability.enable;
@@ -613,6 +638,7 @@
         _scavWeaponDurabilityMinDelta = OriginalConfig.scavBots.weaponDurability.minDelta;
         _scavWeaponDurabilityMaxDelta = OriginalConfig.scavBots.weaponDurability.maxDelta;
         _scavWeaponDurabilityMinLimitPercent = OriginalConfig.scavBots.weaponDurability.minLimitPercent;
+        _scavWeaponDurabilityEnhancementChance = OriginalConfig.scavBots.weaponDurability.enhancementChance;
     }
     private void defaultWeaponDurability()
     {
@@ -622,6 +648,7 @@
         _scavWeaponDurabilityMinDelta = 5;
         _scavWeaponDurabilityMaxDelta = 20;
         _scavWeaponDurabilityMinLimitPercent = Data.scavBots.weaponDurability.min - Data.scavBots.weaponDurability.maxDelta;
+        _scavWeaponDurabilityEnhancementChance = 1;
     }
     #endregion
     #region KEYS

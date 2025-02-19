@@ -131,6 +131,7 @@ namespace APBSConfig.Core
         public int minDelta { get; set; }
         public int maxDelta { get; set; }
         public int minLimitPercent { get; set; }
+        public int enhancementChance { get; set; }
     }
     public class LootConfig
     {
