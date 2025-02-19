@@ -49,7 +49,7 @@ export class APBSUbglExternalMagGen implements APBSIInventoryMagGen
             const tierInfo = this.apbsTierGetter.getTierByLevel(inventoryMagGen.getBotLevel());
             const ammoTable = this.apbsEquipmentGetter.getAmmoByBotRole(inventoryMagGen.getBotRole(), tierInfo)
 
-            const rerolledAmmo = this.apbsMethodHolder.getWeightedCompatibleAmmo(ammoTable, weapon);
+            const rerolledAmmo = this.apbsMethodHolder.apbsGetWeightedCompatibleAmmo(ammoTable, weapon);
 
             this.botWeaponGeneratorHelper.addAmmoIntoEquipmentSlots(
                 rerolledAmmo,

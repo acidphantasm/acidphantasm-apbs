@@ -99,7 +99,7 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
             let selectedAmmoForMag = inventoryMagGen.getAmmoTemplate()._id;
             if (ModConfig.config.generalConfig.enableBotsToRollAmmoAgain && this.randomUtil.getChance100(ModConfig.config.generalConfig.chanceToRollAmmoAgain))
             {
-                selectedAmmoForMag = this.apbsMethodHolder.getWeightedCompatibleAmmo(ammoTable, weapon);
+                selectedAmmoForMag = this.apbsMethodHolder.apbsGetWeightedCompatibleAmmo(ammoTable, weapon);
             }
 
             const magazineWithAmmo = this.botWeaponGeneratorHelper.createMagazineWithAmmo(
