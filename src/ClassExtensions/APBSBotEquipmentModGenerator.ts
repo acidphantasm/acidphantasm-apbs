@@ -43,6 +43,7 @@ import { APBSTester } from "../Utils/APBSTester";
 import { vanillaButtpads } from "../Globals/VanillaItemLists";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { RealismHelper } from "../Helpers/RealismHelper";
+import { APBSIGenerateEquipmentProperties } from "../Interface/APBSIGenerateEquipmentProperties";
 
 /** Handle profile related client events */
 @injectable()
@@ -99,33 +100,18 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             cloner)
     }
 
-    public override generateModsForEquipment(equipment: IItem[], parentId: string, parentTemplate: ITemplateItem, settings: IGenerateEquipmentProperties, specificBlacklist: IEquipmentFilterDetails, shouldForceSpawn: boolean): IItem[]
+    public apbsGenerateModsForEquipment(equipment: IItem[], parentId: string, parentTemplate: ITemplateItem, settings: APBSIGenerateEquipmentProperties, shouldForceSpawn: boolean = false): IItem[]
     {
         let forceSpawn = shouldForceSpawn;
 
-        const botRole = settings.botData.role;
-        const tier = this.apbsTierGetter.getTierByLevel(settings.botData.level);
-        const tieredModPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tier)
-        
-        let spawnChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tier);
-        let compatibleModsPool = tieredModPool[parentTemplate._id]
-        let actualModPool = tieredModPool;
-
-        if (!this.raidInformation.isBotEnabled(botRole))
-        {
-            spawnChances = settings.spawnChances;
-            compatibleModsPool = settings.modPool[parentTemplate._id];
-            actualModPool = settings.modPool;
-        }
-
-        if (!compatibleModsPool)
+        if (!settings.modPool[parentTemplate._id])
         {
             this.logger.warning(
-                `bot: ${botRole} lacks a mod slot pool for item: ${parentTemplate._id} ${parentTemplate._name}`);
+                `bot: ${settings.botData.role} lacks a mod slot pool for item: ${parentTemplate._id} ${parentTemplate._name}`);
         }
 
         // Iterate over mod pool and choose mods to add to item
-        for (const modSlotName in compatibleModsPool)
+        for (const modSlotName in settings.modPool[parentTemplate._id])
         {
             if (modSlotName === "mod_equipment_000" && this.raidInformation.nightTime) continue;
 
@@ -150,7 +136,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             const modSpawnResult = this.shouldModBeSpawned(
                 itemSlotTemplate,
                 modSlotName.toLowerCase(),
-                spawnChances.equipmentMods,
+                settings.spawnChances.equipmentMods,
                 settings.botEquipmentConfig
             );
             if (modSpawnResult === ModSpawn.SKIP && !forceSpawn)
@@ -171,16 +157,16 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 }
             }
 
-            let modPoolToChooseFrom = compatibleModsPool[modSlotName];
+            let modPoolToChooseFrom = settings.modPool[parentTemplate._id][modSlotName];
             if (
                 settings.botEquipmentConfig.filterPlatesByLevel
                 && this.itemHelper.isRemovablePlateSlot(modSlotName.toLowerCase())
             )
             {
-                const outcome = this.filterPlateModsForSlotByLevel(
+                const outcome = this.apbsFilterPlateModsForSlotByLevel(
                     settings,
                     modSlotName.toLowerCase(),
-                    compatibleModsPool[modSlotName],
+                    settings.modPool[parentTemplate._id][modSlotName],
                     parentTemplate
                 );
                 if ([Result.UNKNOWN_FAILURE, Result.NO_DEFAULT_FILTER].includes(outcome.result))
@@ -236,32 +222,31 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             }
 
             const modTemplate = this.itemHelper.getItem(modTpl);
-            if (!this.isModValidForSlot(modTemplate, itemSlotTemplate, modSlotName, parentTemplate, botRole))
+            if (!this.isModValidForSlot(modTemplate, itemSlotTemplate, modSlotName, parentTemplate, settings.botData.role))
             {
                 continue;
             }
 
             // Generate new id to ensure all items are unique on bot
             const modId = this.hashUtil.generate();
-            equipment.push(this.createModItem(modId, modTpl, parentId, modSlotName, modTemplate[1], botRole));
+            equipment.push(this.createModItem(modId, modTpl, parentId, modSlotName, modTemplate[1], settings.botData.role));
 
             // Does the item being added have possible child mods?
-            if (Object.keys(actualModPool).includes(modTpl))
+            if (Object.keys(settings.modPool).includes(modTpl))
             {
                 // Call self recursively with item being checkced item we just added to bot
-                this.generateModsForEquipment(
+                this.apbsGenerateModsForEquipment(
                     equipment,
                     modId,
                     modTemplate[1],
                     settings,
-                    specificBlacklist,
                     forceSpawn
                 );
             }
         }
         
         // This is for testing...
-        if (this.modInformation.testMode && this.modInformation.testBotRole.includes(botRole.toLowerCase()))
+        if (this.modInformation.testMode && this.modInformation.testBotRole.includes(settings.botData.role.toLowerCase()))
         {
             const tables = this.databaseService.getTables();
             const assortEquipment = this.cloner.clone(equipment);
@@ -291,7 +276,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         return equipment;
     }
 
-    protected override filterPlateModsForSlotByLevel(
+    private apbsFilterPlateModsForSlotByLevel(
         settings: IGenerateEquipmentProperties,
         modSlot: string,
         existingPlateTplPool: string[],
@@ -426,13 +411,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         return result;
     }
 
-    /**
-     * Get the default plate an armor has in its db item
-     * @param armorItem Item to look up default plate
-     * @param modSlot front/back
-     * @returns Tpl of plate
-     */
-    protected getDefaultPlateTpl(armorItem: ITemplateItem, modSlot: string): string | undefined 
+    private getDefaultPlateTpl(armorItem: ITemplateItem, modSlot: string): string | undefined 
     {
         const relatedItemDbModSlot = armorItem._props.Slots?.find(
             (slot: { _name: string }) => slot._name.toLowerCase() === modSlot
@@ -441,24 +420,13 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         return relatedItemDbModSlot?._props.filters[0].Plate;
     }
 
-    /**
-     * Get the matching armor slot from the default preset matching passed in armor tpl
-     * @param presetItemId Id of preset
-     * @param modSlot front/back
-     * @returns Armor IItem
-     */
-    protected getDefaultPresetArmorSlot(armorItemTpl: string, modSlot: string): IItem | undefined 
+    private getDefaultPresetArmorSlot(armorItemTpl: string, modSlot: string): IItem | undefined 
     {
         const defaultPreset = this.presetHelper.getDefaultPreset(armorItemTpl);
 
         return defaultPreset?._items.find((item) => item.slotId?.toLowerCase() === modSlot);
     }
 
-    /**
-     * Gets the minimum and maximum plate class levels from an array of plates
-     * @param platePool Pool of plates to sort by armorClass to get min and max
-     * @returns MinMax of armorClass from plate pool
-     */
     private getMinMaxArmorPlateClass(platePool: ITemplateItem[]): MinMax 
     {
         platePool.sort((x, y) => 

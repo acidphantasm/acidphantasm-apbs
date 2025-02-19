@@ -10,6 +10,7 @@ import { ModConfig } from "../Globals/ModConfig";
 import { RandomUtil } from "@spt/utils/RandomUtil";
 import { Season } from "@spt/models/enums/Season";
 import { SeasonalEventService } from "@spt/services/SeasonalEventService";
+import { IEquipment } from "@spt/models/eft/common/tables/IBotType";
 
 @injectable()
 export class APBSEquipmentGetter
@@ -209,7 +210,62 @@ export class APBSEquipmentGetter
         }
     }
 
-    public getEquipmentByBotRole(botRole: string, tierInfo: number, slot: string, range?: string): Record<string, number>
+    public getEquipmentByBotRole(botRole: string, tierInfo: number): IEquipment
+    {
+        const tierJson = this.getTierJson(tierInfo)
+        switch (botRole)
+        {
+            case "pmcusec":
+                return tierJson.pmcUSEC.equipment;
+            case "pmcbear":
+                return tierJson.pmcBEAR.equipment;
+            case "marksman":
+                return tierJson.scav.equipment;
+            case "cursedassault":
+            case "assault":
+                return tierJson.scav.equipment;
+            case "bossboar":
+                return tierJson.bossboar.equipment;
+            case "bossboarsniper":
+                return tierJson.bossboarsniper.equipment;
+            case "bossbully":
+                return tierJson.bossbully.equipment;
+            case "bossgluhar":
+                return tierJson.bossgluhar.equipment;
+            case "bosskilla":
+                return tierJson.bosskilla.equipment;
+            case "bosskojaniy":
+                return tierJson.bosskojaniy.equipment;
+            case "bosskolontay":
+                return tierJson.bosskolontay.equipment;
+            case "bosssanitar":
+                return tierJson.bosssanitar.equipment;
+            case "bosstagilla":
+                return tierJson.bosstagilla.equipment;
+            case "bosspartisan":
+                return tierJson.bosspartisan.equipment;
+            case "bossknight":
+                return tierJson.bossknight.equipment;
+            case "followerbigpipe":
+                return tierJson.followerbigpipe.equipment;
+            case "followerbirdeye":
+                return tierJson.followerbirdeye.equipment;
+            case "sectantpriest":
+                return tierJson.sectantpriest.equipment;
+            case "sectantwarrior":
+                return tierJson.sectantwarrior.equipment;
+            case "exusec":
+            case "arenafighterevent":
+            case "arenafighter":
+                return tierJson.exUSEC.equipment;
+            case "pmcbot":
+                return tierJson.pmcbot.equipment;
+            default:
+                return tierJson.default.equipment;
+        }
+    }
+
+    public getEquipmentByBotRoleAndSlot(botRole: string, tierInfo: number, slot: string, range?: string): Record<string, number>
     {
         const tierJson = this.getTierJson(tierInfo)
         switch (botRole)
