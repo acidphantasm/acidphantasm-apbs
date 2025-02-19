@@ -172,6 +172,10 @@
                                 "6711039f9e648049e50b3307"
                         ]
                 },
+                "questConfig": {
+                        "enable": true,
+                        "chance": 10
+                },
                 "additionalOptions": {
                         "seasonalPmcAppearance": true,
                         "ammoTierSliding": {

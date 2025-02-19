@@ -63,6 +63,7 @@ import { APBSUbglExternalMagGen } from "./InventoryMagGen/APBSUbglExternalMagGen
 import { APBSBotGeneratorHelper } from "./ClassExtensions/APBSBotGeneratorHelper";
 import { BotEnablementHelper } from "./Helpers/BotEnablementHelper";
 import { BotLogHelper } from "./Helpers/BotLogHelper";
+import { BotQuestHelper } from "./Helpers/BotQuestHelper";
 
 export class InstanceManager 
 {
@@ -115,6 +116,7 @@ export class InstanceManager
     public apbsExternalInventoryMagGen: APBSExternalInventoryMagGen;
     public apbsMethodHolder: APBSMethodHolder;
     public botLogHelper: BotLogHelper;
+    public botQuestHelper: BotQuestHelper;
     //#endregion
 
     //#region accessible in or after postDBLoad
@@ -180,6 +182,8 @@ export class InstanceManager
         this.apbsEquipmentGetter = container.resolve<APBSEquipmentGetter>("APBSEquipmentGetter");
         this.container.register<BotLogHelper>("BotLogHelper", BotLogHelper, { lifecycle: Lifecycle.Singleton })
         this.botLogHelper = container.resolve<BotLogHelper>("BotLogHelper");
+        this.container.register<BotQuestHelper>("BotQuestHelper", BotQuestHelper, { lifecycle: Lifecycle.Singleton })
+        this.botQuestHelper = container.resolve<BotQuestHelper>("BotQuestHelper");
 
         // Custom Special
         this.container.register<APBSDynamicRouterHooks>("APBSDynamicRouterHooks", APBSDynamicRouterHooks, { lifecycle: Lifecycle.Singleton });

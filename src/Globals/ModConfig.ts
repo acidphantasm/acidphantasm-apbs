@@ -81,6 +81,7 @@ export interface Config
         resourceRandomization: ResourceRandomizationConfig,
         weaponDurability: WeaponDurabilityConfig,
         lootConfig: LootConfig,
+        questConfig: QuestConfig,
         additionalOptions: PMCSpecificConfig,
         secrets: PMCSecrets,
     }
@@ -125,6 +126,11 @@ export interface PMCSpecificConfig
     seasonalPmcAppearance: boolean,
     ammoTierSliding: AmmoTierSlideConfig,
     gameVersionWeighting: GameVersionWeightConfig, 
+}
+export interface QuestConfig
+{
+    enable: boolean,
+    chance: number,
 }
 export interface ScavSpecificConfig
 {
