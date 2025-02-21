@@ -155,7 +155,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                     chances.equipment.SecondPrimaryWeapon = 100;
                 }
                 questData = questRequirements;
-                this.apbsLogger.log(Logging.DEBUG, `[QUEST CONFIG] Level${botLevel} PMC was assigned the quest ${questRequirements.questName}`)
+                this.apbsLogger.log(Logging.WARN, `[QUEST CONFIG] Level${botLevel} PMC was assigned the quest ${questRequirements.questName}`)
             }
         }
 
