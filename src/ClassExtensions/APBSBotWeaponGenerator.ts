@@ -286,6 +286,11 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             const botEquipmentRole = this.botGeneratorHelper.getBotEquipmentRole(botRole);
             const modLimits = this.botWeaponModLimitService.getWeaponModLimits(botEquipmentRole);
 
+            if (this.itemHelper.isOfBaseclass(weaponTpl, BaseClasses.PISTOL))
+            {
+                modLimits.scopeMax = 1;
+            }
+
             const generateWeaponModsRequest: IGenerateWeaponRequest = {
                 weapon: weaponWithModsArray, // Will become hydrated array of weapon + mods
                 modPool: modPool,
