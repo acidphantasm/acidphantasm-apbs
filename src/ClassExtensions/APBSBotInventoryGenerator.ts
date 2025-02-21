@@ -142,12 +142,12 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
 
         // Check if this bot shouuld get quests, and assign one if so
         const shouldCheckForQuests = this.botQuestHelper.shouldBotHaveQuest(isPmc);
-        let isQuesting;
+        let isQuesting = false;
         let questData;
         if (shouldCheckForQuests)
         {
             const questRequirements = this.botQuestHelper.getQuestFromInternalDatabase(botLevel, this.raidInformation.location);
-            if (questRequirements)
+            if (questRequirements != null)
             {
                 isQuesting = true;
                 questData = questRequirements;
