@@ -12,6 +12,38 @@ import { BaseClasses } from "@spt/models/enums/BaseClasses";
 @injectable()
 export class BotQuestHelper
 {
+    private fishingGear: APBSIQuestBotGear = {
+        isQuestEnabled: true,
+        questName: "Fishing Gear",
+        requiredMap: [
+            "shoreline"
+        ],
+        requiredWeaponMods: [],
+        requiredWeaponModSlots: [
+            "mod_stock",
+            "mod_bipod",
+            "mod_muzzle",
+            "mod_tactical",
+            "mod_sight_rear",
+            "mod_magazine"
+        ],
+        requiredWeaponModBaseClasses: [],
+        requiredEquipmentSlots: [],
+        Headwear: [],
+        Earpiece: [],
+        FaceCover: [],
+        ArmorVest: [],
+        Eyewear: [],
+        TacticalVest: [],
+        Backpack: [],
+        PrimaryWeapon: [
+            "55801eed4bdc2d89578b4588"
+        ],
+        Holster: [],
+        Scabbard: [],
+        minLevel: 35,
+        maxLevel: 45
+    }
     private humanitarianSupplies: APBSIQuestBotGear = {
         isQuestEnabled: true,
         questName: "Humanitarian Supplies",
@@ -53,7 +85,8 @@ export class BotQuestHelper
         requiredWeaponModBaseClasses: [],
         requiredEquipmentSlots: [ 
             EquipmentSlots.TACTICAL_VEST, 
-            EquipmentSlots.HEADWEAR, "ShortRange" 
+            EquipmentSlots.HEADWEAR, 
+            "LongRange" 
         ],
         Headwear: [
             "59e7708286f7742cbd762753"
@@ -88,7 +121,7 @@ export class BotQuestHelper
         requiredWeaponModSlots: [],
         requiredWeaponModBaseClasses: [],
         requiredEquipmentSlots: [
-            "ShortRange"
+            "LongRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -149,7 +182,7 @@ export class BotQuestHelper
         requiredWeaponModSlots: [],
         requiredWeaponModBaseClasses: [],
         requiredEquipmentSlots: [
-            "ShortRange"
+            "LongRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -181,7 +214,7 @@ export class BotQuestHelper
         requiredEquipmentSlots: [
             EquipmentSlots.FACE_COVER, 
             EquipmentSlots.TACTICAL_VEST, 
-            "ShortRange"
+            "LongRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -268,7 +301,7 @@ export class BotQuestHelper
         requiredWeaponModSlots: [],
         requiredWeaponModBaseClasses: [],
         requiredEquipmentSlots: [
-            "LongRange"
+            "ShortRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -303,7 +336,7 @@ export class BotQuestHelper
         ],
         requiredWeaponModBaseClasses: [],
         requiredEquipmentSlots: [
-            "LongRange"
+            "ShortRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -339,7 +372,7 @@ export class BotQuestHelper
             BaseClasses.SILENCER
         ],
         requiredEquipmentSlots: [
-            "ShortRange"
+            "LongRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -374,7 +407,7 @@ export class BotQuestHelper
             BaseClasses.SILENCER
         ],
         requiredEquipmentSlots: [
-            "ShortRange"
+            "LongRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -407,7 +440,7 @@ export class BotQuestHelper
         ],
         requiredWeaponModBaseClasses: [],
         requiredEquipmentSlots: [
-            "ShortRange"
+            "LongRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -443,7 +476,7 @@ export class BotQuestHelper
         ],
         requiredWeaponModBaseClasses: [],
         requiredEquipmentSlots: [
-            "ShortRange"
+            "LongRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -473,7 +506,7 @@ export class BotQuestHelper
         requiredEquipmentSlots: [
             EquipmentSlots.ARMOR_VEST, 
             EquipmentSlots.HEADWEAR, 
-            "ShortRange"
+            "LongRange"
         ],
         Headwear: [
             "5645bc214bdc2d363b8b4571"
@@ -502,7 +535,7 @@ export class BotQuestHelper
         requiredWeaponModSlots: [],
         requiredWeaponModBaseClasses: [],
         requiredEquipmentSlots: [
-            "ShortRange"
+            "LongRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -537,7 +570,7 @@ export class BotQuestHelper
             BaseClasses.SPECIAL_SCOPE
         ],
         requiredEquipmentSlots: [
-            "LongRange"
+            "ShortRange"
         ],
         Headwear: [],
         Earpiece: [],
@@ -576,7 +609,7 @@ export class BotQuestHelper
         requiredEquipmentSlots: [
             EquipmentSlots.ARMOR_VEST, 
             EquipmentSlots.HEADWEAR, 
-            "ShortRange"
+            "LongRange"
         ],
         Headwear: [
             "5aa7d03ae5b5b00016327db5"
@@ -676,10 +709,9 @@ export class BotQuestHelper
         this.connectionsUpNorth,
         this.peacekeepingMission,
         this.dandies,
-        this.decontaminationService
+        this.decontaminationService,
+        this.fishingGear
     ]
-
-    private testing = []
     constructor(
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
@@ -700,12 +732,6 @@ export class BotQuestHelper
 
     public getQuestFromInternalDatabase(botLevel: number, location: string): APBSIQuestBotGear
     {
-        
-        if (this.testing.length)
-        {
-            return this.testing[0];
-        }
-
         const questArray = this.getValidQuestArray(botLevel, location);
         if (questArray.length === 0) return undefined;
 

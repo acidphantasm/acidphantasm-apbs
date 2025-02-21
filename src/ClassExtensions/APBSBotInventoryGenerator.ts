@@ -150,6 +150,10 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             if (questRequirements != null)
             {
                 isQuesting = true;
+                if (questRequirements.questName == "Fishing Gear")
+                {
+                    chances.equipment.SecondPrimaryWeapon = 100;
+                }
                 questData = questRequirements;
                 this.apbsLogger.log(Logging.DEBUG, `[QUEST CONFIG] Level${botLevel} PMC was assigned the quest ${questRequirements.questName}`)
             }
@@ -467,6 +471,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         {
             hasBothPrimary = true;
         }
+
         for (const weaponSlot of weaponSlotsToFill) 
         {
             // Add weapon to bot if true and bot json has something to put into the slot
@@ -520,6 +525,8 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         );
 
         botInventory.items.push(...generatedWeapon.weapon);
+
+        if (questInformation.isQuesting && questInformation.questData.questName == "Fishing Gear" && weaponSlot.slot == "SecondPrimaryWeapon") return;
         
         this.apbsBotWeaponGenerator.apbsAddExtraMagazinesToInventory(
             generatedWeapon,

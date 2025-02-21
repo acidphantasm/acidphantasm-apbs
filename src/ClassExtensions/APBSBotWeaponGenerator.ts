@@ -38,6 +38,7 @@ import { APBSIChances } from "../Interface/APBSIChances";
 import { APBSIQuestBotGenerationDetails } from "../Interface/APBSIQuestBotGear";
 import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
 import { BossBots, FollowerBots, PMCBots, ScavBots, SpecialBots } from "../Enums/Bots";
+import { BaseClasses } from "@spt/models/enums/BaseClasses";
 
 /** Handle profile related client events */
 @injectable()
@@ -88,19 +89,19 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
 
     public apbsGenerateRandomWeapon(sessionId: string, equipmentSlot: string, botTemplateInventory: IInventory, weaponParentId: string, modChances: APBSIChances, botRole: string, isPmc: boolean, botLevel: number, tierNumber: number, hasBothPrimary: boolean, questInformation: APBSIQuestBotGenerationDetails): IGenerateWeaponResult 
     {
-        if (!questInformation.isQuesting || equipmentSlot == EquipmentSlots.HOLSTER || (questInformation.questData != undefined && questInformation.questData.PrimaryWeapon === undefined))
+        if (!questInformation.isQuesting || equipmentSlot == EquipmentSlots.HOLSTER || questInformation.questData.PrimaryWeapon.length === 0)
         {
             const weaponTpl = 
                 (hasBothPrimary && isPmc)
                     ? this.apbsPickWeightedWeaponTplFromPoolHasBothPrimary(equipmentSlot, botRole, tierNumber)
                     : this.apbsPickWeightedWeaponTplFromPool(equipmentSlot, botRole, tierNumber)
-            return this.apbsGenerateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierNumber)
+            return this.apbsGenerateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierNumber, questInformation)
         }
 
         const questWeaponTpl = hasBothPrimary 
-            ? this.apbsPickWeightedWeaponTplFromQuestPool(equipmentSlot, botRole, tierNumber, questInformation)
-            : this.apbsPickWeightedWeaponTplFromQuestPoolBothPrimary(equipmentSlot, botRole, tierNumber, questInformation)
-        return this.apbsGenerateWeaponByTpl(sessionId, questWeaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierNumber)
+            ? this.apbsPickWeightedWeaponTplFromQuestPoolBothPrimary(equipmentSlot, botRole, tierNumber, questInformation)
+            : this.apbsPickWeightedWeaponTplFromQuestPool(equipmentSlot, botRole, tierNumber, questInformation)
+        return this.apbsGenerateWeaponByTpl(sessionId, questWeaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierNumber, questInformation)
     }
 
     private apbsPickWeightedWeaponTplFromQuestPool(equipmentSlot: string, botRole: string, tierInfo: number, questInformation: APBSIQuestBotGenerationDetails): string
@@ -116,13 +117,36 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
 
     private apbsPickWeightedWeaponTplFromQuestPoolBothPrimary(equipmentSlot: string, botRole: string, tierInfo: number, questInformation: APBSIQuestBotGenerationDetails): string
     {
-        if (equipmentSlot == EquipmentSlots.SECOND_PRIMARY_WEAPON)
+        const newEquipmentPool = {};
+
+        // Specific to Fishing Gear - put the SV-98 in the second primary weapon slot
+        if (questInformation.questData.questName == "Fishing Gear")
         {
-            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot);
+            if (equipmentSlot == EquipmentSlots.SECOND_PRIMARY_WEAPON)
+            {
+                for (const item in questInformation.questData.PrimaryWeapon)
+                {
+                    const itemTPL = questInformation.questData.PrimaryWeapon[item];
+                    newEquipmentPool[itemTPL] = 1;
+                }
+                return this.weightedRandomHelper.getWeightedValue<string>(newEquipmentPool);
+            }
+
+            const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot, rangeType);
             return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
         }
 
-        const newEquipmentPool = {};
+        let range;
+        if (questInformation.questData.requiredEquipmentSlots.includes("ShortRange")) range = "ShortRange";
+        else range = "LongRange";
+        // All other quests, put the required weapon in the primary weapon slot
+        if (equipmentSlot == EquipmentSlots.SECOND_PRIMARY_WEAPON)
+        {
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot, range);
+            return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
+        }
+
         for (const item in questInformation.questData.PrimaryWeapon)
         {
             const itemTPL = questInformation.questData.PrimaryWeapon[item];
@@ -173,7 +197,8 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         botRole: string,
         isPmc: boolean,
         botLevel: number,
-        tierInfo: number
+        tierInfo: number,
+        questInformation: APBSIQuestBotGenerationDetails
     ): IGenerateWeaponResult
     {
         const modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
@@ -272,7 +297,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                 weaponEnhancementChance = ModConfig.config.specialBots.weaponDurability.enhancementChance;
             }
         }
-        
+
         // Chance to add randomised weapon enhancement
         if (this.randomUtil.getChance100(weaponEnhancementChance))
         {
@@ -306,7 +331,9 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             weaponWithModsArray = this.apbsBotEquipmentModGenerator.apbsGenerateModsForWeapon(
                 sessionId,
                 generateWeaponModsRequest,
-                isPmc
+                isPmc,
+                questInformation,
+                weaponItemTemplate._id
             );
         }
 

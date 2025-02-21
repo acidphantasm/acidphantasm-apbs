@@ -9,7 +9,7 @@ import { ProbabilityHelper } from "@spt/helpers/ProbabilityHelper";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { IItem } from "@spt/models/eft/common/tables/IItem";
-import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { ISlot, ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { ModSpawn } from "@spt/models/enums/ModSpawn";
 import { IFilterPlateModsForSlotByLevelResult, Result } from "@spt/models/spt/bots/IFilterPlateModsForSlotByLevelResult";
 import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
@@ -44,6 +44,7 @@ import { vanillaButtpads } from "../Globals/VanillaItemLists";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { RealismHelper } from "../Helpers/RealismHelper";
 import { APBSIGenerateEquipmentProperties } from "../Interface/APBSIGenerateEquipmentProperties";
+import { APBSIQuestBotGenerationDetails } from "../Interface/APBSIQuestBotGear";
 
 /** Handle profile related client events */
 @injectable()
@@ -525,7 +526,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         return chosenModResult;
     }
     
-    public apbsGenerateModsForWeapon(sessionId: string, request: IGenerateWeaponRequest, isPmc: boolean): IItem[] 
+    public apbsGenerateModsForWeapon(sessionId: string, request: IGenerateWeaponRequest, isPmc: boolean, questInformation: APBSIQuestBotGenerationDetails, weaponID: string): IItem[] 
     {
         const pmcProfile = this.profileHelper.getPmcProfile(sessionId);
 
@@ -582,12 +583,25 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             }
 
             // Check spawn chance of mod
-            const modSpawnResult = this.shouldModBeSpawned(
+            let modSpawnResult = this.shouldModBeSpawned(
                 modsParentSlot,
                 modSlot,
                 request.modSpawnChances,
                 botEquipConfig
             );
+
+            if (questInformation.isQuesting)
+            {
+                if (questInformation.questData.requiredWeaponModSlots.includes(modSlot))
+                {
+                    modSpawnResult = ModSpawn.SPAWN;
+                }
+                if (!questInformation.questData.requiredWeaponModSlots.includes(modSlot) && questInformation.questData.questName == "Fishing Gear" && questInformation.questData.PrimaryWeapon.includes(weaponID))
+                {
+                    modSpawnResult = ModSpawn.SKIP
+                }
+            }
+
             if (modSpawnResult === ModSpawn.SKIP) 
             {
                 continue;
@@ -609,7 +623,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 conflictingItemTpls: request.conflictingItemTpls,
                 botData: request.botData
             };
-            const modToAdd = this.chooseModToPutIntoSlot(modToSpawnRequest);
+            const modToAdd = this.apbsChooseModToPutIntoSlot(modToSpawnRequest, questInformation, weaponID);
 
             // Compatible mod not found
             if (!modToAdd || typeof modToAdd === "undefined") 
@@ -790,11 +804,378 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                         conflictingItemTpls: request.conflictingItemTpls
                     };
                     // Call self recursively to add mods to this mod
-                    this.apbsGenerateModsForWeapon(sessionId, recursiveRequestData, isPmc);
+                    this.apbsGenerateModsForWeapon(sessionId, recursiveRequestData, isPmc, questInformation, weaponID);
                 }
             }
         }
 
         return request.weapon;
+    }
+
+    private apbsChooseModToPutIntoSlot(request: IModToSpawnRequest, questInformation: APBSIQuestBotGenerationDetails, weaponID: string): [boolean, ITemplateItem] | undefined 
+    {
+        /** Slot mod will fill */
+        const parentSlot = request.parentTemplate._props.Slots?.find((i) => i._name === request.modSlot);
+        const weaponTemplate = this.itemHelper.getItem(request.weapon[0]._tpl)[1];
+
+        // It's ammo, use predefined ammo parameter
+        if (this.getAmmoContainers().includes(request.modSlot) && request.modSlot !== "mod_magazine") 
+        {
+            return this.itemHelper.getItem(request.ammoTpl);
+        }
+
+        // Ensure there's a pool of mods to pick from
+        let modPool = this.getModPoolForSlot(request, weaponTemplate);
+        if (!modPool && !parentSlot?._required) 
+        {
+            // Nothing in mod pool + item not required
+            this.logger.debug(
+                `Mod pool for optional slot: ${request.modSlot} on item: ${request.parentTemplate._name} was empty, skipping mod`
+            );
+            return undefined;
+        }
+        
+        // Filter out non-whitelisted scopes, use full modpool if filtered pool would have no elements
+        if (request.modSlot.includes("mod_scope") && request.botWeaponSightWhitelist) 
+        {
+            // scope pool has more than one scope
+            if (modPool.length > 1) 
+            {
+                modPool = this.filterSightsByWeaponType(request.weapon[0], modPool, request.botWeaponSightWhitelist);
+            }
+        }
+
+        if (request.modSlot === "mod_gas_block") 
+        {
+            if (request.weaponStats.hasOptic && modPool.length > 1) 
+            {
+                // Attempt to limit modpool to low profile gas blocks when weapon has an optic
+                const onlyLowProfileGasBlocks = modPool.filter((tpl) =>
+                    this.botConfig.lowProfileGasBlockTpls.includes(tpl)
+                );
+                if (onlyLowProfileGasBlocks.length > 0) 
+                {
+                    modPool = onlyLowProfileGasBlocks;
+                }
+            }
+            else if (request.weaponStats.hasRearIronSight && modPool.length > 1) 
+            {
+                // Attempt to limit modpool to high profile gas blocks when weapon has rear iron sight + no front iron sight
+                const onlyHighProfileGasBlocks = modPool.filter(
+                    (tpl) => !this.botConfig.lowProfileGasBlockTpls.includes(tpl)
+                );
+                if (onlyHighProfileGasBlocks.length > 0) 
+                {
+                    modPool = onlyHighProfileGasBlocks;
+                }
+            }
+        }
+        
+        // Quest specific handling, because it's stupid
+        if (questInformation.isQuesting)
+        {
+            if (questInformation.questData.questName != "Fishing Gear")
+            {
+                if (questInformation.questData.PrimaryWeapon.includes(weaponID) && questInformation.questData.requiredWeaponMods.length && (questInformation.questData.requiredWeaponModSlots.includes(request.modSlot) || request.modSlot.includes("mod_scope_")))
+                {
+                    //console.log(`Searching for specific mod for Item: ${request.parentTemplate._id} | Slot ${request.modSlot}`);
+                    const newModPool = this.apbsGetModPoolToForceSpecificMods(request.parentTemplate, questInformation, request.modSlot)
+                    if (newModPool != undefined) modPool = newModPool;
+                }
+    
+                if (!this.itemHelper.isOfBaseclasses(weaponID, [BaseClasses.PISTOL, BaseClasses.REVOLVER]) && questInformation.questData.requiredWeaponModBaseClasses.includes(BaseClasses.SILENCER))
+                {
+                    if (request.modSlot === "mod_barrel" && questInformation.questData.requiredWeaponModSlots.includes("mod_muzzle"))
+                    {
+                        const barrelModPool = this.apbsGetBarrelModsForSilencer(request.parentTemplate, questInformation);
+                        if (barrelModPool != undefined) modPool = barrelModPool;
+                    }
+                    // Quest requires a silencer, only allow silencers in the muzzle pool
+                    if (request.modSlot === "mod_muzzle" && questInformation.questData.requiredWeaponModSlots.includes("mod_muzzle"))
+                    {
+                        const muzzleModPool = this.apbsGetMuzzleModsForSilencer(request.parentTemplate, questInformation);
+                        if (muzzleModPool != undefined) modPool = muzzleModPool;
+                    }
+                }
+            }
+            else if (questInformation.questData.questName == "Fishing Gear" && questInformation.questData.PrimaryWeapon.includes(weaponID))
+            {
+                if (request.modSlot == "mod_stock") modPool = ["61faa91878830f069b6b7967"];
+                if (request.modSlot == "mod_bipod") modPool = ["56ea8222d2720b69698b4567"];
+                if (request.modSlot == "mod_muzzle") modPool = ["560e620e4bdc2d724b8b456b"];
+                if (request.modSlot == "mod_tactical") modPool = ["56083eab4bdc2d26448b456a"];
+                if (request.modSlot == "mod_sight_rear") modPool = ["56083e1b4bdc2dc8488b4572"];
+                if (request.modSlot == "mod_magazine") modPool = ["559ba5b34bdc2d1f1a8b4582"];
+            }
+        }
+
+        // Pick random mod that's compatible
+        const chosenModResult = this.getCompatibleWeaponModTplForSlotFromPool(
+            request,
+            modPool,
+            parentSlot,
+            request.modSpawnResult,
+            request.weapon,
+            request.modSlot
+        );
+        if (chosenModResult.slotBlocked && !parentSlot._required) 
+        {
+            // Don't bother trying to fit mod, slot is completely blocked
+            return undefined;
+        }
+
+        // Log if mod chosen was incompatible
+        if (chosenModResult.incompatible && parentSlot._required) 
+        {
+            this.logger.debug(chosenModResult.reason);
+        }
+
+        // Get random mod to attach from items db for required slots if none found above
+        if (!chosenModResult.found && parentSlot !== undefined && parentSlot._required) 
+        {
+            chosenModResult.chosenTpl = this.getRandomModTplFromItemDb("", parentSlot, request.modSlot, request.weapon);
+            chosenModResult.found = true;
+        }
+
+        // Compatible item not found + not required
+        if (!chosenModResult.found && parentSlot !== undefined && !parentSlot._required) 
+        {
+            return undefined;
+        }
+
+        if (!chosenModResult.found && parentSlot !== undefined) 
+        {
+            if (parentSlot._required) 
+            {
+                this.logger.warning(
+                    `Required slot unable to be filled, ${request.modSlot} on ${request.parentTemplate._name} ${request.parentTemplate._id} for weapon: ${request.weapon[0]._tpl}`
+                );
+            }
+
+            return undefined;
+        }
+
+        return this.itemHelper.getItem(chosenModResult.chosenTpl);
+    }
+
+    private apbsGetBarrelModsForSilencer(parentTemplate: ITemplateItem, questInformation: APBSIQuestBotGenerationDetails): string[]
+    {
+        const barrelModPool = [];
+        // Get barrel slot for parent
+        const modSlot = parentTemplate._props.Slots.find((slot) => slot._name === "mod_barrel");
+        if (modSlot)
+        {
+            // All possible mods that fit in slot
+            const modSlotPool = modSlot._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
+            if (modSlotPool)
+            {
+                // Has muzzle children
+                const onlyMuzzleDevicesForChildren = modSlotPool.filter((item) => this.itemHelper.getItem(item)[1]._props.Slots.find((slot) => slot._name === "mod_muzzle"));
+                if (onlyMuzzleDevicesForChildren.length)
+                {
+                    for (const item in onlyMuzzleDevicesForChildren)
+                    {
+                        barrelModPool.push(item);
+                    }
+                    return barrelModPool;
+                }
+            } 
+        }
+
+        //console.log(`barrels - NOTHING FOUND NOT COOL MAN. Parent ${parentTemplate._id}`)
+        return undefined;
+    }
+
+    private apbsGetMuzzleModsForSilencer(parentTemplate: ITemplateItem, questInformation: APBSIQuestBotGenerationDetails): string[]
+    {
+        const muzzleModPool = [];
+        const modSlot = parentTemplate._props.Slots.find((slot) => slot._name === "mod_muzzle");
+        if (modSlot)
+        {
+            // All possible mods that fit in slot - this quest doesn't require specific muzzle IDs
+            const modSlotPool = modSlot._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
+            if (modSlotPool.length)
+            {
+                // Silencers & Combo Devices
+                const allMuzzleInBaseModSlot = modSlotPool.filter((tpl) => this.itemHelper.isOfBaseclasses(tpl, [BaseClasses.MUZZLE]));
+                if (allMuzzleInBaseModSlot.length)
+                {
+                    for (const item of allMuzzleInBaseModSlot)
+                    {
+                        const itemData = this.itemHelper.getItem(item)[1];
+
+                        // Push silencers as they're already found
+                        if (this.itemHelper.isOfBaseclass(itemData._id, BaseClasses.SILENCER)) 
+                        {
+                            muzzleModPool.push(itemData._id);
+                        }
+
+                        const muzzleCanHoldChildren = itemData._props.Slots.find((slot) => slot._name === "mod_muzzle")
+                        if (muzzleCanHoldChildren)
+                        {
+                            const muzzlesThatCanHoldChildren = muzzleCanHoldChildren._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
+                            if (muzzlesThatCanHoldChildren.length)
+                            {
+                                const muzzleHasChildrenThatCanHoldSilencers = muzzlesThatCanHoldChildren.filter((tpl) => this.itemHelper.isOfBaseclasses(tpl, [BaseClasses.SILENCER, "550aa4dd4bdc2dc9348b4569"]));
+                                for (const itemChild of muzzleHasChildrenThatCanHoldSilencers)
+                                {                
+                                    // Push silencers as they're already found
+                                    if (this.itemHelper.isOfBaseclass(itemChild, BaseClasses.SILENCER)) 
+                                    {
+                                        if (!muzzleModPool.includes(itemData._id))
+                                        {
+                                            muzzleModPool.push(itemData._id)
+                                        }
+                                    }
+
+                                    const muzzleItem = this.itemHelper.getItem(itemChild)[1];                                        
+                                    const muzzleOfParentMuzzleCanHoldChildren = muzzleItem._props.Slots.find((slot) => slot._name === "mod_muzzle")
+                                    if (muzzleOfParentMuzzleCanHoldChildren)
+                                    {
+                                        const muzzlesOfParentThatCanHoldChildren = muzzleOfParentMuzzleCanHoldChildren._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
+                                        if (muzzlesOfParentThatCanHoldChildren.length)
+                                        {
+                                            const muzzleOfParentHasChildrenThatCanHoldSilencers = muzzlesOfParentThatCanHoldChildren.filter((tpl) => this.itemHelper.isOfBaseclasses(tpl, [BaseClasses.SILENCER, "550aa4dd4bdc2dc9348b4569"]));
+                                            for (const itemChildOfParent of muzzleOfParentHasChildrenThatCanHoldSilencers)
+                                            {                
+                                                // Push silencers as they're already found
+                                                if (this.itemHelper.isOfBaseclass(itemChildOfParent, BaseClasses.SILENCER)) 
+                                                {
+                                                    
+                                                    if (!muzzleModPool.includes(itemData._id))
+                                                    {
+                                                        muzzleModPool.push(itemData._id)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } 
+        }
+
+        if (muzzleModPool.length)
+        {
+            return muzzleModPool;
+        }
+
+        //console.log(`Muzzles - NOTHING FOUND NOT COOL MAN. Parent ${parentTemplate._id}`)
+        return undefined;
+    }
+
+    private apbsGetModPoolToForceSpecificMods(parentTemplate: ITemplateItem, questInformation: APBSIQuestBotGenerationDetails, modSlot: string): string[]
+    {
+        const bannedSlot = modSlot.includes("mod_scope") ? ["mod_mount", "mod_scope_001"] : [];
+        const modPoolToReturn = [];
+        const slotSearchStart = parentTemplate._props.Slots.find((slot) => slot._name === modSlot);
+        if (slotSearchStart)
+        {
+            const parentModSlotPool = slotSearchStart._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
+            if (parentModSlotPool.length)
+            {
+                for (const itemInSlot of parentModSlotPool)
+                {
+                    const itemInSlotData = this.itemHelper.getItem(itemInSlot)[1];
+                    const itemInSlotDataHasModMount = itemInSlotData._props.Slots.some(slot => bannedSlot.includes(slot._name));
+                    if (itemInSlotDataHasModMount ) continue;
+                    if (questInformation.questData.requiredWeaponMods.includes(itemInSlot))
+                    {
+                        modPoolToReturn.push(itemInSlot)
+                        continue;
+                    }
+                    if (itemInSlotData?._props?.Slots?.length)
+                    {
+                        const childSlots = itemInSlotData._props.Slots;
+                        for (const childSlot in childSlots)
+                        {
+                            const childSlotName = childSlots[childSlot]._name;
+                            const childModSlotPool = childSlots[childSlot]._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
+                            {
+                                if (childModSlotPool.length)
+                                {
+                                    for (const itemInItemChildSlot of childModSlotPool)
+                                    {
+                                        const itemInItemChildSlotData = this.itemHelper.getItem(itemInItemChildSlot)[1];
+                                        if (questInformation.questData.requiredWeaponMods.includes(itemInItemChildSlot))
+                                        {
+                                            if (!modPoolToReturn.includes(itemInSlot))
+                                            {
+                                                //console.log(`pushing ${itemInSlot} found in slot ${modSlot} | banned: ${bannedSlot} | ${itemInSlotDataHasModMount}`)
+                                                modPoolToReturn.push(itemInSlot)
+                                            } 
+                                            continue;
+                                        }
+                                        if (itemInItemChildSlotData?._props?.Slots?.length)
+                                        {
+                                            const childOfChildSlots = itemInItemChildSlotData._props.Slots;
+                                            for (const childOfChildSlot in childOfChildSlots)
+                                            {
+                                                const childOfChildSlotName = childOfChildSlots[childOfChildSlot]._name;
+                                                const childOfChildModSlotPool = childOfChildSlots[childOfChildSlot]._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
+                                                {
+                                                    if (childOfChildModSlotPool.length)
+                                                    {
+                                                        for (const itemInItemChildOfChildSlot of childOfChildModSlotPool)
+                                                        {
+                                                            const itemInItemChildOfChildSlotData = this.itemHelper.getItem(itemInItemChildOfChildSlot)[1];
+                                                            if (questInformation.questData.requiredWeaponMods.includes(itemInItemChildOfChildSlot))
+                                                            {
+                                                                if (!modPoolToReturn.includes(itemInSlot))
+                                                                {
+                                                                    //console.log(`pushing ${itemInSlot} found in slot ${modSlot} | banned: ${bannedSlot} | ${itemInSlotDataHasModMount}`)
+                                                                    modPoolToReturn.push(itemInSlot)
+                                                                } 
+                                                                continue;
+                                                            }
+                                                            if (itemInItemChildOfChildSlotData?._props?.Slots?.length)
+                                                            {
+                                                                const childOfChildOfChildSlots = itemInItemChildOfChildSlotData._props.Slots;
+                                                                for (const childOfChildOfChildSlot in childOfChildOfChildSlots)
+                                                                {
+                                                                    const childOfChildOfChildSlotName = childOfChildOfChildSlots[childOfChildOfChildSlot]._name;
+                                                                    const childOfChildOfChildModSlotPool = childOfChildOfChildSlots[childOfChildOfChildSlot]._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
+                                                                    {
+                                                                        if (childOfChildOfChildModSlotPool.length)
+                                                                        {
+                                                                            for (const itemInItemChildOfChildOfChildSlot of childOfChildOfChildModSlotPool)
+                                                                            {
+                                                                                const itemInItemChildOfChildOfChildSlotData = this.itemHelper.getItem(itemInItemChildOfChildOfChildSlot)[1];
+                                                                                if (questInformation.questData.requiredWeaponMods.includes(itemInItemChildOfChildOfChildSlot))
+                                                                                {
+                                                                                    if (!modPoolToReturn.includes(itemInSlot))
+                                                                                    {
+                                                                                        //console.log(`pushing ${itemInSlot} found in slot ${modSlot} | banned: ${bannedSlot} | ${itemInSlotDataHasModMount}`)
+                                                                                        modPoolToReturn.push(itemInSlot)
+                                                                                    } 
+                                                                                    continue;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (modPoolToReturn.length)
+        {
+            return modPoolToReturn;
+        }
+        //console.log(`Specific mods - NOTHING FOUND NOT COOL MAN. Parent ${parentTemplate._id}`)
+        return undefined;
     }
 }
