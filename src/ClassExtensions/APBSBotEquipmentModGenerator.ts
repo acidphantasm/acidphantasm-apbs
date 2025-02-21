@@ -590,11 +590,18 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 botEquipConfig
             );
 
-            if (questInformation.isQuesting)
+            if (questInformation.isQuesting && !this.itemHelper.isOfBaseclasses(weaponID, [BaseClasses.PISTOL, BaseClasses.REVOLVER]))
             {
                 if (questInformation.questData.requiredWeaponModSlots.includes(modSlot))
                 {
-                    modSpawnResult = ModSpawn.SPAWN;
+                    if (questInformation.questData.PrimaryWeapon.includes(weaponID))
+                    {
+                        modSpawnResult = ModSpawn.SPAWN;
+                    }
+                    if (questInformation.questData.PrimaryWeapon.length === 0)
+                    {
+                        modSpawnResult = ModSpawn.SPAWN;
+                    }
                 }
                 if (!questInformation.questData.requiredWeaponModSlots.includes(modSlot) && questInformation.questData.questName == "Fishing Gear" && questInformation.questData.PrimaryWeapon.includes(weaponID))
                 {
@@ -880,7 +887,11 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 {
                     //console.log(`Searching for specific mod for Item: ${request.parentTemplate._id} | Slot ${request.modSlot}`);
                     const newModPool = this.apbsGetModPoolToForceSpecificMods(request.parentTemplate, questInformation, request.modSlot)
-                    if (newModPool != undefined) modPool = newModPool;
+                    if (newModPool != undefined)
+                    {
+                        //console.log(`Mods found: ${newModPool}`)
+                        modPool = newModPool;
+                    }
                 }
     
                 if (!this.itemHelper.isOfBaseclasses(weaponID, [BaseClasses.PISTOL, BaseClasses.REVOLVER]) && questInformation.questData.requiredWeaponModBaseClasses.includes(BaseClasses.SILENCER))
@@ -1084,6 +1095,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                     if (itemInSlotDataHasModMount ) continue;
                     if (questInformation.questData.requiredWeaponMods.includes(itemInSlot))
                     {
+                        //console.log(`pushing ${itemInSlot} found in slot ${modSlot} | banned: ${bannedSlot} | ${itemInSlotDataHasModMount}`)
                         modPoolToReturn.push(itemInSlot)
                         continue;
                     }
