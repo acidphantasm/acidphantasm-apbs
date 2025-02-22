@@ -151,7 +151,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             {
                 isQuesting = true;
                 questData = questRequirements;
-                this.apbsLogger.log(Logging.DEBUG, `[QUEST CONFIG] Level${botLevel} PMC was assigned the quest ${questRequirements.questName}`)
+                this.apbsLogger.log(Logging.DEBUG, `[QUEST] Level${botLevel} PMC was assigned the quest ${questRequirements.questName}`)
             }
         }
 
@@ -162,7 +162,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                 const minTier = Math.max(1, tierNumber - 3);
                 const maxTier = Math.max(1, tierNumber - 1);
                 const newTierNumber = this.randomUtil.getInt(minTier, maxTier);
-                console.log(`Rolling poverty. Current Tier: ${tierNumber} | New Tier: ${newTierNumber}`);
+                this.apbsLogger.log(Logging.DEBUG, `[POVERTY] Level${botLevel} PMC was flagged to be 'poor' | Old Tier: ${tierNumber} | New Tier: ${newTierNumber}`);
                 tierNumber = newTierNumber;
             }
         }
