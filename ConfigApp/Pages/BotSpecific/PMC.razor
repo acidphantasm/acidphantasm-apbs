@@ -396,8 +396,15 @@
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                                <MudTooltip Text="PMCs have a chance to be poor compared to other PMCs at their level & tier, if they are not assigned a quest. Disabling this means they will always use gear that is available in their tier." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
-                                    <MudText>Poverty Check</MudText>
+                                <MudTooltip Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <ChildContent>
+                                        <MudText>Poverty Check</MudText>
+                                    </ChildContent>
+                                    <TooltipContent>
+                                        <MudText Typo="Typo.caption">PMCs have a chance to be poor compared to other PMCs at their level & tier, if they are not assigned a quest.</MudText><MudSpacer />
+                                        <MudSpacer />
+                                        <MudText Typo="Typo.caption">Disabling this means they will always use gear that is available in their tier.</MudText>
+                                    </TooltipContent>
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
