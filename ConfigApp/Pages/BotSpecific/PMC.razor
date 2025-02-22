@@ -396,6 +396,49 @@
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="PMCs have a chance to be poor compared to other PMCs at their level & tier, if they are not assigned a quest. Disabling this means they will always use gear that is available in their tier." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Poverty Check</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_pmcPovertyEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcPovertyEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_pmcPovertyEnabled") ||
+                           MainLayout.pendingChanges.Contains("_pmcPovertyChance")))
+                            {
+                                <MudButton @onclick="undoPMCPoverty" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _pmcPovertyEnabled != true) ||
+                            _pmcPovertyChance != 10)
+                            {
+                                <MudButton @onclick="defaultPMCPoverty" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Chance of PMC being `poor` for their level, this is not rolled if they are assigned a quest." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Poverty Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcPovertyEnabled">@_pmcPovertyChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="_pmcPovertyChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcPovertyEnabled" />
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                                 <MudTooltip Text="Allows PMCs to slide down to a lower ammo pool tier when they are generated." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudText>Ammo Tier Sliding</MudText>
                                 </MudTooltip>
@@ -1001,6 +1044,36 @@
     {
         _pmcQuestLoadoutEnabled = true;
         _pmcQuestLoadoutChance = 10;
+    }
+    #endregion
+    #region POVERTY
+    private bool _pmcPovertyEnabled
+    {
+        get => Data.pmcBots.povertyConfig.enable;
+        set
+        {
+            Data.pmcBots.povertyConfig.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.povertyConfig.enable);
+        }
+    }
+    private int _pmcPovertyChance
+    {
+        get => Data.pmcBots.povertyConfig.chance;
+        set
+        {
+            Data.pmcBots.povertyConfig.chance = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.povertyConfig.chance);
+        }
+    }
+    private void undoPMCPoverty()
+    {
+        _pmcPovertyEnabled = OriginalConfig.pmcBots.povertyConfig.enable;
+        _pmcPovertyChance = OriginalConfig.pmcBots.povertyConfig.chance;
+    }
+    private void defaultPMCPoverty()
+    {
+        _pmcPovertyEnabled = true;
+        _pmcPovertyChance = 10;
     }
     #endregion
     #region SEASONAL APPEARANCE
