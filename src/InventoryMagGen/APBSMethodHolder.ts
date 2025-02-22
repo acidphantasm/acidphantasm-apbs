@@ -81,7 +81,7 @@ export class APBSMethodHolder
                 
                 if (!compatibleCartridges)
                 {
-                    this.apbsLogger.log(Logging.WARN, `No compatible ammo found for ${weaponTemplate._id}, using weapons default ammo instead.`);
+                    this.apbsLogger.log(Logging.DEBUG, `No compatible ammo found for ${weaponTemplate._id}, using weapons default ammo instead.`);
                     return weaponTemplate._props.defAmmo
                 }
             }
@@ -96,7 +96,7 @@ export class APBSMethodHolder
 
             if (Object.keys(compatibleCartridges).length === 0) 
             {
-                this.apbsLogger.log(Logging.WARN, `No compatible ammo found for ${weaponTemplate._id} in last ditch effort, using weapons default ammo instead.`);
+                this.apbsLogger.log(Logging.DEBUG, `No compatible ammo found for ${weaponTemplate._id} in last ditch effort, using weapons default ammo instead.`);
                 return weaponTemplate._props.defAmmo
             }
         }
@@ -169,7 +169,7 @@ export class APBSMethodHolder
 
         if (desiredMagazineTpls.length === 0) 
         {
-            this.logger.warning(`[Large Capacity Magazine Config] Weapon: ${weaponTpl} does not have compatible small magazines available in tier ${tier}. Ignoring config for this weapon.`);
+            this.apbsLogger.log(Logging.WARN, `[Large Cap Mag] Weapon: ${weaponTpl} does not have compatible small magazines available in tier ${tier}. Ignoring filter...`);
         }
 
         return desiredMagazineTpls;
