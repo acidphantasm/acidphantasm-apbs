@@ -62,8 +62,7 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
             this.botWeaponGeneratorHelper.getRandomizedMagazineCount(inventoryMagGen.getMagCount())
         );
         
-        const tierInfo = this.apbsTierGetter.getTierByLevel(inventoryMagGen.getBotLevel());
-        const ammoTable = this.apbsEquipmentGetter.getAmmoByBotRole(inventoryMagGen.getBotRole(), tierInfo);
+        const ammoTable = this.apbsEquipmentGetter.getAmmoByBotRole(inventoryMagGen.getBotRole(), inventoryMagGen.getTierNumber());
 
         let hasSwitchedToSmallerMags = false;
         let isTryingSmallerMags = false;
@@ -77,7 +76,7 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
 
             if (ModConfig.config.generalConfig.enableLargeCapacityMagazineLimit && !hasSwitchedToSmallerMags && !this.apbsMethodHolder.weaponsWithNoSmallMagazines.includes(weapon._id))
             {
-                const apbsModPool = this.apbsEquipmentGetter.getModsByBotRole(inventoryMagGen.getBotRole(), tierInfo);
+                const apbsModPool = this.apbsEquipmentGetter.getModsByBotRole(inventoryMagGen.getBotRole(), inventoryMagGen.getTierNumber());
                 const apbsModsForWeapon = apbsModPool[weapon._id];
                 const apbsMagazineModPool = apbsModsForWeapon["mod_magazine"];
                 const currentMagazineCountSize = magTemplate?._props?.Cartridges[0]?._max_count;
@@ -86,7 +85,7 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
                     if (currentMagazineCountSize > 35 && i >= (ModConfig.config.generalConfig.largeCapacityMagazineCount - 1))
                     {
                         isTryingSmallerMags = true;
-                        const smallerMagazines = this.apbsMethodHolder.getFilteredMagazinePoolByCapacity(tierInfo, weapon._id, currentMagazineCountSize, apbsMagazineModPool);
+                        const smallerMagazines = this.apbsMethodHolder.getFilteredMagazinePoolByCapacity(inventoryMagGen.getTierNumber(), weapon._id, currentMagazineCountSize, apbsMagazineModPool);
                         if (smallerMagazines.length > 0)
                         {
                             magazineTpl = this.randomUtil.getStringArrayValue(smallerMagazines);

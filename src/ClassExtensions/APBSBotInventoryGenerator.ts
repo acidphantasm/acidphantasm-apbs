@@ -42,6 +42,7 @@ import { APBSBotEquipmentModGenerator } from "./APBSBotEquipmentModGenerator";
 import { APBSIGenerateEquipmentProperties } from "../Interface/APBSIGenerateEquipmentProperties";
 import { APBSIChances } from "../Interface/APBSIChances";
 import { APBSIQuestBotGear, APBSIQuestBotGenerationDetails } from "../Interface/APBSIQuestBotGear";
+import { APBSBotLootGenerator } from "./APBSBotLootGenerator";
 
 /** Handle profile related client events */
 @injectable()
@@ -70,6 +71,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
         @inject("APBSBotWeaponGenerator") protected apbsBotWeaponGenerator: APBSBotWeaponGenerator,
         @inject("APBSBotEquipmentModGenerator") protected apbsBotEquipmentModGenerator: APBSBotEquipmentModGenerator,
+        @inject("APBSBotLootGenerator") protected apbsBotLootGenerator: APBSBotLootGenerator,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("BotQuestHelper") protected botQuestHelper: BotQuestHelper
@@ -136,9 +138,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         }
 
         // APBS generation instead
-        const tierNumber = this.apbsTierGetter.getTierByLevel(botLevel);
-        const chances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierNumber);
-        const generation = chances.generation;
+        let tierNumber = this.apbsTierGetter.getTierByLevel(botLevel);
 
         // Check if this bot shouuld get quests, and assign one if so
         const shouldCheckForQuests = this.botQuestHelper.shouldBotHaveQuest(isPmc);
@@ -150,19 +150,36 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             if (questRequirements != null)
             {
                 isQuesting = true;
-                if (questRequirements.questName == "Fishing Gear")
-                {
-                    chances.equipment.SecondPrimaryWeapon = 100;
-                }
                 questData = questRequirements;
                 this.apbsLogger.log(Logging.DEBUG, `[QUEST CONFIG] Level${botLevel} PMC was assigned the quest ${questRequirements.questName}`)
             }
         }
 
+        if (isPmc && !isQuesting && ModConfig.config.pmcBots.povertyConfig.enable && tierNumber > 1)
+        {
+            if (this.randomUtil.getChance100(ModConfig.config.pmcBots.povertyConfig.chance))
+            {
+                const minTier = Math.max(1, tierNumber - 3);
+                const maxTier = Math.max(1, tierNumber - 1);
+                const newTierNumber = this.randomUtil.getInt(minTier, maxTier);
+                console.log(`Rolling poverty. Current Tier: ${tierNumber} | New Tier: ${newTierNumber}`);
+                tierNumber = newTierNumber;
+            }
+        }
+
+        const chances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierNumber);
+        const generation = chances.generation;
+
+        
+        if (isQuesting && questData.questName == "Fishing Gear")
+        {
+            chances.equipment.SecondPrimaryWeapon = 100;
+        }
+
         this.apbsGenerateAndAddEquipmentToBot(sessionId, chances, botRole, botInventory, botLevel, chosenGameVersion, raidConfig, tierNumber, {isQuesting, questData});
         
         this.apbsGenerateAndAddWeaponsToBot(templateInventory, chances, sessionId, botInventory, botRole, isPmc, generation, botLevel, tierNumber, {isQuesting, questData});
-        this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
+        this.apbsBotLootGenerator.apbsGenerateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel, tierNumber);
 
         return botInventory;
         
@@ -533,7 +550,8 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             itemGenerationWeights.items.magazines,
             botInventory,
             botRole,
-            botLevel
+            botLevel,
+            tierNumber
         );
     }
 }

@@ -419,7 +419,8 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         magWeights: IGenerationData,
         inventory: PmcInventory,
         botRole: string,
-        botLevel: number
+        botLevel: number,
+        tier: number,
     ): void 
     {
         const weaponAndMods = generatedWeaponResult.weapon;
@@ -457,7 +458,8 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             ammoTemplate,
             inventory,
             botRole,
-            botLevel
+            botLevel,
+            tier
         );
         this.apbsInventoryMagGenComponents
             .find((v) => v.canHandleInventoryMagGen(apbsInventoryMagGenModel))

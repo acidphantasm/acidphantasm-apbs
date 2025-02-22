@@ -34,7 +34,6 @@ import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerat
 import { IChooseRandomCompatibleModResult } from "@spt/models/spt/bots/IChooseRandomCompatibleModResult";
 import { MinMax } from "@spt/models/common/MinMax";
 
-import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ModConfig } from "../Globals/ModConfig";
 import { RaidInformation } from "../Globals/RaidInformation";
@@ -71,7 +70,6 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         @inject("BotEquipmentModPoolService") protected botEquipmentModPoolService: BotEquipmentModPoolService,
         @inject("ConfigServer") protected configServer: ConfigServer,
         @inject("PrimaryCloner") protected cloner: ICloner,
-        @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
         @inject("ModInformation") protected modInformation: ModInformation,
