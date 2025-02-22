@@ -81,7 +81,8 @@ export interface Config
         resourceRandomization: ResourceRandomizationConfig,
         weaponDurability: WeaponDurabilityConfig,
         lootConfig: LootConfig,
-        questConfig: QuestConfig,
+        questConfig: EnableChance,
+        povertyConfig: EnableChance,
         additionalOptions: PMCSpecificConfig,
         secrets: PMCSecrets,
     }
@@ -127,7 +128,7 @@ export interface PMCSpecificConfig
     ammoTierSliding: AmmoTierSlideConfig,
     gameVersionWeighting: GameVersionWeightConfig, 
 }
-export interface QuestConfig
+export interface EnableChance
 {
     enable: boolean,
     chance: number,

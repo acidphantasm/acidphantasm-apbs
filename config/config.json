@@ -177,6 +177,10 @@
                         "enable": true,
                         "chance": 10
                 },
+                "povertyConfig": {
+                        "enable": true,
+                        "chance": 10
+                },
                 "additionalOptions": {
                         "seasonalPmcAppearance": true,
                         "ammoTierSliding": {
