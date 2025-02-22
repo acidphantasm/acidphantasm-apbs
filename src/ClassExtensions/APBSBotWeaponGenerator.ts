@@ -560,7 +560,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                 
                 if (!compatibleCartridges)
                 {
-                    this.apbsLogger.log(Logging.WARN, `No compatible ammo found for ${weaponTemplate._id}, using weapons default ammo instead.`);
+                    this.apbsLogger.log(Logging.DEBUG, `No compatible ammo found for ${weaponTemplate._id}, using weapons default ammo instead.`);
                     return weaponTemplate._props.defAmmo
                 }
             }
@@ -575,7 +575,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
 
             if (Object.keys(compatibleCartridges).length === 0) 
             {
-                this.apbsLogger.log(Logging.WARN, `No compatible ammo found for ${weaponTemplate._id} in last ditch effort, using weapons default ammo instead.`);
+                this.apbsLogger.log(Logging.DEBUG, `No compatible ammo found for ${weaponTemplate._id} in last ditch effort, using weapons default ammo instead.`);
                 return weaponTemplate._props.defAmmo
             }
         }

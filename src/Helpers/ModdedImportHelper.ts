@@ -231,7 +231,7 @@ export class ModdedImportHelper
             this.buildModAttachments();
             if (this.invalidModAttachments.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModAttachments.length} Invalid Attachment ItemIDs found in mods: ${JSON.stringify(this.invalidModAttachments)}`)
             if (this.invalidModEquipment.length > 0 ) this.apbsLogger.log(Logging.DEBUG, `${this.invalidModEquipment.length} Invalid Weapon/Equipment ItemIDs found in mods: ${JSON.stringify(this.invalidModEquipment)}`)
-            if (this.allImportedAttachments.length > 0) this.apbsLogger.log(Logging.WARN, `     Imported ${this.allImportedAttachments.length} Modded Attachments to ${this.numberOfAttachments} mount points on vanilla weapons...`)
+            if (this.allImportedAttachments.length > 0) this.apbsLogger.log(Logging.WARN, `     Importing ${this.allImportedAttachments.length} Modded Attachments to ${this.numberOfAttachments} mount points on vanilla weapons...`)
         }
     }
 
@@ -309,7 +309,7 @@ export class ModdedImportHelper
         // Push clothing to APBS database
         if (clothingToBeImported.length > 0)
         {
-            this.apbsLogger.log(Logging.WARN, `     Imported ${clothingToBeImported.length} Modded ${className}...`)
+            this.apbsLogger.log(Logging.WARN, `     Importing ${clothingToBeImported.length} Modded ${className}...`)
             this.pushClothing(clothingToBeImported);
         }
     }
@@ -360,7 +360,7 @@ export class ModdedImportHelper
         // Push items to APBS database depending on if they are weapons or equipment
         if (itemsToBeImported.length > 0)
         {
-            this.apbsLogger.log(Logging.WARN, `     Imported ${itemsToBeImported.length} Modded ${className}...`)
+            this.apbsLogger.log(Logging.WARN, `     Importing ${itemsToBeImported.length} Modded ${className}...`)
             if (baseClass == BaseClasses.WEAPON) this.getSetModdedWeaponDetails(itemsToBeImported);
             if (baseClass != BaseClasses.WEAPON) this.getSetModdedEquipmentDetails(itemsToBeImported);
         }
@@ -1005,7 +1005,7 @@ export class ModdedImportHelper
         if (slotName.includes("mod_stock") || slotName.includes("mod_handguard") || slotName.includes("mod_reciever"))
         {
             if (!this.hasLowerAndUpperOptionsAvailable(parentID, slotName, 9)) return false;
-            if (itemData?._props?.Ergonomics < 9) return true;
+            if (itemData?._props?.Ergonomics <= 9) return true;
         }
 
         if (slotName.includes("mod_scope") && !this.tier4Optics.includes(itemID)) return true;
@@ -1146,7 +1146,7 @@ export class ModdedImportHelper
                     hasHighRequirements = true;
                     continue;
                 }
-                if (checkedValue < threshholdValue && !this.attachmentBlacklist.includes(itemFilters[item]))
+                if (checkedValue <= threshholdValue && !this.attachmentBlacklist.includes(itemFilters[item]))
                 {
                     hasLowRequirements = true;
                     continue;
