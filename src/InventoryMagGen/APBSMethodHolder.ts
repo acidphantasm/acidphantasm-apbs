@@ -169,7 +169,7 @@ export class APBSMethodHolder
 
         if (desiredMagazineTpls.length === 0) 
         {
-            this.apbsLogger.log(Logging.WARN, `[Large Cap Mag] Weapon: ${weaponTpl} does not have compatible small magazines available in tier ${tier}. Ignoring filter...`);
+            this.apbsLogger.log(Logging.DEBUG, `[Large Cap Mag] Weapon: ${weaponTpl} does not have compatible small magazines available in tier ${tier}. Ignoring filter...`);
         }
 
         return desiredMagazineTpls;
