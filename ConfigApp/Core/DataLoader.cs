@@ -26,6 +26,8 @@ namespace APBSConfig.Core
         public required ResourceRandomizationConfig resourceRandomization { get; set; }
         public required WeaponDurabilityConfig weaponDurability { get; set; }
         public required LootConfig lootConfig { get; set; }
+        public required EnableChance questConfig { get; set; }
+        public required EnableChance povertyConfig { get; set; }
         public required PMCSpecificConfig additionalOptions { get; set; }
         public required PMCSecrets secrets { get; set; }
     }
@@ -84,6 +86,7 @@ namespace APBSConfig.Core
         public required TierBlacklistConfig equipmentBlacklist { get; set; }
         public required TierBlacklistConfig ammoBlacklist { get; set; }
         public required TierBlacklistConfig attachmentBlacklist { get; set; }
+        public required TierBlacklistConfig clothingBlacklist { get; set; }
         #endregion
 
         #region LEVEL DELTAS
@@ -102,6 +105,11 @@ namespace APBSConfig.Core
         public required AmmoTierSlideConfig ammoTierSliding { get; set; }
         public required GameVersionWeightConfig gameVersionWeighting { get; set; }
 
+    }
+    public class EnableChance
+    {
+        public bool enable { get; set; }
+        public int chance { get; set; }
     }
     public class ScavSpecificConfig
     {
@@ -124,6 +132,7 @@ namespace APBSConfig.Core
         public int minDelta { get; set; }
         public int maxDelta { get; set; }
         public int minLimitPercent { get; set; }
+        public int enhancementChance { get; set; }
     }
     public class LootConfig
     {
@@ -141,6 +150,8 @@ namespace APBSConfig.Core
         public bool enableBotsToRollAmmoAgain { get; set; }
         public int chanceToRollAmmoAgain { get; set; }
         public bool enablePerWeaponTypeAttachmentChances { get; set; }
+        public bool enableLargeCapacityMagazineLimit { get; set; }
+        public int largeCapacityMagazineCount { get; set; }
         public bool forceStock { get; set; }
         public int stockButtpadChance { get; set; }
         public bool forceDustCover { get; set; }

@@ -34,6 +34,15 @@ import { IGetRaidConfigurationRequestData } from "@spt/models/eft/match/IGetRaid
 import { RaidInformation } from "../Globals/RaidInformation";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
+import { PMCBots } from "../Enums/Bots";
+import { BotQuestHelper } from "../Helpers/BotQuestHelper";
+import { GameEditions } from "@spt/models/enums/GameEditions";
+import { ItemTpl } from "@spt/models/enums/ItemTpl";
+import { APBSBotEquipmentModGenerator } from "./APBSBotEquipmentModGenerator";
+import { APBSIGenerateEquipmentProperties } from "../Interface/APBSIGenerateEquipmentProperties";
+import { APBSIChances } from "../Interface/APBSIChances";
+import { APBSIQuestBotGear, APBSIQuestBotGenerationDetails } from "../Interface/APBSIQuestBotGear";
+import { APBSBotLootGenerator } from "./APBSBotLootGenerator";
 
 /** Handle profile related client events */
 @injectable()
@@ -61,8 +70,11 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         @inject("APBSEquipmentGetter") protected apbsEquipmentGetter: APBSEquipmentGetter,
         @inject("APBSTierGetter") protected apbsTierGetter: APBSTierGetter,
         @inject("APBSBotWeaponGenerator") protected apbsBotWeaponGenerator: APBSBotWeaponGenerator,
+        @inject("APBSBotEquipmentModGenerator") protected apbsBotEquipmentModGenerator: APBSBotEquipmentModGenerator,
+        @inject("APBSBotLootGenerator") protected apbsBotLootGenerator: APBSBotLootGenerator,
         @inject("RaidInformation") protected raidInformation: RaidInformation,
-        @inject("APBSLogger") protected apbsLogger: APBSLogger
+        @inject("APBSLogger") protected apbsLogger: APBSLogger,
+        @inject("BotQuestHelper") protected botQuestHelper: BotQuestHelper
     )
     {
         super(logger, 
@@ -105,74 +117,261 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             .getLatestValue(ContextVariableType.RAID_CONFIGURATION)
             ?.getValue<IGetRaidConfigurationRequestData>();
 
-        this.generateAndAddEquipmentToBot(
-            sessionId,
-            templateInventory,
-            wornItemChances,
-            botRole,
-            botInventory,
-            botLevel,
-            chosenGameVersion,
-            raidConfig
-        );
-        
-        if (!this.raidInformation.isBotEnabled(botRole))
+        // Vanilla generation
+        if (!this.raidInformation.isBotEnabled(botRole) || this.raidInformation.freshProfile)
         {
+            this.generateAndAddEquipmentToBot(
+                sessionId,
+                templateInventory,
+                wornItemChances,
+                botRole,
+                botInventory,
+                botLevel,
+                chosenGameVersion,
+                raidConfig
+            );
+        
             this.generateAndAddWeaponsToBot(templateInventory, wornItemChances, sessionId, botInventory, botRole, isPmc, itemGenerationLimitsMinMax, botLevel);
             this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
 
             return botInventory;
         }
 
-        // APBS generation chances instead
-        const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-        const chances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
+        // APBS generation instead
+        let tierNumber = this.apbsTierGetter.getTierByLevel(botLevel);
+
+        // Check if this bot shouuld get quests, and assign one if so
+        const shouldCheckForQuests = this.botQuestHelper.shouldBotHaveQuest(isPmc);
+        let isQuesting = false;
+        let questData;
+        if (shouldCheckForQuests)
+        {
+            const questRequirements = this.botQuestHelper.getQuestFromInternalDatabase(botLevel, this.raidInformation.location);
+            if (questRequirements != null)
+            {
+                isQuesting = true;
+                questData = questRequirements;
+                this.apbsLogger.log(Logging.DEBUG, `[QUEST] Level${botLevel} PMC was assigned the quest ${questRequirements.questName}`)
+            }
+        }
+
+        if (isPmc && !isQuesting && ModConfig.config.pmcBots.povertyConfig.enable && tierNumber > 1)
+        {
+            if (this.randomUtil.getChance100(ModConfig.config.pmcBots.povertyConfig.chance))
+            {
+                const minTier = Math.max(1, tierNumber - 3);
+                const maxTier = Math.max(1, tierNumber - 1);
+                const newTierNumber = this.randomUtil.getInt(minTier, maxTier);
+                this.apbsLogger.log(Logging.DEBUG, `[POVERTY] Level${botLevel} PMC was flagged to be 'poor' | Old Tier: ${tierNumber} | New Tier: ${newTierNumber}`);
+                tierNumber = newTierNumber;
+            }
+        }
+
+        const chances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierNumber);
         const generation = chances.generation;
+
         
-        this.generateAndAddWeaponsToBot(templateInventory, chances, sessionId, botInventory, botRole, isPmc, generation, botLevel);
-        this.botLootGenerator.generateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel);
+        if (isQuesting && questData.questName == "Fishing Gear")
+        {
+            chances.equipment.SecondPrimaryWeapon = 100;
+        }
+
+        this.apbsGenerateAndAddEquipmentToBot(sessionId, chances, botRole, botInventory, botLevel, chosenGameVersion, raidConfig, tierNumber, {isQuesting, questData});
+        
+        this.apbsGenerateAndAddWeaponsToBot(templateInventory, chances, sessionId, botInventory, botRole, isPmc, generation, botLevel, tierNumber, {isQuesting, questData});
+        this.apbsBotLootGenerator.apbsGenerateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel, tierNumber);
 
         return botInventory;
         
     }
 
-    protected override generateEquipment = (settings: IGenerateEquipmentProperties): boolean => 
+    private apbsGenerateAndAddEquipmentToBot(
+        sessionId: string,
+        wornItemChances: IChances,
+        botRole: string,
+        botInventory: PmcInventory,
+        botLevel: number,
+        chosenGameVersion: string,
+        raidConfig: IGetRaidConfigurationRequestData,
+        tierInfo: number,
+        questInformation: APBSIQuestBotGenerationDetails
+    ): void 
     {
-        const equipmentSlot = settings.rootEquipmentSlot as string;
-        const botRole = settings.botData.role;
-        const botLevel = settings.botData.level;
-        const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-        
-        let equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
-        let randomisationDetails = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-        let wornItemChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-        let modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
-        let apbsBot = true;
+        // These will be handled later
+        const excludedSlots: string[] = [
+            EquipmentSlots.POCKETS,
+            EquipmentSlots.FIRST_PRIMARY_WEAPON,
+            EquipmentSlots.SECOND_PRIMARY_WEAPON,
+            EquipmentSlots.HOLSTER,
+            EquipmentSlots.ARMOR_VEST,
+            EquipmentSlots.TACTICAL_VEST,
+            EquipmentSlots.FACE_COVER,
+            EquipmentSlots.HEADWEAR,
+            EquipmentSlots.EARPIECE,
+            "ArmouredRig"
+        ];
 
-        if (!this.raidInformation.isBotEnabled(botRole))
+        const botEquipConfig = this.botConfig.equipment[this.botGeneratorHelper.getBotEquipmentRole(botRole)];
+        const randomistionDetails = this.botHelper.getBotRandomizationDetails(botLevel, botEquipConfig);
+
+        // Get profile of player generating bots, we use their level later on
+        const pmcProfile = this.profileHelper.getPmcProfile(sessionId);
+        const botEquipmentRole = this.botGeneratorHelper.getBotEquipmentRole(botRole);
+
+        const equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo);
+        const modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
+        // Iterate over all equipment slots of bot, do it in specifc order to reduce conflicts
+        // e.g. ArmorVest should be generated after TactivalVest
+        // or FACE_COVER before HEADWEAR
+        for (const equipmentSlot in equipmentPool) 
         {
-            equipmentPool = settings.rootEquipmentPool;
-            randomisationDetails = settings.randomisationDetails;
-            wornItemChances = settings.spawnChances;
-            modPool = settings.modPool;
-            apbsBot = false;
+            // Skip some slots as they need to be done in a specific order + with specific parameter values
+            // e.g. Weapons
+            if (excludedSlots.includes(equipmentSlot)) 
+            {
+                continue;
+            }
+
+            this.apbsGenerateEquipment({
+                rootEquipmentSlot: equipmentSlot,
+                rootEquipmentPool: equipmentPool[equipmentSlot],
+                modPool: modPool,
+                spawnChances: wornItemChances,
+                botData: { role: botRole, level: botLevel, equipmentRole: botEquipmentRole, tier: tierInfo },
+                inventory: botInventory,
+                botEquipmentConfig: botEquipConfig,
+                randomisationDetails: randomistionDetails,
+                generatingPlayerLevel: pmcProfile.Info.Level,
+            },
+            questInformation);
         }
-        
-        if (apbsBot && equipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
+
+        // Generate below in specific order
+        this.apbsGenerateEquipment({
+            rootEquipmentSlot: EquipmentSlots.POCKETS,
+            // Unheard profiles have unique sized pockets, TODO - handle this somewhere else in a better way
+            rootEquipmentPool:
+                chosenGameVersion === GameEditions.UNHEARD
+                    ? { [ItemTpl.POCKETS_1X4_TUE]: 1 }
+                    : equipmentPool.Pockets,
+            modPool: modPool,
+            spawnChances: wornItemChances,
+            botData: { role: botRole, level: botLevel, equipmentRole: botEquipmentRole, tier: tierInfo },
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails,
+            generateModsBlacklist: [ItemTpl.POCKETS_1X4_TUE],
+            generatingPlayerLevel: pmcProfile.Info.Level
+        },
+        questInformation);
+        this.apbsGenerateEquipment({
+            rootEquipmentSlot: EquipmentSlots.FACE_COVER,
+            rootEquipmentPool: equipmentPool.FaceCover,
+            modPool: modPool,
+            spawnChances: wornItemChances,
+            botData: { role: botRole, level: botLevel, equipmentRole: botEquipmentRole, tier: tierInfo },
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails,
+            generatingPlayerLevel: pmcProfile.Info.Level
+        },
+        questInformation);
+        this.apbsGenerateEquipment({
+            rootEquipmentSlot: EquipmentSlots.HEADWEAR,
+            rootEquipmentPool: equipmentPool.Headwear,
+            modPool: modPool,
+            spawnChances: wornItemChances,
+            botData: { role: botRole, level: botLevel, equipmentRole: botEquipmentRole, tier: tierInfo },
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails,
+            generatingPlayerLevel: pmcProfile.Info.Level
+        },
+        questInformation);
+        this.apbsGenerateEquipment({
+            rootEquipmentSlot: EquipmentSlots.EARPIECE,
+            rootEquipmentPool: equipmentPool.Earpiece,
+            modPool: modPool,
+            spawnChances: wornItemChances,
+            botData: { role: botRole, level: botLevel, equipmentRole: botEquipmentRole, tier: tierInfo },
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails,
+            generatingPlayerLevel: pmcProfile.Info.Level
+        },
+        questInformation);
+
+        // If bot is questing & requires a Tactical Vest, ensure the armour spawns.
+        if (questInformation.isQuesting)
         {
-            equipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, "ArmouredRig");
+            if (questInformation.questData.requiredEquipmentSlots.includes(EquipmentSlots.TACTICAL_VEST))
+            {
+                wornItemChances.equipment.ArmorVest = 100;
+            }
         }
-        
-        if (equipmentSlot == EquipmentSlots.POCKETS && Object.keys(settings.rootEquipmentPool).includes("65e080be269cbd5c5005e529"))
+
+        const hasArmorVest = this.apbsGenerateEquipment({
+            rootEquipmentSlot: EquipmentSlots.ARMOR_VEST,
+            rootEquipmentPool: equipmentPool.ArmorVest,
+            modPool: modPool,
+            spawnChances: wornItemChances,
+            botData: { role: botRole, level: botLevel, equipmentRole: botEquipmentRole, tier: tierInfo },
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails,
+            generatingPlayerLevel: pmcProfile.Info.Level
+        },
+        questInformation);
+
+        // Bot is flagged as always needing a vest
+        if (!hasArmorVest) 
         {
-            equipmentPool = settings.rootEquipmentPool;
+            wornItemChances.equipment.TacticalVest = 100;
+        }
+
+        this.apbsGenerateEquipment({
+            rootEquipmentSlot: EquipmentSlots.TACTICAL_VEST,
+            rootEquipmentPool: equipmentPool.TacticalVest,
+            modPool: modPool,
+            spawnChances: wornItemChances,
+            botData: { role: botRole, level: botLevel, equipmentRole: botEquipmentRole, tier: tierInfo},
+            inventory: botInventory,
+            botEquipmentConfig: botEquipConfig,
+            randomisationDetails: randomistionDetails,
+            generatingPlayerLevel: pmcProfile.Info.Level
+        },
+        questInformation);
+    }
+
+    private apbsGenerateEquipment = (settings: APBSIGenerateEquipmentProperties, questInformation: APBSIQuestBotGenerationDetails): boolean => 
+    {
+        if (questInformation.isQuesting)
+        {
+            if (questInformation.questData.requiredEquipmentSlots.includes(settings.rootEquipmentSlot))
+            {
+                const newEquipmentPool = {};
+                for (const item in questInformation.questData[settings.rootEquipmentSlot])
+                {
+                    const itemTPL = questInformation.questData[settings.rootEquipmentSlot][item];
+
+                    settings.spawnChances.equipment[settings.rootEquipmentSlot] = 100;
+                    newEquipmentPool[itemTPL] = 1;
+                }
+                settings.rootEquipmentPool = newEquipmentPool;
+            }
+        }
+
+        // Get Armoured Rig if they didn't get an ArmorVest
+        if (settings.rootEquipmentSlot == EquipmentSlots.TACTICAL_VEST && !settings.inventory.items.find(e => e.slotId === "ArmorVest"))
+        {
+            settings.rootEquipmentPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(settings.botData.role, settings.botData.tier, "ArmouredRig");
         }
 
         const spawnChance = ([EquipmentSlots.POCKETS, EquipmentSlots.SECURED_CONTAINER] as string[]).includes(
             settings.rootEquipmentSlot
         )
             ? 100
-            : wornItemChances.equipment[settings.rootEquipmentSlot];
+            : settings.spawnChances.equipment[settings.rootEquipmentSlot];
 
         if (typeof spawnChance === "undefined") 
         {
@@ -187,21 +386,21 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         }
 
         const shouldSpawn = this.randomUtil.getChance100(spawnChance);
-        if (shouldSpawn && Object.keys(equipmentPool).length) 
+        if (shouldSpawn && Object.keys(settings.rootEquipmentPool).length) 
         {
             let pickedItemDb: ITemplateItem;
             let found = false;
 
-            const maxAttempts = Math.round(Object.keys(equipmentPool).length * 0.75); // Roughly 75% of pool size
+            const maxAttempts = Math.round(Object.keys(settings.rootEquipmentPool).length * 0.75); // Roughly 75% of pool size
             let attempts = 0;
             while (!found) 
             {
-                if (Object.values(equipmentPool).length === 0) 
+                if (Object.values(settings.rootEquipmentPool).length === 0) 
                 {
                     return false;
                 }
 
-                const chosenItemTpl = this.weightedRandomHelper.getWeightedValue<string>(equipmentPool);
+                const chosenItemTpl = this.weightedRandomHelper.getWeightedValue<string>(settings.rootEquipmentPool);
                 const dbResult = this.itemHelper.getItem(chosenItemTpl);
 
                 if (!dbResult[0]) 
@@ -247,33 +446,14 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                 ...this.botGeneratorHelper.generateExtraPropertiesForItem(pickedItemDb, settings.botData.role)
             };
 
-            const botEquipBlacklist = this.botEquipmentFilterService.getBotEquipmentBlacklist(
-                settings.botData.equipmentRole,
-                settings.generatingPlayerLevel
-            );
-
-            // Edge case: Filter the armor items mod pool if bot exists in config dict + config has armor slot
-            if (
-                this.botConfig.equipment[settings.botData.equipmentRole] &&
-                randomisationDetails?.randomisedArmorSlots?.includes(settings.rootEquipmentSlot)
-            ) 
-            {
-                // Filter out mods from relevant blacklist
-                modPool[pickedItemDb._id] = this.getFilteredDynamicModsForItem(
-                    pickedItemDb._id,
-                    botEquipBlacklist.equipment
-                );
-            }
-
             // Does item have slots for sub-mods to be inserted into
             if (pickedItemDb._props.Slots?.length > 0 && !settings.generateModsBlacklist?.includes(pickedItemDb._id)) 
             {
-                const childItemsToAdd = this.botEquipmentModGenerator.generateModsForEquipment(
+                const childItemsToAdd = this.apbsBotEquipmentModGenerator.apbsGenerateModsForEquipment(
                     [item],
                     id,
                     pickedItemDb,
-                    settings,
-                    botEquipBlacklist
+                    settings
                 );
                 settings.inventory.items.push(...childItemsToAdd);
             } 
@@ -289,15 +469,17 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         return false;
     }
 
-    protected override generateAndAddWeaponsToBot(
+    public apbsGenerateAndAddWeaponsToBot(
         templateInventory: IInventory, 
-        equipmentChances: IChances, 
+        equipmentChances: APBSIChances, 
         sessionId: string, 
         botInventory: PmcInventory, 
         botRole: string, 
         isPmc: boolean, 
         itemGenerationLimitsMinMax: IGeneration, 
-        botLevel: number
+        botLevel: number,
+        tierNumber: number,
+        questInformation: APBSIQuestBotGenerationDetails
     ): void 
     {
         const weaponSlotsToFill = this.getDesiredWeaponsForBot(equipmentChances);
@@ -306,6 +488,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         {
             hasBothPrimary = true;
         }
+
         for (const weaponSlot of weaponSlotsToFill) 
         {
             // Add weapon to bot if true and bot json has something to put into the slot
@@ -321,7 +504,9 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                     isPmc,
                     itemGenerationLimitsMinMax,
                     botLevel,
-                    hasBothPrimary
+                    tierNumber,
+                    hasBothPrimary,
+                    questInformation
                 );
             }
         }
@@ -332,12 +517,14 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         weaponSlot: { slot: EquipmentSlots; shouldSpawn: boolean },
         templateInventory: IInventory,
         botInventory: PmcInventory,
-        equipmentChances: IChances,
+        equipmentChances: APBSIChances,
         botRole: string,
         isPmc: boolean,
         itemGenerationWeights: IGeneration,
         botLevel: number,
-        hasBothPrimary: boolean
+        tierNumber: number,
+        hasBothPrimary: boolean,
+        questInformation: APBSIQuestBotGenerationDetails
     ): void 
     {
         const generatedWeapon = this.apbsBotWeaponGenerator.apbsGenerateRandomWeapon(
@@ -345,31 +532,26 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             weaponSlot.slot,
             templateInventory,
             botInventory.equipment,
-            equipmentChances.weaponMods,
+            equipmentChances,
             botRole,
             isPmc,
             botLevel,
-            hasBothPrimary
+            tierNumber,
+            hasBothPrimary,
+            questInformation
         );
 
         botInventory.items.push(...generatedWeapon.weapon);
+
+        if (questInformation.isQuesting && questInformation.questData.questName == "Fishing Gear" && weaponSlot.slot == "SecondPrimaryWeapon") return;
         
-        if (this.raidInformation.isBotEnabled(botRole) && ModConfig.config.generalConfig.enableBotsToRollAmmoAgain)
-        {
-            this.apbsBotWeaponGenerator.apbsAddExtraMagazinesToInventory(
-                generatedWeapon,
-                itemGenerationWeights.items.magazines,
-                botInventory,
-                botRole,
-                botLevel
-            );
-            return;
-        }
-        this.botWeaponGenerator.addExtraMagazinesToInventory(
+        this.apbsBotWeaponGenerator.apbsAddExtraMagazinesToInventory(
             generatedWeapon,
             itemGenerationWeights.items.magazines,
             botInventory,
-            botRole
+            botRole,
+            botLevel,
+            tierNumber
         );
     }
 }

@@ -609,9 +609,9 @@
                     },
                     "grenades": {
                         "weights": {
-                            "0": 35,
-                            "1": 25,
-                            "2": 25,
+                            "0": 50,
+                            "1": 20,
+                            "2": 15,
                             "3": 10,
                             "4": 5
                         },
@@ -650,8 +650,8 @@
                             "0": 0,
                             "1": 0,
                             "2": 10,
-                            "3": 45,
-                            "4": 45
+                            "3": 65,
+                            "4": 25
                         },
                         "whitelist": {}
                     },
@@ -1315,9 +1315,9 @@
                     },
                     "grenades": {
                         "weights": {
-                            "0": 35,
-                            "1": 25,
-                            "2": 25,
+                            "0": 50,
+                            "1": 20,
+                            "2": 15,
                             "3": 10,
                             "4": 5
                         },
@@ -1356,8 +1356,8 @@
                             "0": 0,
                             "1": 0,
                             "2": 10,
-                            "3": 45,
-                            "4": 45
+                            "3": 65,
+                            "4": 25
                         },
                         "whitelist": {}
                     },
@@ -4178,7 +4178,7 @@
                 "mod_muzzle_001": 0,
                 "mod_pistol_grip": 0,
                 "mod_pistol_grip_akms": 0,
-                "mod_pistolgrip": 0,
+                "mod_pistolgrip": 100,
                 "mod_pistolgrip_000": 0,
                 "mod_reciever": 100,
                 "mod_scope": 66,
@@ -13385,7 +13385,7 @@
                 "mod_flashlight": 45,
                 "mod_foregrip": 65,
                 "mod_hammer": 35,
-                "mod_handguard": 35,
+                "mod_handguard": 100,
                 "mod_launcher": 1,
                 "mod_magazine": 45,
                 "mod_mount": 65,
@@ -13402,7 +13402,7 @@
                 "mod_pistol_grip": 50,
                 "mod_pistol_grip_akms": 50,
                 "mod_pistolgrip": 50,
-                "mod_pistolgrip_000": 0,
+                "mod_pistolgrip_000": 100,
                 "mod_reciever": 75,
                 "mod_scope": 80,
                 "mod_scope_000": 85,

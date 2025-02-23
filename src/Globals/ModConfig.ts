@@ -56,10 +56,9 @@ export interface Config
     generalConfig: {
         enableBotsToRollAmmoAgain: boolean,
         chanceToRollAmmoAgain: number,
-        onlyChads: boolean,
-        tarkovAndChill: boolean,
-        blickyMode: boolean,
         enablePerWeaponTypeAttachmentChances: boolean,
+        enableLargeCapacityMagazineLimit: boolean,
+        largeCapacityMagazineCount: number,
         forceStock: boolean,
         stockButtpadChance: number,
         forceDustCover: boolean,
@@ -70,6 +69,9 @@ export interface Config
         forceWeaponModLimits: boolean,
         scopeLimit: number,
         tacticalLimit: number,
+        onlyChads: boolean,
+        tarkovAndChill: boolean,
+        blickyMode: boolean,
         enableT7Thermals: boolean,
         startTier: number,
         plateChances: PlateWeightConfig,
@@ -79,6 +81,8 @@ export interface Config
         resourceRandomization: ResourceRandomizationConfig,
         weaponDurability: WeaponDurabilityConfig,
         lootConfig: LootConfig,
+        questConfig: EnableChance,
+        povertyConfig: EnableChance,
         additionalOptions: PMCSpecificConfig,
         secrets: PMCSecrets,
     }
@@ -112,6 +116,7 @@ export interface Config
     equipmentBlacklist: TierBlacklistConfig,
     ammoBlacklist: TierBlacklistConfig,
     attachmentBlacklist: TierBlacklistConfig,
+    clothingBlacklist: TierBlacklistConfig,
     customLevelDeltas: CustomLevelDeltas,
     customScavLevelDeltas: CustomLevelDeltas,
     enableDebugLog: boolean,
@@ -122,6 +127,11 @@ export interface PMCSpecificConfig
     seasonalPmcAppearance: boolean,
     ammoTierSliding: AmmoTierSlideConfig,
     gameVersionWeighting: GameVersionWeightConfig, 
+}
+export interface EnableChance
+{
+    enable: boolean,
+    chance: number,
 }
 export interface ScavSpecificConfig
 {
@@ -144,6 +154,7 @@ export interface WeaponDurabilityConfig
     minDelta: number,
     maxDelta: number,
     minLimitPercent: number,
+    enhancementChance: number,
 }
 export interface LootConfig
 {

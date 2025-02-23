@@ -11,7 +11,8 @@ export class APBSInventoryMagGen
         private ammoTemplate: ITemplateItem,
         private pmcInventory: IInventory,
         private botRole: string,
-        private botLevel: number
+        private botLevel: number,
+        private tier: number,
     ) 
     {}
 
@@ -48,5 +49,10 @@ export class APBSInventoryMagGen
     public getBotLevel(): number 
     {
         return this.botLevel;
+    }
+
+    public getTierNumber(): number 
+    {
+        return this.tier;
     }
 }

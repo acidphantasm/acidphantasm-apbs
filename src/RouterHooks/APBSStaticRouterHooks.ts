@@ -44,7 +44,7 @@ export class APBSStaticRouterHooks
                         }
                         catch (err) 
                         {
-                            this.apbsLogger.log(Logging.WARN, "Bot Router hook failed.\n", `${err.stack}`);
+                            this.apbsLogger.log(Logging.ERR, "Bot Router hook failed.\n", `${err.stack}`);
                         }
                         return output;
                     }
@@ -72,7 +72,7 @@ export class APBSStaticRouterHooks
                         }
                         catch (err) 
                         {
-                            this.apbsLogger.log(Logging.WARN, "Match Start Router hook failed.\n", `${err.stack}`);
+                            this.apbsLogger.log(Logging.ERR, "Match Start Router hook failed.\n", `${err.stack}`);
                         }
                         return output;
                     }
@@ -95,7 +95,7 @@ export class APBSStaticRouterHooks
                         }
                         catch (err) 
                         {
-                            this.apbsLogger.log(Logging.WARN, "Game Start Router hook failed.\n", `${err.stack}`);
+                            this.apbsLogger.log(Logging.ERR, "Game Start Router hook failed.\n", `${err.stack}`);
                         }
                         return output;
                     }
@@ -118,7 +118,7 @@ export class APBSStaticRouterHooks
                         }
                         catch (err) 
                         {
-                            this.apbsLogger.log(Logging.WARN, "Profile Status Router hook failed.\n", `${err.stack}`);
+                            this.apbsLogger.log(Logging.ERR, "Profile Status Router hook failed.\n", `${err.stack}`);
                         }
                         return output;
                     }

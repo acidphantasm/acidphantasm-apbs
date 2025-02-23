@@ -5,7 +5,7 @@ import { RandomUtil } from "@spt/utils/RandomUtil";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
 import { IInventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBase";
-import { IGenerationData, IInventory, IModsChances } from "@spt/models/eft/common/tables/IBotType";
+import { IChances, IGenerationData, IInventory, IModsChances } from "@spt/models/eft/common/tables/IBotType";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
@@ -34,6 +34,11 @@ import { APBSInventoryMagGen } from "../InventoryMagGen/APBSInventoryMagGen";
 import { APBSIInventoryMagGen } from "../InventoryMagGen/APBSIInventoryMagGen";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { IItem } from "@spt/models/eft/common/tables/IItem";
+import { APBSIChances } from "../Interface/APBSIChances";
+import { APBSIQuestBotGenerationDetails } from "../Interface/APBSIQuestBotGear";
+import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
+import { BossBots, FollowerBots, PMCBots, ScavBots, SpecialBots } from "../Enums/Bots";
+import { BaseClasses } from "@spt/models/enums/BaseClasses";
 
 /** Handle profile related client events */
 @injectable()
@@ -82,61 +87,103 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             cloner)
     }
 
-    public apbsGenerateRandomWeapon(sessionId: string, equipmentSlot: string, botTemplateInventory: IInventory, weaponParentId: string, modChances: IModsChances, botRole: string, isPmc: boolean, botLevel: number, hasBothPrimary: boolean): IGenerateWeaponResult 
+    public apbsGenerateRandomWeapon(sessionId: string, equipmentSlot: string, botTemplateInventory: IInventory, weaponParentId: string, modChances: APBSIChances, botRole: string, isPmc: boolean, botLevel: number, tierNumber: number, hasBothPrimary: boolean, questInformation: APBSIQuestBotGenerationDetails): IGenerateWeaponResult 
     {
-        // If the profile was just created, then use vanilla weapon gen
-        if (this.raidInformation.freshProfile)
+        if (!questInformation.isQuesting || equipmentSlot == EquipmentSlots.HOLSTER || questInformation.questData.PrimaryWeapon.length === 0)
         {
-            const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
-            return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
+            const weaponTpl = 
+                (hasBothPrimary && isPmc)
+                    ? this.apbsPickWeightedWeaponTplFromPoolHasBothPrimary(equipmentSlot, botRole, tierNumber)
+                    : this.apbsPickWeightedWeaponTplFromPool(equipmentSlot, botRole, tierNumber)
+            return this.apbsGenerateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierNumber, questInformation)
         }
 
-        // Check if bot disabled, if it is - use SPT code
-        if (!this.raidInformation.isBotEnabled(botRole))
-        {
-            const weaponTpl = this.pickWeightedWeaponTplFromPool(equipmentSlot, botTemplateInventory);
-            return this.generateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel);
-        }
-
-        // If not disabled via config, all bots follow this custom generation
-        const tierInfo = this.apbsTierGetter.getTierByLevel(botLevel);
-        const weaponTpl = 
-            (hasBothPrimary && isPmc)
-                ? this.apbsPickWeightedWeaponTplFromPoolHasBothPrimary(equipmentSlot, botLevel, botRole, tierInfo)
-                : this.apbsPickWeightedWeaponTplFromPool(equipmentSlot, botLevel, botRole, tierInfo)
-        return this.apbsGenerateWeaponByTpl(sessionId, weaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierInfo)
+        const questWeaponTpl = hasBothPrimary 
+            ? this.apbsPickWeightedWeaponTplFromQuestPoolBothPrimary(equipmentSlot, botRole, tierNumber, questInformation)
+            : this.apbsPickWeightedWeaponTplFromQuestPool(equipmentSlot, botRole, tierNumber, questInformation)
+        return this.apbsGenerateWeaponByTpl(sessionId, questWeaponTpl, equipmentSlot, botTemplateInventory, weaponParentId, modChances, botRole, isPmc, botLevel, tierNumber, questInformation)
     }
 
-    private apbsPickWeightedWeaponTplFromPoolHasBothPrimary(equipmentSlot: string, botLevel: number, botRole: string, tierInfo: number): string
+    private apbsPickWeightedWeaponTplFromQuestPool(equipmentSlot: string, botRole: string, tierInfo: number, questInformation: APBSIQuestBotGenerationDetails): string
     {
-        let rangeType = "ShortRange";
-        if (equipmentSlot == "FirstPrimaryWeapon")
+        const newEquipmentPool = {};
+        for (const item in questInformation.questData.PrimaryWeapon)
         {
-            if (this.raidInformation.location == "Woods") rangeType = "LongRange";
-            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
+            const itemTPL = questInformation.questData.PrimaryWeapon[item];
+            newEquipmentPool[itemTPL] = 1;
+        }
+        return this.weightedRandomHelper.getWeightedValue<string>(newEquipmentPool);
+    }
+
+    private apbsPickWeightedWeaponTplFromQuestPoolBothPrimary(equipmentSlot: string, botRole: string, tierInfo: number, questInformation: APBSIQuestBotGenerationDetails): string
+    {
+        const newEquipmentPool = {};
+
+        // Specific to Fishing Gear - put the SV-98 in the second primary weapon slot
+        if (questInformation.questData.questName == "Fishing Gear")
+        {
+            if (equipmentSlot == EquipmentSlots.SECOND_PRIMARY_WEAPON)
+            {
+                for (const item in questInformation.questData.PrimaryWeapon)
+                {
+                    const itemTPL = questInformation.questData.PrimaryWeapon[item];
+                    newEquipmentPool[itemTPL] = 1;
+                }
+                return this.weightedRandomHelper.getWeightedValue<string>(newEquipmentPool);
+            }
+
+            const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot, rangeType);
             return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
         }
-        if (equipmentSlot == "SecondPrimaryWeapon")
+
+        let range;
+        if (questInformation.questData.requiredEquipmentSlots.includes("ShortRange")) range = "ShortRange";
+        else range = "LongRange";
+        // All other quests, put the required weapon in the primary weapon slot
+        if (equipmentSlot == EquipmentSlots.SECOND_PRIMARY_WEAPON)
+        {
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot, range);
+            return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
+        }
+
+        for (const item in questInformation.questData.PrimaryWeapon)
+        {
+            const itemTPL = questInformation.questData.PrimaryWeapon[item];
+            newEquipmentPool[itemTPL] = 1;
+        }
+        return this.weightedRandomHelper.getWeightedValue<string>(newEquipmentPool);
+    }
+    private apbsPickWeightedWeaponTplFromPoolHasBothPrimary(equipmentSlot: string, botRole: string, tierInfo: number): string
+    {
+        let rangeType = "ShortRange";
+        if (equipmentSlot == EquipmentSlots.FIRST_PRIMARY_WEAPON)
+        {
+            if (this.raidInformation.location == "Woods") rangeType = "LongRange";
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot, rangeType);
+            return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
+        }
+        if (equipmentSlot == EquipmentSlots.SECOND_PRIMARY_WEAPON)
         {
             if (this.raidInformation.location != "Woods") rangeType = "LongRange";
-            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot, rangeType);
             return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
         }
         
-        const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+        const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot);
         return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
     }
 
-    private apbsPickWeightedWeaponTplFromPool(equipmentSlot: string, botLevel: number, botRole: string, tierInfo: number): string
+    private apbsPickWeightedWeaponTplFromPool(equipmentSlot: string, botRole: string, tierInfo: number): string
     {
-        if (equipmentSlot == "FirstPrimaryWeapon" || equipmentSlot == "SecondPrimaryWeapon")
+        if (equipmentSlot == EquipmentSlots.FIRST_PRIMARY_WEAPON || equipmentSlot == EquipmentSlots.SECOND_PRIMARY_WEAPON)
         {
             const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);
-            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot, rangeType);
+            const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot, rangeType);
             return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
         }
         
-        const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRole(botRole, tierInfo, equipmentSlot);
+        const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot);
         return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
     }
 
@@ -146,16 +193,16 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         equipmentSlot: string,
         botTemplateInventory: IInventory,
         weaponParentId: string,
-        modChances: IModsChances,
+        modChances: APBSIChances,
         botRole: string,
         isPmc: boolean,
         botLevel: number,
-        tierInfo: number
+        tierInfo: number,
+        questInformation: APBSIQuestBotGenerationDetails
     ): IGenerateWeaponResult
     {
         const modPool = this.apbsEquipmentGetter.getModsByBotRole(botRole, tierInfo);
-        const apbsModChances = this.apbsEquipmentGetter.getSpawnChancesByBotRole(botRole, tierInfo);
-        let weaponChances = apbsModChances.weaponMods;
+        let weaponChances = modChances.weaponMods;
         const weaponItemTemplate = this.itemHelper.getItem(weaponTpl)[1];
 
         if (ModConfig.config.generalConfig.enablePerWeaponTypeAttachmentChances)
@@ -163,37 +210,37 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             switch (weaponItemTemplate._parent)
             {
                 case "5447b5fc4bdc2d87278b4567":
-                    weaponChances = apbsModChances.assaultCarbine;
+                    weaponChances = modChances.assaultCarbine;
                     break;
                 case "5447b6254bdc2dc3278b4568":
-                    weaponChances = apbsModChances.sniperRifle;
+                    weaponChances = modChances.sniperRifle;
                     break;
                 case "5447b6194bdc2d67278b4567":
-                    weaponChances = apbsModChances.marksmanRifle;
+                    weaponChances = modChances.marksmanRifle;
                     break;
                 case "5447b5f14bdc2d61278b4567":
-                    weaponChances = apbsModChances.assaultRifle;
+                    weaponChances = modChances.assaultRifle;
                     break;
                 case "5447bed64bdc2d97278b4568":
-                    weaponChances = apbsModChances.machinegun;
+                    weaponChances = modChances.machinegun;
                     break;
                 case "5447b5e04bdc2d62278b4567":
-                    weaponChances = apbsModChances.smg;
+                    weaponChances = modChances.smg;
                     break;
                 case "5447b5cf4bdc2d65278b4567":
-                    weaponChances = apbsModChances.handgun;
+                    weaponChances = modChances.handgun;
                     break;
                 case "617f1ef5e8b54b0998387733":
-                    weaponChances = apbsModChances.revolver;
+                    weaponChances = modChances.revolver;
                     break;
                 case "5447b6094bdc2dc3278b4567":
-                    weaponChances = apbsModChances.shotgun;
+                    weaponChances = modChances.shotgun;
                     break;
                 case "5447bedf4bdc2d87278b4568":
-                    weaponChances = apbsModChances.weaponMods;
+                    weaponChances = modChances.weaponMods;
                     break;
                 default:
-                    weaponChances = apbsModChances.weaponMods;
+                    weaponChances = modChances.weaponMods;
                     this.apbsLogger.log(Logging.WARN, `ItemTemplate._parent is missing classification - Report to acidphantasm - ${weaponItemTemplate._parent}`)
                     break;
             }
@@ -215,7 +262,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             throw new Error(this.localisationService.getText("bot-generation_failed"));
         }
         const ammoTable = this.apbsEquipmentGetter.getAmmoByBotRole(botRole, tierInfo)
-        const ammoTpl = this.getWeightedCompatibleAmmo(ammoTable, weaponItemTemplate);
+        const ammoTpl = this.apbsGetWeightedCompatibleAmmo(ammoTable, weaponItemTemplate);
 
         // Create with just base weapon item
         let weaponWithModsArray = this.constructWeaponBaseArray(
@@ -226,8 +273,33 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             botRole
         );
 
+        let weaponEnhancementChance = 0;
+        if (this.raidInformation.isBotEnabled(botRole))
+        {
+            if (Object.values(PMCBots).includes(botRole as PMCBots))
+            {
+                weaponEnhancementChance = ModConfig.config.pmcBots.weaponDurability.enhancementChance;
+            }
+            if (Object.values(ScavBots).includes(botRole as ScavBots))
+            {
+                weaponEnhancementChance = ModConfig.config.scavBots.weaponDurability.enhancementChance;
+            }
+            if (Object.values(BossBots).includes(botRole as BossBots))
+            {
+                weaponEnhancementChance = ModConfig.config.bossBots.weaponDurability.enhancementChance;
+            }
+            if (Object.values(FollowerBots).includes(botRole as FollowerBots))
+            {
+                weaponEnhancementChance = ModConfig.config.followerBots.weaponDurability.enhancementChance;
+            }
+            if (Object.values(SpecialBots).includes(botRole as SpecialBots))
+            {
+                weaponEnhancementChance = ModConfig.config.specialBots.weaponDurability.enhancementChance;
+            }
+        }
+
         // Chance to add randomised weapon enhancement
-        if (isPmc && this.randomUtil.getChance100(this.pmcConfig.weaponHasEnhancementChancePercent))
+        if (this.randomUtil.getChance100(weaponEnhancementChance))
         {
             const weaponConfig = this.repairConfig.repairKit.weapon;
             this.repairService.addBuff(weaponConfig, weaponWithModsArray[0]);
@@ -238,6 +310,11 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         {
             const botEquipmentRole = this.botGeneratorHelper.getBotEquipmentRole(botRole);
             const modLimits = this.botWeaponModLimitService.getWeaponModLimits(botEquipmentRole);
+
+            if (this.itemHelper.isOfBaseclass(weaponTpl, BaseClasses.PISTOL))
+            {
+                modLimits.scopeMax = 1;
+            }
 
             const generateWeaponModsRequest: IGenerateWeaponRequest = {
                 weapon: weaponWithModsArray, // Will become hydrated array of weapon + mods
@@ -254,7 +331,9 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             weaponWithModsArray = this.apbsBotEquipmentModGenerator.apbsGenerateModsForWeapon(
                 sessionId,
                 generateWeaponModsRequest,
-                isPmc
+                isPmc,
+                questInformation,
+                weaponItemTemplate._id
             );
         }
 
@@ -294,7 +373,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         if (ubglMod)
         {
             const ubglTemplate = this.itemHelper.getItem(ubglMod._tpl)[1];
-            ubglAmmoTpl = this.getWeightedCompatibleAmmo(botTemplateInventory.Ammo, ubglTemplate);
+            ubglAmmoTpl = this.apbsGetWeightedCompatibleAmmo(botTemplateInventory.Ammo, ubglTemplate);
             this.fillUbgl(weaponWithModsArray, ubglMod, ubglAmmoTpl);
         }
         
@@ -340,7 +419,8 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         magWeights: IGenerationData,
         inventory: PmcInventory,
         botRole: string,
-        botLevel: number
+        botLevel: number,
+        tier: number,
     ): void 
     {
         const weaponAndMods = generatedWeaponResult.weapon;
@@ -378,7 +458,8 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             ammoTemplate,
             inventory,
             botRole,
-            botLevel
+            botLevel,
+            tier
         );
         this.apbsInventoryMagGenComponents
             .find((v) => v.canHandleInventoryMagGen(apbsInventoryMagGenModel))
@@ -428,5 +509,79 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         }
 
         return true;
+    }
+
+    public apbsGetWeightedCompatibleAmmo(
+        cartridgePool: Record<string, Record<string, number>>,
+        weaponTemplate: ITemplateItem
+    ): string 
+    {
+        const desiredCaliber = this.getWeaponCaliber(weaponTemplate);
+
+        let cartridgePoolForWeapon = cartridgePool[desiredCaliber];
+        if (!cartridgePoolForWeapon || cartridgePoolForWeapon?.length === 0) 
+        {
+            this.logger.debug(
+                this.localisationService.getText("bot-no_caliber_data_for_weapon_falling_back_to_default", {
+                    weaponId: weaponTemplate._id,
+                    weaponName: weaponTemplate._name,
+                    defaultAmmo: weaponTemplate._props.defAmmo
+                })
+            );
+
+            // Immediately returns, default ammo is guaranteed to be compatible
+            return weaponTemplate._props.defAmmo;
+        }
+
+        // Get cartridges the weapons first chamber allow
+        const compatibleCartridgesInTemplate = this.getCompatibleCartridgesFromWeaponTemplate(weaponTemplate);
+        if (!compatibleCartridgesInTemplate) 
+        {
+            // No chamber data found in weapon, send default
+            return weaponTemplate._props.defAmmo;
+        }
+
+        // Inner join the weapons allowed + passed in cartridge pool to get compatible cartridges
+        let compatibleCartridges = Object.keys(cartridgePoolForWeapon)
+            .filter((cartridge) => compatibleCartridgesInTemplate.includes(cartridge))
+            .reduce((acc, key) => ({ ...acc, [key]: cartridgePoolForWeapon[key] }), {});
+
+        if (Object.keys(compatibleCartridges).length === 0) 
+        {
+            // No compatible cartridges, try to get compatible caliber from magazines
+            const firstMagazine = weaponTemplate._props.Slots.find((slot) => slot._name === "mod_magazine");
+            const magazineTemplate = this.itemHelper.getItem(firstMagazine._props.filters[0].Filter[0]);
+
+            // Get the first slots array of cartridges
+            compatibleCartridges = magazineTemplate[1]._props.Slots[0]?._props.filters[0].Filter;
+            if (!compatibleCartridges) 
+            {
+                // Normal magazines
+                // None found, try the cartridges array
+                compatibleCartridges = magazineTemplate[1]._props.Cartridges[0]?._props.filters[0].Filter;
+                
+                if (!compatibleCartridges)
+                {
+                    this.apbsLogger.log(Logging.DEBUG, `No compatible ammo found for ${weaponTemplate._id}, using weapons default ammo instead.`);
+                    return weaponTemplate._props.defAmmo
+                }
+            }
+
+            // Last ditch effor to get compatible calibers
+            const magazineCaliberData = this.itemHelper.getItem(compatibleCartridges[0])[1]._props.Caliber;
+            cartridgePoolForWeapon = cartridgePool[magazineCaliberData];
+            
+            compatibleCartridges = Object.keys(cartridgePoolForWeapon)
+                .filter((cartridge) => compatibleCartridgesInTemplate.includes(cartridge))
+                .reduce((acc, key) => ({ ...acc, [key]: cartridgePoolForWeapon[key] }), {});
+
+            if (Object.keys(compatibleCartridges).length === 0) 
+            {
+                this.apbsLogger.log(Logging.DEBUG, `No compatible ammo found for ${weaponTemplate._id} in last ditch effort, using weapons default ammo instead.`);
+                return weaponTemplate._props.defAmmo
+            }
+        }
+
+        return this.weightedRandomHelper.getWeightedValue<string>(compatibleCartridges);
     }
 }

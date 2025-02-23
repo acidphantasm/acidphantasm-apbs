@@ -179,7 +179,7 @@
                                 <MudTooltip Text="Chance for medical items to be full resource usage." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerMedRateMaxChance" Label="Full Chance" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_followerResourceRandomizationEnabled" />
                                 </MudTooltip>
-                                <MudTooltip Text="Lowest percent possible for a medical item's usage to be." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudTooltip Text="Lowest percent possible for a medical item's remaining usage to be." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerMedRateUsagePercent" Label="Minimum %" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_followerResourceRandomizationEnabled" />
                                 </MudTooltip>
                             </MudPaper>
@@ -189,7 +189,7 @@
                                 <MudTooltip Text="Chance for food/drink items to be full resource usage." Color="Color.Primary" Placement="Placement.Left" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerFoodRateMaxChance" Label="Full Chance" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_followerResourceRandomizationEnabled" />
                                 </MudTooltip>
-                                <MudTooltip Text="Lowest percent possible for a food/drink item's usage to be." Color="Color.Primary" Placement="Placement.Left" Arrow="true">
+                                <MudTooltip Text="Lowest percent possible for a food/drink item's remaining usage to be." Color="Color.Primary" Placement="Placement.Left" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_followerFoodRateUsagePercent" Label="Minimum %" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_followerResourceRandomizationEnabled" />
                                 </MudTooltip>
                                 <MudSpacer />
@@ -212,20 +212,22 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle && (
-                           MainLayout.pendingChanges.Contains("_followerWeaponDurabilityEnabled") ||
-                           MainLayout.pendingChanges.Contains("_followerWeaponDurabilityMin") ||
-                           MainLayout.pendingChanges.Contains("_followerWeaponDurabilityMax") ||
-                           MainLayout.pendingChanges.Contains("_followerWeaponDurabilityMinDelta") ||
-                           MainLayout.pendingChanges.Contains("_followerWeaponDurabilityMaxDelta")))
+                                   MainLayout.pendingChanges.Contains("_followerWeaponDurabilityEnabled") ||
+                                   MainLayout.pendingChanges.Contains("_followerWeaponDurabilityMin") ||
+                                   MainLayout.pendingChanges.Contains("_followerWeaponDurabilityMax") ||
+                                   MainLayout.pendingChanges.Contains("_followerWeaponDurabilityMinDelta") ||
+                                   MainLayout.pendingChanges.Contains("_followerWeaponDurabilityMaxDelta") ||
+                                   MainLayout.pendingChanges.Contains("_followerWeaponDurabilityEnhancementChance")))
                             {
                                 <MudButton @onclick="undoWeaponDurability" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
                             else if (MainLayout._appDefaultButtonToggle && (
-                            _followerWeaponDurabilityEnabled != true ||
-                            _followerWeaponDurabilityMin != 90 ||
-                            _followerWeaponDurabilityMax != 100 ||
-                            _followerWeaponDurabilityMinDelta != 0 ||
-                            _followerWeaponDurabilityMaxDelta != 15))
+                                    _followerWeaponDurabilityEnabled != true ||
+                                    _followerWeaponDurabilityMin != 90 ||
+                                    _followerWeaponDurabilityMax != 100 ||
+                                    _followerWeaponDurabilityMinDelta != 0 ||
+                                    _followerWeaponDurabilityMaxDelta != 15 ||
+                                    _followerWeaponDurabilityEnhancementChance != 0))
                             {
                                 <MudButton @onclick="defaultWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
                             }
@@ -301,6 +303,21 @@
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1" />
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that bot weapons have an enhancement applied to them." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Enhancement Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">@_followerWeaponDurabilityEnhancementChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="_followerWeaponDurabilityEnhancementChance" ValueLabel="true" Min="0" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_followerWeaponDurabilityEnabled"/>
+                        </MudItem>
 
                     </MudGrid>
                 </MudExpansionPanel>
@@ -484,7 +501,15 @@
         get => Data.followerBots.weaponDurability.max - Data.followerBots.weaponDurability.minDelta;
         set { }
     }
-
+    private int _followerWeaponDurabilityEnhancementChance
+    {
+        get => Data.followerBots.weaponDurability.enhancementChance;
+        set
+        {
+            Data.followerBots.weaponDurability.enhancementChance = value;
+            Utils.UpdateView(value, OriginalConfig.followerBots.weaponDurability.enhancementChance);
+        }
+    }
     private void undoWeaponDurability()
     {
         _followerWeaponDurabilityEnabled = OriginalConfig.followerBots.weaponDurability.enable;
@@ -493,6 +518,7 @@
         _followerWeaponDurabilityMinDelta = OriginalConfig.followerBots.weaponDurability.minDelta;
         _followerWeaponDurabilityMaxDelta = OriginalConfig.followerBots.weaponDurability.maxDelta;
         _followerWeaponDurabilityMinLimitPercent = OriginalConfig.followerBots.weaponDurability.minLimitPercent;
+        _followerWeaponDurabilityEnhancementChance = OriginalConfig.followerBots.weaponDurability.enhancementChance; ;
     }
     private void defaultWeaponDurability()
     {
@@ -502,6 +528,7 @@
         _followerWeaponDurabilityMinDelta = 0;
         _followerWeaponDurabilityMaxDelta = 15;
         _followerWeaponDurabilityMinLimitPercent = Data.followerBots.weaponDurability.min - Data.followerBots.weaponDurability.maxDelta;
+        _followerWeaponDurabilityEnhancementChance = 0;
     }
     #endregion
 

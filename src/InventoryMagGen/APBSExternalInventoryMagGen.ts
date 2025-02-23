@@ -58,19 +58,47 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
         const weapon = inventoryMagGen.getWeaponTemplate();
         const attemptedMagBlacklist: string[] = [];
         const defaultMagazineTpl = this.botWeaponGeneratorHelper.getWeaponsDefaultMagazineTpl(weapon);
-        const randomizedMagazineCount = Number(
+        let randomizedMagazineCount = Number(
             this.botWeaponGeneratorHelper.getRandomizedMagazineCount(inventoryMagGen.getMagCount())
         );
         
-        const tierInfo = this.apbsTierGetter.getTierByLevel(inventoryMagGen.getBotLevel());
-        const ammoTable = this.apbsEquipmentGetter.getAmmoByBotRole(inventoryMagGen.getBotRole(), tierInfo)
+        const ammoTable = this.apbsEquipmentGetter.getAmmoByBotRole(inventoryMagGen.getBotRole(), inventoryMagGen.getTierNumber());
+
+        let hasSwitchedToSmallerMags = false;
+        let isTryingSmallerMags = false;
 
         for (let i = 0; i < randomizedMagazineCount; i++) 
         {
+            if (this.itemHelper.isOfBaseclass(weapon._id, BaseClasses.PISTOL)) 
+            {
+                randomizedMagazineCount = this.randomUtil.getInt(1, 2);
+            }
+
+            if (ModConfig.config.generalConfig.enableLargeCapacityMagazineLimit && !hasSwitchedToSmallerMags && !this.apbsMethodHolder.weaponsWithNoSmallMagazines.includes(weapon._id))
+            {
+                const apbsModPool = this.apbsEquipmentGetter.getModsByBotRole(inventoryMagGen.getBotRole(), inventoryMagGen.getTierNumber());
+                const apbsModsForWeapon = apbsModPool[weapon._id];
+                const apbsMagazineModPool = apbsModsForWeapon["mod_magazine"];
+                const currentMagazineCountSize = magTemplate?._props?.Cartridges[0]?._max_count;
+                if (currentMagazineCountSize && apbsMagazineModPool)
+                {
+                    if (currentMagazineCountSize > 35 && i >= (ModConfig.config.generalConfig.largeCapacityMagazineCount - 1))
+                    {
+                        isTryingSmallerMags = true;
+                        const smallerMagazines = this.apbsMethodHolder.getFilteredMagazinePoolByCapacity(inventoryMagGen.getTierNumber(), weapon._id, currentMagazineCountSize, apbsMagazineModPool);
+                        if (smallerMagazines.length > 0)
+                        {
+                            magazineTpl = this.randomUtil.getStringArrayValue(smallerMagazines);
+                            magTemplate = this.itemHelper.getItem(magazineTpl)[1];
+                        }
+                    }
+                }
+            }            
+
             let selectedAmmoForMag = inventoryMagGen.getAmmoTemplate()._id;
             if (ModConfig.config.generalConfig.enableBotsToRollAmmoAgain && this.randomUtil.getChance100(ModConfig.config.generalConfig.chanceToRollAmmoAgain))
             {
-                selectedAmmoForMag = this.apbsMethodHolder.getWeightedCompatibleAmmo(ammoTable, weapon);
+                selectedAmmoForMag = this.apbsMethodHolder.apbsGetWeightedCompatibleAmmo(ammoTable, weapon);
             }
 
             const magazineWithAmmo = this.botWeaponGeneratorHelper.createMagazineWithAmmo(
@@ -160,6 +188,7 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
             {
                 // Reset fit counter now it succeeded
                 fitAttempts = 0;
+                if (isTryingSmallerMags) hasSwitchedToSmallerMags = true;
             }
         }
     }

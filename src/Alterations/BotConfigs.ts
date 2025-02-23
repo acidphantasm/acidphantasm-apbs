@@ -15,7 +15,7 @@ import { RaidInformation } from "../Globals/RaidInformation";
 import { ModConfig } from "../Globals/ModConfig";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
-import { BossBots, FollowerBots, PMCBots, ScavBots, SpecialBots } from "../Enums/Bots";
+import { BossBots, EventBots, FollowerBots, PMCBots, ScavBots, SpecialBots } from "../Enums/Bots";
 
 
 @injectable()
@@ -164,15 +164,22 @@ export class BotConfigs
         for (const botType in botConfigEquipment)
         {
             if (!this.raidInformation.isBotEnabled(botType)) continue;
-
-            if (botType.includes("assault") || botType.includes("marksman"))
+            if (Object.values(EventBots).includes(botType as EventBots)) continue;
+            if (Object.values(ScavBots).includes(botType as ScavBots))
             {
                 botConfigEquipment[botType].filterPlatesByLevel = true;
                 botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.scavArmorPlateWeights;
                 continue;
             }
+            if (Object.values(PMCBots).includes(botType as PMCBots))
+            {
+                botConfigEquipment[botType].filterPlatesByLevel = true;
+                botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.armorPlateWeights;
+                continue;
+            }
+
             botConfigEquipment[botType].filterPlatesByLevel = true;
-            botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.armorPlateWeights;
+            botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.nonScavNonPMCArmorPlateWeights;
         }
     }
 

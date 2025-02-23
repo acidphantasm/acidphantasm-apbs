@@ -5,7 +5,7 @@
 
 <style>
     .mud-divider {
-        border-width: 2.5px;
+    border-width: 2.5px;
     }
 </style>
 
@@ -74,8 +74,8 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle && (
-                                MainLayout.pendingChanges.Contains("_pmcLootEnabled") || 
-                                MainLayout.pendingChanges.Contains("_pmcLootBlacklist")))
+                              MainLayout.pendingChanges.Contains("_pmcLootEnabled") || 
+                              MainLayout.pendingChanges.Contains("_pmcLootBlacklist")))
                             {
                                 <MudButton @onclick="undoLoot" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
@@ -97,10 +97,10 @@
                         </MudItem>
                         <MudItem xs="4" Class="align-center">
                             <MudTextField T="string" @bind-Value="@_lootBlacklistEntryHolder"
-                                          Typo="Typo.body2" HelperText="Enter valid MongoID"
-                                          Placeholder="ItemID"
-                                          Variant="Variant.Text"
-                                          OnKeyDown="@((e) => {
+                            Typo="Typo.body2" HelperText="Enter valid MongoID"
+                            Placeholder="ItemID"
+                            Variant="Variant.Text"
+                            OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
                                                         if (CanAddMongoIDToList(_lootBlacklistEntryHolder, _pmcLootBlacklist))
@@ -112,11 +112,11 @@
                                                         }
                                                     }
                                                 } )"
-                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
-                                          Immediate="true"
-                                          Adornment="Adornment.End"
-                                          AdornmentIcon="@Icons.Material.Filled.ArrowRight"
-                                          OnAdornmentClick="@(() => {
+                            Validation="@(new Func<string, IEnumerable<string>>(Utils.StringObjectIDValidation))"
+                            Immediate="true"
+                            Adornment="Adornment.End"
+                            AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                            OnAdornmentClick="@(() => {
                                                     if (CanAddMongoIDToList(_lootBlacklistEntryHolder, _pmcLootBlacklist))
                                                     {
                                                         _pmcLootBlacklist.Add(_lootBlacklistEntryHolder);
@@ -154,11 +154,11 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle && (
-                           MainLayout.pendingChanges.Contains("_pmcResourceRandomizationEnabled") ||
-                           MainLayout.pendingChanges.Contains("_pmcMedRateMaxChance") ||
-                           MainLayout.pendingChanges.Contains("_pmcMedRateUsagePercent") ||
-                           MainLayout.pendingChanges.Contains("_pmcFoodRateMaxChance") ||
-                           MainLayout.pendingChanges.Contains("_pmcFoodRateUsagePercent")))
+                         MainLayout.pendingChanges.Contains("_pmcResourceRandomizationEnabled") ||
+                         MainLayout.pendingChanges.Contains("_pmcMedRateMaxChance") ||
+                         MainLayout.pendingChanges.Contains("_pmcMedRateUsagePercent") ||
+                         MainLayout.pendingChanges.Contains("_pmcFoodRateMaxChance") ||
+                         MainLayout.pendingChanges.Contains("_pmcFoodRateUsagePercent")))
                             {
                                 <MudButton @onclick="undoResourceRandomization" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
@@ -184,7 +184,7 @@
                                 <MudTooltip Text="Chance for medical items to be full resource usage." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcMedRateMaxChance" Label="Full Chance" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_pmcResourceRandomizationEnabled" />
                                 </MudTooltip>
-                                <MudTooltip Text="Lowest percent possible for a medical item's usage to be." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudTooltip Text="Lowest percent possible for a medical item's remaining usage to be." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcMedRateUsagePercent" Label="Minimum %" HelperText="Medical" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_pmcResourceRandomizationEnabled" />
                                 </MudTooltip>
                             </MudPaper>
@@ -194,7 +194,7 @@
                                 <MudTooltip Text="Chance for food/drink items to be full resource usage." Color="Color.Primary" Placement="Placement.Left" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcFoodRateMaxChance" Label="Full Chance" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_pmcResourceRandomizationEnabled" />
                                 </MudTooltip>
-                                <MudTooltip Text="Lowest percent possible for a food/drink item's usage to be." Color="Color.Primary" Placement="Placement.Left" Arrow="true">
+                                <MudTooltip Text="Lowest percent possible for a food/drink item's remaining usage to be." Color="Color.Primary" Placement="Placement.Left" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcFoodRateUsagePercent" Label="Minimum %" HelperText="Food/Drink" Variant="Variant.Filled" Min="1" Max="100" Disabled="!_pmcResourceRandomizationEnabled" />
                                 </MudTooltip>
                                 <MudSpacer />
@@ -217,20 +217,22 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle && (
-                           MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityEnabled") ||
-                           MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMin") ||
-                           MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMax") ||
-                           MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMinDelta") ||
-                           MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMaxDelta")))
+                                 MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityEnabled") ||
+                                 MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMin") ||
+                                 MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMax") ||
+                                 MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMinDelta") ||
+                                 MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityMaxDelta") ||
+                                 MainLayout.pendingChanges.Contains("_pmcWeaponDurabilityEnhancementChance")))
                             {
                                 <MudButton @onclick="undoWeaponDurability" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
                             else if (MainLayout._appDefaultButtonToggle && (
-                            _pmcWeaponDurabilityEnabled != true ||
-                            _pmcWeaponDurabilityMin != 95 ||
-                            _pmcWeaponDurabilityMax != 100 ||
-                            _pmcWeaponDurabilityMinDelta != 0 ||
-                            _pmcWeaponDurabilityMaxDelta != 5))
+                                    _pmcWeaponDurabilityEnabled != true ||
+                                    _pmcWeaponDurabilityMin != 95 ||
+                                    _pmcWeaponDurabilityMax != 100 ||
+                                    _pmcWeaponDurabilityMinDelta != 0 ||
+                                    _pmcWeaponDurabilityMaxDelta != 5 ||
+                                    _pmcWeaponDurabilityEnhancementChance != 10))
                             {
                                 <MudButton @onclick="defaultWeaponDurability" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
                             }
@@ -246,20 +248,20 @@
                             <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Lowest a weapon's 'non-repairable' durability can be." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcWeaponDurabilityMin" Label="Min" HelperText="Durability" Variant="Variant.Filled"
-                                                     Min="0"
-                                                     Max="_pmcWeaponDurabilityMax"
-                                                     Disabled="!_pmcWeaponDurabilityEnabled" />
+                                    Min="0"
+                                    Max="_pmcWeaponDurabilityMax"
+                                    Disabled="!_pmcWeaponDurabilityEnabled" />
                                 </MudTooltip>
                                 <MudTooltip Text="Highest a weapon's 'non-repairable' durability can be." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense"
-                                                     HideSpinButtons="true"
-                                                     @bind-Value="_pmcWeaponDurabilityMax"
-                                                     Label="Max"
-                                                     HelperText="Durability"
-                                                     Variant="Variant.Filled"
-                                                     Min="_pmcWeaponDurabilityMin"
-                                                     Max="100"
-                                                     Disabled="!_pmcWeaponDurabilityEnabled" />
+                                    HideSpinButtons="true"
+                                    @bind-Value="_pmcWeaponDurabilityMax"
+                                    Label="Max"
+                                    HelperText="Durability"
+                                    Variant="Variant.Filled"
+                                    Min="_pmcWeaponDurabilityMin"
+                                    Max="100"
+                                    Disabled="!_pmcWeaponDurabilityEnabled" />
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
@@ -267,27 +269,27 @@
                             <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Lowest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense"
-                                                     HideSpinButtons="true"
-                                                     @bind-Value="_pmcWeaponDurabilityMinDelta"
-                                                     Label="Min"
-                                                     HelperText="Delta"
-                                                     Variant="Variant.Filled"
-                                                     Min="0"
-                                                     Max="100"
-                                                     Validation="@(new Func<int, bool>(ValidateDelta))"
-                                                     Disabled="!_pmcWeaponDurabilityEnabled" />
+                                    HideSpinButtons="true"
+                                    @bind-Value="_pmcWeaponDurabilityMinDelta"
+                                    Label="Min"
+                                    HelperText="Delta"
+                                    Variant="Variant.Filled"
+                                    Min="0"
+                                    Max="100"
+                                    Validation="@(new Func<int, bool>(ValidateDelta))"
+                                    Disabled="!_pmcWeaponDurabilityEnabled" />
                                 </MudTooltip>
                                 <MudTooltip Text="Highest possible difference from the rolled 'non-repairable' durabilty to the 'current' durability." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Margin="Margin.Dense"
-                                                     HideSpinButtons="true"
-                                                     @bind-Value="_pmcWeaponDurabilityMaxDelta"
-                                                     Label="Max"
-                                                     HelperText="Delta"
-                                                     Variant="Variant.Filled"
-                                                     Min="0"
-                                                     Max="100"
-                                                     Validation="@(new Func<int, bool>(ValidateDelta))"
-                                                     Disabled="!_pmcWeaponDurabilityEnabled" />
+                                    HideSpinButtons="true"
+                                    @bind-Value="_pmcWeaponDurabilityMaxDelta"
+                                    Label="Max"
+                                    HelperText="Delta"
+                                    Variant="Variant.Filled"
+                                    Min="0"
+                                    Max="100"
+                                    Validation="@(new Func<int, bool>(ValidateDelta))"
+                                    Disabled="!_pmcWeaponDurabilityEnabled" />
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
@@ -295,17 +297,32 @@
                             <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
                                 <MudTooltip Text="Lowest Possible Current Durability Roll." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Disabled Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcWeaponDurabilityMinLimitPercent" Label="Min" HelperText="Actual" Variant="Variant.Filled"
-                                                     Min="0"
-                                                     Max="100" />
+                                    Min="0"
+                                    Max="100" />
                                 </MudTooltip>
                                 <MudTooltip Text="Highest Possible Current Durability Roll." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
                                     <MudNumericField Disabled Margin="Margin.Dense" HideSpinButtons="true" @bind-Value="_pmcWeaponDurabilityMaxLimitPercent" Label="Max" HelperText="Actual" Variant="Variant.Filled"
-                                                     Min="0"
-                                                     Max="100" />
+                                    Min="0"
+                                    Max="100" />
                                 </MudTooltip>
                             </MudPaper>
                         </MudItem>
                         <MudItem xs="1" />
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that bot weapons have an enhancement applied to them." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Enhancement Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">@_pmcWeaponDurabilityEnhancementChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="_pmcWeaponDurabilityEnhancementChance" ValueLabel="true" Min="0" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcWeaponDurabilityEnabled" />
+                        </MudItem>
 
                         <MudItem xs="1" />
                         <MudItem xs="4">
@@ -322,7 +339,7 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle &&
-                                MainLayout.pendingChanges.Contains("_pmcSeasonalAppearanceEnabled"))
+                              MainLayout.pendingChanges.Contains("_pmcSeasonalAppearanceEnabled"))
                             {
                                 <MudButton @onclick="undoPMCSeasonalAppearance" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
@@ -331,6 +348,99 @@
                             {
                                 <MudButton @onclick="defaultPMCSeasonalAppearance" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
                             }
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="PMCs have a chance to wear quest loadouts on appropriate maps at appropriate levels." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Quest Loadouts</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_pmcQuestLoadoutEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcQuestLoadoutEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_pmcQuestLoadoutEnabled") ||
+                           MainLayout.pendingChanges.Contains("_pmcQuestLoadoutChance")))
+                            {
+                                <MudButton @onclick="undoPMCQuestLoadouts" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _pmcQuestLoadoutEnabled != true) ||
+                            _pmcQuestLoadoutChance != 10)
+                            {
+                                <MudButton @onclick="defaultPMCQuestLoadouts" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Chance of them using quest loadouts." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Quest Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcQuestLoadoutEnabled">@_pmcQuestLoadoutChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="_pmcQuestLoadoutChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcQuestLoadoutEnabled" />
+                        </MudItem>
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <ChildContent>
+                                        <MudText>Poverty Check</MudText>
+                                    </ChildContent>
+                                    <TooltipContent>
+                                        <MudText Typo="Typo.caption">PMCs have a chance to be poor compared to other PMCs at their level & tier, if they are not assigned a quest.</MudText><MudSpacer />
+                                        <MudSpacer />
+                                        <MudText Typo="Typo.caption">Disabling this means they will always use gear that is available in their tier.</MudText>
+                                    </TooltipContent>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_pmcPovertyEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcPovertyEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                                MainLayout.pendingChanges.Contains("_pmcPovertyEnabled") ||
+                                MainLayout.pendingChanges.Contains("_pmcPovertyChance")))
+                            {
+                                <MudButton @onclick="undoPMCPoverty" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                                    _pmcPovertyEnabled != true) ||
+                                    _pmcPovertyChance != 10)
+                            {
+                                <MudButton @onclick="defaultPMCPoverty" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Chance of PMC being `poor` for their level, this is not rolled if they are assigned a quest." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Poverty Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcPovertyEnabled">@_pmcPovertyChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudSlider @bind-Value="_pmcPovertyChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcPovertyEnabled" />
                         </MudItem>
 
                         <MudItem xs="1" />
@@ -348,9 +458,9 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle && (
-                                MainLayout.pendingChanges.Contains("_pmcAmmoTierSlideEnabled") ||
-                                MainLayout.pendingChanges.Contains("_pmcAmmoTierSlideAmount") ||
-                                MainLayout.pendingChanges.Contains("_pmcAmmoTierSlideChance")))
+                              MainLayout.pendingChanges.Contains("_pmcAmmoTierSlideEnabled") ||
+                              MainLayout.pendingChanges.Contains("_pmcAmmoTierSlideAmount") ||
+                              MainLayout.pendingChanges.Contains("_pmcAmmoTierSlideChance")))
                             {
                                 <MudButton @onclick="undoPMCAmmoTierSliding" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
@@ -408,12 +518,12 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle && (
-                                MainLayout.pendingChanges.Contains("_pmcVersionWeightingEnabled") ||
-                                MainLayout.pendingChanges.Contains("_pmcStandardVersionWeight") ||
-                                MainLayout.pendingChanges.Contains("_pmcLeftBehindVersionWeight") ||
-                                MainLayout.pendingChanges.Contains("_pmcPrepareForEscapeVersionWeight") ||
-                                MainLayout.pendingChanges.Contains("_pmcEdgeOfDarknessVersionWeight") ||
-                                MainLayout.pendingChanges.Contains("_pmcUnheardVersionWeight")))
+                              MainLayout.pendingChanges.Contains("_pmcVersionWeightingEnabled") ||
+                              MainLayout.pendingChanges.Contains("_pmcStandardVersionWeight") ||
+                              MainLayout.pendingChanges.Contains("_pmcLeftBehindVersionWeight") ||
+                              MainLayout.pendingChanges.Contains("_pmcPrepareForEscapeVersionWeight") ||
+                              MainLayout.pendingChanges.Contains("_pmcEdgeOfDarknessVersionWeight") ||
+                              MainLayout.pendingChanges.Contains("_pmcUnheardVersionWeight")))
                             {
                                 <MudButton @onclick="undoPMCVersionWeighting" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
@@ -525,8 +635,8 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle && (
-                           MainLayout.pendingChanges.Contains("_pmcSecretDevelopersNameMarkEnabled") ||
-                           MainLayout.pendingChanges.Contains("_pmcSecretDevelopersNameList")))
+                         MainLayout.pendingChanges.Contains("_pmcSecretDevelopersNameMarkEnabled") ||
+                         MainLayout.pendingChanges.Contains("_pmcSecretDevelopersNameList")))
                             {
                                 <MudButton @onclick="undoSecretDeveloperEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
@@ -557,11 +667,11 @@
                         </MudItem>
                         <MudItem xs="4" Class="align-center">
                             <MudTextField T="string" @bind-Value="@_pmcSecretDevelopersEntryHolder"
-                                          Typo="Typo.body2" HelperText="Enter valid Bot name"
-                                          Placeholder="Bot Name"
-                                          Variant="Variant.Text"
-                                          Disabled="!_pmcSecretDevelopersNameMarkEnabled"
-                                          OnKeyDown="@((e) => {
+                            Typo="Typo.body2" HelperText="Enter valid Bot name"
+                            Placeholder="Bot Name"
+                            Variant="Variant.Text"
+                            Disabled="!_pmcSecretDevelopersNameMarkEnabled"
+                            OnKeyDown="@((e) => {
                                                     if (HandleKeyDown(e))
                                                     {
                                                         if (CanAddStringToList(_pmcSecretDevelopersEntryHolder, _pmcSecretDevelopersNameList))
@@ -573,11 +683,11 @@
                                                         }
                                                     }
                                                 } )"
-                                          Validation="@(new Func<string, IEnumerable<string>>(Utils.StringLengthValidation))"
-                                          Immediate="true"
-                                          Adornment="Adornment.End"
-                                          AdornmentIcon="@Icons.Material.Filled.ArrowRight"
-                                          OnAdornmentClick="@(() => {
+                            Validation="@(new Func<string, IEnumerable<string>>(Utils.StringLengthValidation))"
+                            Immediate="true"
+                            Adornment="Adornment.End"
+                            AdornmentIcon="@Icons.Material.Filled.ArrowRight"
+                            OnAdornmentClick="@(() => {
                                                     if (CanAddStringToList(_pmcSecretDevelopersEntryHolder, _pmcSecretDevelopersNameList))
                                                     {
                                                         _pmcSecretDevelopersNameList.Add(_pmcSecretDevelopersEntryHolder);
@@ -623,7 +733,7 @@
                                 <MudButton @onclick="defaultSecretDeveloperLevelsEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
                             }
                         </MudItem>
-                        
+
 
                         <MudItem xs="2" />
                         <MudItem xs="3">
@@ -644,8 +754,8 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle && (
-                                MainLayout.pendingChanges.Contains("_pmcSecretDeveloperLevelsMin") ||
-                                MainLayout.pendingChanges.Contains("_pmcSecretDeveloperLevelsMax")))
+                              MainLayout.pendingChanges.Contains("_pmcSecretDeveloperLevelsMin") ||
+                              MainLayout.pendingChanges.Contains("_pmcSecretDeveloperLevelsMax")))
                             {
                                 <MudButton @onclick="undoSecretDeveloperLevelsMinMax" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
@@ -842,6 +952,15 @@
         get => Data.pmcBots.weaponDurability.max - Data.pmcBots.weaponDurability.minDelta;
         set { }
     }
+    private int _pmcWeaponDurabilityEnhancementChance
+    {
+        get => Data.pmcBots.weaponDurability.enhancementChance;
+        set
+        {
+            Data.pmcBots.weaponDurability.enhancementChance = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.weaponDurability.enhancementChance);
+        }
+    }
     private void undoWeaponDurability()
     {
         _pmcWeaponDurabilityEnabled = OriginalConfig.pmcBots.weaponDurability.enable;
@@ -850,6 +969,7 @@
         _pmcWeaponDurabilityMinDelta = OriginalConfig.pmcBots.weaponDurability.minDelta;
         _pmcWeaponDurabilityMaxDelta = OriginalConfig.pmcBots.weaponDurability.maxDelta;
         _pmcWeaponDurabilityMinLimitPercent = OriginalConfig.pmcBots.weaponDurability.minLimitPercent;
+        _pmcWeaponDurabilityEnhancementChance = OriginalConfig.pmcBots.weaponDurability.enhancementChance;
     }
     private void defaultWeaponDurability()
     {
@@ -859,6 +979,7 @@
         _pmcWeaponDurabilityMinDelta = 0;
         _pmcWeaponDurabilityMaxDelta = 5;
         _pmcWeaponDurabilityMinLimitPercent = Data.pmcBots.weaponDurability.min - Data.pmcBots.weaponDurability.maxDelta;
+        _pmcWeaponDurabilityEnhancementChance = 0;
     }
     #endregion
     #region AMMO TIER SLIDING
@@ -900,6 +1021,66 @@
         _pmcAmmoTierSlideEnabled = false;
         _pmcAmmoTierSlideAmount = 1;
         _pmcAmmoTierSlideChance = 33;
+    }
+    #endregion
+    #region QUEST LOADOUTS
+    private bool _pmcQuestLoadoutEnabled
+    {
+        get => Data.pmcBots.questConfig.enable;
+        set
+        {
+            Data.pmcBots.questConfig.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.questConfig.enable);
+        }
+    }
+    private int _pmcQuestLoadoutChance
+    {
+        get => Data.pmcBots.questConfig.chance;
+        set
+        {
+            Data.pmcBots.questConfig.chance = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.questConfig.chance);
+        }
+    }
+    private void undoPMCQuestLoadouts()
+    {
+        _pmcQuestLoadoutEnabled = OriginalConfig.pmcBots.questConfig.enable;
+        _pmcQuestLoadoutChance = OriginalConfig.pmcBots.questConfig.chance;
+    }
+    private void defaultPMCQuestLoadouts()
+    {
+        _pmcQuestLoadoutEnabled = true;
+        _pmcQuestLoadoutChance = 10;
+    }
+    #endregion
+    #region POVERTY
+    private bool _pmcPovertyEnabled
+    {
+        get => Data.pmcBots.povertyConfig.enable;
+        set
+        {
+            Data.pmcBots.povertyConfig.enable = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.povertyConfig.enable);
+        }
+    }
+    private int _pmcPovertyChance
+    {
+        get => Data.pmcBots.povertyConfig.chance;
+        set
+        {
+            Data.pmcBots.povertyConfig.chance = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.povertyConfig.chance);
+        }
+    }
+    private void undoPMCPoverty()
+    {
+        _pmcPovertyEnabled = OriginalConfig.pmcBots.povertyConfig.enable;
+        _pmcPovertyChance = OriginalConfig.pmcBots.povertyConfig.chance;
+    }
+    private void defaultPMCPoverty()
+    {
+        _pmcPovertyEnabled = true;
+        _pmcPovertyChance = 10;
     }
     #endregion
     #region SEASONAL APPEARANCE
