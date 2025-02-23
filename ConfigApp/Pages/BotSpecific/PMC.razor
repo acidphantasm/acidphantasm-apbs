@@ -415,14 +415,14 @@
                         </MudItem>
                         <MudItem xs="1">
                             @if (MainLayout._appUndoButtonToggle && (
-                           MainLayout.pendingChanges.Contains("_pmcPovertyEnabled") ||
-                           MainLayout.pendingChanges.Contains("_pmcPovertyChance")))
+                                MainLayout.pendingChanges.Contains("_pmcPovertyEnabled") ||
+                                MainLayout.pendingChanges.Contains("_pmcPovertyChance")))
                             {
                                 <MudButton @onclick="undoPMCPoverty" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                             }
                             else if (MainLayout._appDefaultButtonToggle && (
-                            _pmcPovertyEnabled != true) ||
-                            _pmcPovertyChance != 10)
+                                    _pmcPovertyEnabled != true) ||
+                                    _pmcPovertyChance != 10)
                             {
                                 <MudButton @onclick="defaultPMCPoverty" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
                             }
