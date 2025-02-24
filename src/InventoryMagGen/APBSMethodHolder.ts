@@ -161,7 +161,6 @@ export class APBSMethodHolder
     {
         const desiredMagazineTpls = modPool.filter((magTpl) => 
         {
-
             const magazineDb = this.itemHelper.getItem(magTpl)[1];
             if (!this.itemHelper.getItem(magazineDb._id)[0]) return false;
             return magazineDb._props && magazineDb._props.Cartridges[0]._max_count < currentMagazineSize && magazineDb._props.Cartridges[0]._max_count >= 30;
@@ -169,7 +168,7 @@ export class APBSMethodHolder
 
         if (desiredMagazineTpls.length === 0) 
         {
-            this.apbsLogger.log(Logging.DEBUG, `[Large Cap Mag] Weapon: ${weaponTpl} does not have compatible small magazines available in tier ${tier}. Ignoring filter...`);
+            this.apbsLogger.log(Logging.DEBUG, `[MAGAZINES] Weapon: ${weaponTpl} does not have compatible small magazines available in tier ${tier}. Ignoring filter...`);
         }
 
         return desiredMagazineTpls;
