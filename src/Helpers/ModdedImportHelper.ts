@@ -644,28 +644,42 @@ export class ModdedImportHelper
                 // Check if the itemID's slot doesn't already contain the item to import, if it doesn't - add it
                 if (!this.tierInformation.tier1mods[itemID][slotName].includes(slotFilterItem))
                 {
-                    if (!highTierItem) this.tierInformation.tier1mods[itemID][slotName].push(slotFilterItem);
-                    if (!highTierItem) this.tierInformation.tier2mods[itemID][slotName].push(slotFilterItem);
-                    if (!highTierItem) this.tierInformation.tier3mods[itemID][slotName].push(slotFilterItem);
-                    if (!lowTierItem) this.tierInformation.tier4mods[itemID][slotName].push(slotFilterItem);
-                    if (!lowTierItem) this.tierInformation.tier5mods[itemID][slotName].push(slotFilterItem);
-                    if (!lowTierItem) this.tierInformation.tier6mods[itemID][slotName].push(slotFilterItem);
-                    if (!lowTierItem) this.tierInformation.tier7mods[itemID][slotName].push(slotFilterItem);
+                    if (!highTierItem || lowTierItem) this.tierInformation.tier1mods[itemID][slotName].push(slotFilterItem);
+                    if (!highTierItem || lowTierItem) this.tierInformation.tier2mods[itemID][slotName].push(slotFilterItem);
+                    if (!highTierItem || lowTierItem) this.tierInformation.tier3mods[itemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem || highTierItem) this.tierInformation.tier4mods[itemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem || highTierItem) this.tierInformation.tier5mods[itemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem || highTierItem) this.tierInformation.tier6mods[itemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem || highTierItem) this.tierInformation.tier7mods[itemID][slotName].push(slotFilterItem);
 
                     /*
-                    Uncomment this to check a specific items slot
-                    if (itemID == "67ac94a942c1d1f45270acd9" && slotName == "mod_scope")
+                    // Uncomment this to check a specific items slot
+                    if (itemID == "67a01e4ea2b82626b73d10a3" && slotName == "mod_magazine")
                     {
-                    this.apbsLogger.log(Logging.WARN, `attempting to add ${slotFilterItem} to parent item ${parentSlotFilterItem} in slot ${slotName}`)
-                    this.apbsLogger.log(Logging.WARN, `high: ${highTierItem} | low: ${lowTierItem}`)
-                    this.apbsLogger.log(Logging.WARN, `Does have MPR?: ${slotFilter.includes("5649a2464bdc2d91118b45a8")}`)
-                    this.apbsLogger.log(Logging.WARN, `Does have more than one item in slot filter?: ${slotFilter.length > 1}`)
-                    this.apbsLogger.log(Logging.WARN, `Slot Filter: ${JSON.stringify(slotFilter)}`)
-                    this.apbsLogger.log(Logging.WARN, `SAND RAIL T3: ${JSON.stringify(this.tierInformation.tier3mods[parentSlotFilterItem][slotName])}`)
-                    this.apbsLogger.log(Logging.WARN, `SAND RAIL T4: ${JSON.stringify(this.tierInformation.tier4mods[parentSlotFilterItem][slotName])}`)
-                    this.apbsLogger.log(Logging.WARN, `----------------------------------------`)
+                        this.apbsLogger.log(Logging.WARN, `PARENT: attempting to add ${slotFilterItem} to parent item ${itemID} in slot ${slotName}`)
+                        this.apbsLogger.log(Logging.WARN, `high: ${highTierItem} | low: ${lowTierItem}`)
+                        this.apbsLogger.log(Logging.WARN, `Does have MPR?: ${slotFilter.includes("5649a2464bdc2d91118b45a8")}`)
+                        this.apbsLogger.log(Logging.WARN, `Does have more than one item in slot filter?: ${slotFilter.length > 1}`)
+                        this.apbsLogger.log(Logging.WARN, `Slot Filter: ${JSON.stringify(slotFilter)}`)
+                        this.apbsLogger.log(Logging.WARN, `ACR Pool: ${JSON.stringify(this.tierInformation.tier3mods[itemID][slotName])}`)
+                        this.apbsLogger.log(Logging.WARN, `ACR Pool: ${JSON.stringify(this.tierInformation.tier4mods[itemID][slotName])}`)
+                        this.apbsLogger.log(Logging.WARN, `----------------------------------------`)
+                    }
+
+                    
+                    if (itemID == "93bcdfda236122e67c098847" && slotName == "mod_magazine")
+                    {
+                        this.apbsLogger.log(Logging.WARN, `PARENT: attempting to add ${slotFilterItem} to parent item ${itemID} in slot ${slotName}`)
+                        this.apbsLogger.log(Logging.WARN, `high: ${highTierItem} | low: ${lowTierItem}`)
+                        this.apbsLogger.log(Logging.WARN, `Does have MPR?: ${slotFilter.includes("5649a2464bdc2d91118b45a8")}`)
+                        this.apbsLogger.log(Logging.WARN, `Does have more than one item in slot filter?: ${slotFilter.length > 1}`)
+                        this.apbsLogger.log(Logging.WARN, `Slot Filter: ${JSON.stringify(slotFilter)}`)
+                        this.apbsLogger.log(Logging.WARN, `DRACO T3: ${JSON.stringify(this.tierInformation.tier3mods[itemID][slotName])}`)
+                        this.apbsLogger.log(Logging.WARN, `DRACO RAIL T4: ${JSON.stringify(this.tierInformation.tier4mods[itemID][slotName])}`)
+                        this.apbsLogger.log(Logging.WARN, `----------------------------------------`)
                     }
                     */
+                    
 
                     // If the item should not receive additional attachments, skip to the next item
                     if (this.itemShouldNotGetModdedChildrenAttachments.includes(slotFilterItem)) continue;
@@ -722,18 +736,20 @@ export class ModdedImportHelper
                 const lowTierItem = this.tier4MinusOnly(parentSlotItemID, slotName, slotFilterItem);
 
                 /*
-                if (parentSlotFilterItem == "67ac94a942c1d1f45270acd9" && slotName == "mod_scope")
+                if (parentSlotFilterItem == "660b566e010010f3889ce04d" && slotName == "mod_reciever")
                 {
-                    this.apbsLogger.log(Logging.WARN, `attempting to add ${slotFilterItem} to parent item ${parentSlotFilterItem} in slot ${slotName}`)
+                    this.apbsLogger.log(Logging.WARN, `CHILD: attempting to add ${slotFilterItem} to parent item ${parentSlotFilterItem} in slot ${slotName}`)
                     this.apbsLogger.log(Logging.WARN, `high: ${highTierItem} | low: ${lowTierItem}`)
                     this.apbsLogger.log(Logging.WARN, `Does have MPR?: ${slotFilter.includes("5649a2464bdc2d91118b45a8")}`)
                     this.apbsLogger.log(Logging.WARN, `Does have more than one item in slot filter?: ${slotFilter.length > 1}`)
                     this.apbsLogger.log(Logging.WARN, `Slot Filter: ${JSON.stringify(slotFilter)}`)
-                    this.apbsLogger.log(Logging.WARN, `SAND RAIL T3: ${JSON.stringify(this.tierInformation.tier3mods[parentSlotFilterItem][slotName])}`)
-                    this.apbsLogger.log(Logging.WARN, `SAND RAIL T4: ${JSON.stringify(this.tierInformation.tier4mods[parentSlotFilterItem][slotName])}`)
+                    this.apbsLogger.log(Logging.WARN, `DRACO T3: ${JSON.stringify(this.tierInformation.tier3mods[parentSlotFilterItem][slotName])}`)
+                    this.apbsLogger.log(Logging.WARN, `DRACO RAIL T4: ${JSON.stringify(this.tierInformation.tier4mods[parentSlotFilterItem][slotName])}`)
                     this.apbsLogger.log(Logging.WARN, `----------------------------------------`)
                 }
-                */
+                    */
+                
+                
 
                 // Check if the PARENT itemID already exists in the tierJsons, if not - create it in all tierJSONs.
                 if (this.tierInformation.tier1mods[parentSlotItemID] == undefined)
@@ -763,13 +779,13 @@ export class ModdedImportHelper
                 if (!this.tierInformation.tier1mods[parentSlotItemID][slotName].includes(slotFilterItem))
                 {
                     // Finally push the child mod to the proper tierJSONs
-                    if (!highTierItem) this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem);
-                    if (!highTierItem) this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem);
-                    if (!highTierItem) this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem);
-                    if (!lowTierItem) this.tierInformation.tier4mods[parentSlotItemID][slotName].push(slotFilterItem);
-                    if (!lowTierItem) this.tierInformation.tier5mods[parentSlotItemID][slotName].push(slotFilterItem);
-                    if (!lowTierItem) this.tierInformation.tier6mods[parentSlotItemID][slotName].push(slotFilterItem);
-                    if (!lowTierItem) this.tierInformation.tier7mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!highTierItem || lowTierItem) this.tierInformation.tier1mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!highTierItem || lowTierItem) this.tierInformation.tier2mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!highTierItem || lowTierItem) this.tierInformation.tier3mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem || highTierItem) this.tierInformation.tier4mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem || highTierItem) this.tierInformation.tier5mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem || highTierItem) this.tierInformation.tier6mods[parentSlotItemID][slotName].push(slotFilterItem);
+                    if (!lowTierItem || highTierItem) this.tierInformation.tier7mods[parentSlotItemID][slotName].push(slotFilterItem);
 
                     if (ModConfig.config.compatibilityConfig.enableModdedAttachments && standaloneAttachment)
                     {
@@ -796,7 +812,7 @@ export class ModdedImportHelper
             const chamberFilter = itemDetails[1]?._props?.Chambers[0]?._props?.filters[0]?.Filter
 
             // If the chamber is valid and has items, add them to the tierJSONs
-            if (chamberFilter && chamberFilter.length > 0)
+            if (chamberFilter.length)
             {
                 for (const botPool in this.tierInformation.tier1ammo)
                 {
@@ -981,8 +997,8 @@ export class ModdedImportHelper
 
         if (slotName.includes("mod_stock") || slotName.includes("mod_handguard") || slotName.includes("mod_reciever"))
         {
-            if (!this.hasLowerAndUpperOptionsAvailable(parentID, slotName, 9)) return false;
-            if (itemData?._props?.Ergonomics >= 9) return true;
+            if (!this.hasLowerAndUpperOptionsAvailable(parentID, slotName, 8)) return false;
+            if (itemData?._props?.Ergonomics >= 8) return true;
         }
 
         if (slotName.includes("mod_scope") && this.tier4Optics.includes(itemID)) return true;
@@ -1004,8 +1020,8 @@ export class ModdedImportHelper
 
         if (slotName.includes("mod_stock") || slotName.includes("mod_handguard") || slotName.includes("mod_reciever"))
         {
-            if (!this.hasLowerAndUpperOptionsAvailable(parentID, slotName, 9)) return false;
-            if (itemData?._props?.Ergonomics <= 9) return true;
+            if (!this.hasLowerAndUpperOptionsAvailable(parentID, slotName, 8)) return false;
+            if (itemData?._props?.Ergonomics <= 8) return true;
         }
 
         if (slotName.includes("mod_scope") && !this.tier4Optics.includes(itemID)) return true;

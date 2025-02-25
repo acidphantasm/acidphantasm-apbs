@@ -44,6 +44,7 @@ import { APBSLogger } from "../Utils/APBSLogger";
 import { RealismHelper } from "../Helpers/RealismHelper";
 import { APBSIGenerateEquipmentProperties } from "../Interface/APBSIGenerateEquipmentProperties";
 import { APBSIQuestBotGenerationDetails } from "../Interface/APBSIQuestBotGear";
+import { Logging } from "../Enums/Logging";
 
 /** Handle profile related client events */
 @injectable()
@@ -896,25 +897,72 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 {
                     if (request.modSlot === "mod_barrel" && questInformation.questData.requiredWeaponModSlots.includes("mod_muzzle"))
                     {
-                        const barrelModPool = this.apbsGetBarrelModsForSilencer(request.parentTemplate, questInformation);
+                        const barrelModPool = this.apbsGetBarrelModsForSilencer(request.parentTemplate);
                         if (barrelModPool != undefined) modPool = barrelModPool;
                     }
                     // Quest requires a silencer, only allow silencers in the muzzle pool
                     if (request.modSlot === "mod_muzzle" && questInformation.questData.requiredWeaponModSlots.includes("mod_muzzle"))
                     {
-                        const muzzleModPool = this.apbsGetMuzzleModsForSilencer(request.parentTemplate, questInformation);
+                        const muzzleModPool = this.apbsGetMuzzleModsForSilencer(request.parentTemplate);
                         if (muzzleModPool != undefined) modPool = muzzleModPool;
                     }
                 }
             }
             else if (questInformation.questData.questName == "Fishing Gear" && questInformation.questData.PrimaryWeapon.includes(weaponID))
             {
-                if (request.modSlot == "mod_stock") modPool = ["61faa91878830f069b6b7967"];
-                if (request.modSlot == "mod_bipod") modPool = ["56ea8222d2720b69698b4567"];
-                if (request.modSlot == "mod_muzzle") modPool = ["560e620e4bdc2d724b8b456b"];
-                if (request.modSlot == "mod_tactical") modPool = ["56083eab4bdc2d26448b456a"];
-                if (request.modSlot == "mod_sight_rear") modPool = ["56083e1b4bdc2dc8488b4572"];
-                if (request.modSlot == "mod_magazine") modPool = ["559ba5b34bdc2d1f1a8b4582"];
+                if (request.modSlot === "mod_stock") modPool = ["61faa91878830f069b6b7967"];
+                if (request.modSlot === "mod_bipod") modPool = ["56ea8222d2720b69698b4567"];
+                if (request.modSlot === "mod_muzzle") modPool = ["560e620e4bdc2d724b8b456b"];
+                if (request.modSlot === "mod_tactical") modPool = ["56083eab4bdc2d26448b456a"];
+                if (request.modSlot === "mod_sight_rear") modPool = ["56083e1b4bdc2dc8488b4572"];
+                if (request.modSlot === "mod_magazine") modPool = ["559ba5b34bdc2d1f1a8b4582"];
+            }
+        }
+
+        if ((weaponID == "67a01e4ea2b82626b73d10a3" || weaponID == "67a01e4ea2b82626b73d10a4") && (request.modSlot === "mod_barrel" || request.modSlot === "mod_magazine"))
+        {
+            const ammoCaliberSelected = this.itemHelper.getItem(request.ammoTpl);
+            if (ammoCaliberSelected[0])
+            {
+                const caliberData = ammoCaliberSelected[1]._props.Caliber;
+
+                switch (caliberData)
+                {
+                    case "Caliber762x39":
+                        if (request.modSlot === "mod_barrel")
+                        {
+                            modPool = [
+                                "67a01e4ea2b82626b73d10a6",
+                                "67a01e4ea2b82626b73d10a7",
+                                "67a01e4ea2b82626b73d10a8"
+                            ];
+                        }
+                        if (request.modSlot === "mod_magazine")
+                        {
+                            modPool = [
+                                "67a01e4ea2b82626b73d10a5"
+                            ];
+                        }
+                        break;
+                    case "Caliber556x45NATO":
+                        if (request.modSlot === "mod_barrel")
+                        {
+                            modPool = [
+                                "67a01e4ea2b82626b73d10a9",
+                                "67a01e4ea2b82626b73d10aa",
+                                "67a01e4ea2b82626b73d10ab"
+                            ];
+                        }
+                        if (request.modSlot === "mod_magazine")
+                        {
+                            const index = modPool.indexOf("67a01e4ea2b82626b73d10a5")
+                            if (index > -1)
+                            {
+                                modPool.splice(index)
+                            }
+                        }
+                        break;
+                }
             }
         }
 
@@ -927,6 +975,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             request.weapon,
             request.modSlot
         );
+        
         if (chosenModResult.slotBlocked && !parentSlot._required) 
         {
             // Don't bother trying to fit mod, slot is completely blocked
@@ -967,7 +1016,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         return this.itemHelper.getItem(chosenModResult.chosenTpl);
     }
 
-    private apbsGetBarrelModsForSilencer(parentTemplate: ITemplateItem, questInformation: APBSIQuestBotGenerationDetails): string[]
+    private apbsGetBarrelModsForSilencer(parentTemplate: ITemplateItem): string[]
     {
         const barrelModPool = [];
         // Get barrel slot for parent
@@ -995,7 +1044,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         return undefined;
     }
 
-    private apbsGetMuzzleModsForSilencer(parentTemplate: ITemplateItem, questInformation: APBSIQuestBotGenerationDetails): string[]
+    private apbsGetMuzzleModsForSilencer(parentTemplate: ITemplateItem): string[]
     {
         const muzzleModPool = [];
         const modSlot = parentTemplate._props.Slots.find((slot) => slot._name === "mod_muzzle");
