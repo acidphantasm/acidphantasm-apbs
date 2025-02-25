@@ -893,13 +893,13 @@ export class ModdedImportHelper
         // Check if the itemID's slot doesn't already contain the item to import, if it doesn't - add it
         if (!this.tierInformation.tier4mods[weaponID][slotName].includes(slotItem))
         {
-            if (!highTierItem) this.tierInformation.tier1mods[weaponID][slotName].push(slotItem);
-            if (!highTierItem) this.tierInformation.tier2mods[weaponID][slotName].push(slotItem);
-            if (!highTierItem) this.tierInformation.tier3mods[weaponID][slotName].push(slotItem);
-            if (!lowTierItem) this.tierInformation.tier4mods[weaponID][slotName].push(slotItem);
-            if (!lowTierItem) this.tierInformation.tier5mods[weaponID][slotName].push(slotItem);
-            if (!lowTierItem) this.tierInformation.tier6mods[weaponID][slotName].push(slotItem);
-            if (!lowTierItem) this.tierInformation.tier7mods[weaponID][slotName].push(slotItem);
+            if (!highTierItem || lowTierItem) this.tierInformation.tier1mods[weaponID][slotName].push(slotItem);
+            if (!highTierItem || lowTierItem) this.tierInformation.tier2mods[weaponID][slotName].push(slotItem);
+            if (!highTierItem || lowTierItem) this.tierInformation.tier3mods[weaponID][slotName].push(slotItem);
+            if (!lowTierItem || highTierItem) this.tierInformation.tier4mods[weaponID][slotName].push(slotItem);
+            if (!lowTierItem || highTierItem) this.tierInformation.tier5mods[weaponID][slotName].push(slotItem);
+            if (!lowTierItem || highTierItem) this.tierInformation.tier6mods[weaponID][slotName].push(slotItem);
+            if (!lowTierItem || highTierItem) this.tierInformation.tier7mods[weaponID][slotName].push(slotItem);
 
             // Push any children mods
             this.recursivePushChildrenMods(slotItem, true);
