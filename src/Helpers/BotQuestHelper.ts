@@ -365,7 +365,7 @@ export class BotQuestHelper
         requiredWeaponModSlots: [
             "mod_muzzle",
             "mod_scope",
-            "mod_receiver",
+            "mod_reciever",
             "mod_mount"
         ],
         requiredWeaponModBaseClasses: [
