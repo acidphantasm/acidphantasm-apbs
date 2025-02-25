@@ -45,8 +45,9 @@ export class APBSInternalMagazineInventoryMagGen implements APBSIInventoryMagGen
             const weapon = inventoryMagGen.getWeaponTemplate();
             
             const ammoTable = this.apbsEquipmentGetter.getAmmoByBotRole(inventoryMagGen.getBotRole(), inventoryMagGen.getTierNumber())
+            const ammoCaliber = inventoryMagGen.getAmmoTemplate()._props.Caliber;
 
-            const rerolledAmmo = this.apbsMethodHolder.apbsGetWeightedCompatibleAmmo(ammoTable, weapon);
+            const rerolledAmmo = this.apbsMethodHolder.apbsGetWeightedCompatibleAmmo(ammoTable, ammoCaliber, weapon);
 
             if (bulletCount > 20) 
             {
