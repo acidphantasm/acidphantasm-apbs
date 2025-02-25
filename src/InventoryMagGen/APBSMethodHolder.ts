@@ -32,12 +32,15 @@ export class APBSMethodHolder
 
     public apbsGetWeightedCompatibleAmmo(
         cartridgePool: Record<string, Record<string, number>>,
+        currentCaliber: string,
         weaponTemplate: ITemplateItem
     ): string 
     {
-        const desiredCaliber = this.getWeaponCaliber(weaponTemplate);
-        
-        let cartridgePoolForWeapon = cartridgePool[desiredCaliber];
+        if (currentCaliber == "762x67mmB")
+        {
+            currentCaliber = "Caliber762x67mmB";
+        } 
+        let cartridgePoolForWeapon = cartridgePool[currentCaliber];
         if (!cartridgePoolForWeapon || cartridgePoolForWeapon?.length === 0) 
         {
             this.logger.debug(
@@ -61,43 +64,43 @@ export class APBSMethodHolder
         }
 
         // Inner join the weapons allowed + passed in cartridge pool to get compatible cartridges
-        let compatibleCartridges = Object.keys(cartridgePoolForWeapon)
-            .filter((cartridge) => compatibleCartridgesInTemplate.includes(cartridge))
-            .reduce((acc, key) => ({ ...acc, [key]: cartridgePoolForWeapon[key] }), {});
+        const compatibleCartridges = {};
+        for (const cartridge of Object.keys(cartridgePoolForWeapon)) 
+        {
+            if (compatibleCartridgesInTemplate.includes(cartridge)) 
+            {
+                compatibleCartridges[cartridge] = cartridgePoolForWeapon[cartridge];
+            }
+        }
 
+        // If no compatible cartridges found still, get caliber data from magazine in weapon template
         if (Object.keys(compatibleCartridges).length === 0) 
         {
-            // No compatible cartridges, try to get compatible caliber from magazines
-            const firstMagazine = weaponTemplate._props.Slots.find((slot) => slot._name === "mod_magazine");
-            const magazineTemplate = this.itemHelper.getItem(firstMagazine._props.filters[0].Filter[0]);
-
-            // Get the first slots array of cartridges
-            compatibleCartridges = magazineTemplate[1]._props.Slots[0]?._props.filters[0].Filter;
-            if (!compatibleCartridges) 
+            // Get cartridges from the weapons first magazine in filters
+            const compatibleCartridgesInMagazine = this.getCompatibleCartridgesFromMagazineTemplate(weaponTemplate);
+            if (compatibleCartridgesInMagazine.length === 0) 
             {
-                // Normal magazines
-                // None found, try the cartridges array
-                compatibleCartridges = magazineTemplate[1]._props.Cartridges[0]?._props.filters[0].Filter;
-                
-                if (!compatibleCartridges)
+                // No compatible cartridges found in magazine, use default
+                this.apbsLogger.log(Logging.DEBUG, `[AMMO] No compatible ammo found for ${weaponTemplate._id}, using weapons default ammo instead.`);
+                return weaponTemplate._props.defAmmo;
+            }
+            // Get the caliber data from the first compatible round in the magazine
+            const magazineCaliberData = this.itemHelper.getItem(compatibleCartridgesInMagazine[0])[1]._props.Caliber;
+            cartridgePoolForWeapon = cartridgePool[magazineCaliberData];
+
+            for (const cartridge of Object.keys(cartridgePoolForWeapon)) 
+            {
+                if (compatibleCartridgesInMagazine.includes(cartridge)) 
                 {
-                    this.apbsLogger.log(Logging.DEBUG, `No compatible ammo found for ${weaponTemplate._id}, using weapons default ammo instead.`);
-                    return weaponTemplate._props.defAmmo
+                    compatibleCartridges[cartridge] = cartridgePoolForWeapon[cartridge];
                 }
             }
 
-            // Last ditch effor to get compatible calibers
-            const magazineCaliberData = this.itemHelper.getItem(compatibleCartridges[0])[1]._props.Caliber;
-            cartridgePoolForWeapon = cartridgePool[magazineCaliberData];
-            
-            compatibleCartridges = Object.keys(cartridgePoolForWeapon)
-                .filter((cartridge) => compatibleCartridgesInTemplate.includes(cartridge))
-                .reduce((acc, key) => ({ ...acc, [key]: cartridgePoolForWeapon[key] }), {});
-
+            // Nothing found after also checking magazines, return default ammo
             if (Object.keys(compatibleCartridges).length === 0) 
             {
-                this.apbsLogger.log(Logging.DEBUG, `No compatible ammo found for ${weaponTemplate._id} in last ditch effort, using weapons default ammo instead.`);
-                return weaponTemplate._props.defAmmo
+                this.apbsLogger.log(Logging.DEBUG, `[AMMO] No compatible ammo found for ${weaponTemplate._id} in last ditch effort, using weapons default ammo instead.`);
+                return weaponTemplate._props.defAmmo;
             }
         }
 
@@ -133,42 +136,78 @@ export class APBSMethodHolder
         }
     }
 
-    public getCompatibleCartridgesFromWeaponTemplate(weaponTemplate: ITemplateItem): string[] 
+    private getCompatibleCartridgesFromWeaponTemplate(weaponTemplate: ITemplateItem): string[] 
     {
-        let cartridges = weaponTemplate._props.Chambers[0]?._props?.filters[0]?.Filter;
+        const cartridges = weaponTemplate._props?.Chambers[0]?._props?.filters[0]?.Filter;
         if (!cartridges) 
         {
             // Fallback to the magazine if possible, e.g. for revolvers
-            //  Grab the magazines template
-            const firstMagazine = weaponTemplate._props.Slots.find((slot) => slot._name === "mod_magazine");
-            const magazineTemplate = this.itemHelper.getItem(firstMagazine._props.filters[0].Filter[0]);
-
-            // Get the first slots array of cartridges
-            cartridges = magazineTemplate[1]._props.Slots[0]?._props.filters[0].Filter;
-            if (!cartridges) 
-            {
-                // Normal magazines
-                // None found, try the cartridges array
-                cartridges = magazineTemplate[1]._props.Cartridges[0]?._props.filters[0].Filter;
-            }
+            return this.getCompatibleCartridgesFromMagazineTemplate(weaponTemplate);
         }
 
         return cartridges;
     }
 
+    private getCompatibleCartridgesFromMagazineTemplate(weaponTemplate: ITemplateItem): string[] 
+    {
+        // Get the first magazine's template from the weapon
+        const magazineSlot = weaponTemplate._props.Slots?.find((slot) => slot._name === "mod_magazine");
+        if (!magazineSlot) 
+        {
+            return [];
+        }
+        const magazineTemplate = this.itemHelper.getItem(magazineSlot._props.filters[0].Filter[0]);
+        if (!magazineTemplate[0]) 
+        {
+            return [];
+        }
+
+        // Get the first slots array of cartridges
+        let cartridges = magazineTemplate[1]._props.Slots[0]?._props?.filters[0].Filter;
+        if (!cartridges) 
+        {
+            // Normal magazines
+            // None found, try the cartridges array
+            cartridges = magazineTemplate[1]._props.Cartridges[0]?._props?.filters[0].Filter;
+        }
+
+        return cartridges ?? [];
+    }
+    
+    private magazineHasCompatibleCaliber(magazineTemplate: ITemplateItem, currentCaliber: string): boolean 
+    {
+        const cartridges = magazineTemplate._props.Cartridges[0]?._props?.filters[0].Filter;
+
+        if (cartridges.length)
+        {
+            // Check each rout in the compatible cartridges
+            for (const round in cartridges)
+            {
+                const caliberData = this.itemHelper.getItem(cartridges[round])[1]._props.Caliber;
+                if (caliberData === currentCaliber)
+                {
+                    return true;
+                } 
+            }
+            return false;
+        }
+        return false;
+    }
+
     // Custom filtered magazine pool by capacity - returns empty array if nothing is compatible
-    public getFilteredMagazinePoolByCapacity(tier: number, weaponTpl: string, currentMagazineSize: number, modPool: string[]): string[] 
+    public getFilteredMagazinePoolByCapacity(tier: number, weapon: ITemplateItem, currentCaliber: string, modPool: string[]): string[] 
     {
         const desiredMagazineTpls = modPool.filter((magTpl) => 
         {
-            const magazineDb = this.itemHelper.getItem(magTpl)[1];
-            if (!this.itemHelper.getItem(magazineDb._id)[0]) return false;
-            return magazineDb._props && magazineDb._props.Cartridges[0]._max_count < currentMagazineSize && magazineDb._props.Cartridges[0]._max_count >= 30;
+            const magazineDb = this.itemHelper.getItem(magTpl);
+            if (!magazineDb[0]) return false;
+            if (!this.magazineHasCompatibleCaliber(magazineDb[1], currentCaliber)) return false;
+            return magazineDb[1]._props && magazineDb[1]._props.Cartridges[0]._max_count < 40 && magazineDb[1]._props.Cartridges[0]._max_count >= 30;
         });
 
         if (desiredMagazineTpls.length === 0) 
         {
-            this.apbsLogger.log(Logging.DEBUG, `[MAGAZINES] Weapon: ${weaponTpl} does not have compatible small magazines available in tier ${tier}. Ignoring filter...`);
+            this.apbsLogger.log(Logging.DEBUG, `[MAGAZINES] Weapon: ${weapon._id} does not have compatible small magazines available in tier ${tier}. Ignoring filter...`);
         }
 
         return desiredMagazineTpls;
