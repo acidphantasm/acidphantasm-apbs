@@ -56,6 +56,7 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
         let magTemplate = inventoryMagGen.getMagazineTemplate();
         let magazineTpl = magTemplate._id;
         const weapon = inventoryMagGen.getWeaponTemplate();
+        const ammoCaliber = inventoryMagGen.getAmmoTemplate()._props.Caliber;
         const attemptedMagBlacklist: string[] = [];
         const defaultMagazineTpl = this.botWeaponGeneratorHelper.getWeaponsDefaultMagazineTpl(weapon);
         let randomizedMagazineCount = Number(
@@ -80,13 +81,13 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
                 const apbsModsForWeapon = apbsModPool[weapon._id];
                 const apbsMagazineModPool = apbsModsForWeapon["mod_magazine"];
                 const currentMagazineCountSize = magTemplate?._props?.Cartridges[0]?._max_count;
-                if (currentMagazineCountSize && apbsMagazineModPool)
+                if (currentMagazineCountSize && apbsMagazineModPool.length)
                 {
                     if (currentMagazineCountSize > 35 && i >= (ModConfig.config.generalConfig.largeCapacityMagazineCount - 1))
                     {
                         isTryingSmallerMags = true;
-                        const smallerMagazines = this.apbsMethodHolder.getFilteredMagazinePoolByCapacity(inventoryMagGen.getTierNumber(), weapon._id, currentMagazineCountSize, apbsMagazineModPool);
-                        if (smallerMagazines.length > 0)
+                        const smallerMagazines = this.apbsMethodHolder.getFilteredMagazinePoolByCapacity(inventoryMagGen.getTierNumber(), weapon, ammoCaliber, apbsMagazineModPool);
+                        if (smallerMagazines.length)
                         {
                             magazineTpl = this.randomUtil.getStringArrayValue(smallerMagazines);
                             magTemplate = this.itemHelper.getItem(magazineTpl)[1];
@@ -98,7 +99,7 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
             let selectedAmmoForMag = inventoryMagGen.getAmmoTemplate()._id;
             if (ModConfig.config.generalConfig.enableBotsToRollAmmoAgain && this.randomUtil.getChance100(ModConfig.config.generalConfig.chanceToRollAmmoAgain))
             {
-                selectedAmmoForMag = this.apbsMethodHolder.apbsGetWeightedCompatibleAmmo(ammoTable, weapon);
+                selectedAmmoForMag = this.apbsMethodHolder.apbsGetWeightedCompatibleAmmo(ammoTable, ammoCaliber, weapon);
             }
 
             const magazineWithAmmo = this.botWeaponGeneratorHelper.createMagazineWithAmmo(
