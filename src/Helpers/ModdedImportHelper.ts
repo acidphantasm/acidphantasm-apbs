@@ -735,7 +735,7 @@ export class ModdedImportHelper
             {
                 const slotFilterItem = slotFilter[item]; 
 
-                if (this.shouldItemBeSkipped(parentSlotFilterItem, slotFilterItem, slotName, standaloneAttachment)) continue;
+                if (this.shouldItemBeSkipped(parentSlotItemID, slotFilterItem, slotName, standaloneAttachment)) continue;
 
                 const highTierItem = this.tier4PlusOnly(parentSlotItemID, slotName, slotFilterItem);
                 const lowTierItem = this.tier4MinusOnly(parentSlotItemID, slotName, slotFilterItem);
@@ -794,7 +794,7 @@ export class ModdedImportHelper
 
                     if (ModConfig.config.compatibilityConfig.enableModdedAttachments && standaloneAttachment)
                     {
-                        this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. ParentSlotItem: ${parentSlotFilterItem} | Slot: ${slotName} | Attachment: ${slotFilterItem}`);
+                        this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. ParentSlotItem: ${parentSlotItemID} | Slot: ${slotName} | Attachment: ${slotFilterItem}`);
                         if (!this.allImportedAttachments.includes(slotFilterItem)) this.allImportedAttachments.push(slotFilterItem);
                         this.numberOfAttachments++
                     } 
@@ -814,7 +814,7 @@ export class ModdedImportHelper
         // Check if the Caliber exists on tierJSON or is valid
         if (!Object.keys(this.tierInformation.tier1ammo.scavAmmo).includes(itemCaliber) && itemCaliber != undefined)
         {
-            const chamberFilter = itemDetails[1]?._props?.Chambers[0]?._props?.filters[0]?.Filter
+            const chamberFilter = itemDetails[1]?._props?.Chambers[0]?._props?.filters[0]?.Filter ?? [];
 
             // If the chamber is valid and has items, add them to the tierJSONs
             if (chamberFilter.length)
@@ -843,6 +843,10 @@ export class ModdedImportHelper
                         this.tierInformation.tier7ammo[botPool][itemCaliber][ammo] = 1;
                     }
                 }
+            }
+            else
+            {
+                this.apbsLogger.log(Logging.WARN, `[CALIBER] New caliber found in weapon, but could not find details. Item: ${itemID} | Caliber: ${itemCaliber}`)
             }
         }
     }
@@ -1094,18 +1098,23 @@ export class ModdedImportHelper
             if (itemData?._props?.Cartridges[0]?._max_count == undefined) return true;
         }
         
+        if (slotName == "mod_sight_front" || slotName == "mod_sight_rear")
+        {
+            if (isVanillaParent) return true;
+        }
+
         if (slotName == "mod_scope_000")
         {
             if (!this.modScope000Whitelist.includes(itemID)) return true;
         }        
 
         // Last checks only if it's standalone
-        if (standaloneAttachment) return this.standaloneAttachmentShouldBeSkipped(isVanillaParent, isVanillaItem, itemID, slotName);
+        if (standaloneAttachment) return this.standaloneAttachmentShouldBeSkipped(itemID, slotName);
 
         return false;
     }
 
-    private standaloneAttachmentShouldBeSkipped(isVanillaParent: boolean, isVanillaItem: boolean, itemID: string, slotName: string): boolean
+    private standaloneAttachmentShouldBeSkipped(itemID: string, slotName: string): boolean
     {
         slotName = slotName.toLowerCase();
 
