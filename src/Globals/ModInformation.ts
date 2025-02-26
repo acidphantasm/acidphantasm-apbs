@@ -12,7 +12,7 @@ export class ModInformation
     public testMode: boolean = false;
     public testBotRole: (string)[] = [ "pmcusec", "pmcbear" ]
     public testTrader: string = "100000000000000000000000"
-    public testLevelLock: boolean = true;
+    public testLevelLock: boolean = false;
     public clearAssortPreRaid: boolean = true;
 }
 
