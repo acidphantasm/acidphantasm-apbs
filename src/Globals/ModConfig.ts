@@ -12,6 +12,7 @@ import { Logging } from "../Enums/Logging";
 export class ModConfig
 {
     public static config: Config;
+    public static blacklist: Blacklist;
 
     constructor(
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
@@ -21,6 +22,7 @@ export class ModConfig
     )
     {
         ModConfig.config = jsonc.parse(this.vfs.readFile(path.resolve(__dirname, "../../config/config.json")));
+        ModConfig.blacklist = jsonc.parse(this.vfs.readFile(path.resolve(__dirname, "../../config/blacklists.json")));
     }
 
     public serverLogDetails(): void
@@ -112,15 +114,18 @@ export interface Config
         weaponDurability: WeaponDurabilityConfig,
         lootConfig: LootConfig
     },
-    weaponBlacklist: TierBlacklistConfig,
-    equipmentBlacklist: TierBlacklistConfig,
-    ammoBlacklist: TierBlacklistConfig,
-    attachmentBlacklist: TierBlacklistConfig,
-    clothingBlacklist: TierBlacklistConfig,
     customLevelDeltas: CustomLevelDeltas,
     customScavLevelDeltas: CustomLevelDeltas,
     enableDebugLog: boolean,
     configAppSettings: ConfigAppSettings,
+}
+export interface Blacklist
+{
+    weaponBlacklist: TierBlacklistConfig,
+    equipmentBlacklist: TierBlacklistConfig,
+    ammoBlacklist: TierBlacklistConfig,
+    attachmentBlacklist: TierBlacklistConfig,
+    clothingBlacklist: TierBlacklistConfig
 }
 export interface PMCSpecificConfig
 {
