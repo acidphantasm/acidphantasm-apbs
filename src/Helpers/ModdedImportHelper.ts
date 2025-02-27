@@ -816,39 +816,89 @@ export class ModdedImportHelper
         {
             const chamberFilter = itemDetails[1]?._props?.Chambers[0]?._props?.filters[0]?.Filter ?? [];
 
+            // Probably a revolver or something, check the magazines instead
+            if (chamberFilter.length === 0)
+            {
+                const cartridges = this.getCompatibleCartridgesFromMagazineTemplate(itemDetails[1]);
+                if (cartridges.length)
+                {
+                    for (const cartridge in cartridges)
+                    {
+                        // Validate the cartridge caliber matches the weapon, if it does then push to the proper caliber (prevents multi caliber rifles from changing weights that already exist)
+                        const cartridgeID = cartridges[cartridge];
+                        const cartridgeDetails = this.itemHelper.getItem(cartridgeID)
+                        if (!cartridgeDetails[0]) continue;
+                        if (itemCaliber == cartridgeDetails[1]._props.Caliber)
+                        {
+                            this.pushAmmoToTier(itemCaliber, cartridgeID);
+                        }
+                    }
+                    return;
+                }
+            }
             // If the chamber is valid and has items, add them to the tierJSONs
             if (chamberFilter.length)
             {
-                for (const botPool in this.tierInformation.tier1ammo)
+                for (const round in chamberFilter)
                 {
-                    // Since the Caliber doesn't exist, create them empty to prevent undefined error below
-                    this.tierInformation.tier1ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier2ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier3ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier4ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier5ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier6ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier7ammo[botPool][itemCaliber] = {};
-
-                    // Push each item in the filter to the tierJSON
-                    for (const item in chamberFilter)
+                    // Validate the cartridge caliber matches the weapon, if it does then push to the proper caliber (prevents multi caliber rifles from changing weights that already exist)
+                    const roundID = chamberFilter[round];
+                    const roundDetails = this.itemHelper.getItem(roundID)
+                    if (!roundDetails[0]) continue;
+                    if (itemCaliber == roundDetails[1]._props.Caliber)
                     {
-                        const ammo = chamberFilter[item]
-                        this.tierInformation.tier1ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier2ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier3ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier4ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier5ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier6ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier7ammo[botPool][itemCaliber][ammo] = 1;
+                        this.pushAmmoToTier(itemCaliber, roundID);
                     }
                 }
+                return;
             }
-            else
-            {
-                this.apbsLogger.log(Logging.WARN, `[CALIBER] New caliber found in weapon, but could not find details. Item: ${itemID} | Caliber: ${itemCaliber}`)
-            }
+
+            this.apbsLogger.log(Logging.WARN, `[CALIBER] New caliber found in weapon, but could not find details. Item: ${itemID} | Caliber: ${itemCaliber}`)
         }
+    }
+
+    private pushAmmoToTier(caliber: string, itemID: string): void
+    {
+        for (const botPool in this.tierInformation.tier1ammo)
+        {
+            this.tierInformation.tier1ammo[botPool][caliber] = {};
+            this.tierInformation.tier2ammo[botPool][caliber] = {};
+            this.tierInformation.tier3ammo[botPool][caliber] = {};
+            this.tierInformation.tier4ammo[botPool][caliber] = {};
+            this.tierInformation.tier5ammo[botPool][caliber] = {};
+            this.tierInformation.tier6ammo[botPool][caliber] = {};
+            this.tierInformation.tier7ammo[botPool][caliber] = {};
+
+            this.tierInformation.tier1ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier2ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier3ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier4ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier5ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier6ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier7ammo[botPool][caliber][itemID] = 1;
+        }
+    }
+
+    private getCompatibleCartridgesFromMagazineTemplate(weaponTemplate: ITemplateItem): string[] 
+    {
+        const magazineSlot = weaponTemplate._props.Slots?.find((slot) => slot._name === "mod_magazine");
+        if (!magazineSlot) 
+        {
+            return [];
+        }
+        const magazineTemplate = this.itemHelper.getItem(magazineSlot._props.filters[0].Filter[0]);
+        if (!magazineTemplate[0]) 
+        {
+            return [];
+        }
+
+        let cartridges = magazineTemplate[1]._props.Slots[0]?._props?.filters[0].Filter;
+        if (!cartridges) 
+        {
+            cartridges = magazineTemplate[1]._props.Cartridges[0]?._props?.filters[0].Filter;
+        }
+
+        return cartridges ?? [];
     }
 
     private getItem(tpl: string): ITemplateItem
