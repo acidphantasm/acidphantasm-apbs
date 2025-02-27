@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
@@ -8,8 +9,10 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Windows.Input;
 using System.Windows.Media.TextFormatting;
+using System.Windows.Shapes;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using Path = System.IO.Path;
 
 namespace APBSConfig.Core
 {
@@ -42,6 +45,16 @@ namespace APBSConfig.Core
 
     }
 
+    public class APBSServerBlacklistConfig
+    {
+        #region BLACKLISTS
+        public required TierBlacklistConfig weaponBlacklist { get; set; }
+        public required TierBlacklistConfig equipmentBlacklist { get; set; }
+        public required TierBlacklistConfig ammoBlacklist { get; set; }
+        public required TierBlacklistConfig attachmentBlacklist { get; set; }
+        public required TierBlacklistConfig clothingBlacklist { get; set; }
+        #endregion
+    }
     public class APBSServerConfig
     {
         #region PRESETS
@@ -79,14 +92,6 @@ namespace APBSConfig.Core
 
         #region SPECIAL-ONLY
         public required BotData specialBots { get; set; }
-        #endregion
-
-        #region BLACKLISTS
-        public required TierBlacklistConfig weaponBlacklist { get; set; }
-        public required TierBlacklistConfig equipmentBlacklist { get; set; }
-        public required TierBlacklistConfig ammoBlacklist { get; set; }
-        public required TierBlacklistConfig attachmentBlacklist { get; set; }
-        public required TierBlacklistConfig clothingBlacklist { get; set; }
         #endregion
 
         #region LEVEL DELTAS
@@ -294,20 +299,29 @@ public class DataLoader
 
         public static APBSServerConfig Data { get; set; } = default!;
         public static APBSServerConfig OriginalConfig { get; set; } = default!;
+        public static APBSServerBlacklistConfig BlacklistData { get; set; } = default!;
+        public static APBSServerBlacklistConfig OriginalBlacklist { get; set; } = default!;
+
         public static bool initialLoad = false;
         public static bool LoadJson()
         {
             if (directory != null)
             {
-                var path = Path.Combine(directory, "./config/config.json");
+                var configPath = Path.Combine(directory, "./config/config.json");
+                var blacklistPath = Path.Combine(directory, "./config/blacklists.json");
 
                 try
                 {
-                    Data = JsonConvert.DeserializeObject<APBSServerConfig>(File.ReadAllText(path)) ?? default!;
-
+                    Data = JsonConvert.DeserializeObject<APBSServerConfig>(File.ReadAllText(configPath)) ?? default!;
                     // Reserialize Data into temporary object to reset OriginalConfig to current loaded config
                     string serializedData = JsonConvert.SerializeObject(Data);
                     OriginalConfig = JsonConvert.DeserializeObject<APBSServerConfig>(serializedData)!;
+
+
+                    BlacklistData = JsonConvert.DeserializeObject<APBSServerBlacklistConfig>(File.ReadAllText(blacklistPath)) ?? default!;
+                    // Reserialize Data into temporary object to reset OriginalConfig to current loaded config
+                    string serializedBlacklistData = JsonConvert.SerializeObject(BlacklistData);
+                    OriginalBlacklist = JsonConvert.DeserializeObject<APBSServerBlacklistConfig>(serializedBlacklistData)!;
 
                     return true;
                 }
@@ -323,15 +337,22 @@ public class DataLoader
 
             if (directory != null)
             {
-                var path = Path.Combine(directory, "./config/config.json");
+                var configPath = Path.Combine(directory, "./config/config.json");
+                var blacklistPath = Path.Combine(directory, "./config/blacklists.json");
 
                 try
                 {
-                    File.WriteAllText(path, JsonConvert.SerializeObject(Data, Formatting.Indented));
-
+                    File.WriteAllText(configPath, JsonConvert.SerializeObject(Data, Formatting.Indented));
                     // Reserialize Data into temporary object to reset OriginalConfig to current loaded config
                     string serializedData = JsonConvert.SerializeObject(Data);
                     OriginalConfig = JsonConvert.DeserializeObject<APBSServerConfig>(serializedData)!;
+
+
+                    File.WriteAllText(blacklistPath, JsonConvert.SerializeObject(BlacklistData, Formatting.Indented));
+                    // Reserialize Data into temporary object to reset OriginalConfig to current loaded config
+                    string serializedBlacklistData = JsonConvert.SerializeObject(BlacklistData);
+                    OriginalBlacklist = JsonConvert.DeserializeObject<APBSServerBlacklistConfig>(serializedBlacklistData)!;
+
 
                     return true;
                 }

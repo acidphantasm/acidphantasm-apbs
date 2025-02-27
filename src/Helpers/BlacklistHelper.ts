@@ -25,45 +25,45 @@ export class BlacklistHelper
 
     public initialize(): void
     {
-        if (ModConfig.config.weaponBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier1Blacklist, 1);
-        if (ModConfig.config.weaponBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier2Blacklist, 2);
-        if (ModConfig.config.weaponBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier3Blacklist, 3);
-        if (ModConfig.config.weaponBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier4Blacklist, 4);
-        if (ModConfig.config.weaponBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier5Blacklist, 5);
-        if (ModConfig.config.weaponBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier6Blacklist, 6);
-        if (ModConfig.config.weaponBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.config.weaponBlacklist.tier7Blacklist, 7);
+        if (ModConfig.blacklist.weaponBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.blacklist.weaponBlacklist.tier1Blacklist, 1);
+        if (ModConfig.blacklist.weaponBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.blacklist.weaponBlacklist.tier2Blacklist, 2);
+        if (ModConfig.blacklist.weaponBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.blacklist.weaponBlacklist.tier3Blacklist, 3);
+        if (ModConfig.blacklist.weaponBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.blacklist.weaponBlacklist.tier4Blacklist, 4);
+        if (ModConfig.blacklist.weaponBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.blacklist.weaponBlacklist.tier5Blacklist, 5);
+        if (ModConfig.blacklist.weaponBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.blacklist.weaponBlacklist.tier6Blacklist, 6);
+        if (ModConfig.blacklist.weaponBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedWeapons(ModConfig.blacklist.weaponBlacklist.tier7Blacklist, 7);
 
-        if (ModConfig.config.equipmentBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier1Blacklist, 1);
-        if (ModConfig.config.equipmentBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier2Blacklist, 2);
-        if (ModConfig.config.equipmentBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier3Blacklist, 3);
-        if (ModConfig.config.equipmentBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier4Blacklist, 4);
-        if (ModConfig.config.equipmentBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier5Blacklist, 5);
-        if (ModConfig.config.equipmentBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier6Blacklist, 6);
-        if (ModConfig.config.equipmentBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.config.equipmentBlacklist.tier7Blacklist, 7);
+        if (ModConfig.blacklist.equipmentBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.blacklist.equipmentBlacklist.tier1Blacklist, 1);
+        if (ModConfig.blacklist.equipmentBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.blacklist.equipmentBlacklist.tier2Blacklist, 2);
+        if (ModConfig.blacklist.equipmentBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.blacklist.equipmentBlacklist.tier3Blacklist, 3);
+        if (ModConfig.blacklist.equipmentBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.blacklist.equipmentBlacklist.tier4Blacklist, 4);
+        if (ModConfig.blacklist.equipmentBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.blacklist.equipmentBlacklist.tier5Blacklist, 5);
+        if (ModConfig.blacklist.equipmentBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.blacklist.equipmentBlacklist.tier6Blacklist, 6);
+        if (ModConfig.blacklist.equipmentBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedEquipment(ModConfig.blacklist.equipmentBlacklist.tier7Blacklist, 7);
 
-        if (ModConfig.config.ammoBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier1Blacklist, 1);
-        if (ModConfig.config.ammoBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier2Blacklist, 2);
-        if (ModConfig.config.ammoBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier3Blacklist, 3);
-        if (ModConfig.config.ammoBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier4Blacklist, 4);
-        if (ModConfig.config.ammoBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier5Blacklist, 5);
-        if (ModConfig.config.ammoBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier6Blacklist, 6);
-        if (ModConfig.config.ammoBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.config.ammoBlacklist.tier7Blacklist, 7);
+        if (ModConfig.blacklist.ammoBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.blacklist.ammoBlacklist.tier1Blacklist, 1);
+        if (ModConfig.blacklist.ammoBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.blacklist.ammoBlacklist.tier2Blacklist, 2);
+        if (ModConfig.blacklist.ammoBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.blacklist.ammoBlacklist.tier3Blacklist, 3);
+        if (ModConfig.blacklist.ammoBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.blacklist.ammoBlacklist.tier4Blacklist, 4);
+        if (ModConfig.blacklist.ammoBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.blacklist.ammoBlacklist.tier5Blacklist, 5);
+        if (ModConfig.blacklist.ammoBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.blacklist.ammoBlacklist.tier6Blacklist, 6);
+        if (ModConfig.blacklist.ammoBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedAmmo(ModConfig.blacklist.ammoBlacklist.tier7Blacklist, 7);
 
-        if (ModConfig.config.attachmentBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier1Blacklist, 1);
-        if (ModConfig.config.attachmentBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier2Blacklist, 2);
-        if (ModConfig.config.attachmentBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier3Blacklist, 3);
-        if (ModConfig.config.attachmentBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier4Blacklist, 4);
-        if (ModConfig.config.attachmentBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier5Blacklist, 5);
-        if (ModConfig.config.attachmentBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier6Blacklist, 6);
-        if (ModConfig.config.attachmentBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.config.attachmentBlacklist.tier7Blacklist, 7);
+        if (ModConfig.blacklist.attachmentBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.blacklist.attachmentBlacklist.tier1Blacklist, 1);
+        if (ModConfig.blacklist.attachmentBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.blacklist.attachmentBlacklist.tier2Blacklist, 2);
+        if (ModConfig.blacklist.attachmentBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.blacklist.attachmentBlacklist.tier3Blacklist, 3);
+        if (ModConfig.blacklist.attachmentBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.blacklist.attachmentBlacklist.tier4Blacklist, 4);
+        if (ModConfig.blacklist.attachmentBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.blacklist.attachmentBlacklist.tier5Blacklist, 5);
+        if (ModConfig.blacklist.attachmentBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.blacklist.attachmentBlacklist.tier6Blacklist, 6);
+        if (ModConfig.blacklist.attachmentBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedAttachments(ModConfig.blacklist.attachmentBlacklist.tier7Blacklist, 7);
 
-        if (ModConfig.config.clothingBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier1Blacklist, 1);
-        if (ModConfig.config.clothingBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier2Blacklist, 2);
-        if (ModConfig.config.clothingBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier3Blacklist, 3);
-        if (ModConfig.config.clothingBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier4Blacklist, 4);
-        if (ModConfig.config.clothingBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier5Blacklist, 5);
-        if (ModConfig.config.clothingBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier6Blacklist, 6);
-        if (ModConfig.config.clothingBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.config.clothingBlacklist.tier7Blacklist, 7);
+        if (ModConfig.blacklist.clothingBlacklist.tier1Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.blacklist.clothingBlacklist.tier1Blacklist, 1);
+        if (ModConfig.blacklist.clothingBlacklist.tier2Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.blacklist.clothingBlacklist.tier2Blacklist, 2);
+        if (ModConfig.blacklist.clothingBlacklist.tier3Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.blacklist.clothingBlacklist.tier3Blacklist, 3);
+        if (ModConfig.blacklist.clothingBlacklist.tier4Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.blacklist.clothingBlacklist.tier4Blacklist, 4);
+        if (ModConfig.blacklist.clothingBlacklist.tier5Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.blacklist.clothingBlacklist.tier5Blacklist, 5);
+        if (ModConfig.blacklist.clothingBlacklist.tier6Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.blacklist.clothingBlacklist.tier6Blacklist, 6);
+        if (ModConfig.blacklist.clothingBlacklist.tier7Blacklist.length > 0) this.removeBlacklistedClothing(ModConfig.blacklist.clothingBlacklist.tier7Blacklist, 7);
 
         this.validateBlacklist();
     }
@@ -88,7 +88,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${ammo} pool.`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${ammo} pool empty`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} ${ammo} pool empty`)
                             continue;
                         }
                     }
@@ -121,7 +121,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${equipmentSlot} pool.`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${equipmentSlot} pool empty.`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} ${equipmentSlot} pool empty.`)
                             continue;
                         }
                     }
@@ -154,7 +154,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${equipmentSlot} pool.`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${equipmentSlot} pool empty.`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} ${equipmentSlot} pool empty.`)
                             continue;
                         }
                     }
@@ -168,7 +168,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${equipmentSlot} pool.`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${equipmentSlot} pool empty.`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} ${equipmentSlot} pool empty.`)
                             continue;
                         }
                     }
@@ -180,7 +180,7 @@ export class BlacklistHelper
                             this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" Holster pool.`)
                             continue;
                         }
-                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" Holster pool empty.`)
+                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} Holster pool empty.`)
                         continue;
                     }
                     if (Object.keys(tierJSON[botType].equipment.Scabbard).includes(itemDetails._id))
@@ -191,7 +191,7 @@ export class BlacklistHelper
                             this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" Scabbard pool.`)
                             continue;
                         }
-                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" Scabbard pool empty.`)
+                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} Scabbard pool empty.`)
                         continue;
                     }
                 }
@@ -266,7 +266,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${type} pool.`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${type} pool empty.`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} ${type} pool empty.`)
                             continue;
                         }
                     }

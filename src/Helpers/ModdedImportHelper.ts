@@ -98,12 +98,17 @@ export class ModdedImportHelper
             "609bab8b455afd752b2e6138",
             "63fc44e2429a8a166c7f61e6",
             "5a1ead28fcdbcb001912fa9f",
+            "5ae30e795acfc408fb139a0b",
             "63fc449f5bd61c6cf3784a88",
             "5b3b6dc75acfc47a8773fb1e",
             "5c11046cd174af02a012e42b",
             "5a7c74b3e899ef0014332c29",
             "544a3f024bdc2d1d388b4568", // Bugged optics
             "544a3d0a4bdc2d1b388b4567",
+            "5cf638cbd7f00c06595bc936",
+            "576fd4ec2459777f0b518431",
+            "5c82343a2e221644f31c0611",
+            "5d0a29ead7ad1a0026013f27",
             "5dfe6104585a0c3e995c7b82",
             "618b9643526131765025ab35",
             "618bab21526131765025ab3f",
@@ -730,7 +735,7 @@ export class ModdedImportHelper
             {
                 const slotFilterItem = slotFilter[item]; 
 
-                if (this.shouldItemBeSkipped(parentSlotFilterItem, slotFilterItem, slotName, standaloneAttachment)) continue;
+                if (this.shouldItemBeSkipped(parentSlotItemID, slotFilterItem, slotName, standaloneAttachment)) continue;
 
                 const highTierItem = this.tier4PlusOnly(parentSlotItemID, slotName, slotFilterItem);
                 const lowTierItem = this.tier4MinusOnly(parentSlotItemID, slotName, slotFilterItem);
@@ -789,7 +794,7 @@ export class ModdedImportHelper
 
                     if (ModConfig.config.compatibilityConfig.enableModdedAttachments && standaloneAttachment)
                     {
-                        this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. ParentSlotItem: ${parentSlotFilterItem} | Slot: ${slotName} | Attachment: ${slotFilterItem}`);
+                        this.apbsLogger.log(Logging.DEBUG, `Found mod attachment to import. ParentSlotItem: ${parentSlotItemID} | Slot: ${slotName} | Attachment: ${slotFilterItem}`);
                         if (!this.allImportedAttachments.includes(slotFilterItem)) this.allImportedAttachments.push(slotFilterItem);
                         this.numberOfAttachments++
                     } 
@@ -809,37 +814,91 @@ export class ModdedImportHelper
         // Check if the Caliber exists on tierJSON or is valid
         if (!Object.keys(this.tierInformation.tier1ammo.scavAmmo).includes(itemCaliber) && itemCaliber != undefined)
         {
-            const chamberFilter = itemDetails[1]?._props?.Chambers[0]?._props?.filters[0]?.Filter
+            const chamberFilter = itemDetails[1]?._props?.Chambers[0]?._props?.filters[0]?.Filter ?? [];
 
+            // Probably a revolver or something, check the magazines instead
+            if (chamberFilter.length === 0)
+            {
+                const cartridges = this.getCompatibleCartridgesFromMagazineTemplate(itemDetails[1]);
+                if (cartridges.length)
+                {
+                    for (const cartridge in cartridges)
+                    {
+                        // Validate the cartridge caliber matches the weapon, if it does then push to the proper caliber (prevents multi caliber rifles from changing weights that already exist)
+                        const cartridgeID = cartridges[cartridge];
+                        const cartridgeDetails = this.itemHelper.getItem(cartridgeID)
+                        if (!cartridgeDetails[0]) continue;
+                        if (itemCaliber == cartridgeDetails[1]._props.Caliber)
+                        {
+                            this.pushAmmoToTier(itemCaliber, cartridgeID);
+                        }
+                    }
+                    return;
+                }
+            }
             // If the chamber is valid and has items, add them to the tierJSONs
             if (chamberFilter.length)
             {
-                for (const botPool in this.tierInformation.tier1ammo)
+                for (const round in chamberFilter)
                 {
-                    // Since the Caliber doesn't exist, create them empty to prevent undefined error below
-                    this.tierInformation.tier1ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier2ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier3ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier4ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier5ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier6ammo[botPool][itemCaliber] = {};
-                    this.tierInformation.tier7ammo[botPool][itemCaliber] = {};
-
-                    // Push each item in the filter to the tierJSON
-                    for (const item in chamberFilter)
+                    // Validate the cartridge caliber matches the weapon, if it does then push to the proper caliber (prevents multi caliber rifles from changing weights that already exist)
+                    const roundID = chamberFilter[round];
+                    const roundDetails = this.itemHelper.getItem(roundID)
+                    if (!roundDetails[0]) continue;
+                    if (itemCaliber == roundDetails[1]._props.Caliber)
                     {
-                        const ammo = chamberFilter[item]
-                        this.tierInformation.tier1ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier2ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier3ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier4ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier5ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier6ammo[botPool][itemCaliber][ammo] = 1;
-                        this.tierInformation.tier7ammo[botPool][itemCaliber][ammo] = 1;
+                        this.pushAmmoToTier(itemCaliber, roundID);
                     }
                 }
+                return;
             }
+
+            this.apbsLogger.log(Logging.WARN, `[CALIBER] New caliber found in weapon, but could not find details. Item: ${itemID} | Caliber: ${itemCaliber}`)
         }
+    }
+
+    private pushAmmoToTier(caliber: string, itemID: string): void
+    {
+        for (const botPool in this.tierInformation.tier1ammo)
+        {
+            this.tierInformation.tier1ammo[botPool][caliber] = {};
+            this.tierInformation.tier2ammo[botPool][caliber] = {};
+            this.tierInformation.tier3ammo[botPool][caliber] = {};
+            this.tierInformation.tier4ammo[botPool][caliber] = {};
+            this.tierInformation.tier5ammo[botPool][caliber] = {};
+            this.tierInformation.tier6ammo[botPool][caliber] = {};
+            this.tierInformation.tier7ammo[botPool][caliber] = {};
+
+            this.tierInformation.tier1ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier2ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier3ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier4ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier5ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier6ammo[botPool][caliber][itemID] = 1;
+            this.tierInformation.tier7ammo[botPool][caliber][itemID] = 1;
+        }
+    }
+
+    private getCompatibleCartridgesFromMagazineTemplate(weaponTemplate: ITemplateItem): string[] 
+    {
+        const magazineSlot = weaponTemplate._props.Slots?.find((slot) => slot._name === "mod_magazine");
+        if (!magazineSlot) 
+        {
+            return [];
+        }
+        const magazineTemplate = this.itemHelper.getItem(magazineSlot._props.filters[0].Filter[0]);
+        if (!magazineTemplate[0]) 
+        {
+            return [];
+        }
+
+        let cartridges = magazineTemplate[1]._props.Slots[0]?._props?.filters[0].Filter;
+        if (!cartridges) 
+        {
+            cartridges = magazineTemplate[1]._props.Cartridges[0]?._props?.filters[0].Filter;
+        }
+
+        return cartridges ?? [];
     }
 
     private getItem(tpl: string): ITemplateItem
@@ -1089,18 +1148,23 @@ export class ModdedImportHelper
             if (itemData?._props?.Cartridges[0]?._max_count == undefined) return true;
         }
         
+        if (slotName == "mod_sight_front" || slotName == "mod_sight_rear")
+        {
+            if (isVanillaParent) return true;
+        }
+
         if (slotName == "mod_scope_000")
         {
             if (!this.modScope000Whitelist.includes(itemID)) return true;
         }        
 
         // Last checks only if it's standalone
-        if (standaloneAttachment) return this.standaloneAttachmentShouldBeSkipped(isVanillaParent, isVanillaItem, itemID, slotName);
+        if (standaloneAttachment) return this.standaloneAttachmentShouldBeSkipped(itemID, slotName);
 
         return false;
     }
 
-    private standaloneAttachmentShouldBeSkipped(isVanillaParent: boolean, isVanillaItem: boolean, itemID: string, slotName: string): boolean
+    private standaloneAttachmentShouldBeSkipped(itemID: string, slotName: string): boolean
     {
         slotName = slotName.toLowerCase();
 
