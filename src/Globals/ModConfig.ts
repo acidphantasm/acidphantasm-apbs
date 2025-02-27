@@ -6,7 +6,6 @@ import path from "path";
 import { TierInformation } from "./TierInformation";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
-import { Logging } from "../Enums/Logging";
 
 @injectable()
 export class ModConfig
