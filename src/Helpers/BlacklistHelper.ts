@@ -88,7 +88,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${ammo} pool.`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${ammo} pool empty`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} ${ammo} pool empty`)
                             continue;
                         }
                     }
@@ -121,7 +121,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${equipmentSlot} pool.`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${equipmentSlot} pool empty.`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} ${equipmentSlot} pool empty.`)
                             continue;
                         }
                     }
@@ -154,7 +154,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${equipmentSlot} pool.`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${equipmentSlot} pool empty.`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} ${equipmentSlot} pool empty.`)
                             continue;
                         }
                     }
@@ -168,7 +168,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${equipmentSlot} pool.`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${equipmentSlot} pool empty.`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} ${equipmentSlot} pool empty.`)
                             continue;
                         }
                     }
@@ -180,7 +180,7 @@ export class BlacklistHelper
                             this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" Holster pool.`)
                             continue;
                         }
-                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" Holster pool empty.`)
+                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} Holster pool empty.`)
                         continue;
                     }
                     if (Object.keys(tierJSON[botType].equipment.Scabbard).includes(itemDetails._id))
@@ -191,7 +191,7 @@ export class BlacklistHelper
                             this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" Scabbard pool.`)
                             continue;
                         }
-                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" Scabbard pool empty.`)
+                        this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} Scabbard pool empty.`)
                         continue;
                     }
                 }
@@ -266,7 +266,7 @@ export class BlacklistHelper
                                 this.apbsLogger.log(Logging.DEBUG, `[Tier${tier}] Removed "${itemDetails._id}" from "${botType}" ${type} pool.`)
                                 continue;
                             }
-                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" as it would make the Tier${tier} "${botType}" ${type} pool empty.`)
+                            this.apbsLogger.log(Logging.WARN, `Did not blacklist "${itemDetails._id}" for "${botType}" as it would make the Tier${tier} ${type} pool empty.`)
                             continue;
                         }
                     }
