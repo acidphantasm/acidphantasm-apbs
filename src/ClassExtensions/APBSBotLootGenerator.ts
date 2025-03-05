@@ -80,7 +80,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
         botRole: string,
         botInventory: PmcInventory,
         botLevel: number,
-        tier: number,
+        tier: number
     ): void
     {
         // Limits on item types to be added as loot
