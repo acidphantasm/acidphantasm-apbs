@@ -239,7 +239,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                 inventory: botInventory,
                 botEquipmentConfig: botEquipConfig,
                 randomisationDetails: randomistionDetails,
-                generatingPlayerLevel: pmcProfile.Info.Level,
+                generatingPlayerLevel: pmcProfile.Info.Level
             },
             questInformation);
         }
