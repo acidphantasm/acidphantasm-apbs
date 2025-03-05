@@ -5,7 +5,7 @@ import { RandomUtil } from "@spt/utils/RandomUtil";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { BotWeaponGenerator } from "@spt/generators/BotWeaponGenerator";
 import { IInventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBase";
-import { IChances, IGenerationData, IInventory, IModsChances } from "@spt/models/eft/common/tables/IBotType";
+import { IGenerationData, IInventory } from "@spt/models/eft/common/tables/IBotType";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { ILogger } from "@spt/models/spt/utils/ILogger";

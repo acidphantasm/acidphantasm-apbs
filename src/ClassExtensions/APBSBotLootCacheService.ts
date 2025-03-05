@@ -16,8 +16,6 @@ import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { IBotLootCache, LootCacheType } from "@spt/models/spt/bots/IBotLootCache";
 import { RaidInformation } from "../Globals/RaidInformation";
 import { APBSLogger } from "../Utils/APBSLogger";
-import { Logging } from "../Enums/Logging";
-import { IProps } from "@spt/models/eft/common/tables/ITemplateItem";
 
 @injectable()
 export class APBSBotLootCacheService extends BotLootCacheService

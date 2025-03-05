@@ -1,9 +1,6 @@
 import { ItemHelper } from "@spt/helpers/ItemHelper";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
-import { IInventory } from "@spt/models/eft/common/tables/IBotBase";
-import { IGenerationData } from "@spt/models/eft/common/tables/IBotType";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
-import { IModToSpawnRequest } from "@spt/models/spt/bots/IModToSpawnRequest";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { LocalisationService } from "@spt/services/LocalisationService";
 import { inject, injectable } from "tsyringe";

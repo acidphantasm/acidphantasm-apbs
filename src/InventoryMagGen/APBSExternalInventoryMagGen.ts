@@ -1,5 +1,4 @@
-import { IInventoryMagGen } from "@spt/generators/weapongen/IInventoryMagGen";
-import { InventoryMagGen } from "@spt/generators/weapongen/InventoryMagGen";
+
 import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
 import { ItemHelper } from "@spt/helpers/ItemHelper";

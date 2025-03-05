@@ -1,5 +1,3 @@
-import { IInventoryMagGen } from "@spt/generators/weapongen/IInventoryMagGen";
-import { InventoryMagGen } from "@spt/generators/weapongen/InventoryMagGen";
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
 import { inject, injectable } from "tsyringe";
 import { APBSIInventoryMagGen } from "./APBSIInventoryMagGen";

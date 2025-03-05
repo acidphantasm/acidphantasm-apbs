@@ -1,5 +1,3 @@
-import { IInventoryMagGen } from "@spt/generators/weapongen/IInventoryMagGen";
-import { InventoryMagGen } from "@spt/generators/weapongen/InventoryMagGen";
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";

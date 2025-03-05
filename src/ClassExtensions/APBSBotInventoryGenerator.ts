@@ -12,7 +12,6 @@ import { IInventory as PmcInventory } from "@spt/models/eft/common/tables/IBotBa
 import { IChances, IGeneration, IBotType, IInventory } from "@spt/models/eft/common/tables/IBotType";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
-import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 import { ConfigServer } from "@spt/servers/ConfigServer";
 import { BotEquipmentModPoolService } from "@spt/services/BotEquipmentModPoolService";
@@ -34,14 +33,13 @@ import { IGetRaidConfigurationRequestData } from "@spt/models/eft/match/IGetRaid
 import { RaidInformation } from "../Globals/RaidInformation";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
-import { PMCBots } from "../Enums/Bots";
 import { BotQuestHelper } from "../Helpers/BotQuestHelper";
 import { GameEditions } from "@spt/models/enums/GameEditions";
 import { ItemTpl } from "@spt/models/enums/ItemTpl";
 import { APBSBotEquipmentModGenerator } from "./APBSBotEquipmentModGenerator";
 import { APBSIGenerateEquipmentProperties } from "../Interface/APBSIGenerateEquipmentProperties";
 import { APBSIChances } from "../Interface/APBSIChances";
-import { APBSIQuestBotGear, APBSIQuestBotGenerationDetails } from "../Interface/APBSIQuestBotGear";
+import { APBSIQuestBotGenerationDetails } from "../Interface/APBSIQuestBotGear";
 import { APBSBotLootGenerator } from "./APBSBotLootGenerator";
 
 /** Handle profile related client events */

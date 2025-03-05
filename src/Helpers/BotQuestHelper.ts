@@ -1,8 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import { BossBots, FollowerBots, PMCBots, ScavBots, SpecialBots, EventBots } from "../Enums/Bots";
+import { PMCBots } from "../Enums/Bots";
 import { ModConfig } from "../Globals/ModConfig";
 import { APBSLogger } from "../Utils/APBSLogger";
-import { Logging } from "../Enums/Logging";
 import { APBSIQuestBotGear } from "../Interface/APBSIQuestBotGear";
 import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
 import { RaidInformation } from "../Globals/RaidInformation";

@@ -19,7 +19,7 @@ import { BotInventoryGenerator } from "@spt/generators/BotInventoryGenerator";
 import { BotLevelGenerator } from "@spt/generators/BotLevelGenerator";
 import { SeasonalEventService } from "@spt/services/SeasonalEventService";
 import { TimeUtil } from "@spt/utils/TimeUtil";
-import { IBotBase, IInfo } from "@spt/models/eft/common/tables/IBotBase";
+import { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
 import { IAppearance, IBotType } from "@spt/models/eft/common/tables/IBotType";
 import { IBotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
 import { IWildBody } from "@spt/models/eft/common/IGlobals";
