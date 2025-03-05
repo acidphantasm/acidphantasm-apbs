@@ -1149,7 +1149,6 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                         const childSlots = itemInSlotData._props.Slots;
                         for (const childSlot in childSlots)
                         {
-                            const childSlotName = childSlots[childSlot]._name;
                             const childModSlotPool = childSlots[childSlot]._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
                             {
                                 if (childModSlotPool.length)
@@ -1171,7 +1170,6 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                                             const childOfChildSlots = itemInItemChildSlotData._props.Slots;
                                             for (const childOfChildSlot in childOfChildSlots)
                                             {
-                                                const childOfChildSlotName = childOfChildSlots[childOfChildSlot]._name;
                                                 const childOfChildModSlotPool = childOfChildSlots[childOfChildSlot]._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
                                                 {
                                                     if (childOfChildModSlotPool.length)
@@ -1193,14 +1191,12 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                                                                 const childOfChildOfChildSlots = itemInItemChildOfChildSlotData._props.Slots;
                                                                 for (const childOfChildOfChildSlot in childOfChildOfChildSlots)
                                                                 {
-                                                                    const childOfChildOfChildSlotName = childOfChildOfChildSlots[childOfChildOfChildSlot]._name;
                                                                     const childOfChildOfChildModSlotPool = childOfChildOfChildSlots[childOfChildOfChildSlot]._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
                                                                     {
                                                                         if (childOfChildOfChildModSlotPool.length)
                                                                         {
                                                                             for (const itemInItemChildOfChildOfChildSlot of childOfChildOfChildModSlotPool)
                                                                             {
-                                                                                const itemInItemChildOfChildOfChildSlotData = this.itemHelper.getItem(itemInItemChildOfChildOfChildSlot)[1];
                                                                                 if (questInformation.questData.requiredWeaponMods.includes(itemInItemChildOfChildOfChildSlot))
                                                                                 {
                                                                                     if (!modPoolToReturn.includes(itemInSlot))
