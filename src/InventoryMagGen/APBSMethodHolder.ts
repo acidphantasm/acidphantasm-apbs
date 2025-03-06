@@ -291,10 +291,11 @@ export class APBSMethodHolder
         let cartridgeCountToAdd = 0;
         let currentStoredCartridgeCount = 0;
         let location = 0;
-        let remainingMagSpace = desiredMaxStackCount;
+        let remainingMagSpace = 0;
 
         while (currentStoredCartridgeCount < desiredMaxStackCount) 
         {
+            remainingMagSpace = desiredMaxStackCount - currentStoredCartridgeCount;
             if (currentStoredCartridgeCount < desiredBottomLoadAmount)
             {
                 cartridgeTplToAdd = bottomLoadTpl;
@@ -303,13 +304,11 @@ export class APBSMethodHolder
                 {
                     cartridgeCountToAdd = remainingMagSpace - desiredTopLoadAmount
                 }
-                remainingMagSpace -= cartridgeCountToAdd;
             }
             else
             {
                 cartridgeTplToAdd = topLoadTpl;
                 cartridgeCountToAdd = desiredTopLoadAmount <= cartridgeMaxStackSize ? desiredTopLoadAmount : cartridgeMaxStackSize;
-                remainingMagSpace -= cartridgeCountToAdd;
             }
 
             // Ensure we don't go over the max stackcount size
