@@ -24,7 +24,7 @@ import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerat
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
 import { RaidInformation } from "../Globals/RaidInformation";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
-import { ModConfig } from "../Globals/ModConfig";
+import { EnableChance, ModConfig, ToploadConfig } from "../Globals/ModConfig";
 import { Logging } from "../Enums/Logging";
 import { APBSTester } from "../Utils/APBSTester";
 import { ModInformation } from "../Globals/ModInformation";
@@ -458,7 +458,9 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
             inventory,
             botRole,
             botLevel,
-            tier
+            tier,
+            this.getToploadConfig(botRole),
+            this.getRerollConfig(botRole)
         );
         this.apbsInventoryMagGenComponents
             .find((v) => v.canHandleInventoryMagGen(apbsInventoryMagGenModel))
@@ -630,5 +632,34 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         }
 
         return cartridges ?? [];
+    }
+
+    private getRerollConfig(botRole: string): EnableChance
+    {
+        if (Object.values(PMCBots).includes(botRole as PMCBots)) return ModConfig.config.pmcBots.rerollConfig;
+        if (Object.values(ScavBots).includes(botRole as ScavBots)) return ModConfig.config.scavBots.rerollConfig;
+        if (Object.values(BossBots).includes(botRole as BossBots)) return ModConfig.config.bossBots.rerollConfig;
+        if (Object.values(FollowerBots).includes(botRole as FollowerBots)) return ModConfig.config.followerBots.rerollConfig;
+        if (Object.values(SpecialBots).includes(botRole as SpecialBots)) return ModConfig.config.specialBots.rerollConfig;
+
+        return {
+            enable: false,
+            chance: 0
+        };
+    }
+
+    private getToploadConfig(botRole: string): ToploadConfig
+    {
+        if (Object.values(PMCBots).includes(botRole as PMCBots)) return ModConfig.config.pmcBots.toploadConfig;
+        if (Object.values(ScavBots).includes(botRole as ScavBots)) return ModConfig.config.scavBots.toploadConfig;
+        if (Object.values(BossBots).includes(botRole as BossBots)) return ModConfig.config.bossBots.toploadConfig;
+        if (Object.values(FollowerBots).includes(botRole as FollowerBots)) return ModConfig.config.followerBots.toploadConfig;
+        if (Object.values(SpecialBots).includes(botRole as SpecialBots)) return ModConfig.config.specialBots.toploadConfig;
+
+        return {
+            enable: false,
+            chance: 0,
+            percent: 0
+        };
     }
 }

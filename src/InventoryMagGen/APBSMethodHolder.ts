@@ -6,6 +6,10 @@ import { LocalisationService } from "@spt/services/LocalisationService";
 import { inject, injectable } from "tsyringe";
 import { APBSLogger } from "../Utils/APBSLogger";
 import { Logging } from "../Enums/Logging";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
+import { HashUtil } from "@spt/utils/HashUtil";
+import { BaseClasses } from "@spt/models/enums/BaseClasses";
+import { RandomUtil } from "@spt/utils/RandomUtil";
 
 @injectable()
 export class APBSMethodHolder 
@@ -23,7 +27,9 @@ export class APBSMethodHolder
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("LocalisationService") protected localisationService: LocalisationService,
         @inject("WeightedRandomHelper") protected weightedRandomHelper: WeightedRandomHelper,
-        @inject("ItemHelper") protected itemHelper: ItemHelper
+        @inject("ItemHelper") protected itemHelper: ItemHelper,
+        @inject("HashUtil") protected hashUtil: HashUtil,
+        @inject("RandomUtil") protected randUtil: RandomUtil
     ) 
     {}
 
@@ -208,5 +214,130 @@ export class APBSMethodHolder
         }
 
         return desiredMagazineTpls;
+    }
+
+    public createMagazineWithAmmo(magazineTpl: string, ammoTpl: string, ammoPool: Record<string, Record<string, number>>, ammoCaliber: string, magTemplate: ITemplateItem, percentOfMag: number): IItem[] 
+    {
+        const magazine: IItem[] = [{ _id: this.hashUtil.generate(), _tpl: magazineTpl }];
+
+        this.fillMagazineWithCartridge(magazine, magTemplate, ammoTpl, ammoPool, ammoCaliber, percentOfMag);
+
+        return magazine;
+    }
+
+    public fillMagazineWithCartridge(
+        magazineWithChildCartridges: IItem[],
+        magTemplate: ITemplateItem,
+        cartridgeTpl: string,
+        ammoPool: Record<string, Record<string, number>>,
+        ammoCaliber: string,
+        percentOfMag: number
+    ): void 
+    {
+        // Get cartridge properties and max allowed stack size
+        const cartridgeDetails = this.itemHelper.getItem(cartridgeTpl);
+        if (!cartridgeDetails[0]) 
+        {
+            this.logger.error(this.localisationService.getText("item-invalid_tpl_item", cartridgeTpl));
+        }
+
+        const cartridgeMaxStackSize = cartridgeDetails[1]._props?.StackMaxSize;
+        if (!cartridgeMaxStackSize) 
+        {
+            this.logger.error(`Item with tpl: ${cartridgeTpl} lacks a _props or StackMaxSize property`);
+        }
+
+        // Get max number of cartridges in magazine, choose random value between min/max
+        const magazineCartridgeMaxCount = this.itemHelper.isOfBaseclass(magTemplate._id, BaseClasses.SPRING_DRIVEN_CYLINDER)
+            ? magTemplate._props.Slots.length // Edge case for rotating grenade launcher magazine
+            : magTemplate._props.Cartridges[0]?._max_count;
+
+        if (!magazineCartridgeMaxCount) 
+        {
+            this.logger.warning(
+                `Magazine: ${magTemplate._id} ${magTemplate._name} lacks a Cartridges array, unable to fill magazine with ammo`
+            );
+
+            return;
+        }
+
+        let bottomLoadTpl = cartridgeTpl;
+        let topLoadTpl = cartridgeTpl;
+        
+        const ammoTableKeys = Object.keys(ammoPool[ammoCaliber]);
+        const topLoadAmmoSelection = ammoTableKeys.at(ammoTableKeys.indexOf(cartridgeTpl) + 1);
+
+        if (topLoadAmmoSelection == null)
+        {
+            bottomLoadTpl = ammoTableKeys.at(ammoTableKeys.indexOf(cartridgeTpl) - 1) ?? cartridgeTpl;
+            topLoadTpl = cartridgeTpl;
+        }
+        else
+        {
+            topLoadTpl = topLoadAmmoSelection;
+        }
+
+        const desiredMaxStackCount = magazineCartridgeMaxCount;
+        const desiredTopLoadAmount = Math.max(1, this.randUtil.getPercentOfValue(percentOfMag, desiredMaxStackCount, 0));
+        const desiredBottomLoadAmount = desiredMaxStackCount - desiredTopLoadAmount;
+
+        if (magazineWithChildCartridges.length > 1) 
+        {
+            this.logger.warning(`Magazine ${magTemplate._name} already has cartridges defined, this may cause issues`);
+        }
+
+        // Loop over cartridge count and add stacks to magazine
+        let cartridgeTplToAdd = cartridgeTpl;
+        let cartridgeCountToAdd = 0;
+        let currentStoredCartridgeCount = 0;
+        let location = 0;
+        let remainingMagSpace = desiredMaxStackCount;
+
+        while (currentStoredCartridgeCount < desiredMaxStackCount) 
+        {
+            if (currentStoredCartridgeCount < desiredBottomLoadAmount)
+            {
+                cartridgeTplToAdd = bottomLoadTpl;
+                cartridgeCountToAdd = desiredBottomLoadAmount <= cartridgeMaxStackSize ? desiredBottomLoadAmount : cartridgeMaxStackSize;
+                if (cartridgeCountToAdd > (remainingMagSpace - desiredTopLoadAmount))
+                {
+                    cartridgeCountToAdd = remainingMagSpace - desiredTopLoadAmount
+                }
+                remainingMagSpace -= cartridgeCountToAdd;
+            }
+            else
+            {
+                cartridgeTplToAdd = topLoadTpl;
+                cartridgeCountToAdd = desiredTopLoadAmount <= cartridgeMaxStackSize ? desiredTopLoadAmount : cartridgeMaxStackSize;
+                remainingMagSpace -= cartridgeCountToAdd;
+            }
+
+            // Ensure we don't go over the max stackcount size
+            const actualSpace = desiredMaxStackCount - currentStoredCartridgeCount;
+            if (cartridgeCountToAdd > actualSpace) 
+            {
+                cartridgeCountToAdd = actualSpace;
+            }
+
+            // Add cartridge item object into items array
+            magazineWithChildCartridges.push(
+                this.itemHelper.createCartridges(
+                    magazineWithChildCartridges[0]._id,
+                    cartridgeTplToAdd,
+                    cartridgeCountToAdd,
+                    location,
+                    magazineWithChildCartridges[0].upd?.SpawnedInSession
+                )
+            );
+
+            currentStoredCartridgeCount += cartridgeCountToAdd;
+            location++;
+        }
+
+        // Only one cartridge stack added, remove location property as its only used for 2 or more stacks
+        if (location === 1) 
+        {
+            delete magazineWithChildCartridges[1].location;
+        }
     }
 }

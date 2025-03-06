@@ -16,6 +16,7 @@ import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { APBSMethodHolder } from "./APBSMethodHolder";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { ModConfig } from "../Globals/ModConfig";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
 
 @injectable()
 export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
@@ -60,12 +61,16 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
         const defaultMagazineTpl = this.botWeaponGeneratorHelper.getWeaponsDefaultMagazineTpl(weapon);
         let randomizedMagazineCount = Number(
             this.botWeaponGeneratorHelper.getRandomizedMagazineCount(inventoryMagGen.getMagCount())
-        );
-        
+        );        
         const ammoTable = this.apbsEquipmentGetter.getAmmoByBotRole(inventoryMagGen.getBotRole(), inventoryMagGen.getTierNumber());
+        const rerollConfig = inventoryMagGen.getRerollDetails();
+        const toploadConfig = inventoryMagGen.getToploadDetails();
 
         let hasSwitchedToSmallerMags = false;
         let isTryingSmallerMags = false;
+
+        const shouldBotRerollAmmo = (rerollConfig.enable && !toploadConfig.enable) ? this.randomUtil.getChance100(rerollConfig.chance) : false;
+        const shouldBotTopload = (toploadConfig.enable && !rerollConfig.enable) ? this.randomUtil.getChance100(toploadConfig.chance) : false;
 
         for (let i = 0; i < randomizedMagazineCount; i++) 
         {
@@ -74,6 +79,7 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
                 randomizedMagazineCount = this.randomUtil.getInt(1, 2);
             }
 
+            // Large capacity mag limited
             if (ModConfig.config.generalConfig.enableLargeCapacityMagazineLimit && !hasSwitchedToSmallerMags && !this.apbsMethodHolder.weaponsWithNoSmallMagazines.includes(weapon._id))
             {
                 const apbsModPool = this.apbsEquipmentGetter.getModsByBotRole(inventoryMagGen.getBotRole(), inventoryMagGen.getTierNumber());
@@ -93,19 +99,35 @@ export class APBSExternalInventoryMagGen implements APBSIInventoryMagGen
                         }
                     }
                 }
-            }            
+            }
 
+            // Ammo reselection
             let selectedAmmoForMag = inventoryMagGen.getAmmoTemplate()._id;
-            if (ModConfig.config.generalConfig.enableBotsToRollAmmoAgain && this.randomUtil.getChance100(ModConfig.config.generalConfig.chanceToRollAmmoAgain))
+            if (shouldBotRerollAmmo)
             {
                 selectedAmmoForMag = this.apbsMethodHolder.apbsGetWeightedCompatibleAmmo(ammoTable, ammoCaliber, weapon);
             }
 
-            const magazineWithAmmo = this.botWeaponGeneratorHelper.createMagazineWithAmmo(
-                magazineTpl,
-                selectedAmmoForMag,
-                magTemplate
-            );
+            let magazineWithAmmo: IItem[];
+            if (shouldBotTopload)
+            {
+                magazineWithAmmo = this.apbsMethodHolder.createMagazineWithAmmo(
+                    magazineTpl,
+                    selectedAmmoForMag,
+                    ammoTable,
+                    ammoCaliber,
+                    magTemplate,
+                    toploadConfig.percent
+                );
+            }
+            else
+            {
+                magazineWithAmmo = this.botWeaponGeneratorHelper.createMagazineWithAmmo(
+                    magazineTpl,
+                    selectedAmmoForMag,
+                    magTemplate
+                );
+            }
 
             const fitsIntoInventory = this.botGeneratorHelper.addItemWithChildrenToEquipmentSlot(
                 [EquipmentSlots.TACTICAL_VEST, EquipmentSlots.POCKETS],

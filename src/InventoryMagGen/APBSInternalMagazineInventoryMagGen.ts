@@ -37,8 +37,8 @@ export class APBSInternalMagazineInventoryMagGen implements APBSIInventoryMagGen
             inventoryMagGen.getMagazineTemplate()
         );
 
-        
-        if (ModConfig.config.generalConfig.enableBotsToRollAmmoAgain && this.randomUtil.getChance100(ModConfig.config.generalConfig.chanceToRollAmmoAgain))
+        const rerollConfig = inventoryMagGen.getRerollDetails();
+        if (rerollConfig.enable && this.randomUtil.getChance100(rerollConfig.chance))
         {
             const weapon = inventoryMagGen.getWeaponTemplate();
             
