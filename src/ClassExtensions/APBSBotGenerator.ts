@@ -20,7 +20,7 @@ import { BotLevelGenerator } from "@spt/generators/BotLevelGenerator";
 import { SeasonalEventService } from "@spt/services/SeasonalEventService";
 import { TimeUtil } from "@spt/utils/TimeUtil";
 import { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
-import { IAppearance, IBotType } from "@spt/models/eft/common/tables/IBotType";
+import { IAppearance } from "@spt/models/eft/common/tables/IBotType";
 import { IBotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
 import { IWildBody } from "@spt/models/eft/common/IGlobals";
 import { BotNameService } from "@spt/services/BotNameService";
@@ -28,7 +28,7 @@ import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { ModConfig } from "../Globals/ModConfig";
 import { GameEditions } from "@spt/models/enums/GameEditions";
 import { MemberCategory } from "@spt/models/enums/MemberCategory";
-import { APBSIBotBase, APBSIBotBaseInfo } from "../Interface/APBSIBotBase";
+import { APBSIBotBaseInfo } from "../Interface/APBSIBotBase";
 
 /** Handle profile related client events */
 @injectable()

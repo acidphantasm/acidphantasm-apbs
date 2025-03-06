@@ -9,7 +9,6 @@ import { RagfairPriceService } from "@spt/services/RagfairPriceService";
 import { PMCLootGenerator } from "@spt/generators/PMCLootGenerator";
 import { BotLootCacheService } from "@spt/services/BotLootCacheService";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
-import { DatabaseServer } from "@spt/servers/DatabaseServer";
 import { LocalisationService } from "@spt/services/LocalisationService";
 import { ICloner } from "@spt/utils/cloners/ICloner";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
