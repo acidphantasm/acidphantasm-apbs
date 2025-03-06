@@ -45,6 +45,7 @@ export class ModdedImportHelper
             "5ae083b25acfc4001a5fc702", //weapons
             "5e81ebcd8e146c7080625e15",
             "6217726288ed9f0845317459",
+            "675ea3d6312c0a5c4e04e317",
             "5d52cc5ba4b9367408500062",
             "620109578d82e67e7911abf2",
             "639af924d0446708ee62294e",
