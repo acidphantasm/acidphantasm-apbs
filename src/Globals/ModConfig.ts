@@ -55,8 +55,6 @@ export interface Config
     },
     normalizedHealthPool: NormalizeHealthConfig,
     generalConfig: {
-        enableBotsToRollAmmoAgain: boolean,
-        chanceToRollAmmoAgain: number,
         enablePerWeaponTypeAttachmentChances: boolean,
         enableLargeCapacityMagazineLimit: boolean,
         largeCapacityMagazineCount: number,
@@ -82,6 +80,8 @@ export interface Config
         resourceRandomization: ResourceRandomizationConfig,
         weaponDurability: WeaponDurabilityConfig,
         lootConfig: LootConfig,
+        rerollConfig: EnableChance,
+        toploadConfig: ToploadConfig,
         questConfig: EnableChance,
         povertyConfig: EnableChance,
         additionalOptions: PMCSpecificConfig,
@@ -92,6 +92,8 @@ export interface Config
         resourceRandomization: ResourceRandomizationConfig,
         weaponDurability: WeaponDurabilityConfig,
         lootConfig: LootConfig,
+        rerollConfig: EnableChance,
+        toploadConfig: ToploadConfig,
         keyConfig: KeyConfig,
         additionalOptions: ScavSpecificConfig,
     },
@@ -99,19 +101,25 @@ export interface Config
         enable: boolean,
         resourceRandomization: ResourceRandomizationConfig,
         weaponDurability: WeaponDurabilityConfig,
-        lootConfig: LootConfig
+        lootConfig: LootConfig,
+        rerollConfig: EnableChance,
+        toploadConfig: ToploadConfig,
     },
     followerBots: {
         enable: boolean,
         resourceRandomization: ResourceRandomizationConfig,
         weaponDurability: WeaponDurabilityConfig,
-        lootConfig: LootConfig
+        lootConfig: LootConfig,
+        rerollConfig: EnableChance,
+        toploadConfig: ToploadConfig,
     },
     specialBots: {
         enable: boolean,
         resourceRandomization: ResourceRandomizationConfig,
         weaponDurability: WeaponDurabilityConfig,
-        lootConfig: LootConfig
+        lootConfig: LootConfig,
+        rerollConfig: EnableChance,
+        toploadConfig: ToploadConfig,
     },
     customLevelDeltas: CustomLevelDeltas,
     customScavLevelDeltas: CustomLevelDeltas,
@@ -164,6 +172,12 @@ export interface LootConfig
 {
     enable: boolean,
     blacklist: string[],
+}
+export interface ToploadConfig
+{
+    enable: boolean,
+    chance: number,
+    percent: number,
 }
 export interface KeyConfig
 {
