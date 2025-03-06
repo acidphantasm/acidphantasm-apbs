@@ -126,6 +126,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
                 botInventory,
                 botLevel,
                 chosenGameVersion,
+                isPmc,
                 raidConfig
             );
         
@@ -174,7 +175,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             chances.equipment.SecondPrimaryWeapon = 100;
         }
 
-        this.apbsGenerateAndAddEquipmentToBot(sessionId, chances, botRole, botInventory, botLevel, chosenGameVersion, raidConfig, tierNumber, {isQuesting, questData});
+        this.apbsGenerateAndAddEquipmentToBot(sessionId, chances, botRole, botInventory, botLevel, chosenGameVersion, isPmc, raidConfig, tierNumber, {isQuesting, questData});
         
         this.apbsGenerateAndAddWeaponsToBot(templateInventory, chances, sessionId, botInventory, botRole, isPmc, generation, botLevel, tierNumber, {isQuesting, questData});
         this.apbsBotLootGenerator.apbsGenerateLoot(sessionId, botJsonTemplate, isPmc, botRole, botInventory, botLevel, tierNumber);
@@ -190,6 +191,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
         botInventory: PmcInventory,
         botLevel: number,
         chosenGameVersion: string,
+        isPmc: boolean,
         raidConfig: IGetRaidConfigurationRequestData,
         tierInfo: number,
         questInformation: APBSIQuestBotGenerationDetails
@@ -249,7 +251,7 @@ export class APBSBotInventoryGenerator extends BotInventoryGenerator
             rootEquipmentSlot: EquipmentSlots.POCKETS,
             // Unheard profiles have unique sized pockets, TODO - handle this somewhere else in a better way
             rootEquipmentPool:
-                chosenGameVersion === GameEditions.UNHEARD
+                chosenGameVersion === GameEditions.UNHEARD && isPmc
                     ? { [ItemTpl.POCKETS_1X4_TUE]: 1 }
                     : equipmentPool.Pockets,
             modPool: modPool,

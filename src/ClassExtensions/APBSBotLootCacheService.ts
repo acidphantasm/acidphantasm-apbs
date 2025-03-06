@@ -25,7 +25,6 @@ export class APBSBotLootCacheService extends BotLootCacheService
     constructor(
         @inject("PrimaryLogger") protected logger: ILogger,
         @inject("ItemHelper") protected itemHelper: ItemHelper,
-        @inject("DatabaseServer") protected databaseServer: DatabaseServer,
         @inject("PMCLootGenerator") protected pmcLootGenerator: PMCLootGenerator,
         @inject("LocalisationService") protected localisationService: LocalisationService,
         @inject("RagfairPriceService") protected ragfairPriceService: RagfairPriceService,
@@ -37,8 +36,7 @@ export class APBSBotLootCacheService extends BotLootCacheService
     )
     {
         super(logger, 
-            itemHelper, 
-            databaseServer, 
+            itemHelper,
             pmcLootGenerator, 
             localisationService, 
             ragfairPriceService, 
