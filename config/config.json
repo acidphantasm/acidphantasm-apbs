@@ -169,9 +169,7 @@
                 },
                 "lootConfig": {
                         "enable": false,
-                        "blacklist": [
-                                "6711039f9e648049e50b3307"
-                        ]
+                        "blacklist": []
                 },
                 "rerollConfig": {
                         "enable": false,
