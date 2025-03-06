@@ -142,6 +142,112 @@
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows PMCs to roll their selected round from their weapons caliber, max one time per each magazine." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Roll Ammunition Selection Again</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_pmcWeaponAmmunitionRollEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcWeaponAmmunitionRollEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_pmcWeaponAmmunitionRollEnabled") ||
+                           MainLayout.pendingChanges.Contains("_pmcWeaponAmmunitionRollChance")))
+                            {
+                                <MudButton @onclick="undoRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _pmcWeaponAmmunitionRollEnabled != false ||
+                            _pmcWeaponAmmunitionRollChance != 50))
+                            {
+                                <MudButton @onclick="defaultRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that PMCs will roll for a different round from the same caliber, max one time per each magazine." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Roll Again Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcWeaponAmmunitionRollEnabled">@_pmcWeaponAmmunitionRollChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_pmcWeaponAmmunitionRollChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcWeaponAmmunitionRollEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows PMCs to top load their extra magazines." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Toploading</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_pmcWeaponToploadEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcWeaponToploadEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_pmcWeaponToploadEnabled") ||
+                           MainLayout.pendingChanges.Contains("_pmcWeaponToploadChance") ||
+                           MainLayout.pendingChanges.Contains("_pmcWeaponToploadPercent")))
+                            {
+                                <MudButton @onclick="undoToploadEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _pmcWeaponToploadEnabled != true ||
+                            _pmcWeaponToploadChance != 30 ||
+                            _pmcWeaponToploadPercent != 30))
+                            {
+                                <MudButton @onclick="defaultToploadEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that PMCs will topload their extra magazines." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Topload Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcWeaponToploadEnabled">@_pmcWeaponToploadChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_pmcWeaponToploadChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcWeaponToploadEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the percentage of their extra magazine that PMCs will topload." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Topload Percent</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_pmcWeaponToploadEnabled">@_pmcWeaponToploadPercent</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_pmcWeaponToploadPercent" ValueLabel="true" Min="10" Max="50" Color="Color.Info" Size="Size.Medium" Disabled="!_pmcWeaponToploadEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                                 <MudTooltip Text="Allows random resource consumption on Food/Drink/Medical Items." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudText>Resource Randomization</MudText>
                                 </MudTooltip>
@@ -829,6 +935,89 @@
         _pmcLootBlacklist.Add("6711039f9e648049e50b3307");
         if (!MainLayout.pendingChanges.Contains("_pmcLootEnabled")) MainLayout.pendingChanges.Add("_pmcLootEnabled");
         if (!MainLayout.pendingChanges.Contains("_pmcLootBlacklist")) MainLayout.pendingChanges.Add("_pmcLootBlacklist");
+    }
+    #endregion
+    #region REROLL
+    private bool _pmcWeaponAmmunitionRollEnabled
+    {
+        get => Data.pmcBots.rerollConfig.enable;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.pmcBots.rerollConfig.enable);
+            Data.pmcBots.rerollConfig.enable = value;
+            Data.pmcBots.toploadConfig.enable = !value;
+        }
+    }
+    private int _pmcWeaponAmmunitionRollChance
+    {
+        get => Data.pmcBots.rerollConfig.chance;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.pmcBots.rerollConfig.chance);
+            Data.pmcBots.rerollConfig.chance = value;
+        }
+    }
+    private void undoRollAmmunitionEnabled()
+    {
+        _pmcWeaponAmmunitionRollEnabled = OriginalConfig.pmcBots.rerollConfig.enable;
+        _pmcWeaponAmmunitionRollChance = OriginalConfig.pmcBots.rerollConfig.chance;
+        _pmcWeaponToploadEnabled = OriginalConfig.pmcBots.toploadConfig.enable;
+        _pmcWeaponToploadChance = OriginalConfig.pmcBots.toploadConfig.chance;
+        _pmcWeaponToploadPercent = OriginalConfig.pmcBots.toploadConfig.percent;
+    }
+    private void defaultRollAmmunitionEnabled()
+    {
+        _pmcWeaponAmmunitionRollEnabled = false;
+        _pmcWeaponAmmunitionRollChance = 50;
+        _pmcWeaponToploadEnabled = true;
+        _pmcWeaponToploadChance = 30;
+        _pmcWeaponToploadPercent = 30;
+    }
+    #endregion
+    #region TOPLOAD
+    private bool _pmcWeaponToploadEnabled
+    {
+        get => Data.pmcBots.toploadConfig.enable;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.pmcBots.toploadConfig.enable);
+            Data.pmcBots.toploadConfig.enable = value;
+            Data.pmcBots.rerollConfig.enable = !value;
+        }
+    }
+    private int _pmcWeaponToploadChance
+    {
+        get => Data.pmcBots.toploadConfig.chance;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.pmcBots.toploadConfig.chance);
+            Data.pmcBots.toploadConfig.chance = value;
+        }
+    }
+    private int _pmcWeaponToploadPercent
+    {
+        get => Data.pmcBots.toploadConfig.percent;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.pmcBots.toploadConfig.percent);
+            Data.pmcBots.toploadConfig.percent = value;
+        }
+    }
+    private void undoToploadEnabled()
+    {
+        _pmcWeaponAmmunitionRollEnabled = OriginalConfig.pmcBots.rerollConfig.enable;
+        _pmcWeaponAmmunitionRollChance = OriginalConfig.pmcBots.rerollConfig.chance;
+        _pmcWeaponToploadEnabled = OriginalConfig.pmcBots.toploadConfig.enable;
+        _pmcWeaponToploadChance = OriginalConfig.pmcBots.toploadConfig.chance;
+        _pmcWeaponToploadPercent = OriginalConfig.pmcBots.toploadConfig.percent;
+    }
+    private void defaultToploadEnabled()
+    {
+        _pmcWeaponAmmunitionRollEnabled = false;
+        _pmcWeaponAmmunitionRollChance = 50;
+        _pmcWeaponToploadEnabled = true;
+        _pmcWeaponToploadChance = 30;
+        _pmcWeaponToploadPercent = 30;
     }
     #endregion
     #region RESOURCE RANDOMIZATION

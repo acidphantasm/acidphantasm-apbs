@@ -137,6 +137,112 @@
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Special bots to roll their selected round from their weapons caliber, max one time per each magazine." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Roll Ammunition Selection Again</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_specialWeaponAmmunitionRollEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_specialWeaponAmmunitionRollEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_specialWeaponAmmunitionRollEnabled") ||
+                           MainLayout.pendingChanges.Contains("_specialWeaponAmmunitionRollChance")))
+                            {
+                                <MudButton @onclick="undoRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _specialWeaponAmmunitionRollEnabled != true ||
+                            _specialWeaponAmmunitionRollChance != 50))
+                            {
+                                <MudButton @onclick="defaultRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that Special bots will roll for a different round from the same caliber, max one time per each magazine." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Roll Again Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_specialWeaponAmmunitionRollEnabled">@_specialWeaponAmmunitionRollChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_specialWeaponAmmunitionRollChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_specialWeaponAmmunitionRollEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Special bots to top load their extra magazines." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Toploading</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_specialWeaponToploadEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_specialWeaponToploadEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_specialWeaponToploadEnabled") ||
+                           MainLayout.pendingChanges.Contains("_specialWeaponToploadChance") ||
+                           MainLayout.pendingChanges.Contains("_specialWeaponToploadPercent")))
+                            {
+                                <MudButton @onclick="undoToploadEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _specialWeaponToploadEnabled != false ||
+                            _specialWeaponToploadChance != 30 ||
+                            _specialWeaponToploadPercent != 30))
+                            {
+                                <MudButton @onclick="defaultToploadEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that Special bots will topload their extra magazines." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Topload Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_specialWeaponToploadEnabled">@_specialWeaponToploadChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_specialWeaponToploadChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_specialWeaponToploadEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the percentage of their extra magazine that Special bots will topload." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Topload Percent</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_specialWeaponToploadEnabled">@_specialWeaponToploadPercent</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_specialWeaponToploadPercent" ValueLabel="true" Min="10" Max="50" Color="Color.Info" Size="Size.Medium" Disabled="!_specialWeaponToploadEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                                 <MudTooltip Text="Allows random resource consumption on Food/Drink/Medical Items." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudText>Resource Randomization</MudText>
                                 </MudTooltip>
@@ -378,6 +484,89 @@
         _specialLootEnabled = true;
         _specialLootBlacklist.Clear();
         MainLayout.pendingChanges.Add("_specialLootBlacklist");
+    }
+    #endregion
+    #region REROLL
+    private bool _specialWeaponAmmunitionRollEnabled
+    {
+        get => Data.specialBots.rerollConfig.enable;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.specialBots.rerollConfig.enable);
+            Data.specialBots.rerollConfig.enable = value;
+            Data.specialBots.toploadConfig.enable = !value;
+        }
+    }
+    private int _specialWeaponAmmunitionRollChance
+    {
+        get => Data.specialBots.rerollConfig.chance;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.specialBots.rerollConfig.chance);
+            Data.specialBots.rerollConfig.chance = value;
+        }
+    }
+    private void undoRollAmmunitionEnabled()
+    {
+        _specialWeaponAmmunitionRollEnabled = OriginalConfig.specialBots.rerollConfig.enable;
+        _specialWeaponAmmunitionRollChance = OriginalConfig.specialBots.rerollConfig.chance;
+        _specialWeaponToploadEnabled = OriginalConfig.specialBots.toploadConfig.enable;
+        _specialWeaponToploadChance = OriginalConfig.specialBots.toploadConfig.chance;
+        _specialWeaponToploadPercent = OriginalConfig.specialBots.toploadConfig.percent;
+    }
+    private void defaultRollAmmunitionEnabled()
+    {
+        _specialWeaponAmmunitionRollEnabled = true;
+        _specialWeaponAmmunitionRollChance = 50;
+        _specialWeaponToploadEnabled = false;
+        _specialWeaponToploadChance = 30;
+        _specialWeaponToploadPercent = 30;
+    }
+    #endregion
+    #region TOPLOAD
+    private bool _specialWeaponToploadEnabled
+    {
+        get => Data.specialBots.toploadConfig.enable;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.specialBots.toploadConfig.enable);
+            Data.specialBots.toploadConfig.enable = value;
+            Data.specialBots.rerollConfig.enable = !value;
+        }
+    }
+    private int _specialWeaponToploadChance
+    {
+        get => Data.specialBots.toploadConfig.chance;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.specialBots.toploadConfig.chance);
+            Data.specialBots.toploadConfig.chance = value;
+        }
+    }
+    private int _specialWeaponToploadPercent
+    {
+        get => Data.specialBots.toploadConfig.percent;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.specialBots.toploadConfig.percent);
+            Data.specialBots.toploadConfig.percent = value;
+        }
+    }
+    private void undoToploadEnabled()
+    {
+        _specialWeaponAmmunitionRollEnabled = OriginalConfig.specialBots.rerollConfig.enable;
+        _specialWeaponAmmunitionRollChance = OriginalConfig.specialBots.rerollConfig.chance;
+        _specialWeaponToploadEnabled = OriginalConfig.specialBots.toploadConfig.enable;
+        _specialWeaponToploadChance = OriginalConfig.specialBots.toploadConfig.chance;
+        _specialWeaponToploadPercent = OriginalConfig.specialBots.toploadConfig.percent;
+    }
+    private void defaultToploadEnabled()
+    {
+        _specialWeaponAmmunitionRollEnabled = true;
+        _specialWeaponAmmunitionRollChance = 50;
+        _specialWeaponToploadEnabled = false;
+        _specialWeaponToploadChance = 30;
+        _specialWeaponToploadPercent = 30;
     }
     #endregion
     #region RESOURCE RANDOMIZATION

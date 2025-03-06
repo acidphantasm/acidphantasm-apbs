@@ -137,6 +137,112 @@
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Scavs to roll their selected round from their weapons caliber, max one time per each magazine." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Roll Ammunition Selection Again</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_scavWeaponAmmunitionRollEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavWeaponAmmunitionRollEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_scavWeaponAmmunitionRollEnabled") ||
+                           MainLayout.pendingChanges.Contains("_scavWeaponAmmunitionRollChance")))
+                            {
+                                <MudButton @onclick="undoRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _scavWeaponAmmunitionRollEnabled != true ||
+                            _scavWeaponAmmunitionRollChance != 50))
+                            {
+                                <MudButton @onclick="defaultRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that Scavs will roll for a different round from the same caliber, max one time per each magazine." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Roll Again Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_scavWeaponAmmunitionRollEnabled">@_scavWeaponAmmunitionRollChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_scavWeaponAmmunitionRollChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_scavWeaponAmmunitionRollEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Scavs to top load their extra magazines." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Toploading</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_scavWeaponToploadEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_scavWeaponToploadEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_scavWeaponToploadEnabled") ||
+                           MainLayout.pendingChanges.Contains("_scavWeaponToploadChance") ||
+                           MainLayout.pendingChanges.Contains("_scavWeaponToploadPercent")))
+                            {
+                                <MudButton @onclick="undoToploadEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _scavWeaponToploadEnabled != false ||
+                            _scavWeaponToploadChance != 30 ||
+                            _scavWeaponToploadPercent != 30))
+                            {
+                                <MudButton @onclick="defaultToploadEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that Scavs will topload their extra magazines." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Topload Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_scavWeaponToploadEnabled">@_scavWeaponToploadChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_scavWeaponToploadChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_scavWeaponToploadEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the percentage of their extra magazine that Scavs will topload." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Topload Percent</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_scavWeaponToploadEnabled">@_scavWeaponToploadPercent</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_scavWeaponToploadPercent" ValueLabel="true" Min="10" Max="50" Color="Color.Info" Size="Size.Medium" Disabled="!_scavWeaponToploadEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                                 <MudTooltip Text="Allows random resource consumption on Food/Drink/Medical Items." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudText>Resource Randomization</MudText>
                                 </MudTooltip>
@@ -498,6 +604,89 @@
         _scavLootEnabled = true;
         _scavLootBlacklist.Clear();
         MainLayout.pendingChanges.Add("_scavLootBlacklist");
+    }
+    #endregion
+    #region REROLL
+    private bool _scavWeaponAmmunitionRollEnabled
+    {
+        get => Data.scavBots.rerollConfig.enable;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.scavBots.rerollConfig.enable);
+            Data.scavBots.rerollConfig.enable = value;
+            Data.scavBots.toploadConfig.enable = !value;
+        }
+    }
+    private int _scavWeaponAmmunitionRollChance
+    {
+        get => Data.scavBots.rerollConfig.chance;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.scavBots.rerollConfig.chance);
+            Data.scavBots.rerollConfig.chance = value;
+        }
+    }
+    private void undoRollAmmunitionEnabled()
+    {
+        _scavWeaponAmmunitionRollEnabled = OriginalConfig.scavBots.rerollConfig.enable;
+        _scavWeaponAmmunitionRollChance = OriginalConfig.scavBots.rerollConfig.chance;
+        _scavWeaponToploadEnabled = OriginalConfig.scavBots.toploadConfig.enable;
+        _scavWeaponToploadChance = OriginalConfig.scavBots.toploadConfig.chance;
+        _scavWeaponToploadPercent = OriginalConfig.scavBots.toploadConfig.percent;
+    }
+    private void defaultRollAmmunitionEnabled()
+    {
+        _scavWeaponAmmunitionRollEnabled = true;
+        _scavWeaponAmmunitionRollChance = 50;
+        _scavWeaponToploadEnabled = false;
+        _scavWeaponToploadChance = 30;
+        _scavWeaponToploadPercent = 30;
+    }
+    #endregion
+    #region TOPLOAD
+    private bool _scavWeaponToploadEnabled
+    {
+        get => Data.scavBots.toploadConfig.enable;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.scavBots.toploadConfig.enable);
+            Data.scavBots.toploadConfig.enable = value;
+            Data.scavBots.rerollConfig.enable = !value;
+        }
+    }
+    private int _scavWeaponToploadChance
+    {
+        get => Data.scavBots.toploadConfig.chance;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.scavBots.toploadConfig.chance);
+            Data.scavBots.toploadConfig.chance = value;
+        }
+    }
+    private int _scavWeaponToploadPercent
+    {
+        get => Data.scavBots.toploadConfig.percent;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.scavBots.toploadConfig.percent);
+            Data.scavBots.toploadConfig.percent = value;
+        }
+    }
+    private void undoToploadEnabled()
+    {
+        _scavWeaponAmmunitionRollEnabled = OriginalConfig.scavBots.rerollConfig.enable;
+        _scavWeaponAmmunitionRollChance = OriginalConfig.scavBots.rerollConfig.chance;
+        _scavWeaponToploadEnabled = OriginalConfig.scavBots.toploadConfig.enable;
+        _scavWeaponToploadChance = OriginalConfig.scavBots.toploadConfig.chance;
+        _scavWeaponToploadPercent = OriginalConfig.scavBots.toploadConfig.percent;
+    }
+    private void defaultToploadEnabled()
+    {
+        _scavWeaponAmmunitionRollEnabled = true;
+        _scavWeaponAmmunitionRollChance = 50;
+        _scavWeaponToploadEnabled = false;
+        _scavWeaponToploadChance = 30;
+        _scavWeaponToploadPercent = 30;
     }
     #endregion
     #region RESOURCE RANDOMIZATION

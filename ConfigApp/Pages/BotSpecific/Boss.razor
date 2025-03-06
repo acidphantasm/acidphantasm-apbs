@@ -137,6 +137,112 @@
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Bosses to roll their selected round from their weapons caliber, max one time per each magazine." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Roll Ammunition Selection Again</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_bossWeaponAmmunitionRollEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_bossWeaponAmmunitionRollEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                                   MainLayout.pendingChanges.Contains("_bossWeaponAmmunitionRollEnabled") ||
+                                   MainLayout.pendingChanges.Contains("_bossWeaponAmmunitionRollChance")))
+                            {
+                                <MudButton @onclick="undoRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                                    _bossWeaponAmmunitionRollEnabled != true ||
+                                    _bossWeaponAmmunitionRollChance != 50))
+                            {
+                                <MudButton @onclick="defaultRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that Bosses will roll for a different round from the same caliber, max one time per each magazine." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Roll Again Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_bossWeaponAmmunitionRollEnabled">@_bossWeaponAmmunitionRollChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_bossWeaponAmmunitionRollChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_bossWeaponAmmunitionRollEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allows Bosses to top load their extra magazines." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Toploading</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_bossWeaponToploadEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_bossWeaponToploadEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && (
+                           MainLayout.pendingChanges.Contains("_bossWeaponToploadEnabled") ||
+                           MainLayout.pendingChanges.Contains("_bossWeaponToploadChance") ||
+                           MainLayout.pendingChanges.Contains("_bossWeaponToploadPercent")))
+                            {
+                                <MudButton @onclick="undoToploadEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && (
+                            _bossWeaponToploadEnabled != false ||
+                            _bossWeaponToploadChance != 30 ||
+                            _bossWeaponToploadPercent != 30))
+                            {
+                                <MudButton @onclick="defaultToploadEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the chance that Bosses will topload their extra magazines." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Topload Chance</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_bossWeaponToploadEnabled">@_bossWeaponToploadChance</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_bossWeaponToploadChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_bossWeaponToploadEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="2" />
+                        <MudItem xs="3">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="This is the percentage of their extra magazine that Bosses will topload." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Topload Percent</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_bossWeaponToploadEnabled">@_bossWeaponToploadPercent</MudButton>
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudSlider @bind-Value="_bossWeaponToploadPercent" ValueLabel="true" Min="10" Max="50" Color="Color.Info" Size="Size.Medium" Disabled="!_bossWeaponToploadEnabled" />
+                        </MudItem>
+                        <MudItem xs="1" />
+
+                        <MudItem xs="1" />
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                                 <MudTooltip Text="Allows random resource consumption on Food/Drink/Medical Items." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                     <MudText>Resource Randomization</MudText>
                                 </MudTooltip>
@@ -381,6 +487,89 @@
         _bossLootEnabled = true;
         _bossLootBlacklist.Clear();
         MainLayout.pendingChanges.Add("_bossLootBlacklist");
+    }
+    #endregion
+    #region REROLL
+    private bool _bossWeaponAmmunitionRollEnabled
+    {
+        get => Data.bossBots.rerollConfig.enable;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.bossBots.rerollConfig.enable);
+            Data.bossBots.rerollConfig.enable = value;
+            Data.bossBots.toploadConfig.enable = !value;
+        }
+    }
+    private int _bossWeaponAmmunitionRollChance
+    {
+        get => Data.bossBots.rerollConfig.chance;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.bossBots.rerollConfig.chance);
+            Data.bossBots.rerollConfig.chance = value;
+        }
+    }
+    private void undoRollAmmunitionEnabled()
+    {
+        _bossWeaponAmmunitionRollEnabled = OriginalConfig.bossBots.rerollConfig.enable;
+        _bossWeaponAmmunitionRollChance = OriginalConfig.bossBots.rerollConfig.chance;
+        _bossWeaponToploadEnabled = OriginalConfig.bossBots.toploadConfig.enable;
+        _bossWeaponToploadChance = OriginalConfig.bossBots.toploadConfig.chance;
+        _bossWeaponToploadPercent = OriginalConfig.bossBots.toploadConfig.percent;
+    }
+    private void defaultRollAmmunitionEnabled()
+    {
+        _bossWeaponAmmunitionRollEnabled = true;
+        _bossWeaponAmmunitionRollChance = 50;
+        _bossWeaponToploadEnabled = false;
+        _bossWeaponToploadChance = 30;
+        _bossWeaponToploadPercent = 30;
+    }
+    #endregion
+    #region TOPLOAD
+    private bool _bossWeaponToploadEnabled
+    {
+        get => Data.bossBots.toploadConfig.enable;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.bossBots.toploadConfig.enable);
+            Data.bossBots.toploadConfig.enable = value;
+            Data.bossBots.rerollConfig.enable = !value;
+        }
+    }
+    private int _bossWeaponToploadChance
+    {
+        get => Data.bossBots.toploadConfig.chance;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.bossBots.toploadConfig.chance);
+            Data.bossBots.toploadConfig.chance = value;
+        }
+    }
+    private int _bossWeaponToploadPercent
+    {
+        get => Data.bossBots.toploadConfig.percent;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.bossBots.toploadConfig.percent);
+            Data.bossBots.toploadConfig.percent = value;
+        }
+    }
+    private void undoToploadEnabled()
+    {
+        _bossWeaponAmmunitionRollEnabled = OriginalConfig.bossBots.rerollConfig.enable;
+        _bossWeaponAmmunitionRollChance = OriginalConfig.bossBots.rerollConfig.chance;
+        _bossWeaponToploadEnabled = OriginalConfig.bossBots.toploadConfig.enable;
+        _bossWeaponToploadChance = OriginalConfig.bossBots.toploadConfig.chance;
+        _bossWeaponToploadPercent = OriginalConfig.bossBots.toploadConfig.percent;
+    }
+    private void defaultToploadEnabled()
+    {
+        _bossWeaponAmmunitionRollEnabled = true;
+        _bossWeaponAmmunitionRollChance = 50;
+        _bossWeaponToploadEnabled = false;
+        _bossWeaponToploadChance = 30;
+        _bossWeaponToploadPercent = 30;
     }
     #endregion
     #region RESOURCE RANDOMIZATION
