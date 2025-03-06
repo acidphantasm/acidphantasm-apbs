@@ -13,7 +13,7 @@ import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import { ICoreConfig } from "@spt/models/spt/config/ICoreConfig";
 import { ConfigServer } from "@spt/servers/ConfigServer";
 import { minVersion, satisfies, SemVer } from "semver";
-import { VFS } from "@spt/utils/VFS";
+import { FileSystemSync } from "@spt/utils/FileSystemSync";
 import path from "path";
 import { ILogger } from "@spt/models/spt/utils/ILogger";
 
@@ -111,22 +111,23 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
     
     public validSptVersion(container: DependencyContainer): boolean
     {
-        const vfs = container.resolve<VFS>("VFS");
+        const fileSysem = container.resolve<FileSystemSync>("FileSystemSync");
         const configServer = container.resolve<ConfigServer>("ConfigServer");
         const sptConfig = configServer.getConfig<ICoreConfig>(ConfigTypes.CORE);
         
         const sptVersion = globalThis.G_SPTVERSION || sptConfig.sptVersion;
         const packageJsonPath: string = path.join(__dirname, "../package.json");
-        const modSptVersion = JSON.parse(vfs.readFile(packageJsonPath)).sptVersion;
+        const modSptVersion = fileSysem.readJson(packageJsonPath).sptVersion;
+
 
         return satisfies(sptVersion, modSptVersion);
     }
 
     public validMinimumSptVersion(container: DependencyContainer): SemVer
     {
-        const vfs = container.resolve<VFS>("VFS");
+        const fileSysem = container.resolve<FileSystemSync>("FileSystemSync");
         const packageJsonPath: string = path.join(__dirname, "../package.json");
-        const modSptVersion = JSON.parse(vfs.readFile(packageJsonPath)).sptVersion;
+        const modSptVersion = fileSysem.readJson(packageJsonPath).sptVersion;
 
         return minVersion(modSptVersion)
     }
