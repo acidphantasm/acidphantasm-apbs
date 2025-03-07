@@ -1,4 +1,229 @@
 {
+  "673dd617912f68467c0615b6": {
+    "mod_tactical": [
+      "5a800961159bd4315e3a1657",
+      "57fd23e32459772d0805bcf1",
+      "5cc9c20cd7f00c001336c65d",
+      "5d2369418abbc306c62e0c80",
+      "5b07dd285acfc4001754240d",
+      "5a7b483fe899ef0016170d15",
+      "5b3a337e5acfc4704b4a19a0",
+      "57d17e212459775a1179a0f5",
+      "6267c6396b642f77f56f5c1c",
+      "646f6322f43d0c5d62063715"
+    ]
+  },
+  "673dd5f73f92dc7e120d20a9": {
+    "mod_tactical": [
+      "5a800961159bd4315e3a1657",
+      "57fd23e32459772d0805bcf1",
+      "5cc9c20cd7f00c001336c65d",
+      "5d2369418abbc306c62e0c80",
+      "5b07dd285acfc4001754240d",
+      "5a7b483fe899ef0016170d15",
+      "5b3a337e5acfc4704b4a19a0",
+      "57d17e212459775a1179a0f5",
+      "6267c6396b642f77f56f5c1c",
+      "646f6322f43d0c5d62063715"
+    ]
+  },
+  "646f6322f43d0c5d62063715": {
+    "mod_tactical": [
+      "646f62fee779812413011ab7"
+    ]
+  },
+  "673cab3e03c6a20581028bc1": {
+    "mod_magazine": [
+      "673cbdfad0453ba50c0f76d6"
+    ],
+    "mod_charge": [
+      "673cb4054ff4aa8f86076f4a"
+    ],
+    "mod_stock": [
+      "673cb212e695740be0047a46"
+    ],
+    "mod_reciever": [
+      "673cb491280680de5e02ff36"
+    ],
+    "patron_in_weapon": [
+      "5fc275cf85fd526b824a571a",
+      "5fc382c1016cce60e8341b20",
+      "5fc382b6d6fa9c00c571bbc3",
+      "5fc382a9d724d907e2077dab"
+    ]
+  },
+  "673cbdfad0453ba50c0f76d6": {
+    "cartridges": [
+      "5fc382a9d724d907e2077dab",
+      "5fc275cf85fd526b824a571a",
+      "5fc382c1016cce60e8341b20",
+      "5fc382b6d6fa9c00c571bbc3"
+    ]
+  },
+  "673cb212e695740be0047a46": {
+    "mod_mount_000": [
+      "673ddbb567c759b3c90e5f76"
+    ]
+  },
+  "673cb491280680de5e02ff36": {
+    "mod_handguard": [
+      "673cb5d1280680de5e02ff3b",
+      "67405ef125beb509e8070276",
+      "67405fd0812f476fb2020066"
+    ],
+    "mod_barrel": [
+      "673cb551093e0ea7fd0b874a",
+      "67405d760098dcb5940ea1a6",
+      "67405e3b83ac5c69ae025406"
+    ],
+    "mod_mount": [
+      "673cb51e093e0ea7fd0b8746"
+    ]
+  },
+  "673cb51e093e0ea7fd0b8746": {
+    "mod_scope": [
+      "57c69dd424597774c03b7bbc"
+    ],
+    "mod_sight_rear": [
+      "5c18b9192e2216398b5a8104"
+    ]
+  },
+  "673cb5d1280680de5e02ff3b": {
+    "mod_tactical_000": [
+      "57fd23e32459772d0805bcf1",
+      "5a7b483fe899ef0016170d15"
+    ],
+    "mod_foregrip": [
+      "673cb81f5b1511adb10cd326"      
+    ],
+    "mod_sight_front": [
+      "5c18b90d2e2216152142466b"
+    ],
+    "mod_mount_000": [
+      "673dd617912f68467c0615b6",
+      "673dd5f73f92dc7e120d20a9"
+    ],
+    "mod_mount_001": [
+      "673dd617912f68467c0615b6",
+      "673dd5f73f92dc7e120d20a9"
+    ],
+    "mod_tactical_001": [
+      "5a800961159bd4315e3a1657",
+      "57fd23e32459772d0805bcf1",
+      "5cc9c20cd7f00c001336c65d",
+      "5d2369418abbc306c62e0c80",
+      "5b07dd285acfc4001754240d",
+      "5a7b483fe899ef0016170d15",
+      "5b3a337e5acfc4704b4a19a0",
+      "6644920d49817dc7d505ca71",
+      "646f6322f43d0c5d62063715",
+      "57d17e212459775a1179a0f5"
+    ]
+  },
+  "67405ef125beb509e8070276": {
+    "mod_foregrip": [
+      "673cb81f5b1511adb10cd326"      
+    ],
+    "mod_sight_front": [
+      "5c18b90d2e2216152142466b"
+    ],
+    "mod_mount_000": [
+      "673dd617912f68467c0615b6",
+      "673dd5f73f92dc7e120d20a9"
+    ],
+    "mod_mount_001": [
+      "673dd617912f68467c0615b6",
+      "673dd5f73f92dc7e120d20a9"
+    ],
+    "mod_tactical": [
+      "5a800961159bd4315e3a1657",
+      "57fd23e32459772d0805bcf1",
+      "5cc9c20cd7f00c001336c65d",
+      "5d2369418abbc306c62e0c80",
+      "5b07dd285acfc4001754240d",
+      "5a7b483fe899ef0016170d15",
+      "5b3a337e5acfc4704b4a19a0",
+      "6644920d49817dc7d505ca71",
+      "646f6322f43d0c5d62063715",
+      "57d17e212459775a1179a0f5"
+    ]
+  },
+  "67405fd0812f476fb2020066": {
+    "mod_foregrip": [
+      "673cb81f5b1511adb10cd326"      
+    ],
+    "mod_sight_front": [
+      "5c18b90d2e2216152142466b"
+    ],
+    "mod_mount_000": [
+      "669a6a4a525be1d2d004b8eb",
+      "6269220d70b6c02e665f2635",
+      "6269545d0e57f218e4548ca2",
+      "5b7be47f5acfc400170e2dd2"
+    ],
+    "mod_mount_001": [
+      "669a6a4a525be1d2d004b8eb",
+      "5b7be47f5acfc400170e2dd2",
+      "6269220d70b6c02e665f2635",
+      "6269545d0e57f218e4548ca2"
+    ],
+    "mod_mount_002": [
+      "669a6a4a525be1d2d004b8eb",
+      "5b7be47f5acfc400170e2dd2",
+      "671126b049e181972e0681fa",
+      "6269220d70b6c02e665f2635",
+      "6269545d0e57f218e4548ca2"
+    ],
+    "mod_tactical": [
+      "57fd23e32459772d0805bcf1",
+      "5a7b483fe899ef0016170d15"
+    ]
+  },
+  "673cb551093e0ea7fd0b874a": {
+    "mod_muzzle": [
+      "62812081d23f207deb0ab216",
+      "612e0d81290d254f5e6b291a",
+      "5fc23636016cce60e8341b05",
+      "673f3ef1259f5945d70e43a8",
+      "673f4046259f5945d70e43ab",
+      "673f3f5eef7545280c00f026",
+      "673f3f9840aeca974e0b5c68",
+      "673f0a9370a3ddcf0d0ee0b8",
+      "673f0b36536d64240f01acd6"
+    ]
+  },
+  "67405d760098dcb5940ea1a6": {
+    "mod_muzzle": [
+      "62812081d23f207deb0ab216",
+      "612e0d81290d254f5e6b291a",
+      "5fc23636016cce60e8341b05",
+      "673f3ef1259f5945d70e43a8",
+      "673f4046259f5945d70e43ab",
+      "673f3f5eef7545280c00f026",
+      "673f3f9840aeca974e0b5c68",
+      "673f0a9370a3ddcf0d0ee0b8",
+      "673f0b36536d64240f01acd6"
+    ]
+  },
+  "67405e3b83ac5c69ae025406": {
+    "mod_muzzle": [
+      "62812081d23f207deb0ab216",
+      "612e0d81290d254f5e6b291a",
+      "5fc23636016cce60e8341b05",
+      "673f3ef1259f5945d70e43a8",
+      "673f4046259f5945d70e43ab",
+      "673f3f5eef7545280c00f026",
+      "673f3f9840aeca974e0b5c68",
+      "673f0a9370a3ddcf0d0ee0b8",
+      "673f0b36536d64240f01acd6"
+    ]
+  },
+  "673f3ef1259f5945d70e43a8": {
+    "mod_muzzle": [
+      "673f3f2f40aeca974e0b5c66",
+      "673f0a38259f5945d70e43a6"
+    ]
+  },
   "651450ce0e00edc794068371": {
     "mod_muzzle": [
       "65144ff50e00edc79406836f"
