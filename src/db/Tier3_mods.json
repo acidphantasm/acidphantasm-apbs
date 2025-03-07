@@ -302,7 +302,6 @@
       "57c450252459772d28133253"
     ],
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_mount_000": [
@@ -2834,7 +2833,6 @@
   },
   "5644bd2b4bdc2d3b4c8b4572": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -3362,7 +3360,6 @@
   },
   "576165642459773c7a400233": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_handguard": [
@@ -3647,8 +3644,7 @@
       "6565bb7eb4b12a56eb04b084"
     ],
     "mod_charge": [
-      "5648ac824bdc2ded0b8b457d",
-      "6130ca3fd92c473c77020dbd"
+      "5648ac824bdc2ded0b8b457d"
     ],
     "mod_magazine": [
       "57838f9f2459774a150289a0"
@@ -3751,7 +3747,6 @@
       "6565bb7eb4b12a56eb04b084"
     ],
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_magazine": [
@@ -3848,7 +3843,6 @@
   },
   "57dc2fa62459775949412633": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -4057,7 +4051,6 @@
   },
   "583990e32459771419544dd2": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -4131,7 +4124,6 @@
   },
   "5839a40f24597726f856b511": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -4967,7 +4959,6 @@
   },
   "59984ab886f7743e98271174": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -5551,8 +5542,7 @@
   },
   "59d6088586f774275f37482f": {
     "mod_charge": [
-      "5648ac824bdc2ded0b8b457d",
-      "6130ca3fd92c473c77020dbd"
+      "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
       "59c6633186f7740cf0493bb9",
@@ -5733,7 +5723,6 @@
   },
   "59e6152586f77473dc057aa1": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -5844,7 +5833,6 @@
   },
   "59e6687d86f77411d949b251": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -6090,7 +6078,6 @@
   },
   "59f9cabd86f7743a10721f46": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -6174,7 +6161,6 @@
   },
   "59ff346386f77477562ff5e2": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -6285,7 +6271,6 @@
   },
   "5a0ec13bfcdbcb00165aa685": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -7917,7 +7902,6 @@
   },
   "5ab8e9fcd8ce870019439434": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -8006,7 +7990,6 @@
       "62e7e7bbe6da9612f743f1e0"
     ],
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -8091,7 +8074,6 @@
   },
   "5ac4cd105acfc40016339859": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -8246,7 +8228,6 @@
   },
   "5ac66cb05acfc40198510a10": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -8324,7 +8305,6 @@
   },
   "5ac66d015acfc400180ae6e4": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -8399,7 +8379,6 @@
   },
   "5ac66d2e5acfc43b321d4b53": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -8481,7 +8460,6 @@
   },
   "5ac66d725acfc43b321d4b60": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -8560,7 +8538,6 @@
   },
   "5ac66d9b5acfc4001633997a": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -10491,7 +10468,6 @@
   },
   "5beed0f50db834001c062b12": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_barrel": [
@@ -10546,7 +10522,6 @@
   },
   "5bf3e03b0db834001d2c4a9c": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -10626,7 +10601,6 @@
   },
   "5bf3e0490db83400196199af": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -19095,7 +19069,7 @@
   },
   "628a60ae6b1d481ff772e9c8": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd"
+      "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
       "628a83c29179c324ed269508"
@@ -19199,7 +19173,6 @@
   },
   "628b5638ad252a16da6dd245": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -19361,7 +19334,6 @@
   },
   "628b9c37a733087d0d7fe84b": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
@@ -20517,7 +20489,6 @@
   },
   "6499849fc93611967b034949": {
     "mod_charge": [
-      "6130ca3fd92c473c77020dbd",
       "5648ac824bdc2ded0b8b457d"
     ],
     "mod_gas_block": [
