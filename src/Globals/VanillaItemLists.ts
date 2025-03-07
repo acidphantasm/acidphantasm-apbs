@@ -40,7 +40,8 @@ export const vanillaItemList =
             "627e14b21713922ded6f2c15",
             "57c44b372459772d2b39b8ce",
             "57838ad32459774a17445cd2",
-            "645e0c6b3b381ede770e1cc9"
+            "645e0c6b3b381ede770e1cc9",
+            "673cab3e03c6a20581028bc1"
         ],
         "ShortRange": [
             "5a7828548dc32e5a9c28b516",
@@ -133,7 +134,9 @@ export const vanillaItemList =
             "66992b349950f5f4cd06029f",
             "66ffa9b66e19cc902401c5e8",
             "67124dcfa3541f2a1f0e788b",
-            "6718817435e3cfd9550d2c27"
+            "6718817435e3cfd9550d2c27",
+            "674d6121c09f69dfb201a888",
+            "674fe9a75e51f1c47c04ec23"
         ],
         "Holster": [
             "56e0598dd2720bb5668b45a6",
