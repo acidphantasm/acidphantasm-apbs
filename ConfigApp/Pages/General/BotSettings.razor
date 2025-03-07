@@ -258,50 +258,6 @@
                     <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="Allows bots to roll their selected round from their weapons caliber, max one time per each magazine." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Roll Ammunition Selection Again</MudText>
-                            </MudTooltip>
-                        </MudPaper>
-                    </MudItem>
-                    <MudItem xs="6">
-                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
-                            <MudSwitch T="bool" @bind-Value="_allWeaponAmmunitionRollEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allWeaponAmmunitionRollEnabled</MudSwitch>
-                        </MudPaper>
-                    </MudItem>
-                    <MudItem xs="1">
-                        @if (MainLayout._appUndoButtonToggle && (
-                            MainLayout.pendingChanges.Contains("_allWeaponAmmunitionRollEnabled") ||
-                            MainLayout.pendingChanges.Contains("_allWeaponAmmunitionRollChance")))
-                        {
-                            <MudButton @onclick="undoRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
-                        }
-                        else if (MainLayout._appDefaultButtonToggle && (
-                                _allWeaponAmmunitionRollEnabled != true ||
-                                _allWeaponAmmunitionRollChance != 50))
-                        {
-                            <MudButton @onclick="defaultRollAmmunitionEnabled" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
-                        }
-                    </MudItem>
-
-                    <MudItem xs="2" />
-                    <MudItem xs="3">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="This is the chance that bots will roll for a different round from the same caliber, max one time per each magazine." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
-                                <MudText>Roll Again Chance</MudText>
-                            </MudTooltip>
-                        </MudPaper>
-                    </MudItem>
-                    <MudItem xs="1">
-                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small" Disabled="!_allWeaponAmmunitionRollEnabled">@_allWeaponAmmunitionRollChance</MudButton>
-                    </MudItem>
-                    <MudItem xs="5">
-                        <MudSlider @bind-Value="_allWeaponAmmunitionRollChance" ValueLabel="true" Min="1" Max="100" Color="Color.Info" Size="Size.Medium" Disabled="!_allWeaponAmmunitionRollEnabled" />
-                    </MudItem>
-                    <MudItem xs="1" />
-
-                    <MudItem xs="1" />
-                    <MudItem xs="4">
-                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="Allows bots to use different chances for each slot, depending on the category of weapon they have selected." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                 <MudText>Per Weapon Category Attachment Chances</MudText>
                             </MudTooltip>
@@ -1074,34 +1030,6 @@
     private void defaultNormalizeHealthExcludedBots() => _allNormalizeHealthExcludedBots.Clear();
     #endregion
     #region WEAPON CONFIG
-    private bool _allWeaponAmmunitionRollEnabled
-    {
-        get => Data.generalConfig.enableBotsToRollAmmoAgain;
-        set
-        {
-            Utils.UpdateView(value, OriginalConfig.generalConfig.enableBotsToRollAmmoAgain);
-            Data.generalConfig.enableBotsToRollAmmoAgain = value;
-        }
-    }
-    private int _allWeaponAmmunitionRollChance
-    {
-        get => Data.generalConfig.chanceToRollAmmoAgain;
-        set
-        {
-            Utils.UpdateView(value, OriginalConfig.generalConfig.chanceToRollAmmoAgain);
-            Data.generalConfig.chanceToRollAmmoAgain = value;
-        }
-    }
-    private void undoRollAmmunitionEnabled()
-    {
-        _allWeaponAmmunitionRollEnabled = OriginalConfig.generalConfig.enableBotsToRollAmmoAgain;
-        _allWeaponAmmunitionRollChance = OriginalConfig.generalConfig.chanceToRollAmmoAgain;
-    }
-    private void defaultRollAmmunitionEnabled() 
-    {
-        _allWeaponAmmunitionRollEnabled = true;
-        _allWeaponAmmunitionRollChance = 50;
-    }
     private bool _allPerWeaponAttachmentRolls
     {
         get => Data.generalConfig.enablePerWeaponTypeAttachmentChances;

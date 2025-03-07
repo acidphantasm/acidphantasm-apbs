@@ -9,6 +9,13 @@ import { IPostSptLoadMod } from "@spt/models/external/IPostSptLoadMod";
 import { Logging } from "./Enums/Logging";
 import { InstanceManager } from "./InstanceManager";
 import { ModConfig } from "./Globals/ModConfig";
+import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
+import { ICoreConfig } from "@spt/models/spt/config/ICoreConfig";
+import { ConfigServer } from "@spt/servers/ConfigServer";
+import { minVersion, satisfies, SemVer } from "semver";
+import { VFS } from "@spt/utils/VFS";
+import path from "path";
+import { ILogger } from "@spt/models/spt/utils/ILogger";
 
 class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
 {
@@ -17,6 +24,14 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
     public preSptLoad(container: DependencyContainer): void 
     {
         const start = performance.now()
+
+        const logger = container.resolve<ILogger>("WinstonLogger");
+        if (!this.validSptVersion(container)) 
+        {
+            logger.error(`[APBS] This version of APBS was not made for your version of SPT. Disabling. Requires ${this.validMinimumSptVersion(container)} or higher.`);
+            return;
+        }
+
         this.instance.preSptLoad(container, "APBS");
 
         // Set Mod Configuration Settings
@@ -92,6 +107,28 @@ class APBS implements IPreSptLoadMod, IPostDBLoadMod, IPostSptLoadMod
 
         const timeTaken = performance.now() - start;
         this.instance.apbsLogger.log(Logging.DEBUG, `${timeTaken.toFixed(2)}ms for APBS.postSptLoad`);
+    }
+    
+    public validSptVersion(container: DependencyContainer): boolean
+    {
+        const vfs = container.resolve<VFS>("VFS");
+        const configServer = container.resolve<ConfigServer>("ConfigServer");
+        const sptConfig = configServer.getConfig<ICoreConfig>(ConfigTypes.CORE);
+        
+        const sptVersion = globalThis.G_SPTVERSION || sptConfig.sptVersion;
+        const packageJsonPath: string = path.join(__dirname, "../package.json");
+        const modSptVersion = JSON.parse(vfs.readFile(packageJsonPath)).sptVersion;
+
+        return satisfies(sptVersion, modSptVersion);
+    }
+
+    public validMinimumSptVersion(container: DependencyContainer): SemVer
+    {
+        const vfs = container.resolve<VFS>("VFS");
+        const packageJsonPath: string = path.join(__dirname, "../package.json");
+        const modSptVersion = JSON.parse(vfs.readFile(packageJsonPath)).sptVersion;
+
+        return minVersion(modSptVersion)
     }
 }
 

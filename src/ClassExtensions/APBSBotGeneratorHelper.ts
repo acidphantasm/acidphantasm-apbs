@@ -7,15 +7,10 @@ import { RandomUtil } from "@spt/utils/RandomUtil";
 
 import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { ApplicationContext } from "@spt/context/ApplicationContext";
-import { ContextVariableType } from "@spt/context/ContextVariableType";
 import { ContainerHelper } from "@spt/helpers/ContainerHelper";
 import { DurabilityLimitsHelper } from "@spt/helpers/DurabilityLimitsHelper";
 import { InventoryHelper } from "@spt/helpers/InventoryHelper";
 import { ItemHelper } from "@spt/helpers/ItemHelper";
-import { IUpd } from "@spt/models/eft/common/tables/IItem";
-import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
-import { IGetRaidConfigurationRequestData } from "@spt/models/eft/match/IGetRaidConfigurationRequestData";
-import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { LocalisationService } from "@spt/services/LocalisationService";
 import { IRandomisedResourceValues } from "@spt/models/spt/config/IBotConfig";
 

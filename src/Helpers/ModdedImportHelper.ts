@@ -570,7 +570,7 @@ export class ModdedImportHelper
             let weight;
             if (equipmentSlot == "TacticalVest" && gridLength > 10) weight = 10;
             if (equipmentSlot == "TacticalVest" && gridLength <= 10) weight = 1;
-            if (equipmentSlot == "ArmBand") weight = 1;
+            if (equipmentSlot == "ArmBand") weight = 3;
             if (equipmentSlot == "ArmouredRig") weight = 7;
             if (equipmentSlot == "ArmorVest") weight = 10;
             if (equipmentSlot == "Headwear" && equipmentSlotsLength > 0) weight = 6;

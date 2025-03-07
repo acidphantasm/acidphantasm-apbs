@@ -22,6 +22,8 @@ namespace APBSConfig.Core
         public required ResourceRandomizationConfig resourceRandomization { get; set; }
         public required WeaponDurabilityConfig weaponDurability { get; set; }
         public required LootConfig lootConfig { get; set; }
+        public required EnableChance rerollConfig { get; set; }
+        public required ToploadConfig toploadConfig { get; set; }
     }
     public class PMCBotData
     {
@@ -29,6 +31,8 @@ namespace APBSConfig.Core
         public required ResourceRandomizationConfig resourceRandomization { get; set; }
         public required WeaponDurabilityConfig weaponDurability { get; set; }
         public required LootConfig lootConfig { get; set; }
+        public required EnableChance rerollConfig { get; set; }
+        public required ToploadConfig toploadConfig { get; set; }
         public required EnableChance questConfig { get; set; }
         public required EnableChance povertyConfig { get; set; }
         public required PMCSpecificConfig additionalOptions { get; set; }
@@ -40,6 +44,8 @@ namespace APBSConfig.Core
         public required ResourceRandomizationConfig resourceRandomization { get; set; }
         public required WeaponDurabilityConfig weaponDurability { get; set; }
         public required LootConfig lootConfig { get; set; }
+        public required EnableChance rerollConfig { get; set; }
+        public required ToploadConfig toploadConfig { get; set; }
         public required KeyConfig keyConfig { get; set; }
         public required ScavSpecificConfig additionalOptions { get; set; }
 
@@ -116,6 +122,12 @@ namespace APBSConfig.Core
         public bool enable { get; set; }
         public int chance { get; set; }
     }
+    public class ToploadConfig
+    {
+        public bool enable { get; set; }
+        public int chance { get; set; }
+        public int percent { get; set; }
+    }
     public class ScavSpecificConfig
     {
         public bool enableScavAttachmentTiering { get; set; }
@@ -152,8 +164,6 @@ namespace APBSConfig.Core
     }
     public class GeneralConfig
     {
-        public bool enableBotsToRollAmmoAgain { get; set; }
-        public int chanceToRollAmmoAgain { get; set; }
         public bool enablePerWeaponTypeAttachmentChances { get; set; }
         public bool enableLargeCapacityMagazineLimit { get; set; }
         public int largeCapacityMagazineCount { get; set; }

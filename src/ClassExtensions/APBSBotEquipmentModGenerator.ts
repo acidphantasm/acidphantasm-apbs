@@ -9,7 +9,7 @@ import { ProbabilityHelper } from "@spt/helpers/ProbabilityHelper";
 import { ProfileHelper } from "@spt/helpers/ProfileHelper";
 import { WeightedRandomHelper } from "@spt/helpers/WeightedRandomHelper";
 import { IItem } from "@spt/models/eft/common/tables/IItem";
-import { ISlot, ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { ModSpawn } from "@spt/models/enums/ModSpawn";
 import { IFilterPlateModsForSlotByLevelResult, Result } from "@spt/models/spt/bots/IFilterPlateModsForSlotByLevelResult";
 import { IGenerateEquipmentProperties } from "@spt/models/spt/bots/IGenerateEquipmentProperties";
@@ -29,7 +29,6 @@ import { Money } from "@spt/models/enums/Money";
 import { IGenerateWeaponRequest } from "@spt/models/spt/bots/IGenerateWeaponRequest";
 import { IModToSpawnRequest } from "@spt/models/spt/bots/IModToSpawnRequest";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
-import { IEquipmentFilterDetails } from "@spt/models/spt/config/IBotConfig";
 import { BotEquipmentModGenerator } from "@spt/generators/BotEquipmentModGenerator";
 import { IChooseRandomCompatibleModResult } from "@spt/models/spt/bots/IChooseRandomCompatibleModResult";
 import { MinMax } from "@spt/models/common/MinMax";
@@ -44,7 +43,6 @@ import { APBSLogger } from "../Utils/APBSLogger";
 import { RealismHelper } from "../Helpers/RealismHelper";
 import { APBSIGenerateEquipmentProperties } from "../Interface/APBSIGenerateEquipmentProperties";
 import { APBSIQuestBotGenerationDetails } from "../Interface/APBSIQuestBotGear";
-import { Logging } from "../Enums/Logging";
 
 /** Handle profile related client events */
 @injectable()
@@ -1151,7 +1149,6 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                         const childSlots = itemInSlotData._props.Slots;
                         for (const childSlot in childSlots)
                         {
-                            const childSlotName = childSlots[childSlot]._name;
                             const childModSlotPool = childSlots[childSlot]._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
                             {
                                 if (childModSlotPool.length)
@@ -1173,7 +1170,6 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                                             const childOfChildSlots = itemInItemChildSlotData._props.Slots;
                                             for (const childOfChildSlot in childOfChildSlots)
                                             {
-                                                const childOfChildSlotName = childOfChildSlots[childOfChildSlot]._name;
                                                 const childOfChildModSlotPool = childOfChildSlots[childOfChildSlot]._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
                                                 {
                                                     if (childOfChildModSlotPool.length)
@@ -1195,14 +1191,12 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                                                                 const childOfChildOfChildSlots = itemInItemChildOfChildSlotData._props.Slots;
                                                                 for (const childOfChildOfChildSlot in childOfChildOfChildSlots)
                                                                 {
-                                                                    const childOfChildOfChildSlotName = childOfChildOfChildSlots[childOfChildOfChildSlot]._name;
                                                                     const childOfChildOfChildModSlotPool = childOfChildOfChildSlots[childOfChildOfChildSlot]._props.filters[0].Filter.filter((tpl) => this.itemHelper.getItem(tpl)[1]);
                                                                     {
                                                                         if (childOfChildOfChildModSlotPool.length)
                                                                         {
                                                                             for (const itemInItemChildOfChildOfChildSlot of childOfChildOfChildModSlotPool)
                                                                             {
-                                                                                const itemInItemChildOfChildOfChildSlotData = this.itemHelper.getItem(itemInItemChildOfChildOfChildSlot)[1];
                                                                                 if (questInformation.questData.requiredWeaponMods.includes(itemInItemChildOfChildOfChildSlot))
                                                                                 {
                                                                                     if (!modPoolToReturn.includes(itemInSlot))

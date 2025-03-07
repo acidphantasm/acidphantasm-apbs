@@ -1,5 +1,3 @@
-import { IInventoryMagGen } from "@spt/generators/weapongen/IInventoryMagGen";
-import { InventoryMagGen } from "@spt/generators/weapongen/InventoryMagGen";
 import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper";
 import { BaseClasses } from "@spt/models/enums/BaseClasses";
 import { EquipmentSlots } from "@spt/models/enums/EquipmentSlots";
@@ -40,9 +38,9 @@ export class APBSUbglExternalMagGen implements APBSIInventoryMagGen
             inventoryMagGen.getMagCount(),
             inventoryMagGen.getMagazineTemplate()
         );
-
         
-        if (ModConfig.config.generalConfig.enableBotsToRollAmmoAgain && this.randomUtil.getChance100(ModConfig.config.generalConfig.chanceToRollAmmoAgain))
+        const rerollConfig = inventoryMagGen.getRerollDetails();
+        if (rerollConfig.enable && this.randomUtil.getChance100(rerollConfig.chance))
         {
             const weapon = inventoryMagGen.getWeaponTemplate();
             

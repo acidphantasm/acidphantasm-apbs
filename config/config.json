@@ -173,6 +173,15 @@
                                 "6711039f9e648049e50b3307"
                         ]
                 },
+                "rerollConfig": {
+                        "enable": false,
+                        "chance": 50
+                },
+                "toploadConfig": {
+                        "enable": true,
+                        "chance": 30,
+                        "percent": 30
+                },
                 "questConfig": {
                         "enable": true,
                         "chance": 10
@@ -244,6 +253,15 @@
                         "enable": true,
                         "blacklist": []
                 },
+                "rerollConfig": {
+                        "enable": true,
+                        "chance": 50
+                },
+                "toploadConfig": {
+                        "enable": false,
+                        "chance": 30,
+                        "percent": 30
+                },
                 "keyConfig": {
                         "addAllKeysToScavs": false,
                         "addOnlyMechanicalKeysToScavs": false,
@@ -275,6 +293,15 @@
                 "lootConfig": {
                         "enable": true,
                         "blacklist": []
+                },
+                "rerollConfig": {
+                        "enable": true,
+                        "chance": 50
+                },
+                "toploadConfig": {
+                        "enable": false,
+                        "chance": 30,
+                        "percent": 30
                 }
         },
         "followerBots": {
@@ -298,6 +325,15 @@
                 "lootConfig": {
                         "enable": true,
                         "blacklist": []
+                },
+                "rerollConfig": {
+                        "enable": true,
+                        "chance": 50
+                },
+                "toploadConfig": {
+                        "enable": false,
+                        "chance": 30,
+                        "percent": 30
                 }
         },
         "specialBots": {
@@ -321,6 +357,15 @@
                 "lootConfig": {
                         "enable": true,
                         "blacklist": []
+                },
+                "rerollConfig": {
+                        "enable": true,
+                        "chance": 50
+                },
+                "toploadConfig": {
+                        "enable": false,
+                        "chance": 30,
+                        "percent": 30
                 }
         },
         "customLevelDeltas": {

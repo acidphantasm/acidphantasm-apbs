@@ -1,6 +1,7 @@
 import { IInventory } from "@spt/models/eft/common/tables/IBotBase";
 import { IGenerationData } from "@spt/models/eft/common/tables/IBotType";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
+import { EnableChance, ToploadConfig } from "../Globals/ModConfig";
 
 export class APBSInventoryMagGen 
 {
@@ -13,6 +14,8 @@ export class APBSInventoryMagGen
         private botRole: string,
         private botLevel: number,
         private tier: number,
+        private toploadDetails: ToploadConfig,
+        private rerollDetails: EnableChance
     ) 
     {}
 
@@ -54,5 +57,15 @@ export class APBSInventoryMagGen
     public getTierNumber(): number 
     {
         return this.tier;
+    }
+
+    public getToploadDetails(): ToploadConfig 
+    {
+        return this.toploadDetails;
+    }
+
+    public getRerollDetails(): EnableChance 
+    {
+        return this.rerollDetails;
     }
 }

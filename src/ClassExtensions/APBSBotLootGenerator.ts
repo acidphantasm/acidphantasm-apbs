@@ -26,7 +26,6 @@ import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { APBSBotLootCacheService } from "./APBSBotLootCacheService";
 import { RaidInformation } from "../Globals/RaidInformation";
 import { APBSLogger } from "../Utils/APBSLogger";
-import { Logging } from "../Enums/Logging";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
 import { IItemSpawnLimitSettings } from "@spt/models/spt/bots/IItemSpawnLimitSettings";
 
@@ -81,7 +80,7 @@ export class APBSBotLootGenerator extends BotLootGenerator
         botRole: string,
         botInventory: PmcInventory,
         botLevel: number,
-        tier: number,
+        tier: number
     ): void
     {
         // Limits on item types to be added as loot

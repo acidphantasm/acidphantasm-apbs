@@ -1,7 +1,7 @@
 {
     "name": "Acids Progressive Bot System",
-    "version": "1.7.2",
-    "sptVersion": "~3.10",
+    "version": "1.7.3",
+    "sptVersion": ">=3.10.4 <3.11.0",
     "loadBefore": [],
     "loadAfter": [
         "DanW-SPTQuestingBots"
@@ -29,5 +29,5 @@
     },
     "author": "acidphantasm",
     "contributors": [],
-    "license": "MIT"
+    "license": "BY-NC-ND 4.0"
 }
