@@ -261,9 +261,9 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
                 }
             }
             this.apbsTester.createComplexAssortItem(assortEquipment)
-                .addUnlimitedStackCount()
+                .addStackCount(1)
                 .addMoneyCost(Money.ROUBLES, settings.botData.level)
-                .addBuyRestriction(3)
+                .addBuyRestriction(1)
                 .addLoyaltyLevel(1)
                 .export(tables.traders[this.modInformation.testTrader]);
         }

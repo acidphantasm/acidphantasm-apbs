@@ -398,9 +398,9 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                 }
             }
             this.apbsTester.createComplexAssortItem(assortWeapon)
-                .addUnlimitedStackCount()
+                .addStackCount(1)
                 .addMoneyCost(Money.ROUBLES, botLevel)
-                .addBuyRestriction(3)
+                .addBuyRestriction(1)
                 .addLoyaltyLevel(1)
                 .export(tables.traders[this.modInformation.testTrader]);
         }
