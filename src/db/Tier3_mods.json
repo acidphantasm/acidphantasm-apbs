@@ -1,4 +1,35 @@
 {
+  "674d91ce6e862d5a95059ed6": {
+    "Back_plate": [
+      "654a4a964b446df1ad03f192",
+      "656efaf54772930db4031ff5",
+      "656efd66034e8e01c407f35c"
+    ],
+    "Collar": [
+      "6575ea719c7cad336508e418"
+    ],
+    "Front_plate": [
+      "656f63c027aed95beb08f62c",
+      "656f57dc27aed95beb08f628",
+      "656f611f94b480b8a500c0db",
+      "656f603f94b480b8a500c0d6"
+    ],
+    "Groin": [
+      "6575ea7c60703324250610e2"
+    ],
+    "Soft_armor_back": [
+      "6575ea4cf6a13a7b7100adc4"
+    ],
+    "Soft_armor_front": [
+      "6575ea3060703324250610da"
+    ],
+    "Soft_armor_left": [
+      "6575ea5cf6a13a7b7100adc8"
+    ],
+    "soft_armor_right": [
+      "6575ea6760703324250610de"
+    ]
+  },
   "660ea4ba5a58d057b009efab": {
     "cartridges": [
       "5a6086ea4f39f99cd479502f",
