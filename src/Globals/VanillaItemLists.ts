@@ -200,7 +200,10 @@ export const vanillaItemList =
             "619bdfd4c9546643a67df6fa",
             "664a5480bfcc521bad3192ca",
             "660312cc4d6cdfa6f500c703",
-            "619bddffc9546643a67df6f0"
+            "619bddffc9546643a67df6f0",
+            "67614b3ab8c060ebb204b106",
+            "67614b542eb91250020f2b86",
+            "67614b6b47c71ea3d40256d7"
         ],
         "ArmorVest": [
             "5df8a2ca86f7740bfe6df777",
@@ -236,7 +239,8 @@ export const vanillaItemList =
             "5fd4c474dd870108a754b241",
             "5e4abb5086f77406975c9342",
             "6038b4b292ec1c3103795a0b",
-            "6038b4ca92ec1c3103795a0d"
+            "6038b4ca92ec1c3103795a0d",
+            "674d91ce6e862d5a95059ed6"
         ],
         "Backpack": [
             "5ab8f04f86f774585f4237d8",
@@ -382,7 +386,15 @@ export const vanillaItemList =
             "66b5f65ca7f72d197e70bcd6",
             "66b5f661af44ca0014063c05",
             "66b5f666cad6f002ab7214c2",
-            "66bdc28a0b603c26902b2011"
+            "66bdc28a0b603c26902b2011",
+            "6745895717824b1ec20570a6",
+            "675956062f6ddfe8ff0e2806",
+            "6759655674aa5e0825040d62",
+            "67597ceea35600b4c10cea86",
+            "67597d241d5a44f2f605df06",
+            "6759af0f9c8a538dd70bfae6",
+            "675aadf3003bb2e826030996",
+            "675aae1c26dc64e17800fee6"
         ],
         "TacticalVest": [
             "572b7adb24597762ae139821",
@@ -440,7 +452,8 @@ export const vanillaItemList =
             "628b9c7d45122232a872358f",
             "66b6295178bbc0200425f995",
             "66b6295a8ca68c6461709efa",
-            "66b6296d7994640992013b17"
+            "66b6296d7994640992013b17",
+            "674589d98dd67746010329e6"
         ]
     }
 }
