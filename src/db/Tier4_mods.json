@@ -20940,7 +20940,10 @@
       "6165aeedfaa1272e431521e3"
     ],
     "mod_stock": [
-      "61825d06d92c473c770215de"
+      "61825d06d92c473c770215de",
+      "66ffc20ba73a7bce3d0b45ab",
+      "66ffbfb1a73a7bce3d0b45a8",
+      "66ffc246a81a4f85e70d4d06"
     ],
     "patron_in_weapon": [
       "5a6086ea4f39f99cd479502f",
@@ -21510,10 +21513,13 @@
       "652911675ae2ae97b80fdf3c"
     ],
     "mod_reciever": [
-      "6165aeedfaa1272e431521e3"
+      "6165adcdd3a39d50044c120f"
     ],
     "mod_stock": [
-      "61825d06d92c473c770215de"
+      "61816734d8e3106d9806c1f3",
+      "66ffc20ba73a7bce3d0b45ab",
+      "66ffbfb1a73a7bce3d0b45a8",
+      "66ffc246a81a4f85e70d4d06"
     ],
     "patron_in_weapon": [
       "5a6086ea4f39f99cd479502f",
@@ -21779,7 +21785,10 @@
       "618405198004cc50514c3594"
     ],
     "mod_stock": [
-      "61816734d8e3106d9806c1f3"
+      "61816734d8e3106d9806c1f3",
+      "66ffc20ba73a7bce3d0b45ab",
+      "66ffbfb1a73a7bce3d0b45a8",
+      "66ffc246a81a4f85e70d4d06"
     ],
     "patron_in_weapon": [
       "59e6920f86f77411d82aa167",
@@ -21905,7 +21914,10 @@
       "618426d96c780c1e710c9b9f"
     ],
     "mod_stock": [
-      "61825d06d92c473c770215de"
+      "61825d06d92c473c770215de",
+      "66ffc20ba73a7bce3d0b45ab",
+      "66ffbfb1a73a7bce3d0b45a8",
+      "66ffc246a81a4f85e70d4d06"
     ],
     "patron_in_weapon": [
       "59e6920f86f77411d82aa167",
