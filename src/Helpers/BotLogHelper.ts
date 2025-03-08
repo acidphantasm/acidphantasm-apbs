@@ -90,73 +90,76 @@ export class BotLogHelper
 
     public logBotGeneration(outputJSON: any): void
     {
-        const botDetails = this.getBotDetails(outputJSON);
-        const logMessages = this.getLogMessage(botDetails);
-        const botRole = outputJSON.data[0].Info.Settings.Role.toLowerCase();
-        const enabledStringText = this.raidInformation.isBotEnabled(botRole) ? "APBS Bot" : "Vanilla Bot";
-        let logged = false;
-
-        if (Object.values(BossBots).includes(botRole as BossBots) || Object.values(FollowerBots).includes(botRole as FollowerBots))
+        for (let i = 0; i < outputJSON.data.length; i++)
         {
-            logged = true;
-            this.apbsLogger.log( 
-                Logging.BOSS,
-                `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
-                `| ${logMessages[0]}`,
-                `| ${logMessages[1]}`,
-                `| ${logMessages[2]} ${logMessages[3]}`
-            );
+            const botDetails = this.getBotDetails(outputJSON.data[i]);
+            const logMessages = this.getLogMessage(botDetails);
+            const botRole = botDetails.role.toLowerCase();
+            const enabledStringText = this.raidInformation.isBotEnabled(botRole) ? "APBS Bot" : "Vanilla Bot";
+            let logged = false;
+    
+            if (Object.values(BossBots).includes(botRole as BossBots) || Object.values(FollowerBots).includes(botRole as FollowerBots))
+            {
+                logged = true;
+                this.apbsLogger.log( 
+                    Logging.BOSS,
+                    `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
+                    `| ${logMessages[0]}`,
+                    `| ${logMessages[1]}`,
+                    `| ${logMessages[2]} ${logMessages[3]}`
+                );
+            }
+    
+            if (Object.values(PMCBots).includes(botRole as PMCBots))
+            {
+                logged = true;
+                this.apbsLogger.log( 
+                    Logging.PMC,
+                    `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
+                    `| ${logMessages[0]}`,
+                    `| ${logMessages[1]}`,
+                    `| ${logMessages[2]} ${logMessages[3]}`
+                );
+            }
+    
+            if (Object.values(ScavBots).includes(botRole as ScavBots))
+            {
+                logged = true;
+                this.apbsLogger.log(
+                    Logging.SCAV,
+                    `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
+                    `| ${logMessages[0]}`,
+                    `| ${logMessages[1]}`,
+                    `| ${logMessages[2]} ${logMessages[3]}`
+                );
+            }
+    
+            if (Object.values(SpecialBots).includes(botRole as SpecialBots))
+            {
+                logged = true;
+                this.apbsLogger.log(
+                    Logging.SPECIAL,
+                    `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
+                    `| ${logMessages[0]}`,
+                    `| ${logMessages[1]}`,
+                    `| ${logMessages[2]} ${logMessages[3]}`
+                );
+            }
+    
+            if (Object.values(EventBots).includes(botRole as EventBots))
+            {
+                logged = true;
+                this.apbsLogger.log( 
+                    Logging.EVENT,
+                    `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
+                    `| ${logMessages[0]}`,
+                    `| ${logMessages[1]}`,
+                    `| ${logMessages[2]} ${logMessages[3]}`
+                );
+            }
+    
+            if (!logged) this.apbsLogger.log(Logging.ERR, `Logging failed for: ${botRole} - Unknown bot role`);
         }
-
-        if (Object.values(PMCBots).includes(botRole as PMCBots))
-        {
-            logged = true;
-            this.apbsLogger.log( 
-                Logging.PMC,
-                `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
-                `| ${logMessages[0]}`,
-                `| ${logMessages[1]}`,
-                `| ${logMessages[2]} ${logMessages[3]}`
-            );
-        }
-
-        if (Object.values(ScavBots).includes(botRole as ScavBots))
-        {
-            logged = true;
-            this.apbsLogger.log(
-                Logging.SCAV,
-                `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
-                `| ${logMessages[0]}`,
-                `| ${logMessages[1]}`,
-                `| ${logMessages[2]} ${logMessages[3]}`
-            );
-        }
-
-        if (Object.values(SpecialBots).includes(botRole as SpecialBots))
-        {
-            logged = true;
-            this.apbsLogger.log(
-                Logging.SPECIAL,
-                `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
-                `| ${logMessages[0]}`,
-                `| ${logMessages[1]}`,
-                `| ${logMessages[2]} ${logMessages[3]}`
-            );
-        }
-
-        if (Object.values(EventBots).includes(botRole as EventBots))
-        {
-            logged = true;
-            this.apbsLogger.log( 
-                Logging.EVENT,
-                `[${enabledStringText}]----------------------------------------------Bot spawned from cache-----------------------------------------------------`,
-                `| ${logMessages[0]}`,
-                `| ${logMessages[1]}`,
-                `| ${logMessages[2]} ${logMessages[3]}`
-            );
-        }
-
-        if (!logged) this.apbsLogger.log(Logging.ERR, `Logging failed for: ${botRole} - REPORT THIS TO ACIDPHANTASM`);
     }
 
     private getBotDetails (detailsJSON: any): any
@@ -179,7 +182,7 @@ export class BotLogHelper
 
         let canHavePlates = false;
 
-        const botDetails = detailsJSON.data[0].Inventory.items;
+        const botDetails = detailsJSON.Inventory.items;
 
         let grenadeCount = 0;
         for (const item in botDetails) 
@@ -280,13 +283,13 @@ export class BotLogHelper
         }
 
         return {
-            tier: detailsJSON.data[0].Info.Tier,
-            name: detailsJSON.data[0].Info.Nickname, 
-            level: detailsJSON.data[0].Info.Level, 
-            gameVersion: detailsJSON.data[0].Info.GameVersion, 
-            role: detailsJSON.data[0].Info.Settings.Role, 
-            side: detailsJSON.data[0].Info.Side,
-            difficulty: detailsJSON.data[0].Info.Settings.BotDifficulty,
+            tier: detailsJSON.Info.Tier,
+            name: detailsJSON.Info.Nickname, 
+            level: detailsJSON.Info.Level, 
+            gameVersion: detailsJSON.Info.GameVersion, 
+            role: detailsJSON.Info.Settings.Role, 
+            side: detailsJSON.Info.Side,
+            difficulty: detailsJSON.Info.Settings.BotDifficulty,
             primaryID,
             primaryCaliberID,
             secondaryID,
