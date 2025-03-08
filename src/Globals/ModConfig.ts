@@ -51,6 +51,7 @@ export interface Config
         enableMPRSafeGuard: boolean,
         PackNStrap_UnlootablePMCArmbandBelts: boolean,
         Realism_AddGasMasksToBots: boolean,
+        General_SecureContainerAmmoStacks: number,
     },
     normalizedHealthPool: NormalizeHealthConfig,
     generalConfig: {

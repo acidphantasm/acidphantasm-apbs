@@ -99,6 +99,7 @@ export class BotConfigs
         this.adjustNVG();
         this.setLootItemResourceRandomization();
         this.setWeaponModLimits();
+        this.setCountOfAmmoStacksForSecureContainer();
 
         // All Bots - Bypasses bot enablement
         this.normalizeHealthPools();
@@ -977,5 +978,10 @@ export class BotConfigs
                 }
             }
         }
+    }
+
+    private setCountOfAmmoStacksForSecureContainer(): void
+    {
+        this.botConfig.secureContainerAmmoStackCount = ModConfig.config.compatibilityConfig.General_SecureContainerAmmoStacks;
     }
 }

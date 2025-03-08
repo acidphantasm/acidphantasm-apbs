@@ -13,7 +13,8 @@
                 "enableSafeGuard": true,
                 "enableMPRSafeGuard": true,
                 "PackNStrap_UnlootablePMCArmbandBelts": true,
-                "Realism_AddGasMasksToBots": false
+                "Realism_AddGasMasksToBots": false,
+                "General_SecureContainerAmmoStacks": 20
         },
         "normalizedHealthPool": {
                 "enable": false,

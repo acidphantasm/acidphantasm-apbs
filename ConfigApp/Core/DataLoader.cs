@@ -266,6 +266,7 @@ namespace APBSConfig.Core
         public bool enableMPRSafeGuard { get; set; }
         public bool PackNStrap_UnlootablePMCArmbandBelts { get; set; }
         public bool Realism_AddGasMasksToBots { get; set; }
+        public int General_SecureContainerAmmoStacks { get; set; }
     }
 
     public class PMCSecrets
