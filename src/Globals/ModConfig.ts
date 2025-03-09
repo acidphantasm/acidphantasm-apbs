@@ -55,7 +55,6 @@ export interface Config
     },
     normalizedHealthPool: NormalizeHealthConfig,
     generalConfig: {
-        enableBotPrestiging: boolean,
         enablePerWeaponTypeAttachmentChances: boolean,
         enableLargeCapacityMagazineLimit: boolean,
         largeCapacityMagazineCount: number,
@@ -137,6 +136,7 @@ export interface Blacklist
 }
 export interface PMCSpecificConfig
 {
+    enablePrestiging: boolean,
     seasonalPmcAppearance: boolean,
     ammoTierSliding: AmmoTierSlideConfig,
     gameVersionWeighting: GameVersionWeightConfig, 

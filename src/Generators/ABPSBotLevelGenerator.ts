@@ -140,7 +140,7 @@ export class APBSBotLevelGenerator
             maxLevel = botGenerationDetails.playerLevel + this.apbsTierGetter.getScavTierUpperLevelDeviation(botGenerationDetails.playerLevel);
         }
 
-        if (ModConfig.config.generalConfig.enableBotPrestiging)
+        if (ModConfig.config.pmcBots.additionalOptions.enablePrestiging)
         {
             const pmcProfile = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)
             if (pmcProfile.Info.PrestigeLevel > 0)
@@ -162,7 +162,7 @@ export class APBSBotLevelGenerator
 
     private setBotPrestigeInfo(level: number, botGenerationDetails: IBotGenerationDetails): number
     {
-        if (!ModConfig.config.generalConfig.enableBotPrestiging) return 0;
+        if (!ModConfig.config.pmcBots.additionalOptions.enablePrestiging) return 0;
         if (!botGenerationDetails.isPmc) return 0;
 
         const pmcProfile = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)
