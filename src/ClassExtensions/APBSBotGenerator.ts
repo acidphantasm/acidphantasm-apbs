@@ -29,6 +29,8 @@ import { ModConfig } from "../Globals/ModConfig";
 import { GameEditions } from "@spt/models/enums/GameEditions";
 import { MemberCategory } from "@spt/models/enums/MemberCategory";
 import { APBSIBotBaseInfo } from "../Interface/APBSIBotBase";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
+import { ItemTpl } from "@spt/models/enums/ItemTpl";
 
 /** Handle profile related client events */
 @injectable()
@@ -179,5 +181,66 @@ export class APBSBotGenerator extends BotGenerator
         botInfo.SelectedMemberCategory = botInfo.MemberCategory;
 
         return botInfo.GameVersion;
+    }
+
+    protected override addDogtagToBot(bot: IBotBase): void 
+    {
+        const inventoryItem: IItem = {
+            _id: this.hashUtil.generate(),
+            _tpl: this.apbsGetDogtagTplByGameVersionAndSide(bot.Info.Side, bot.Info.GameVersion, bot.Info.PrestigeLevel),
+            parentId: bot.Inventory.equipment,
+            slotId: "Dogtag",
+            upd: {
+                SpawnedInSession: true
+            }
+        };
+
+        bot.Inventory.items.push(inventoryItem);
+    }
+
+    private apbsGetDogtagTplByGameVersionAndSide(side: string, gameVersion: string, prestigeLevel: number): string 
+    {
+        if (side.toLowerCase() === "usec") 
+        {
+            switch (prestigeLevel)
+            {
+                case 0:
+                    switch (gameVersion) 
+                    {
+                        case GameEditions.EDGE_OF_DARKNESS:
+                            return ItemTpl.BARTER_DOGTAG_USEC_EOD;
+                        case GameEditions.UNHEARD:
+                            return ItemTpl.BARTER_DOGTAG_USEC_TUE;
+                        default:
+                            return ItemTpl.BARTER_DOGTAG_USEC;
+                    }
+                case 1:
+                    return ItemTpl.BARTER_DOGTAG_USEC_PRESTIGE_1;
+                case 2:
+                    return ItemTpl.BARTER_DOGTAG_USEC_PRESTIGE_2;
+                default:
+                    return ItemTpl.BARTER_DOGTAG_USEC;
+            }
+        }
+
+        switch (prestigeLevel)
+        {
+            case 0:
+                switch (gameVersion) 
+                {
+                    case GameEditions.EDGE_OF_DARKNESS:
+                        return ItemTpl.BARTER_DOGTAG_BEAR_EOD;
+                    case GameEditions.UNHEARD:
+                        return ItemTpl.BARTER_DOGTAG_BEAR_TUE;
+                    default:
+                        return ItemTpl.BARTER_DOGTAG_BEAR;
+                }
+            case 1:
+                return ItemTpl.BARTER_DOGTAG_BEAR_PRESTIGE_1;
+            case 2:
+                return ItemTpl.BARTER_DOGTAG_BEAR_PRESTIGE_2;
+            default:
+                return ItemTpl.BARTER_DOGTAG_BEAR;
+        }
     }
 }

@@ -28,8 +28,7 @@
                 "excludedBots": []
         },
         "generalConfig": {
-                "enableBotsToRollAmmoAgain": true,
-                "chanceToRollAmmoAgain": 50,
+                "enableBotPrestiging": true,
                 "enablePerWeaponTypeAttachmentChances": true,
                 "enableLargeCapacityMagazineLimit": true,
                 "largeCapacityMagazineCount": 2,

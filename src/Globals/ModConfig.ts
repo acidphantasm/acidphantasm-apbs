@@ -55,6 +55,7 @@ export interface Config
     },
     normalizedHealthPool: NormalizeHealthConfig,
     generalConfig: {
+        enableBotPrestiging: boolean,
         enablePerWeaponTypeAttachmentChances: boolean,
         enableLargeCapacityMagazineLimit: boolean,
         largeCapacityMagazineCount: number,

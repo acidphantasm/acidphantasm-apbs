@@ -39,12 +39,14 @@ export class APBSBotLevelGenerator
         {
             result.generateBotLevel = (levelDetails: MinMax, botGenerationDetails: IBotGenerationDetails, bot: APBSIBotBase): IRandomisedBotLevelResult => 
             {                
-                if (this.modInformation.testMode && this.modInformation.testLevelLock && this.modInformation.testBotRole.includes(botGenerationDetails.role.toLowerCase()))
+                if (this.modInformation.testMode && (this.modInformation.testLevelLock || this.modInformation.testLevelLockToPlayer) && this.modInformation.testBotRole.includes(botGenerationDetails.role.toLowerCase()))
                 {
-                    const level = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)?.Info?.Level;
+                    let level = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)?.Info?.Level;
+                    if (this.modInformation.testLevelLock) level = this.modInformation.levelLockLevel;
                     const exp = this.profileHelper.getExperience(level);
                     const tier = this.apbsTierGetter.getTierByLevel(level);
                     bot.Info.Tier = this.chadOrChill(tier.toString());
+                    bot.Info.PrestigeLevel = this.setBotPrestigeInfo(level, botGenerationDetails);
                     
                     const result: IRandomisedBotLevelResult = {
                         level,
@@ -83,7 +85,8 @@ export class APBSBotLevelGenerator
                 const exp = this.profileHelper.getExperience(level);
                 const tier = this.apbsTierGetter.getTierByLevel(level);
                 bot.Info.Tier = this.chadOrChill(tier.toString());
-                
+                bot.Info.PrestigeLevel = this.setBotPrestigeInfo(level, botGenerationDetails);
+
                 const result: IRandomisedBotLevelResult = {
                     level,
                     exp 
@@ -109,7 +112,7 @@ export class APBSBotLevelGenerator
         return tierInfo;
     }
 
-    protected apbsGetRelativeBotLevelRange(
+    private apbsGetRelativeBotLevelRange(
         botGenerationDetails: IBotGenerationDetails,
         levelDetails: MinMax,
         maxAvailableLevel: number
@@ -137,6 +140,16 @@ export class APBSBotLevelGenerator
             maxLevel = botGenerationDetails.playerLevel + this.apbsTierGetter.getScavTierUpperLevelDeviation(botGenerationDetails.playerLevel);
         }
 
+        if (ModConfig.config.generalConfig.enableBotPrestiging)
+        {
+            const pmcProfile = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)
+            if (pmcProfile.Info.PrestigeLevel > 0)
+            {
+                maxLevel = 79;
+                minLevel = 1;
+            }
+        }
+
         // Bound the level to the min/max possible
         maxLevel = Math.min(Math.max(maxLevel, minPossibleLevel), maxPossibleLevel);
         minLevel = Math.min(Math.max(minLevel, minPossibleLevel), maxPossibleLevel);
@@ -145,5 +158,39 @@ export class APBSBotLevelGenerator
             min: minLevel,
             max: maxLevel
         }
+    }
+
+    private setBotPrestigeInfo(level: number, botGenerationDetails: IBotGenerationDetails): number
+    {
+        if (!ModConfig.config.generalConfig.enableBotPrestiging) return 0;
+        if (!botGenerationDetails.isPmc) return 0;
+
+        const pmcProfile = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)
+        const isPlayerPrestiged = pmcProfile.Info.PrestigeLevel > 0 ? true : false;
+        const playerPrestigeLevel = pmcProfile.Info.PrestigeLevel;
+        const minPlayerLevelForBotsToPrestige = 61;
+        const maxPrestige = 2;
+
+        const canBotPrestige = 
+            botGenerationDetails.playerLevel >= minPlayerLevelForBotsToPrestige || 
+            botGenerationDetails.playerLevel >= (level - 15) && isPlayerPrestiged 
+                ? true : false;
+
+        if (canBotPrestige)
+        {
+            if (botGenerationDetails.playerLevel >= (level - 15) && isPlayerPrestiged)
+            {
+                const botPrestigeLevel = playerPrestigeLevel >= maxPrestige ? this.randomUtil.getInt(0, maxPrestige) : this.randomUtil.getInt(0, playerPrestigeLevel)
+                return botPrestigeLevel;
+            }
+            if (level <= (20 - Math.abs((botGenerationDetails.playerLevel - 79))))
+            {
+                const botPrestigeLevel = playerPrestigeLevel >= maxPrestige ? this.randomUtil.getInt(0, maxPrestige) : this.randomUtil.getInt(0, playerPrestigeLevel + 1)
+                return botPrestigeLevel;
+            }
+        }
+        if (isPlayerPrestiged) return playerPrestigeLevel - 1;
+        
+        return 0;
     }
 }
