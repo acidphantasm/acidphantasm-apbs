@@ -173,24 +173,30 @@ export class APBSBotLevelGenerator
 
         const canBotPrestige = 
             botGenerationDetails.playerLevel >= minPlayerLevelForBotsToPrestige || 
-            botGenerationDetails.playerLevel >= (level - 15) && isPlayerPrestiged 
+            botGenerationDetails.playerLevel >= (level - 15) && isPlayerPrestiged ||
+            isPlayerPrestiged
                 ? true : false;
 
         if (canBotPrestige)
         {
+            let botPrestigeLevel = 0;
+            let hasBotTriedPrestige = false;
             if (botGenerationDetails.playerLevel >= (level - 15) && isPlayerPrestiged)
             {
-                const botPrestigeLevel = playerPrestigeLevel >= maxPrestige ? this.randomUtil.getInt(0, maxPrestige) : this.randomUtil.getInt(0, playerPrestigeLevel)
-                return botPrestigeLevel;
+                botPrestigeLevel = playerPrestigeLevel >= maxPrestige ? this.randomUtil.getInt(0, maxPrestige) : this.randomUtil.getInt(0, playerPrestigeLevel)
+                hasBotTriedPrestige = true;
             }
             if (level <= (20 - Math.abs((botGenerationDetails.playerLevel - 79))))
             {
-                const botPrestigeLevel = playerPrestigeLevel >= maxPrestige ? this.randomUtil.getInt(0, maxPrestige) : this.randomUtil.getInt(0, playerPrestigeLevel + 1)
-                return botPrestigeLevel;
+                botPrestigeLevel = playerPrestigeLevel >= maxPrestige ? this.randomUtil.getInt(0, maxPrestige) : this.randomUtil.getInt(botPrestigeLevel, playerPrestigeLevel + 1)
+                hasBotTriedPrestige = true;
             }
+            if (isPlayerPrestiged && !hasBotTriedPrestige)
+            {
+                botPrestigeLevel = this.randomUtil.getInt(0, playerPrestigeLevel - 1);
+            }
+            return botPrestigeLevel;
         }
-        if (isPlayerPrestiged) return playerPrestigeLevel - 1;
-        
         return 0;
     }
 }
