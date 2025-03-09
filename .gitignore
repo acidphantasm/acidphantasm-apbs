@@ -18,3 +18,6 @@ ConfigApp/Properties/PublishProfiles/FolderProfile.pubxml.user
 APBSConfig.pdb
 ConfigApp/config
 APBSConfig.staticwebassets.endpoints.json
+*.iml
+/.idea
+pnpm-lock.yaml
