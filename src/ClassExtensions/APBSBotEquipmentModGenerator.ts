@@ -140,7 +140,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             }
 
             // Ensure submods for nvgs all spawn together if it's night
-            if (modSlotName === "mod_nvg")
+            if (modSlotName === "mod_nvg" || modSlotName === "mod_equipment_000" && parentTemplate._id == "5df8a58286f77412631087ed")
             {
                 if (this.raidInformation.nightTime) 
                 {
@@ -363,7 +363,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
 
         if (
             !(
-                request.parentTemplate._props.Slots.length ||
+                request.parentTemplate._props.Slots?.length ||
                 request.parentTemplate._props.Cartridges?.length ||
                 request.parentTemplate._props.Chambers?.length
             )
