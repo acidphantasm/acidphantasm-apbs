@@ -493,7 +493,7 @@ export const vanillaClothingList =
             "642c5273ff5ecad7810a89d7",
             "5d1f56ff86f7743f8362bcd7",
             "5e4bb35286f77406a511c9bc",
-            "5cdea33e7d6c8b0474535dac",
+            "5cdea42e7d6c8b0474535dad",
             "5e9da17386f774054b6f79a3",
             "5f5e4075df4f3100376a8138",
             "657058fddf9b3231400e9188",
@@ -509,11 +509,18 @@ export const vanillaClothingList =
             "6430119aac11c9eaf10d881b",
             "5df89f1f86f77412631087ea",
             "5e9d9fa986f774054d6b89f2",
-            "5cdea33e7d6c8b0474535dac",
+            "5cdea42e7d6c8b0474535dad",
             "5e4bb31586f7740695730568",
             "5f5e401747344c2e4f6c42c5",
             "66acbe49dc61999a6a03d4d6",
-            "66acec1dc94f4bf5bc063a16"
+            "66acec1dc94f4bf5bc063a16",
+            "675fd6897a57e0b2a00e3405",
+            "6750704650f7ea9dc604afc6",
+            "675844f8a31925671c000af6",
+            "675069c97348af9e3e0c2a96",
+            "675695d6e08b3ae7480096bf",
+            "675697b09fe31e6df7031b26",
+            "67599500a378f89a3e089b56"
         ],
         "feet": [
             "5cde95ef7d6c8b04713c4f2d",
@@ -559,7 +566,13 @@ export const vanillaClothingList =
             "5e4bb39386f774067f79de05",
             "5f5e40400bc58666c37e7819",
             "66acebd4ede86671bb09584b",
-            "66acc8f719271bd6d00dec0b"
+            "66acc8f719271bd6d00dec0b",
+            "675fd6b2f26b0db5f0060eb6",
+            "675994c9f7adb892bd080766",
+            "6756960dbe1cb7ec47002236",
+            "67506f51caaa3394b2082166",
+            "675697fad588566bce0da766",
+            "6750707dc1b42fa2ee09aeb6"
         ],
         "hands": [
             "5cde95fa7d6c8b04737c2d13",
