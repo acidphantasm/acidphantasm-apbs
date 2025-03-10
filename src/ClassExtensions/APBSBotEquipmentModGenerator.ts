@@ -108,7 +108,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
         // Iterate over mod pool and choose mods to add to item
         for (const modSlotName in settings.modPool[parentTemplate._id])
         {
-            if (modSlotName === "mod_equipment_000" && this.raidInformation.nightTime) continue;
+            if (modSlotName === "mod_equipment_000" && this.raidInformation.nightTime && parentTemplate._id != "5df8a58286f77412631087ed") continue;
 
             if (modSlotName === "mod_equipment" && this.realismHelper.gasMasks.includes(parentTemplate._id) && this.realismHelper.realismDetected == true)
             {
@@ -140,7 +140,7 @@ export class APBSBotEquipmentModGenerator extends BotEquipmentModGenerator
             }
 
             // Ensure submods for nvgs all spawn together if it's night
-            if (modSlotName === "mod_nvg" || modSlotName === "mod_equipment_000" && parentTemplate._id == "5df8a58286f77412631087ed")
+            if (modSlotName === "mod_nvg")
             {
                 if (this.raidInformation.nightTime) 
                 {
