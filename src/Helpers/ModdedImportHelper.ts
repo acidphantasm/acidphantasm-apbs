@@ -133,7 +133,12 @@ export class ModdedImportHelper
             "67641b461c2eb66ade05dba6",
             "676176a162e0497044079f46",
             "67641bec4ad898aa100c1079",
-            "62811d61578c54356d6d67ea",
+            "628120f210e26c1f344e6558", // AXMC .308 conversion part
+            "62811d61578c54356d6d67ea", // AXMC .308 conversion part
+            "628120415631d45211793c99", // AXMC .308 conversion part
+            "6281214c1d5df4475f46a33a", // AXMC .308 conversion part
+            "6281215b4fa03b6b6c35dc6c", // AXMC .308 conversion part
+            "628121651d5df4475f46a33c", // AXMC .308 conversion part
             "6761765f1f08ed5e8800b7a6",
             "671d85439ae8365d69117ba6",
             "670e8eab8c1bb0e5a7075acf",
@@ -151,7 +156,8 @@ export class ModdedImportHelper
             "59e5f5a486f7746c530b3ce2",
             "55d481904bdc2d8c2f8b456a",
             "5b1fb3e15acfc4001637f068",
-            "564ca9df4bdc2d35148b4569"
+            "564ca9df4bdc2d35148b4569",
+            "61a4cda622af7f4f6a3ce617" // Rhino speedloader
         ];
 
         this.modScope000Whitelist = [
