@@ -28,8 +28,6 @@
                 "excludedBots": []
         },
         "generalConfig": {
-                "enableBotsToRollAmmoAgain": true,
-                "chanceToRollAmmoAgain": 50,
                 "enablePerWeaponTypeAttachmentChances": true,
                 "enableLargeCapacityMagazineLimit": true,
                 "largeCapacityMagazineCount": 2,
@@ -190,6 +188,7 @@
                         "chance": 10
                 },
                 "additionalOptions": {
+                        "enablePrestiging": true,
                         "seasonalPmcAppearance": true,
                         "ammoTierSliding": {
                                 "enable": false,

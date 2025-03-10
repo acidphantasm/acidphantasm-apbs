@@ -112,6 +112,7 @@ namespace APBSConfig.Core
     }
     public class PMCSpecificConfig
     {
+        public bool enablePrestiging { get; set; }
         public bool seasonalPmcAppearance { get; set; }
         public required AmmoTierSlideConfig ammoTierSliding { get; set; }
         public required GameVersionWeightConfig gameVersionWeighting { get; set; }

@@ -136,6 +136,7 @@ export interface Blacklist
 }
 export interface PMCSpecificConfig
 {
+    enablePrestiging: boolean,
     seasonalPmcAppearance: boolean,
     ammoTierSliding: AmmoTierSlideConfig,
     gameVersionWeighting: GameVersionWeightConfig, 

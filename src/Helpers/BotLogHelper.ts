@@ -284,12 +284,12 @@ export class BotLogHelper
 
         return {
             tier: detailsJSON.Info.Tier,
+            role: detailsJSON.Info.Settings.Role,
             name: detailsJSON.Info.Nickname, 
             level: detailsJSON.Info.Level, 
-            gameVersion: detailsJSON.Info.GameVersion, 
-            role: detailsJSON.Info.Settings.Role, 
-            side: detailsJSON.Info.Side,
             difficulty: detailsJSON.Info.Settings.BotDifficulty,
+            gameVersion: detailsJSON.Info.GameVersion, 
+            prestigeLevel: detailsJSON.Info.PrestigeLevel,
             primaryID,
             primaryCaliberID,
             secondaryID,
@@ -329,7 +329,8 @@ export class BotLogHelper
             `Nickname: ${botDetails.name}`,
             `Level: ${botDetails.level}`,
             `Difficulty: ${botDetails.difficulty}`,
-            `GameVersion: ${botDetails.gameVersion ?? "None" }`,
+            `GameVersion: ${botDetails.gameVersion || "None" }`,
+            `Prestige: ${botDetails.prestigeLevel || "None" }`,
             `Grenades: ${botDetails.grenadeCount >= 1 ? botDetails.grenadeCount : "None" }`
         ];
         let temporaryMessage2: string[] = [
