@@ -141,6 +141,7 @@ export class ModdedImportHelper
             "628121651d5df4475f46a33c", // AXMC .308 conversion part
             "6761765f1f08ed5e8800b7a6",
             "671d85439ae8365d69117ba6",
+            "6241c2c2117ad530666a5108", // airsoft mag
             "670e8eab8c1bb0e5a7075acf",
             "671d8617a3e45c1f5908278c",
             "671d8ac8a3e45c1f59082799",
