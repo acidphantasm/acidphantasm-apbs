@@ -205,7 +205,7 @@ export class BotConfigs
         {
             if (!this.raidInformation.isBotEnabled(botType)) continue;
 
-            if (Object.values(PMCBots).includes(botType as PMCBots) && ModConfig.config.pmcBots.weaponDurability.enable)
+            if ((Object.values(PMCBots).includes(botType as PMCBots) || botType == "boss" || botType == "follower") && ModConfig.config.pmcBots.weaponDurability.enable)
             {
                 botConfigDurability[botType].weapon.lowestMax = ModConfig.config.pmcBots.weaponDurability.min;
                 botConfigDurability[botType].weapon.highestMax = ModConfig.config.pmcBots.weaponDurability.max;
