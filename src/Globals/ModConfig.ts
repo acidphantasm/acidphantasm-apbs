@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { VFS } from "@spt/utils/VFS";
+import { FileSystemSync } from "@spt/utils/FileSystemSync";
 import { inject, injectable } from "tsyringe";
-import { jsonc } from "jsonc";
 import path from "path";
 import { TierInformation } from "./TierInformation";
 import { APBSLogger } from "../Utils/APBSLogger";
@@ -17,11 +16,11 @@ export class ModConfig
         @inject("APBSLogger") protected apbsLogger: APBSLogger,
         @inject("PrimaryLogger") protected logger: ILogger,
         @inject("TierInformation") protected tierInformation: TierInformation,
-        @inject("VFS") protected vfs: VFS
+        @inject("FileSystemSync") protected fileSystemSync: FileSystemSync
     )
     {
-        ModConfig.config = jsonc.parse(this.vfs.readFile(path.resolve(__dirname, "../../config/config.json")));
-        ModConfig.blacklist = jsonc.parse(this.vfs.readFile(path.resolve(__dirname, "../../config/blacklists.json")));
+        ModConfig.config = this.fileSystemSync.readJson(path.resolve(__dirname, "../../config/config.json"));
+        ModConfig.blacklist = this.fileSystemSync.readJson(path.resolve(__dirname, "../../config/blacklists.json"));
     }
 
     public serverLogDetails(): void
@@ -52,6 +51,7 @@ export interface Config
         enableMPRSafeGuard: boolean,
         PackNStrap_UnlootablePMCArmbandBelts: boolean,
         Realism_AddGasMasksToBots: boolean,
+        General_SecureContainerAmmoStacks: number,
     },
     normalizedHealthPool: NormalizeHealthConfig,
     generalConfig: {
@@ -136,6 +136,7 @@ export interface Blacklist
 }
 export interface PMCSpecificConfig
 {
+    enablePrestiging: boolean,
     seasonalPmcAppearance: boolean,
     ammoTierSliding: AmmoTierSlideConfig,
     gameVersionWeighting: GameVersionWeightConfig, 

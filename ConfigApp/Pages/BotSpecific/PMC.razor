@@ -139,6 +139,30 @@
 
                         <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
 
+                        <MudItem xs="1"/>
+                        <MudItem xs="4">
+                            <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                                <MudTooltip Text="Allow PMCs to prestige with the player." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                    <MudText>Prestiging</MudText>
+                                </MudTooltip>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                                <MudSwitch T="bool" @bind-Value="_pmcPrestigeEnabled" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_pmcPrestigeEnabled</MudSwitch>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="1">
+                            @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_pmcPrestigeEnabled"))
+                            {
+                                <MudButton @onclick="undoPrestiging" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                            }
+                            else if (MainLayout._appDefaultButtonToggle && _pmcPrestigeEnabled != true)
+                            {
+                                <MudButton @onclick="defaultPrestiging" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                            }
+                        </MudItem>
+
                         <MudItem xs="1" />
                         <MudItem xs="4">
                             <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
@@ -932,7 +956,6 @@
     {
         _pmcLootEnabled = false;
         _pmcLootBlacklist.Clear();
-        _pmcLootBlacklist.Add("6711039f9e648049e50b3307");
         if (!MainLayout.pendingChanges.Contains("_pmcLootEnabled")) MainLayout.pendingChanges.Add("_pmcLootEnabled");
         if (!MainLayout.pendingChanges.Contains("_pmcLootBlacklist")) MainLayout.pendingChanges.Add("_pmcLootBlacklist");
     }
@@ -1284,6 +1307,19 @@
     }
     private void undoPMCSeasonalAppearance() => _pmcSeasonalAppearanceEnabled = OriginalConfig.pmcBots.additionalOptions.seasonalPmcAppearance;
     private void defaultPMCSeasonalAppearance() => _pmcSeasonalAppearanceEnabled = true;
+    #endregion
+    #region PRESTIGE
+    private bool _pmcPrestigeEnabled
+    {
+        get => Data.pmcBots.additionalOptions.enablePrestiging;
+        set
+        {
+            Data.pmcBots.additionalOptions.enablePrestiging = value;
+            Utils.UpdateView(value, OriginalConfig.pmcBots.additionalOptions.enablePrestiging);
+        }
+    }
+    private void undoPrestiging() => _pmcPrestigeEnabled = OriginalConfig.pmcBots.additionalOptions.enablePrestiging;
+    private void defaultPrestiging() => _pmcPrestigeEnabled = true;
     #endregion
     #region GAME VERSION WEIGHTING
     private bool _pmcVersionWeightingEnabled

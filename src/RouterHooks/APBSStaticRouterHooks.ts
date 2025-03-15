@@ -37,6 +37,7 @@ export class APBSStaticRouterHooks
                         try 
                         {
                             const outputJSON = JSON.parse(output);
+
                             if (outputJSON.data?.length)
                             {
                                 this.botLogHelper.logBotGeneration(outputJSON);

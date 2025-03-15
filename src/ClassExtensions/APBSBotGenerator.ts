@@ -20,7 +20,7 @@ import { BotLevelGenerator } from "@spt/generators/BotLevelGenerator";
 import { SeasonalEventService } from "@spt/services/SeasonalEventService";
 import { TimeUtil } from "@spt/utils/TimeUtil";
 import { IBotBase } from "@spt/models/eft/common/tables/IBotBase";
-import { IAppearance, IBotType } from "@spt/models/eft/common/tables/IBotType";
+import { IAppearance } from "@spt/models/eft/common/tables/IBotType";
 import { IBotGenerationDetails } from "@spt/models/spt/bots/BotGenerationDetails";
 import { IWildBody } from "@spt/models/eft/common/IGlobals";
 import { BotNameService } from "@spt/services/BotNameService";
@@ -28,7 +28,9 @@ import { BotGeneratorHelper } from "@spt/helpers/BotGeneratorHelper";
 import { ModConfig } from "../Globals/ModConfig";
 import { GameEditions } from "@spt/models/enums/GameEditions";
 import { MemberCategory } from "@spt/models/enums/MemberCategory";
-import { APBSIBotBase, APBSIBotBaseInfo } from "../Interface/APBSIBotBase";
+import { APBSIBotBaseInfo } from "../Interface/APBSIBotBase";
+import { IItem } from "@spt/models/eft/common/tables/IItem";
+import { ItemTpl } from "@spt/models/enums/ItemTpl";
 
 /** Handle profile related client events */
 @injectable()
@@ -181,129 +183,64 @@ export class APBSBotGenerator extends BotGenerator
         return botInfo.GameVersion;
     }
 
-    protected override generateBot(
-        sessionId: string,
-        bot: APBSIBotBase,
-        botJsonTemplate: IBotType,
-        botGenerationDetails: IBotGenerationDetails
-    ): APBSIBotBase 
+    protected override addDogtagToBot(bot: IBotBase): void 
     {
-        const botRoleLowercase = botGenerationDetails.role.toLowerCase();
-        const botLevel = this.botLevelGenerator.generateBotLevel(
-            botJsonTemplate.experience.level,
-            botGenerationDetails,
-            bot
-        );
+        const inventoryItem: IItem = {
+            _id: this.hashUtil.generate(),
+            _tpl: this.apbsGetDogtagTplByGameVersionAndSide(bot.Info.Side, bot.Info.GameVersion, bot.Info.PrestigeLevel),
+            parentId: bot.Inventory.equipment,
+            slotId: "Dogtag",
+            upd: {
+                SpawnedInSession: true
+            }
+        };
 
-        // Only filter bot equipment, never players
-        if (!botGenerationDetails.isPlayerScav) 
+        bot.Inventory.items.push(inventoryItem);
+    }
+
+    private apbsGetDogtagTplByGameVersionAndSide(side: string, gameVersion: string, prestigeLevel: number): string 
+    {
+        if (side.toLowerCase() === "usec") 
         {
-            this.botEquipmentFilterService.filterBotEquipment(
-                sessionId,
-                botJsonTemplate,
-                botLevel.level,
-                botGenerationDetails
-            );
-        }
-
-        bot.Info.Nickname = this.botNameService.generateUniqueBotNickname(
-            botJsonTemplate,
-            botGenerationDetails,
-            botRoleLowercase,
-            this.botConfig.botRolesThatMustHaveUniqueName
-        );
-
-        // Only run when generating a 'fake' playerscav, not actual player scav
-        if (!botGenerationDetails.isPlayerScav && this.shouldSimulatePlayerScav(botRoleLowercase)) 
-        {
-            this.botNameService.addRandomPmcNameToBotMainProfileNicknameProperty(bot);
-            this.setRandomisedGameVersionAndCategory(bot.Info);
-        }
-
-        if (!this.seasonalEventService.christmasEventEnabled()) 
-        {
-            // Process all bots EXCEPT gifter, he needs christmas items
-            if (botGenerationDetails.role !== "gifter") 
+            switch (prestigeLevel)
             {
-                this.seasonalEventService.removeChristmasItemsFromBotInventory(
-                    botJsonTemplate.inventory,
-                    botGenerationDetails.role
-                );
+                case 0:
+                    switch (gameVersion) 
+                    {
+                        case GameEditions.EDGE_OF_DARKNESS:
+                            return ItemTpl.BARTER_DOGTAG_USEC_EOD;
+                        case GameEditions.UNHEARD:
+                            return ItemTpl.BARTER_DOGTAG_USEC_TUE;
+                        default:
+                            return ItemTpl.BARTER_DOGTAG_USEC;
+                    }
+                case 1:
+                    return ItemTpl.BARTER_DOGTAG_USEC_PRESTIGE_1;
+                case 2:
+                    return ItemTpl.BARTER_DOGTAG_USEC_PRESTIGE_2;
+                default:
+                    return ItemTpl.BARTER_DOGTAG_USEC;
             }
         }
 
-        this.removeBlacklistedLootFromBotTemplate(botJsonTemplate.inventory);
-
-        // Remove hideout data if bot is not a PMC or pscav - match what live sends
-        if (!(botGenerationDetails.isPmc || botGenerationDetails.isPlayerScav)) 
+        switch (prestigeLevel)
         {
-            bot.Hideout = undefined;
+            case 0:
+                switch (gameVersion) 
+                {
+                    case GameEditions.EDGE_OF_DARKNESS:
+                        return ItemTpl.BARTER_DOGTAG_BEAR_EOD;
+                    case GameEditions.UNHEARD:
+                        return ItemTpl.BARTER_DOGTAG_BEAR_TUE;
+                    default:
+                        return ItemTpl.BARTER_DOGTAG_BEAR;
+                }
+            case 1:
+                return ItemTpl.BARTER_DOGTAG_BEAR_PRESTIGE_1;
+            case 2:
+                return ItemTpl.BARTER_DOGTAG_BEAR_PRESTIGE_2;
+            default:
+                return ItemTpl.BARTER_DOGTAG_BEAR;
         }
-
-        bot.Info.Experience = botLevel.exp;
-        bot.Info.Level = botLevel.level;
-        bot.Info.Settings.Experience = this.getExperienceRewardForKillByDifficulty(
-            botJsonTemplate.experience.reward,
-            botGenerationDetails.botDifficulty,
-            botGenerationDetails.role
-        );
-        bot.Info.Settings.StandingForKill = this.getStandingChangeForKillByDifficulty(
-            botJsonTemplate.experience.standingForKill,
-            botGenerationDetails.botDifficulty,
-            botGenerationDetails.role
-        );
-        bot.Info.Settings.AggressorBonus = this.getAgressorBonusByDifficulty(
-            botJsonTemplate.experience.standingForKill,
-            botGenerationDetails.botDifficulty,
-            botGenerationDetails.role
-        );
-        bot.Info.Settings.UseSimpleAnimator = botJsonTemplate.experience.useSimpleAnimator ?? false;
-        bot.Info.Voice = this.weightedRandomHelper.getWeightedValue<string>(botJsonTemplate.appearance.voice);
-        bot.Health = this.generateHealth(botJsonTemplate.health, botGenerationDetails.isPlayerScav);
-        bot.Skills = this.generateSkills(<any>botJsonTemplate.skills); // TODO: fix bad type, bot jsons store skills in dict, output needs to be array
-
-        if (botGenerationDetails.isPmc) 
-        {
-            bot.Info.IsStreamerModeAvailable = true; // Set to true so client patches can pick it up later - client sometimes alters botrole to assaultGroup
-            this.setRandomisedGameVersionAndCategory(bot.Info);
-            if (bot.Info.GameVersion === GameEditions.UNHEARD) 
-            {
-                this.addAdditionalPocketLootWeightsForUnheardBot(botJsonTemplate);
-            }
-        }
-
-        // Add drip
-        this.setBotAppearance(bot, botJsonTemplate.appearance, botGenerationDetails);
-
-        // Filter out blacklisted gear from the base template
-        this.filterBlacklistedGear(botJsonTemplate, botGenerationDetails);
-
-        bot.Inventory = this.botInventoryGenerator.generateInventory(
-            sessionId,
-            botJsonTemplate,
-            botRoleLowercase,
-            botGenerationDetails.isPmc,
-            bot.Info.Level,
-            bot.Info.GameVersion
-        );
-
-        if (this.botConfig.botRolesWithDogTags.includes(botRoleLowercase)) 
-        {
-            this.addDogtagToBot(bot);
-        }
-
-        // Generate new bot ID
-        this.addIdsToBot(bot);
-
-        // Generate new inventory ID
-        this.generateInventoryId(bot);
-
-        // Set role back to originally requested now its been generated
-        if (botGenerationDetails.eventRole) 
-        {
-            bot.Info.Settings.Role = botGenerationDetails.eventRole;
-        }
-
-        return bot;
     }
 }

@@ -112,6 +112,7 @@ namespace APBSConfig.Core
     }
     public class PMCSpecificConfig
     {
+        public bool enablePrestiging { get; set; }
         public bool seasonalPmcAppearance { get; set; }
         public required AmmoTierSlideConfig ammoTierSliding { get; set; }
         public required GameVersionWeightConfig gameVersionWeighting { get; set; }
@@ -266,6 +267,7 @@ namespace APBSConfig.Core
         public bool enableMPRSafeGuard { get; set; }
         public bool PackNStrap_UnlootablePMCArmbandBelts { get; set; }
         public bool Realism_AddGasMasksToBots { get; set; }
+        public int General_SecureContainerAmmoStacks { get; set; }
     }
 
     public class PMCSecrets

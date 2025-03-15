@@ -28,7 +28,7 @@ import { BotWeaponGeneratorHelper } from "@spt/helpers/BotWeaponGeneratorHelper"
 import { BotWeaponModLimitService } from "@spt/services/BotWeaponModLimitService";
 import { RepairService } from "@spt/services/RepairService";
 import { SeasonalEventService } from "@spt/services/SeasonalEventService";
-import { VFS } from "@spt/utils/VFS";
+import { FileSystemSync } from "@spt/utils/FileSystemSync";
 
 // Custom
 import { APBSLogger } from "./Utils/APBSLogger";
@@ -97,7 +97,7 @@ export class InstanceManager
     public botEquipmentModGenerator: BotEquipmentModGenerator;
     public botGeneratorHelper: BotGeneratorHelper;
     public repairService: RepairService;
-    public vfs: VFS;
+    public fileSystemSync: FileSystemSync;
     public seasonalEventService: SeasonalEventService;
 
     public apbsLogger: APBSLogger;
@@ -160,7 +160,7 @@ export class InstanceManager
         this.botGeneratorHelper = container.resolve<BotGeneratorHelper>("BotGeneratorHelper");
         this.repairService = container.resolve<RepairService>("RepairService");
         this.cloner = container.resolve<ICloner>("PrimaryCloner");
-        this.vfs = container.resolve<VFS>("VFS");
+        this.fileSystemSync = container.resolve<FileSystemSync>("FileSystemSync");
         this.seasonalEventService = container.resolve<SeasonalEventService>("SeasonalEventService");
 
         // Custom Classes

@@ -19,7 +19,8 @@ export class APBSMethodHolder
         "64ca3d3954fc657e230529cc",
         "64637076203536ad5600c990",
         "6513ef33e06849f06c0957ca",
-        "65268d8ecb944ff1e90ea385"
+        "65268d8ecb944ff1e90ea385",
+        "65fb023261d5829b2d090755"
     ]
     
     constructor(
@@ -187,10 +188,7 @@ export class APBSMethodHolder
             for (const round in cartridges)
             {
                 const caliberData = this.itemHelper.getItem(cartridges[round])[1]._props.Caliber;
-                if (caliberData === currentCaliber)
-                {
-                    return true;
-                } 
+                if (caliberData == currentCaliber) return true;
             }
             return false;
         }
@@ -205,7 +203,7 @@ export class APBSMethodHolder
             const magazineDb = this.itemHelper.getItem(magTpl);
             if (!magazineDb[0]) return false;
             if (!this.magazineHasCompatibleCaliber(magazineDb[1], currentCaliber)) return false;
-            return magazineDb[1]._props && magazineDb[1]._props.Cartridges[0]._max_count < 40 && magazineDb[1]._props.Cartridges[0]._max_count >= 30;
+            return magazineDb[1]._props && magazineDb[1]._props.Cartridges[0]._max_count < 40 && magazineDb[1]._props.Cartridges[0]._max_count >= 25;
         });
 
         if (desiredMagazineTpls.length === 0) 

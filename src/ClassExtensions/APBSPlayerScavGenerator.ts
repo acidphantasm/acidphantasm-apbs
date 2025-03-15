@@ -61,7 +61,7 @@ export class APBSPlayerScavGenerator extends PlayerScavGenerator
             cloner)
     }
 
-    public generate(sessionID: string): IPmcData 
+    public override generate(sessionID: string): IPmcData 
     {
         // get karma level from profile
         const profile = this.saveServer.getProfile(sessionID);

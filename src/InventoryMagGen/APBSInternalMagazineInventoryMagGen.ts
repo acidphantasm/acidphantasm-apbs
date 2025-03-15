@@ -5,7 +5,6 @@ import { APBSInventoryMagGen } from "./APBSInventoryMagGen";
 import { APBSEquipmentGetter } from "../Utils/APBSEquipmentGetter";
 import { APBSTierGetter } from "../Utils/APBSTierGetter";
 import { APBSMethodHolder } from "./APBSMethodHolder";
-import { ModConfig } from "../Globals/ModConfig";
 import { RandomUtil } from "@spt/utils/RandomUtil";
 
 @injectable()

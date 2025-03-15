@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { inject, injectable } from "tsyringe";
 import { BotEnablementHelper } from "../Helpers/BotEnablementHelper";
 import { APBSLogger } from "../Utils/APBSLogger";

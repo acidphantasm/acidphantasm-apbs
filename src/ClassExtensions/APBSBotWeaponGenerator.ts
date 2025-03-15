@@ -398,9 +398,9 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                 }
             }
             this.apbsTester.createComplexAssortItem(assortWeapon)
-                .addUnlimitedStackCount()
+                .addStackCount(1)
                 .addMoneyCost(Money.ROUBLES, botLevel)
-                .addBuyRestriction(3)
+                .addBuyRestriction(1)
                 .addLoyaltyLevel(1)
                 .export(tables.traders[this.modInformation.testTrader]);
         }
@@ -593,45 +593,6 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
         }
 
         return this.weightedRandomHelper.getWeightedValue<string>(compatibleCartridges);
-    }
-
-    
-    protected override getCompatibleCartridgesFromWeaponTemplate(weaponTemplate: ITemplateItem): string[] 
-    {
-        const cartridges = weaponTemplate._props?.Chambers[0]?._props?.filters[0]?.Filter;
-        if (!cartridges) 
-        {
-            // Fallback to the magazine if possible, e.g. for revolvers
-            return this.getCompatibleCartridgesFromMagazineTemplate(weaponTemplate);
-        }
-
-        return cartridges;
-    }
-
-    private getCompatibleCartridgesFromMagazineTemplate(weaponTemplate: ITemplateItem): string[] 
-    {
-        // Get the first magazine's template from the weapon
-        const magazineSlot = weaponTemplate._props.Slots?.find((slot) => slot._name === "mod_magazine");
-        if (!magazineSlot) 
-        {
-            return [];
-        }
-        const magazineTemplate = this.itemHelper.getItem(magazineSlot._props.filters[0].Filter[0]);
-        if (!magazineTemplate[0]) 
-        {
-            return [];
-        }
-
-        // Get the first slots array of cartridges
-        let cartridges = magazineTemplate[1]._props.Slots[0]?._props?.filters[0].Filter;
-        if (!cartridges) 
-        {
-            // Normal magazines
-            // None found, try the cartridges array
-            cartridges = magazineTemplate[1]._props.Cartridges[0]?._props?.filters[0].Filter;
-        }
-
-        return cartridges ?? [];
     }
 
     private getRerollConfig(botRole: string): EnableChance

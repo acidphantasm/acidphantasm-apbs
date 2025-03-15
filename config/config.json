@@ -13,7 +13,8 @@
                 "enableSafeGuard": true,
                 "enableMPRSafeGuard": true,
                 "PackNStrap_UnlootablePMCArmbandBelts": true,
-                "Realism_AddGasMasksToBots": false
+                "Realism_AddGasMasksToBots": false,
+                "General_SecureContainerAmmoStacks": 20
         },
         "normalizedHealthPool": {
                 "enable": false,
@@ -27,8 +28,6 @@
                 "excludedBots": []
         },
         "generalConfig": {
-                "enableBotsToRollAmmoAgain": true,
-                "chanceToRollAmmoAgain": 50,
                 "enablePerWeaponTypeAttachmentChances": true,
                 "enableLargeCapacityMagazineLimit": true,
                 "largeCapacityMagazineCount": 2,
@@ -169,9 +168,7 @@
                 },
                 "lootConfig": {
                         "enable": false,
-                        "blacklist": [
-                                "6711039f9e648049e50b3307"
-                        ]
+                        "blacklist": []
                 },
                 "rerollConfig": {
                         "enable": false,
@@ -191,6 +188,7 @@
                         "chance": 10
                 },
                 "additionalOptions": {
+                        "enablePrestiging": true,
                         "seasonalPmcAppearance": true,
                         "ammoTierSliding": {
                                 "enable": false,

@@ -334,6 +334,45 @@
                         }
                     </MudItem>
 
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <ChildContent>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                                </ChildContent>
+                                <TooltipContent>
+                                    <MudText Typo="Typo.caption">If you have a mod that increases the max stack size of ammo, you may need to adjust this.</MudText><MudSpacer />
+                                    <MudText Typo="Typo.caption">If the stack size of ammo is 10x higher than normal, then set this to 10% of normal.</MudText><MudSpacer />
+                                    <MudText Typo="Typo.caption">Example: Mod changes ammo stacks to 600 - you need to set this to 2, so they get 2 stacks of 600 instead of 20 stacks of 600.</MudText><MudSpacer />
+                                    <MudText Typo="Typo.caption">Do NOT mess with this unless you need it - it may cause bots to run out of ammo.</MudText>
+                                </TooltipContent>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Changes the amount of ammo stacks that get added to bot secure containers." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Bot Secure Container Ammo Stack Count</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">@_modAmmoStackCount</MudButton>
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudSlider @bind-Value="_modAmmoStackCount" ValueLabel="true" Min="1" Max="30" Color="Color.Info" Size="Size.Medium"/>
+                    </MudItem>
+                    <MudItem xs="1">
+                        @if (MainLayout._appUndoButtonToggle && MainLayout.pendingChanges.Contains("_modAmmoStackCount"))
+                        {
+                            <MudButton @onclick="undoAmmoStackCount" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (MainLayout._appDefaultButtonToggle && _modAmmoStackCount != 20)
+                        {
+                            <MudButton @onclick="defaultAmmoStackCount" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
+                    </MudItem>
+
                 </MudGrid>
             </MudExpansionPanel>
             <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Debug" Expanded=false>
@@ -350,7 +389,7 @@
                         <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
                             <MudText>
                                 <MudTooltip Text="Do you really need this? Maybe...you're an early release tester?" Color="Color.Primary" Placement="Placement.Right" Arrow="true">
-                                    Debug Logging
+                                    <MudText>Debug Logging</MudText>
                                 </MudTooltip>
                             </MudText>
                         </MudPaper>
@@ -470,7 +509,7 @@
     private void undoInitialTierAppearance() => _modInitialTierAppearance = OriginalConfig.compatibilityConfig.initalTierAppearance;
     private void defaultInitialTierAppearance() => _modInitialTierAppearance = 3;
     #endregion
-    #region OPTIONS
+    #region COMPATIBILITYSETTINGS
     private bool _modSafeGuardEnabled
     {
         get => Data.compatibilityConfig.enableSafeGuard;
@@ -515,6 +554,17 @@
     }
     private void undoRealism() => _modRealismCompatibility = OriginalConfig.compatibilityConfig.Realism_AddGasMasksToBots;
     private void defaultRealism() => _modRealismCompatibility = false;
+    private int _modAmmoStackCount
+    {
+        get => Data.compatibilityConfig.General_SecureContainerAmmoStacks;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.compatibilityConfig.General_SecureContainerAmmoStacks);
+            Data.compatibilityConfig.General_SecureContainerAmmoStacks = value;
+        }
+    }
+    private void undoAmmoStackCount() => _modAmmoStackCount = OriginalConfig.compatibilityConfig.General_SecureContainerAmmoStacks;
+    private void defaultAmmoStackCount() => _modAmmoStackCount = 20;
     #endregion
     #region DEBUG
     private bool _debugLogging
