@@ -568,6 +568,7 @@ export const vanillaClothingList =
             "66acebd4ede86671bb09584b",
             "66acc8f719271bd6d00dec0b",
             "675fd6b2f26b0db5f0060eb6",
+            "67599889a378f89a3e089b5a",
             "675994c9f7adb892bd080766",
             "6756960dbe1cb7ec47002236",
             "67506f51caaa3394b2082166",
