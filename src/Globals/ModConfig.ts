@@ -213,6 +213,7 @@ export interface NormalizeHealthConfig
     healthLeftLeg: number,
     healthRightLeg: number,
     excludedBots: string[],
+    normalizeSkills: boolean,
 }
 
 export interface TierBlacklistConfig

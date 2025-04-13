@@ -103,6 +103,7 @@ export class BotConfigs
 
         // All Bots - Bypasses bot enablement
         this.normalizeHealthPools();
+        this.normalizeSkills();
 
         // Special Handling Needed
         this.removeThermalGoggles(ModConfig.config.generalConfig.enableT7Thermals);
@@ -144,6 +145,27 @@ export class BotConfigs
 
                 bodyParts[array].RightLeg.min = ModConfig.config.normalizedHealthPool.healthRightLeg > 0 ? ModConfig.config.normalizedHealthPool.healthRightLeg : 65;
                 bodyParts[array].RightLeg.max = ModConfig.config.normalizedHealthPool.healthRightLeg > 0 ? ModConfig.config.normalizedHealthPool.healthRightLeg : 65;
+            }
+        }
+    }
+
+    private normalizeSkills(): void
+    {
+        if (!ModConfig.config.normalizedHealthPool.normalizeSkills) return;
+
+        const botTable = this.tables.bots.types;
+        for (const bot in botTable)
+        {
+            if (bot == "usec" || bot == "bear" || bot == "pmcusec" || bot == "pmcbear") continue;
+            for (const skill in botTable[bot].skills.Common)
+            {
+                if (skill == "Strength") continue;
+                const currentSkill = botTable[bot].skills.Common[skill];
+                if (currentSkill.max > 100)
+                {
+                    currentSkill.min = 1;
+                    currentSkill.max = 9;
+                }
             }
         }
     }

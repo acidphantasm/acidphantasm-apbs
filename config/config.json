@@ -25,7 +25,8 @@
                 "healthRightArm": 60,
                 "healthLeftLeg": 65,
                 "healthRightLeg": 65,
-                "excludedBots": []
+                "excludedBots": [],
+                "normalizeSkills": false
         },
         "generalConfig": {
                 "enablePerWeaponTypeAttachmentChances": true,
