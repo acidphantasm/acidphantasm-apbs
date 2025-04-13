@@ -248,6 +248,36 @@
                             <MudButton @onclick="defaultNormalizeHealthExcludedBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
                         }
                     </MudItem>
+                    
+                    <MudItem xs="1">
+                        <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="This applies to all bots, including bots disabled in APBS." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudIconButton Icon="@Icons.Material.Filled.Warning" Size="Size.Small" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
+                            <MudTooltip Text="Normalizes bot skills. Applies to all non-PMC bots. Will set all skills to level 1 (except Strength). Primarily used to get rid of instant reload/silent footsteps." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                                <MudText>Normalize Bot Skills</MudText>
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudPaper Class="d-flex align-center mud-width-full" Elevation="0">
+                            <MudSwitch T="bool" @bind-Value="_allNormalizeSkillsEnable" Color="Color.Success" UncheckedColor="Color.Default" LabelPlacement="Placement.End">@_allNormalizeSkillsEnable</MudSwitch>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="1">
+                        @if (MainLayout.pendingChanges.Contains("_allNormalizeSkillsEnable") && MainLayout._appUndoButtonToggle)
+                        {
+                            <MudButton @onclick="undoNormalizeSkillsEnable" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                        }
+                        else if (_allNormalizeSkillsEnable != false && MainLayout._appDefaultButtonToggle)
+                        {
+                            <MudButton @onclick="defaultNormalizeSkillsEnable" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                        }
+                    </MudItem>
 
                 </MudGrid>
             </MudExpansionPanel>
@@ -1028,6 +1058,17 @@
     }
     private void undoNormalizeHealthExcludedBots() => _allNormalizeHealthExcludedBots = OriginalConfig.normalizedHealthPool.excludedBots;
     private void defaultNormalizeHealthExcludedBots() => _allNormalizeHealthExcludedBots.Clear();
+    private bool _allNormalizeSkillsEnable
+    {
+        get => Data.normalizedHealthPool.normalizeSkills;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.normalizedHealthPool.normalizeSkills);
+            Data.normalizedHealthPool.normalizeSkills = value;
+        }
+    }
+    private void undoNormalizeSkillsEnable() => _allNormalizeSkillsEnable = OriginalConfig.normalizedHealthPool.normalizeSkills;
+    private void defaultNormalizeSkillsEnable() => _allNormalizeSkillsEnable = false;
     #endregion
     #region WEAPON CONFIG
     private bool _allPerWeaponAttachmentRolls

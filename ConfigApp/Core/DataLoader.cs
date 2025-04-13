@@ -225,6 +225,7 @@ namespace APBSConfig.Core
         public int healthLeftLeg { get; set; }
         public int healthRightLeg { get; set; }
         public required List<string> excludedBots { get; set; }
+        public bool normalizeSkills { get; set; }
     }
     public class TierBlacklistConfig
     {
