@@ -143,7 +143,7 @@ export class APBSBotLevelGenerator
         if (ModConfig.config.pmcBots.additionalOptions.enablePrestiging)
         {
             const pmcProfile = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)
-            if (pmcProfile.Info.PrestigeLevel > 0)
+            if (ModConfig.config.pmcBots.additionalOptions.enablePrestigeAnyLevel && pmcProfile.Info.PrestigeLevel > 0)
             {
                 maxLevel = 79;
                 minLevel = 1;
