@@ -294,6 +294,7 @@ export class ModdedImportHelper
         this.getModdedItems(headwear as ITemplateItem, BaseClasses.HEADWEAR, "Helmets");
         this.getModdedItems(tacticalVests as ITemplateItem, BaseClasses.VEST, "Vests");
         this.getModdedItems(armbands as ITemplateItem, BaseClasses.ARMBAND, "ArmBands");
+        this.getPackNStrap()
     }
 
     private buildVanillaClothingList(): void
@@ -388,6 +389,23 @@ export class ModdedImportHelper
         }
     }
 
+    private getPackNStrap()
+    {
+        const items = Object.values(this.tables.templates.items);
+        let allPackNStrap = items.filter(x => this.itemHelper.isOfBaseclass(x._id, "6815465859b8c6ff13f94026"))
+
+        for (const item of allPackNStrap)
+        {
+            if (this.blacklist.includes(item._id)) allPackNStrap = allPackNStrap.filter(id => id._id != item._id)
+        }
+
+        if (allPackNStrap.length > 0)
+        {
+            this.apbsLogger.log(Logging.WARN, `     Importing ${allPackNStrap.length} Pack 'n' Strap belts...`)
+            this.getSetModdedEquipmentDetails(allPackNStrap);
+        }
+    }
+
     private getSetModdedWeaponDetails(weaponPool: ITemplateItem[]): void
     {
         // Loop each weapon in the pool of weapons to be imported - push them individually
@@ -435,6 +453,7 @@ export class ModdedImportHelper
                 // Additional slots, likely armoured rig
                 if (equipmentSlots.length >= 1) equipmentSlot = "ArmouredRig";
 
+                /*
                 // Might be a Pack N Strap belt, check that.
                 const defaultInventorySlots = this.databaseService.getTables().templates.items["55d7217a4bdc2d86028b456d"]?._props?.Slots;
                 for (const slot in defaultInventorySlots)
@@ -451,6 +470,17 @@ export class ModdedImportHelper
                         equipmentInfo._props.UnlootableFromSlot = "ArmBand";
                     }
                 }
+                */
+            }
+            if (equipmentParent == "6815465859b8c6ff13f94026")
+            {
+                if (ModConfig.config.compatibilityConfig.PackNStrap_UnlootablePMCArmbandBelts)
+                {
+                    equipmentInfo._props.Unlootable = true;
+                    equipmentInfo._props.UnlootableFromSide.push("Bear", "Usec", "Savage");
+                    equipmentInfo._props.UnlootableFromSlot = "ArmBand";
+                }
+                equipmentSlot = "ArmBand";
             }
             
             if (this.itemHelper.isOfBaseclass(equipmentId, BaseClasses.ARMBAND)) equipmentSlot = "ArmBand";
