@@ -132,7 +132,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
                 return this.weightedRandomHelper.getWeightedValue<string>(newEquipmentPool);
             }
 
-            const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);
+            const rangeType = this.weightedRandomHelper.getWeightedValue<string>(ModConfig.config.generalConfig.mapRangeWeighting[this.raidInformation.location]);
             const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot, rangeType);
             return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
         }
@@ -178,7 +178,7 @@ export class APBSBotWeaponGenerator extends BotWeaponGenerator
     {
         if (equipmentSlot == EquipmentSlots.FIRST_PRIMARY_WEAPON || equipmentSlot == EquipmentSlots.SECOND_PRIMARY_WEAPON)
         {
-            const rangeType = this.weightedRandomHelper.getWeightedValue<string>(this.raidInformation.mapWeights[this.raidInformation.location]);
+            const rangeType = this.weightedRandomHelper.getWeightedValue<string>(ModConfig.config.generalConfig.mapRangeWeighting[this.raidInformation.location]);
             const weaponPool = this.apbsEquipmentGetter.getEquipmentByBotRoleAndSlot(botRole, tierInfo, equipmentSlot, rangeType);
             return this.weightedRandomHelper.getWeightedValue<string>(weaponPool);
         }
