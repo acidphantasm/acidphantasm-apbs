@@ -908,13 +908,16 @@ export class ModdedImportHelper
     {
         for (const botPool in this.tierInformation.tier1ammo)
         {
-            this.tierInformation.tier1ammo[botPool][caliber] = {};
-            this.tierInformation.tier2ammo[botPool][caliber] = {};
-            this.tierInformation.tier3ammo[botPool][caliber] = {};
-            this.tierInformation.tier4ammo[botPool][caliber] = {};
-            this.tierInformation.tier5ammo[botPool][caliber] = {};
-            this.tierInformation.tier6ammo[botPool][caliber] = {};
-            this.tierInformation.tier7ammo[botPool][caliber] = {};
+            if (this.tierInformation.tier1ammo[botPool][caliber] == undefined)
+            {
+                this.tierInformation.tier1ammo[botPool][caliber] = {};
+                this.tierInformation.tier2ammo[botPool][caliber] = {};
+                this.tierInformation.tier3ammo[botPool][caliber] = {};
+                this.tierInformation.tier4ammo[botPool][caliber] = {};
+                this.tierInformation.tier5ammo[botPool][caliber] = {};
+                this.tierInformation.tier6ammo[botPool][caliber] = {};
+                this.tierInformation.tier7ammo[botPool][caliber] = {};
+            }
 
             this.tierInformation.tier1ammo[botPool][caliber][itemID] = 1;
             this.tierInformation.tier2ammo[botPool][caliber][itemID] = 1;
