@@ -15,12 +15,11 @@ export class RaidInformation
     )
     {}
 
-    public freshProfile: boolean;
+    public freshProfile: boolean = false;
 
     public location: string;
     public currentTime: string;
-    public timeVariant: string;
-    public nightTime: boolean;
+    public nightTime: boolean = false;
 
     public sessionId: string;
 
