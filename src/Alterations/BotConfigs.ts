@@ -191,18 +191,168 @@ export class BotConfigs
             if (Object.values(ScavBots).includes(botType as ScavBots))
             {
                 botConfigEquipment[botType].filterPlatesByLevel = true;
-                botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.scavArmorPlateWeights;
+                botConfigEquipment[botType].armorPlateWeighting = [
+                    {
+                        "levelRange": {
+                            "min": 1,
+                            "max": 10
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.scav.tier1
+                    },
+                    {
+                        "levelRange": {
+                            "min": 11,
+                            "max": 20
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.scav.tier2
+                    },
+                    {
+                        "levelRange": {
+                            "min": 21,
+                            "max": 30
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.scav.tier3
+                    },
+                    {
+                        "levelRange": {
+                            "min": 31,
+                            "max": 40
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.scav.tier4
+                    },
+                    {
+                        "levelRange": {
+                            "min": 41,
+                            "max": 50
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.scav.tier5
+                    },
+                    {
+                        "levelRange": {
+                            "min": 51,
+                            "max": 60
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.scav.tier6
+                    },
+                    {
+                        "levelRange": {
+                            "min": 61,
+                            "max": 100
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.scav.tier7
+                    }
+                ];
                 continue;
             }
             if (Object.values(PMCBots).includes(botType as PMCBots))
             {
                 botConfigEquipment[botType].filterPlatesByLevel = true;
-                botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.armorPlateWeights;
+                botConfigEquipment[botType].armorPlateWeighting = [
+                    {
+                        "levelRange": {
+                            "min": 1,
+                            "max": 10
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.pmc.tier1
+                    },
+                    {
+                        "levelRange": {
+                            "min": 11,
+                            "max": 20
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.pmc.tier2
+                    },
+                    {
+                        "levelRange": {
+                            "min": 21,
+                            "max": 30
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.pmc.tier3
+                    },
+                    {
+                        "levelRange": {
+                            "min": 31,
+                            "max": 40
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.pmc.tier4
+                    },
+                    {
+                        "levelRange": {
+                            "min": 41,
+                            "max": 50
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.pmc.tier5
+                    },
+                    {
+                        "levelRange": {
+                            "min": 51,
+                            "max": 60
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.pmc.tier6
+                    },
+                    {
+                        "levelRange": {
+                            "min": 61,
+                            "max": 100
+                        },
+                        ...ModConfig.config.generalConfig.plateClasses.pmc.tier7
+                    }
+                ];
                 continue;
             }
 
             botConfigEquipment[botType].filterPlatesByLevel = true;
-            botConfigEquipment[botType].armorPlateWeighting = this.tierInformation.nonScavNonPMCArmorPlateWeights;
+            botConfigEquipment[botType].armorPlateWeighting = [
+                {
+                    "levelRange": {
+                        "min": 1,
+                        "max": 10
+                    },
+                    ...ModConfig.config.generalConfig.plateClasses.bossAndSpecial.tier1
+                },
+                {
+                    "levelRange": {
+                        "min": 11,
+                        "max": 20
+                    },
+                    ...ModConfig.config.generalConfig.plateClasses.bossAndSpecial.tier2
+                },
+                {
+                    "levelRange": {
+                        "min": 21,
+                        "max": 30
+                    },
+                    ...ModConfig.config.generalConfig.plateClasses.bossAndSpecial.tier3
+                },
+                {
+                    "levelRange": {
+                        "min": 31,
+                        "max": 40
+                    },
+                    ...ModConfig.config.generalConfig.plateClasses.bossAndSpecial.tier4
+                },
+                {
+                    "levelRange": {
+                        "min": 41,
+                        "max": 50
+                    },
+                    ...ModConfig.config.generalConfig.plateClasses.bossAndSpecial.tier5
+                },
+                {
+                    "levelRange": {
+                        "min": 51,
+                        "max": 60
+                    },
+                    ...ModConfig.config.generalConfig.plateClasses.bossAndSpecial.tier6
+                },
+                {
+                    "levelRange": {
+                        "min": 61,
+                        "max": 100
+                    },
+                    ...ModConfig.config.generalConfig.plateClasses.bossAndSpecial.tier7
+                }
+            ];
         }
     }
 

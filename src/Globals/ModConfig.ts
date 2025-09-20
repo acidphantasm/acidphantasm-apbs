@@ -73,7 +73,9 @@ export interface Config
         blickyMode: boolean,
         enableT7Thermals: boolean,
         startTier: number,
+        mapRangeWeighting: MapListRangeConfig,
         plateChances: PlateWeightConfig,
+        plateClasses: PlateClassConfig,
     }
     pmcBots: {
         enable: boolean,
@@ -137,6 +139,7 @@ export interface Blacklist
 export interface PMCSpecificConfig
 {
     enablePrestiging: boolean,
+    enablePrestigeAnyLevel: boolean,
     seasonalPmcAppearance: boolean,
     ammoTierSliding: AmmoTierSlideConfig,
     gameVersionWeighting: GameVersionWeightConfig, 
@@ -258,6 +261,26 @@ export interface CustomLevelDeltas
         max: number,
     }
 }
+export interface MapListRangeConfig
+{
+    bigmap: RangeWeights,
+    RezervBase: RangeWeights,
+    laboratory: RangeWeights,
+    factory4_night: RangeWeights,
+    factory4_day: RangeWeights,
+    Interchange: RangeWeights,
+    Sandbox: RangeWeights,
+    Sandbox_high: RangeWeights,
+    Woods: RangeWeights,
+    Shoreline: RangeWeights,
+    Lighthouse: RangeWeights,
+    TarkovStreets: RangeWeights,
+}
+export interface RangeWeights
+{
+    LongRange: number,
+    ShortRange: number,
+}
 export interface PlateWeightConfig
 {
     enable: boolean,
@@ -271,6 +294,38 @@ export interface PlateWeightConfig
     followerSidePlateChance: [number, number, number, number, number, number, number],
     specialMainPlateChance: [number, number, number, number, number, number, number],
     specialSidePlateChance: [number, number, number, number, number, number, number],
+}
+export interface PlateClassConfig
+{
+    pmc: PlateClassTierConfig,
+    scav: PlateClassTierConfig,
+    bossAndSpecial: PlateClassTierConfig,
+}
+
+export interface PlateClassTierConfig
+{
+    tier1: PlateClassList,
+    tier2: PlateClassList,
+    tier3: PlateClassList,
+    tier4: PlateClassList,
+    tier5: PlateClassList,
+    tier6: PlateClassList,
+    tier7: PlateClassList,
+}
+export interface PlateClassList
+{
+    front_plate: PlateLevels,
+    back_plate: PlateLevels,
+    left_side_plate: PlateLevels,
+    right_side_plate: PlateLevels,
+}
+export interface PlateLevels
+{
+    2: number,
+    3: number,
+    4: number,
+    5: number,
+    6: number,
 }
 export interface PMCSecrets
 {

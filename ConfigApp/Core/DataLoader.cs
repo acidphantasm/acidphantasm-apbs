@@ -113,6 +113,7 @@ namespace APBSConfig.Core
     public class PMCSpecificConfig
     {
         public bool enablePrestiging { get; set; }
+        public bool enablePrestigeAnyLevel { get; set; }
         public bool seasonalPmcAppearance { get; set; }
         public required AmmoTierSlideConfig ammoTierSliding { get; set; }
         public required GameVersionWeightConfig gameVersionWeighting { get; set; }
@@ -183,7 +184,31 @@ namespace APBSConfig.Core
         public bool blickyMode { get; set; }
         public bool enableT7Thermals { get; set; }
         public int startTier { get; set; }
+        public required MapRangeWeights mapRangeWeighting { get; set; }
         public required PlateWeightConfig plateChances { get; set; }
+        public required PlateClasses plateClasses { get; set; }
+    }
+    public class MapRangeWeights
+    {
+        public required LongShortRange bigmap { get; set; }
+        public required LongShortRange RezervBase { get; set; }
+        public required LongShortRange laboratory { get; set; }
+        public required LongShortRange factory4_night { get; set; }
+        public required LongShortRange factory4_day { get; set; }
+        public required LongShortRange Interchange { get; set; }
+        public required LongShortRange Sandbox { get; set; }
+        public required LongShortRange Sandbox_high { get; set; }
+        public required LongShortRange Woods { get; set; }
+        public required LongShortRange Shoreline { get; set; }
+        public required LongShortRange Lighthouse { get; set; }
+        public required LongShortRange TarkovStreets { get; set; }
+
+    }
+    public class LongShortRange
+    {
+        public int LongRange { get; set; }
+        public int ShortRange { get; set; }
+
     }
     public class PlateWeightConfig
     {
@@ -199,7 +224,45 @@ namespace APBSConfig.Core
         public required List<int> specialMainPlateChance { get; set; }
         public required List<int> specialSidePlateChance { get; set; }
     }
-    public class AmmoTierSlideConfig
+    public class PlateClasses
+    {
+        public required PlateClassList pmc { get; set; }
+        public required PlateClassList scav { get; set; }
+        public required PlateClassList bossAndSpecial { get; set; }
+
+    }
+    public class PlateClassList
+    {
+        public required PlateTierList tier1 { get; set; }
+        public required PlateTierList tier2 { get; set; }
+        public required PlateTierList tier3 { get; set; }
+        public required PlateTierList tier4 { get; set; }
+        public required PlateTierList tier5 { get; set; }
+        public required PlateTierList tier6 { get; set; }
+        public required PlateTierList tier7 { get; set; }
+    }
+    public class PlateTierList
+    {
+        public required PlateSlotList front_plate { get; set; }
+        public required PlateSlotList back_plate { get; set; }
+        public required PlateSlotList left_side_plate { get; set; }
+        public required PlateSlotList right_side_plate { get; set; }
+
+    }
+    public class PlateSlotList
+    {
+        [JsonProperty(PropertyName = "2")]
+        public int class2 { get; set; }
+        [JsonProperty(PropertyName = "3")]
+        public int class3 { get; set; }
+        [JsonProperty(PropertyName = "4")]
+        public int class4 { get; set; }
+        [JsonProperty(PropertyName = "5")]
+        public int class5 { get; set; }
+        [JsonProperty(PropertyName = "6")]
+        public int class6 { get; set; }
+    }
+        public class AmmoTierSlideConfig
     {
         public bool enable { get; set; }
         public int slideAmount { get; set; }

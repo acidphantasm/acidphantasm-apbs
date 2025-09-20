@@ -136,7 +136,6 @@ export class JSONHelper
             return;
         }
 
-        this.raidInformation.usingDefaultDB = false;
         for (const item of files)
         {
             const filePath = path.join(folderPath, item);
@@ -301,7 +300,6 @@ export class JSONHelper
     private missingFileCount(folderName: string, errorType: number): void
     {
         const error = errorType == 0 ? "Missing files" : "Extra files found";
-        this.raidInformation.usingDefaultDB = true;
         this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid.`);
         this.apbsLogger.log(Logging.ERR, `${error}. Report issue to author of preset.`);
         this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");
@@ -310,7 +308,6 @@ export class JSONHelper
     
     private invalidFileName(folderName: string, item: string): void
     {
-        this.raidInformation.usingDefaultDB = true;
         this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid.`);
         this.apbsLogger.log(Logging.ERR, `"${item}" is incorrectly named. Report issue to author of preset.`);
         this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");
@@ -319,7 +316,6 @@ export class JSONHelper
 
     private missingPresetFolder(folderName: string, presetFolder: string): void
     {
-        this.raidInformation.usingDefaultDB = true;
         this.apbsLogger.log(Logging.ERR, `Preset name "${folderName}" is invalid.`);
         this.apbsLogger.log(Logging.ERR, `Verify the preset folder exists in "${presetFolder}" and is named properly.`);
         this.apbsLogger.log(Logging.WARN, "Using APBS database instead of preset...");

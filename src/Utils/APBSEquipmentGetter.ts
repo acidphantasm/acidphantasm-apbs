@@ -384,7 +384,7 @@ export class APBSEquipmentGetter
             {
                 const slideAmount = ModConfig.config.pmcBots.additionalOptions.ammoTierSliding.slideAmount;
                 const minTier = (tierInfo - slideAmount) <= 0 ? 1 : tierInfo - slideAmount
-                const maxTier = tierInfo - 1
+                const maxTier = tierInfo - 1 <= 0 ? 1 : tierInfo - 1;
                 tierInfo = this.newTierCalc(tierInfo, minTier, maxTier);
             }
         }
@@ -459,6 +459,8 @@ export class APBSEquipmentGetter
 
     private newTierCalc(tierInfo: number, minTier: number, maxTier: number): number
     {
+        if (minTier == maxTier) return minTier;
+        
         const newTier = (Math.floor(Math.random() * (maxTier - minTier + 1) + minTier)) >= tierInfo  ? (tierInfo - 1) : (Math.floor(Math.random() * (maxTier - minTier + 1) + minTier))
         return newTier;
     }

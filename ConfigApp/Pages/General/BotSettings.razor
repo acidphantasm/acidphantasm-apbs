@@ -4,7 +4,7 @@
 
 <style>
     .mud-divider {
-        border-width: 2.5px;
+    border-width: 2.5px;
     }
 </style>
 
@@ -12,7 +12,7 @@
     <MudContainer Class="mb-20">
         <MudExpansionPanels MultiExpansion="true">
 
-            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="AI Health" Expanded=true>
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Normalization of AI" Expanded=true>
                 <MudGrid>
 
                     <MudItem xs="1">
@@ -224,13 +224,13 @@
                     <MudItem xs="9">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1"  Elevation="0">
                             <MudSelect T="string" Label="Excluded Bots"
-                                       MultiSelection="true"
-                                       SelectedValues="_allNormalizeHealthExcludedBots"
-                                       SelectedValuesChanged="OnExcludedBotsValueChanged"
-                                       Variant="Variant.Filled"
-                                       AnchorOrigin="Origin.CenterLeft"
-                                       Dense Clearable
-                                       Disabled="!_allNormalizeHealthEnable">
+                            MultiSelection="true"
+                            SelectedValues="_allNormalizeHealthExcludedBots"
+                            SelectedValuesChanged="OnExcludedBotsValueChanged"
+                            Variant="Variant.Filled"
+                            AnchorOrigin="Origin.CenterLeft"
+                            Dense Clearable
+                            Disabled="!_allNormalizeHealthEnable">
                                 @foreach (var name in BotNames)
                                 {
                                     <MudSelectItem T="string" Value="@name">@name</MudSelectItem>
@@ -248,7 +248,7 @@
                             <MudButton @onclick="defaultNormalizeHealthExcludedBots" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
                         }
                     </MudItem>
-                    
+
                     <MudItem xs="1">
                         <MudPaper Class="d-flex justify-center mud-width-full ma-1" Elevation="0">
                             <MudTooltip Text="This applies to all bots, including bots disabled in APBS." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
@@ -258,7 +258,7 @@
                     </MudItem>
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
-                            <MudTooltip Text="Normalizes bot skills. Applies to all non-PMC bots. Will set all skills to level 1 (except Strength). Primarily used to get rid of instant reload/silent footsteps." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                            <MudTooltip Text="Normalizes bot skills. Applies to all non-PMC bots. Will set most skills to level 1. Primarily used to get rid of instant reload/silent footsteps." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
                                 <MudText>Normalize Bot Skills</MudText>
                             </MudTooltip>
                         </MudPaper>
@@ -282,6 +282,526 @@
                 </MudGrid>
             </MudExpansionPanel>
 
+            <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Map Weapon Selection Weighting" Expanded=true>
+                <MudGrid>
+                <MudItem xs="1" />
+                <MudItem xs="4" Style="margin-top: 20px;" >
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>Customs </MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Customs_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Customs_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_Customs_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_Customs_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoCustomsWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_Customs_Long != 20 || _mapRangeWeighting_Customs_Short != 80) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultCustomsWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>Reserve </MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Reserve_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Reserve_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_Reserve_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_Reserve_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoReserveWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_Reserve_Long != 20 || _mapRangeWeighting_Reserve_Short != 80) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultReserveWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>Labs </MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Labs_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Labs_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_Labs_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_Labs_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoLabsWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_Labs_Long != 10 || _mapRangeWeighting_Labs_Short != 90) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultLabsWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>FactoryNight </MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_FactoryNight_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_FactoryNight_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_FactoryNight_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_FactoryNight_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoFactoryNightWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_FactoryNight_Long != 5 || _mapRangeWeighting_FactoryNight_Short != 95) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultFactoryNightWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>FactoryDay </MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_FactoryDay_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_FactoryDay_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_FactoryDay_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_FactoryDay_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoFactoryDayWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_FactoryDay_Long != 5 || _mapRangeWeighting_FactoryDay_Short != 95) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultFactoryDayWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>Interchange </MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Interchange_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Interchange_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_Interchange_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_Interchange_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoInterchangeWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_Interchange_Long != 20 || _mapRangeWeighting_Interchange_Short != 80) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultInterchangeWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>Ground Zero</MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Sandbox_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Sandbox_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_Sandbox_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_Sandbox_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoSandboxWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_Sandbox_Long != 15 || _mapRangeWeighting_Sandbox_Short != 85) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultSandboxWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>Ground Zero (21+)</MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_SandboxHigh_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_SandboxHigh_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_SandboxHigh_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_SandboxHigh_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoSandboxHighWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_SandboxHigh_Long != 15 || _mapRangeWeighting_SandboxHigh_Short != 85) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultSandboxHighWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>Woods </MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Woods_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Woods_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_Woods_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_Woods_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoWoodsWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_Woods_Long != 60 || _mapRangeWeighting_Woods_Short != 40) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultWoodsWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>Shoreline </MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Shoreline_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Shoreline_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_Shoreline_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_Shoreline_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoShorelineWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_Shoreline_Long != 50 || _mapRangeWeighting_Shoreline_Short != 50) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultShorelineWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>Lighthouse </MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Lighthouse_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_Lighthouse_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_Lighthouse_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_Lighthouse_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoLighthouseWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_Lighthouse_Long != 30 || _mapRangeWeighting_Lighthouse_Short != 70) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultLighthouseWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+
+                <MudItem xs="1" />
+                <MudItem xs="4">
+                    <MudTooltip Text="Adjust weapon range selection weights. Higher is more common." Color="Color.Primary" Placement="Placement.Right" Arrow="true">
+                        <MudText>TarkovStreets </MudText>
+                    </MudTooltip>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="d-flex align-start mud-width-full" Style="margin-top: -20px;" Elevation="0">
+                        <MudTooltip Text="Long range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_TarkovStreets_Long"
+                                             Label="Weight"
+                                             HelperText="Long Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                        <MudTooltip Text="Short range weapon selection weight." Color="Color.Primary" Placement="Placement.Bottom" Arrow="true">
+                            <MudNumericField Margin="Margin.Dense"
+                                             HideSpinButtons="true"
+                                             @bind-Value="_mapRangeWeighting_TarkovStreets_Short"
+                                             Label="Weight"
+                                             HelperText="Short Range"
+                                             Variant="Variant.Filled"
+                                             Min="0"
+                                             Max="100" />
+                        </MudTooltip>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="1">
+                    @if ((MainLayout.pendingChanges.Contains("_mapRangeWeighting_TarkovStreets_Long") ||
+                    MainLayout.pendingChanges.Contains("_mapRangeWeighting_TarkovStreets_Short")) &&
+                    MainLayout._appUndoButtonToggle)
+                    {
+                        <MudButton @onclick="undoTarkovStreetsWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
+                    }
+                    else if ((_mapRangeWeighting_TarkovStreets_Long != 20 || _mapRangeWeighting_TarkovStreets_Short != 80) && MainLayout._appDefaultButtonToggle)
+                    {
+                        <MudButton @onclick="defaultTarkovStreetsWeaponRangeWeights" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
+                    }
+                </MudItem>
+                
+                </MudGrid>
+            </MudExpansionPanel>
             <MudExpansionPanel Class="mud-expansion-panels-borders ma-3 pa-5" Text="Weapon & Armour Configurations" Expanded=true>
                 <MudGrid>
 
@@ -496,7 +1016,7 @@
                     </MudItem>
                     <MudItem xs="1">
                         @if (MainLayout._appUndoButtonToggle && (
-                            MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceEnabled") ||
+                           MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceEnabled") ||
                         MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceValueTier1") ||
                         MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceValueTier2") ||
                         MainLayout.pendingChanges.Contains("_allWeaponOverrideMuzzleChanceValueTier3") ||
@@ -548,9 +1068,9 @@
                     </MudItem>
                     <MudItem xs="1">
                         @if (MainLayout._appUndoButtonToggle && (
-                            MainLayout.pendingChanges.Contains("_allWeaponAttachmentLimitEnabled") || 
-                            MainLayout.pendingChanges.Contains("_allWeaponAttachmentOpticalLimit") ||
-                            MainLayout.pendingChanges.Contains("_allWeaponAttachmentTacticalLimit")))
+                           MainLayout.pendingChanges.Contains("_allWeaponAttachmentLimitEnabled") || 
+                           MainLayout.pendingChanges.Contains("_allWeaponAttachmentOpticalLimit") ||
+                           MainLayout.pendingChanges.Contains("_allWeaponAttachmentTacticalLimit")))
                         {
                             <MudButton @onclick="undoWeaponAttachmentLimits" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                         }
@@ -703,8 +1223,8 @@
                     </MudItem>
                     <MudItem xs="1">
                         @if (MainLayout._appUndoButtonToggle && (
-                            MainLayout.pendingChanges.Contains("_allEquipmentT7ThermalEnabled") ||
-                            MainLayout.pendingChanges.Contains("_allEquipmentT7ThermalStartTier")))
+                           MainLayout.pendingChanges.Contains("_allEquipmentT7ThermalEnabled") ||
+                           MainLayout.pendingChanges.Contains("_allEquipmentT7ThermalStartTier")))
                         {
                             <MudButton @onclick="undoT7Thermal" Variant="Variant.Filled" Color="Color.Inherit" Size="Size.Small">Undo</MudButton>
                         }
@@ -715,7 +1235,7 @@
                             <MudButton @onclick="defaultT7Thermal" Variant="Variant.Filled" Color="Color.Dark" Size="Size.Small">Default</MudButton>
                         }
                     </MudItem>
-                    
+
                     <MudItem xs="2" />
                     <MudItem xs="3">
                         <MudPaper Class="d-flex align-left mud-width-full ma-1" Elevation="0">
@@ -733,6 +1253,7 @@
 
                     <MudDivider DividerType="DividerType.FullWidth" Class="my-3" />
 
+                    
                     <MudItem xs="1" />
                     <MudItem xs="4">
                         <MudPaper Class="d-flex align-center mud-width-full ma-1" Elevation="0">
@@ -937,7 +1458,7 @@
 </MudMainContent>
 
 @code {
-    #region HEALTH
+        #region HEALTH
     private bool _allNormalizeHealthEnable
     {
         get => Data.normalizedHealthPool.enable;
@@ -1368,7 +1889,357 @@
         _allEquipmentT7ThermalStartTier = 6;
     }
     #endregion
-    
+
+    #region MAP WEIGHTINGS
+    private int _mapRangeWeighting_Customs_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.bigmap.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.bigmap.LongRange);
+            Data.generalConfig.mapRangeWeighting.bigmap.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_Customs_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.bigmap.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.bigmap.ShortRange);
+            Data.generalConfig.mapRangeWeighting.bigmap.ShortRange = value;
+        }
+    }
+    private void undoCustomsWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Customs_Long = OriginalConfig.generalConfig.mapRangeWeighting.bigmap.LongRange;
+        _mapRangeWeighting_Customs_Short = OriginalConfig.generalConfig.mapRangeWeighting.bigmap.ShortRange;
+    }
+    private void defaultCustomsWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Customs_Long = 20;
+        _mapRangeWeighting_Customs_Short = 80;
+    }
+    private int _mapRangeWeighting_Reserve_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.RezervBase.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.RezervBase.LongRange);
+            Data.generalConfig.mapRangeWeighting.RezervBase.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_Reserve_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.RezervBase.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.RezervBase.ShortRange);
+            Data.generalConfig.mapRangeWeighting.RezervBase.ShortRange = value;
+        }
+    }
+
+    private void undoReserveWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Reserve_Long = OriginalConfig.generalConfig.mapRangeWeighting.RezervBase.LongRange;
+        _mapRangeWeighting_Reserve_Short = OriginalConfig.generalConfig.mapRangeWeighting.RezervBase.ShortRange;
+    }
+    private void defaultReserveWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Reserve_Long = 20;
+        _mapRangeWeighting_Reserve_Short = 80;
+    }
+    private int _mapRangeWeighting_Labs_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.laboratory.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.laboratory.LongRange);
+            Data.generalConfig.mapRangeWeighting.laboratory.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_Labs_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.laboratory.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.laboratory.ShortRange);
+            Data.generalConfig.mapRangeWeighting.laboratory.ShortRange = value;
+        }
+    }
+
+    private void undoLabsWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Labs_Long = OriginalConfig.generalConfig.mapRangeWeighting.laboratory.LongRange;
+        _mapRangeWeighting_Labs_Short = OriginalConfig.generalConfig.mapRangeWeighting.laboratory.ShortRange;
+    }
+    private void defaultLabsWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Labs_Long = 10;
+        _mapRangeWeighting_Labs_Short = 90;
+    }
+    private int _mapRangeWeighting_FactoryNight_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.factory4_night.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.factory4_night.LongRange);
+            Data.generalConfig.mapRangeWeighting.factory4_night.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_FactoryNight_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.factory4_night.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.factory4_night.ShortRange);
+            Data.generalConfig.mapRangeWeighting.factory4_night.ShortRange = value;
+        }
+    }
+
+    private void undoFactoryNightWeaponRangeWeights()
+    {
+        _mapRangeWeighting_FactoryNight_Long = OriginalConfig.generalConfig.mapRangeWeighting.factory4_night.LongRange;
+        _mapRangeWeighting_FactoryNight_Short = OriginalConfig.generalConfig.mapRangeWeighting.factory4_night.ShortRange;
+    }
+    private void defaultFactoryNightWeaponRangeWeights()
+    {
+        _mapRangeWeighting_FactoryNight_Long = 5;
+        _mapRangeWeighting_FactoryNight_Short = 95;
+    }
+    private int _mapRangeWeighting_FactoryDay_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.factory4_day.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.factory4_day.LongRange);
+            Data.generalConfig.mapRangeWeighting.factory4_day.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_FactoryDay_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.factory4_day.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.factory4_day.ShortRange);
+            Data.generalConfig.mapRangeWeighting.factory4_day.ShortRange = value;
+        }
+    }
+
+    private void undoFactoryDayWeaponRangeWeights()
+    {
+        _mapRangeWeighting_FactoryDay_Long = OriginalConfig.generalConfig.mapRangeWeighting.factory4_day.LongRange;
+        _mapRangeWeighting_FactoryDay_Short = OriginalConfig.generalConfig.mapRangeWeighting.factory4_day.ShortRange;
+    }
+    private void defaultFactoryDayWeaponRangeWeights()
+    {
+        _mapRangeWeighting_FactoryDay_Long = 5;
+        _mapRangeWeighting_FactoryDay_Short = 95;
+    }
+    private int _mapRangeWeighting_Interchange_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.Interchange.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Interchange.LongRange);
+            Data.generalConfig.mapRangeWeighting.Interchange.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_Interchange_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.Interchange.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Interchange.ShortRange);
+            Data.generalConfig.mapRangeWeighting.Interchange.ShortRange = value;
+        }
+    }
+
+    private void undoInterchangeWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Interchange_Long = OriginalConfig.generalConfig.mapRangeWeighting.Interchange.LongRange;
+        _mapRangeWeighting_Interchange_Short = OriginalConfig.generalConfig.mapRangeWeighting.Interchange.ShortRange;
+    }
+    private void defaultInterchangeWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Interchange_Long = 20;
+        _mapRangeWeighting_Interchange_Short = 80;
+    }
+    private int _mapRangeWeighting_Sandbox_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.Sandbox.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Sandbox.LongRange);
+            Data.generalConfig.mapRangeWeighting.Sandbox.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_Sandbox_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.Sandbox.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Sandbox.ShortRange);
+            Data.generalConfig.mapRangeWeighting.Sandbox.ShortRange = value;
+        }
+    }
+
+    private void undoSandboxWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Sandbox_Long = OriginalConfig.generalConfig.mapRangeWeighting.Sandbox.LongRange;
+        _mapRangeWeighting_Sandbox_Short = OriginalConfig.generalConfig.mapRangeWeighting.Sandbox.ShortRange;
+    }
+    private void defaultSandboxWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Sandbox_Long = 15;
+        _mapRangeWeighting_Sandbox_Short = 85;
+    }
+    private int _mapRangeWeighting_SandboxHigh_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.Sandbox_high.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Sandbox_high.LongRange);
+            Data.generalConfig.mapRangeWeighting.Sandbox_high.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_SandboxHigh_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.Sandbox_high.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Sandbox_high.ShortRange);
+            Data.generalConfig.mapRangeWeighting.Sandbox_high.ShortRange = value;
+        }
+    }
+
+    private void undoSandboxHighWeaponRangeWeights()
+    {
+        _mapRangeWeighting_SandboxHigh_Long = OriginalConfig.generalConfig.mapRangeWeighting.Sandbox_high.LongRange;
+        _mapRangeWeighting_SandboxHigh_Short = OriginalConfig.generalConfig.mapRangeWeighting.Sandbox_high.ShortRange;
+    }
+    private void defaultSandboxHighWeaponRangeWeights()
+    {
+        _mapRangeWeighting_SandboxHigh_Long = 15;
+        _mapRangeWeighting_SandboxHigh_Short = 85;
+    }
+    private int _mapRangeWeighting_Woods_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.Woods.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Woods.LongRange);
+            Data.generalConfig.mapRangeWeighting.Woods.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_Woods_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.Woods.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Woods.ShortRange);
+            Data.generalConfig.mapRangeWeighting.Woods.ShortRange = value;
+        }
+    }
+
+    private void undoWoodsWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Woods_Long = OriginalConfig.generalConfig.mapRangeWeighting.Woods.LongRange;
+        _mapRangeWeighting_Woods_Short = OriginalConfig.generalConfig.mapRangeWeighting.Woods.ShortRange;
+    }
+    private void defaultWoodsWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Woods_Long = 60;
+        _mapRangeWeighting_Woods_Short = 40;
+    }
+    private int _mapRangeWeighting_Shoreline_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.Shoreline.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Shoreline.LongRange);
+            Data.generalConfig.mapRangeWeighting.Shoreline.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_Shoreline_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.Shoreline.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Shoreline.ShortRange);
+            Data.generalConfig.mapRangeWeighting.Shoreline.ShortRange = value;
+        }
+    }
+
+    private void undoShorelineWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Shoreline_Long = OriginalConfig.generalConfig.mapRangeWeighting.Shoreline.LongRange;
+        _mapRangeWeighting_Shoreline_Short = OriginalConfig.generalConfig.mapRangeWeighting.Shoreline.ShortRange;
+    }
+    private void defaultShorelineWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Shoreline_Long = 50;
+        _mapRangeWeighting_Shoreline_Short = 50;
+    }
+    private int _mapRangeWeighting_Lighthouse_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.Lighthouse.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Lighthouse.LongRange);
+            Data.generalConfig.mapRangeWeighting.Lighthouse.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_Lighthouse_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.Lighthouse.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.Lighthouse.ShortRange);
+            Data.generalConfig.mapRangeWeighting.Lighthouse.ShortRange = value;
+        }
+    }
+
+    private void undoLighthouseWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Lighthouse_Long = OriginalConfig.generalConfig.mapRangeWeighting.Lighthouse.LongRange;
+        _mapRangeWeighting_Lighthouse_Short = OriginalConfig.generalConfig.mapRangeWeighting.Lighthouse.ShortRange;
+    }
+    private void defaultLighthouseWeaponRangeWeights()
+    {
+        _mapRangeWeighting_Lighthouse_Long = 30;
+        _mapRangeWeighting_Lighthouse_Short = 70;
+    }
+    private int _mapRangeWeighting_TarkovStreets_Long
+    {
+        get => Data.generalConfig.mapRangeWeighting.TarkovStreets.LongRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.TarkovStreets.LongRange);
+            Data.generalConfig.mapRangeWeighting.TarkovStreets.LongRange = value;
+        }
+    }
+    private int _mapRangeWeighting_TarkovStreets_Short
+    {
+        get => Data.generalConfig.mapRangeWeighting.TarkovStreets.ShortRange;
+        set
+        {
+            Utils.UpdateView(value, OriginalConfig.generalConfig.mapRangeWeighting.TarkovStreets.ShortRange);
+            Data.generalConfig.mapRangeWeighting.TarkovStreets.ShortRange = value;
+        }
+    }
+
+    private void undoTarkovStreetsWeaponRangeWeights()
+    {
+        _mapRangeWeighting_TarkovStreets_Long = OriginalConfig.generalConfig.mapRangeWeighting.TarkovStreets.LongRange;
+        _mapRangeWeighting_TarkovStreets_Short = OriginalConfig.generalConfig.mapRangeWeighting.TarkovStreets.ShortRange;
+    }
+    private void defaultTarkovStreetsWeaponRangeWeights()
+    {
+        _mapRangeWeighting_TarkovStreets_Long = 20;
+        _mapRangeWeighting_TarkovStreets_Short = 80;
+    }
+    #endregion
+
     #region PLATE CHANCES
     private bool _allPlateChanceEnabled
     {
