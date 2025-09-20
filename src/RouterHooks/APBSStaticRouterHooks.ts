@@ -61,7 +61,9 @@ export class APBSStaticRouterHooks
                     url: "/client/match/local/start",
                     action: async (url, info, sessionId, output) => 
                     {
-                        this.raidInformation.sessionId = sessionId;
+                        const fullProfile = this.profileHelper.getFullProfile(sessionId);
+                        this.raidInformation.highestPrestige = fullProfile.characters.pmc.Info.PrestigeLevel >= this.raidInformation.highestPrestige ? fullProfile.characters.pmc.Info.PrestigeLevel : this.raidInformation.highestPrestige;
+                        this.raidInformation.sessionId = fullProfile.info.id;
                         try 
                         {
                             this.botLogHelper.logLocation(info);
