@@ -142,8 +142,7 @@ export class APBSBotLevelGenerator
 
         if (ModConfig.config.pmcBots.additionalOptions.enablePrestiging)
         {
-            const pmcProfile = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)
-            if (ModConfig.config.pmcBots.additionalOptions.enablePrestigeAnyLevel && pmcProfile.Info.PrestigeLevel > 0)
+            if (ModConfig.config.pmcBots.additionalOptions.enablePrestigeAnyLevel && this.raidInformation.highestPrestige > 0)
             {
                 maxLevel = 79;
                 minLevel = 1;
@@ -165,9 +164,8 @@ export class APBSBotLevelGenerator
         if (!ModConfig.config.pmcBots.additionalOptions.enablePrestiging) return 0;
         if (!botGenerationDetails.isPmc) return 0;
 
-        const pmcProfile = this.profileHelper.getPmcProfile(this.raidInformation.sessionId)
-        const isPlayerPrestiged = pmcProfile.Info.PrestigeLevel > 0 ? true : false;
-        const playerPrestigeLevel = pmcProfile.Info.PrestigeLevel;
+        const isPlayerPrestiged = this.raidInformation.highestPrestige > 0 ? true : false;
+        const playerPrestigeLevel = this.raidInformation.highestPrestige;
         const minPlayerLevelForBotsToPrestige = 61;
         const maxPrestige = 2;
 

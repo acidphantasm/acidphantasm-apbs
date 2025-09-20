@@ -20,6 +20,7 @@ export class RaidInformation
     public location: string;
     public currentTime: string;
     public nightTime: boolean = false;
+    public highestPrestige: number = 0;
 
     public sessionId: string;
 
