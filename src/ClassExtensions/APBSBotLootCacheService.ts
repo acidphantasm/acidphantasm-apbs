@@ -507,6 +507,24 @@ export class APBSBotLootCacheService extends BotLootCacheService
             filteredVestItems[itemKey] = vestLootPool[itemKey];
         }
 
+        const filteredSecureLoot = {};
+
+        for (const itemKey of Object.keys(secureLootTPool)) {
+            const itemResult = this.itemHelper.getItem(itemKey);
+
+            if (!itemResult[0]) {
+                continue;
+            }
+
+            const itemTemplate = itemResult[1];
+
+            if (this.isBulletOrGrenade(itemTemplate._props) || this.isMagazine(itemTemplate._props)) {
+                continue;
+            }
+
+            filteredSecureLoot[itemKey] = secureLootTPool[itemKey];
+        }
+
         this.apbsLootCache[combinedBotRoleTier].healingItems = healingItems;
         this.apbsLootCache[combinedBotRoleTier].drugItems = drugItems;
         this.apbsLootCache[combinedBotRoleTier].foodItems = foodItems;
@@ -519,7 +537,7 @@ export class APBSBotLootCacheService extends BotLootCacheService
         this.apbsLootCache[combinedBotRoleTier].backpackLoot = finalFilteredBackpackItems;
         this.apbsLootCache[combinedBotRoleTier].pocketLoot = filteredPocketItems;
         this.apbsLootCache[combinedBotRoleTier].vestLoot = filteredVestItems;
-        this.apbsLootCache[combinedBotRoleTier].secureLoot = secureLootTPool;
+        this.apbsLootCache[combinedBotRoleTier].secureLoot = filteredSecureLoot;
     }
 
     private isAmmoBox(tpl: string): boolean 
