@@ -1088,7 +1088,7 @@ export class BotConfigs
         this.tierInformation.tiers[4].botMaxLevelVariance = ModConfig.config.customLevelDeltas.tier5.max;
 
         this.tierInformation.tiers[5].botMinLevelVariance = ModConfig.config.customLevelDeltas.tier6.min;
-        this.tierInformation.tiers[5].botMaxLevelVariance = ModConfig.config.customLevelDeltas.tier6.min;
+        this.tierInformation.tiers[5].botMaxLevelVariance = ModConfig.config.customLevelDeltas.tier6.max;
 
         this.tierInformation.tiers[6].botMinLevelVariance = ModConfig.config.customLevelDeltas.tier7.min;
         this.tierInformation.tiers[6].botMaxLevelVariance = ModConfig.config.customLevelDeltas.tier7.max;
